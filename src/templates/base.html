@@ -1,0 +1,50 @@
+{% load i18n %}
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+<head>
+    <title>{{title.name}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Libre Hatti" />
+    <meta name="description" content="Libre Hatti is a versatile software which changes according to the work that need to be done." />
+    <meta http-equiv="content-language" content="en">
+    <meta name="author" content="Inderpreet Singh, Piyush Parkash" />
+
+    <link href="{% static 'css/bootstrap.css' %}" media="screen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}/jquery-ui.css" />
+    <script src="{{ STATIC_URL }}js/jquery.min.js">
+    </script>
+    <script src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+    </script>
+</head>
+
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>
