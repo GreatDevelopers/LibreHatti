@@ -11,11 +11,11 @@
     <meta name="author" content="Inderpreet Singh, Piyush Parkash" />
 
     <link href="{% static 'css/bootstrap.css' %}" media="screen" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}/jquery-ui.css" />
-    <script src="{{ STATIC_URL }}js/jquery.min.js">
+    <link rel="stylesheet" href="{% static 'jquery-ui.css' %}" />
+    <script src="{% static 'js/jquery.js' %}%}">
     </script>
-    <script src="{{ STATIC_URL }}js/jquery-ui.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript">
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
