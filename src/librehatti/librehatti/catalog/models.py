@@ -50,6 +50,7 @@ class admin_organisations(user):
         self.arg = arg
 
 class category(models.Model):
+    name = models.CharField(max_length = 100)
     parent = models.ForeignKey('self',null = True)
     def __unicode__(self):
         return self.id
@@ -82,9 +83,9 @@ class purchase_order(models.Model):
 
 class purchased_item(models.Model):
     """docstring for purchased_item"""
-    purchase_orderid = models.ForeignKey(purchase_order)
+    purchase_order = models.ForeignKey(purchase_order)
     price = models.IntegerField()
-    item_id = models.ForeignKey(product)
+    item = models.ForeignKey(product)
     organisation = models.ForeignKey(admin_organisations)
     def __init__(self, arg):
         super(purchased_item, self).__init__()
