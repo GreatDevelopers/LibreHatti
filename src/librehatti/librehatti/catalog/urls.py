@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('librehatti.catalog.urls',
+urlpatterns = patterns('librehatti.catalog.views',
+	url(r'^$', 'index')
    
 )

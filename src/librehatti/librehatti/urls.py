@@ -8,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^catalog/', include('librehatti.catalog.urls')),
-	url(r'^account/', include("registration.urls")),
+	url(r'^account/', include("registration.backends.default.urls")),
     # Examples:
     # url(r'^$', 'librehatti.views.home', name='home'),
     # url(r'^librehatti/', include('librehatti.foo.urls')),
