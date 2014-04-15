@@ -10,9 +10,7 @@
                         {% csrf_token %}
                         <div class="form-group">
                             {% for field in form %}
-                            <div class="fieldWrapper">
-                                {{ field.errors }} {{ field.label_tag }} {{field|addcss:"form-control"}}
-                            </div>
+                                {{ field.errors }} {{ field.label_tag }} {{ field|addcss:"form-control" }}
                             {% endfor %}
                         </div>
                         <input type="hidden" name="next" value="{{ next }}" />
