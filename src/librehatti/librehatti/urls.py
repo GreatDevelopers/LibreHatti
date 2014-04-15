@@ -7,6 +7,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+	url(r'^$', 'librehatti.catalog.views.index'),
 	url(r'^catalog/', include('librehatti.catalog.urls')),
 	url(r'^account/', include("registration.backends.default.urls")),
     # Examples:
