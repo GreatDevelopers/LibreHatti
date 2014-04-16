@@ -12,7 +12,7 @@
 
     <link href="{% static 'css/bootstrap.css' %}" media="screen" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'jquery-ui.css' %}" />
-    <script src="{% static 'js/jquery.js' %}%}">
+    <script src="{% static 'js/jquery.min.js' %}">
     </script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -60,10 +60,22 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href = "{% url 'auth_login' %}">Login</a></li>
-                    <li><a href="{% url 'registration_register' %}">Register</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'auth_logout' %}">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url 'auth_login' %}">Login</a>
+                    </li>
+                    <li><a href="{% url 'registration_register' %}">Register</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
