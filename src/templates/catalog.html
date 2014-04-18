@@ -1,5 +1,12 @@
 {% extends base_template|default:"base.html" %} {% load i18n %} {% block content %}
 
+{% if nocategory %}
+<div class="text-center">
+    <h1>No Categories. Please add some Categories</h1>
+    <a href="#" class="btn btn-primary btn-large">Add Category</a>
+</div>
+{% else %}
+
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-3 column well">
@@ -28,5 +35,5 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 {% endblock %}
