@@ -8,8 +8,17 @@ def index(request):
 
 	# Collect all the categories first
 	categorylist = category.objects.all()
-	if categorylist.count() == 0:
-		nocategory = True;
 
-	return render(request, 'catalog.html', {'nocategory': nocategory})
+	#Do we have categories
+	if categorylist.count() == 0:
+		nocategory = True
+		return render(request, 'catalog.html', {'nocategory': nocategory})
+
+	# Ok we have categories. Lets start showing products
+	productlist = product.objects.all();
+
+	# Do we have products
+	if productlist.count():
+		noproduct = True
+		return render(request, 'catalog.html', {'noproduct': noproduct})
 	pass

@@ -1,6 +1,4 @@
-{% extends base_template|default:"base.html" %} {% load i18n %} {% block content %}
-
-{% if nocategory %}
+{% extends base_template|default:"base.html" %} {% load i18n %} {% block content %} {% if nocategory %}
 <div class="text-center">
     <h1>No Categories. Please add some Categories</h1>
     <a href="#" class="btn btn-primary btn-large">Add Category</a>
@@ -18,22 +16,22 @@
         <div class="col-md-1 column">
         </div>
         <div class="col-md-8 column">
+            {% if noproducts %}
+            <div class="row clearfix">
+                <div class="col-md-12 column well">
+                    <h1>No Products. Please add some.</h1>
+                    <a href="#" class="btn btn-large btn-primary">Add Products</a>
+                </div>
+            </div>
+            {% endif %}
+            {% for product in productlist %}
             <div class="row clearfix">
                 <div class="col-md-3 column well">
                     Product 1
                 </div>
-                <div class="col-md-3 column well">
-                    Product 2
-                </div>
-                <div class="col-md-3 column well">
-                    Product 3
-                </div>
-                <div class="col-md-3 column well">
-                    Product 4
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}
