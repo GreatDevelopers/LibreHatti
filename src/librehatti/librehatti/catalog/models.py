@@ -9,9 +9,8 @@ Models for cart module
 class organisation_type(models.Model):
     """docstring for organisation_type"""
     type_desc = models.CharField(max_length = 200)
-    def __init__(self, arg):
-        super(organisation_type, self).__init__()
-        self.arg = arg
+    def __unicode__(self):
+        return self.type_desc
         
 
 
@@ -22,9 +21,8 @@ class address(models.Model):
     pin = models.CharField(max_length=10)
     province = models.CharField(max_length=100)
     nationality = models.CharField(max_length=100)
-    def __init__(self, arg):
-        super(address, self).__init__()
-        self.arg = arg
+    def __unicode__(self):
+        return self.street_address + ", " + self.city
 
 class user(models.Model):
     """
@@ -36,7 +34,7 @@ class user(models.Model):
     telephone = models.CharField(max_length = 500)
     date_joined  = models.DateTimeField(auto_now_add = True)
     fax = models.CharField(max_length = 100)
-    avatar = models.CharField(max_length = 100)
+    avatar = models.CharField(max_length = 100, null=True, blank=True)
     tagline = models.CharField(max_length = 140)
     class Meta:
         abstract = True
@@ -45,15 +43,14 @@ class admin_organisations(user):
     """docstring for organisation"""
     title = models.CharField(max_length = 200)
     organisation_type = models.ForeignKey(organisation_type)
-    def __init__(self, arg):
-        super(organisation, self).__init__()
-        self.arg = arg
+    def __unicode__(self):
+        return self.title
 
 class category(models.Model):
     name = models.CharField(max_length = 100)
-    parent = models.ForeignKey('self',null = True)
+    parent = models.ForeignKey('self',blank = True, null = True)
     def __unicode__(self):
-        return self.id
+        return unicode(self.name)
 
 class product(models.Model):
     name = models.CharField(max_length = 100)
@@ -98,7 +95,7 @@ class catalog(models.Model):
     product = models.ForeignKey(product)
     organisation = models.ForeignKey(admin_organisations)
     def __unicode__(self):
-        return self.name
+        return self.attribute.name;
 
 
 class customer(user):

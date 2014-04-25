@@ -18,7 +18,10 @@ def index(request):
 	productlist = product.objects.all();
 
 	# Do we have products
-	if productlist.count():
+	if productlist.count() == 0:
 		noproduct = True
 		return render(request, 'catalog.html', {'noproduct': noproduct})
+
+	#if none of above happens then we will do this
+	return render(request,'catalog.html', {'productlist': productlist, 'categorylist': categorylist})
 	pass
