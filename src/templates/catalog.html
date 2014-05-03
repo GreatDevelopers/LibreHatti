@@ -7,29 +7,53 @@
 
 <div class="container">
     <div class="row clearfix">
-        <div class="col-md-3 column well">
-            <ul class="list-unstyled">
-            </ul>
-        </div>
-        <div class="col-md-1 column">
-        </div>
-        <div class="col-md-8 column">
+        <div class="col-md-12 column">
             {% if noproducts %}
-            <div class="row clearfix">
-                <div class="col-md-12 column well">
-                    <h1>No Products. Please add some.</h1>
-                    <a href="#" class="btn btn-large btn-primary">Add Products</a>
-                </div>
-            </div>
+            <h1>No Products. Please add some.</h1>
+            <a href="#" class="btn btn-large btn-primary">Add Products</a>
             {% endif %}
-            {% for product in productlist %}
             <div class="row clearfix">
-                <div class="col-md-3 column well">
-                    {{ product.name }}
+                {% for product in productlist %}
+                <div class="col-md-3 column well ui-widget-content draggable product" id="{{ product.id }}product">
+                    <input type="checkbox" />
+                    <span>{{ product.name }}</span>
+                    <button class="btn btn-xs btn-primary">Add to Cart</button>
                 </div>
                 {% endfor %}
+            </div>
+            <div class="droppable">
+
             </div>
         </div>
     </div>
 </div>
+<div id="cart" class="cart">
+    <ul id="cartitems">
+
+    </ul>
+</div>
+<script type="text/javascript">
+$(".product button").click(function() {
+
+	//First read the id of the product
+	var parent = parseInt($(this).parent("div")[0].id);
+
+	// We have the product id. Get the name show
+	var name = $(this).siblings("span").html();
+	
+	//Insert this item in div to store all the items
+	cartlist = $("#cartitems");
+
+	//Add that item to the cart
+	cartlist.append("<li>"+name+"</li>");
+});
+//This will make the element draggable
+$(".draggable").draggable();
+
+//This will make it droppable
+$(".droppable").droppable({
+
+});
+</script>
+
 {% endif %} {% endblock %}
