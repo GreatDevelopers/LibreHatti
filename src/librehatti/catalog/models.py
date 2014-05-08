@@ -74,9 +74,8 @@ class purchase_order(models.Model):
     is_debit = models.BooleanField()
     organisation = models.ForeignKey(admin_organisations)
     date_time = models.DateTimeField(auto_now_add=True)
-    def __init__(self, arg):
-        super(purchase_order, self).__init__()
-        self.arg = arg
+    def __unicode__(self, arg):
+	return self.total
 
 class purchased_item(models.Model):
     """docstring for purchased_item"""
@@ -84,16 +83,14 @@ class purchased_item(models.Model):
     price = models.IntegerField()
     item = models.ForeignKey(product)
     organisation = models.ForeignKey(admin_organisations)
-    def __init__(self, arg):
-        super(purchased_item, self).__init__()
-        self.arg = arg
+    def __unicode__(self, arg):
+        return self.item
 
 
 class catalog(models.Model):
     attribute = models.ForeignKey(attributes)
     value = models.CharField(max_length = 200)
     product = models.ForeignKey(product)
-    organisation = models.ForeignKey(admin_organisations)
     def __unicode__(self):
         return self.attribute.name;
 
