@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from librehatti.catalog.models import *
+from librehatti.catalog.forms import *
 
 def index(request):
 	# we have to show all products
@@ -25,3 +26,16 @@ def index(request):
 	#if none of above happens then we will do this
 	return render(request,'catalog.html', {'productlist': productlist, 'categorylist': categorylist})
 	pass
+
+def addCategories(request):
+	if request.method == 'POST' :
+		form = addCategory(request.POST)
+		if form.is_valid():
+			return HttpResponseRedirec('/')
+	else:
+		form = addCategory()
+	
+	return render(request, 'addCategory.html', {
+		'form':form,
+	})
+
