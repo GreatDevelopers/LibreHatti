@@ -1,7 +1,7 @@
 {% extends base_template|default:"base.html" %} {% load i18n %} {% block content %} {% if nocategory %}
 <div class="text-center">
     <h1>No Categories. Please add some Categories</h1>
-    <a href="admin/" class="btn btn-primary btn-large">Add Category</a>
+    <a href="/admin/" class="btn btn-primary btn-large">Add Category</a>
 </div>
 {% else %}
 
@@ -10,7 +10,7 @@
         <div class="col-md-12 column">
             {% if noproducts %}
             <h1>No Products. Please add some.</h1>
-            <a href="admin/" class="btn btn-large btn-primary">Add Products</a>
+            <a href="/admin/" class="btn btn-large btn-primary">Add Products</a>
             {% endif %}
             <div class="row clearfix">
                 {% for product in productlist %}
