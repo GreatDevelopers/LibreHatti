@@ -18,7 +18,7 @@ function product(name, id, no, element) {
         }
     }
 
-    this.returnhtmlname= function() {
+    this.returnhtmlname = function() {
         return name + "(" + this.no + ")";
     }
 
@@ -30,6 +30,10 @@ function product(name, id, no, element) {
         return this.id
     }
 
+    this.createid = function() {
+        return this.id + "productcart";
+    }
+
     this.createhtml = function() {
         //Check if html element was created earlier
         if (this.element != null) {
@@ -37,12 +41,17 @@ function product(name, id, no, element) {
         }
         //Create the HTML element
         var li = $("<li></li>");
-        li.attr("id", id + "product");
+        li.attr("id", this.createid());
         li.html(this.returnhtmlname());
 
         //Add the created element. From now on this will used.
         this.element = li;
         return this.element;
+    }
+
+    this.remove = function() {
+        //Remove the html
+        $("#" + this.createid()).remove();
     }
 }
 
@@ -103,45 +112,45 @@ cart.removeItem = function(id, no) {
     }
 }
 
-cart.syncproducthtml = function(product, id)
-{
-	var element = $("#"+id);
+cart.syncproducthtml = function(product, id) {
+    //Check if the element even exist. if not then we need to create it.
+    if (product.element == null) {
+    	product.createhtml();
+        $(this.container).append(product.element);
+    }
 
-	//Now sync the details.
-	if (!element.length)
-	{
-		alert("I couldn't find my element. Please check");
-	}
+    var element = $("#" + id);
 
-	element.html(product.returnhtmlname());
+    //Now sync the details.
+    if (!element.length) {
+        alert("I couldn't find my element. Please check");
+    }
+
+    element.html(product.returnhtmlname());
 }
 
 
 cart.synchtml = function() {
     //For each of the element
     $.each(this.items, function(key, value) {
-    	//We don't have to do anything with the array here. Staight go to the value
-    	if (value.no <= 0)
-    	{
-    		//It is is negative that means we have to remvove this
-    		this.items.slice(key, 1);
-    		this.synchtml();
-    	}
-    	else
-    	{
-    		// There are the products. Now we to synchtml
+        //We don't have to do anything with the array here. Staight go to the value
+        if (value.no <= 0) {
+            //It is is negative that means we have to remvove this
+            this.items[key].remove();
+            this.items.slice(key, 1);
+        } else {
+            // There are the products. Now we to synchtml
 
-    		//Check if it even has a html
-    		if (value.element == null)
-    		{
-    			value.createhtml();
-    		}
+            //Check if it even has a html
+            if (value.element == null) {
+                value.createhtml();
+            }
 
-    		//Now add this html on the page
-    		$(this.container).append(value.element);
+            //Now add this html on the page
+            $(cart.container).append(value.element);
 
-    		//Now we have html we can now directly access it and sync it.
-    		this.syncproducthtml(value, value.returnhtmlname());
-    	}
+            //Now we have html we can now directly access it and sync it.
+            cart.syncproducthtml(value, value.createid());
+        }
     });
 }
