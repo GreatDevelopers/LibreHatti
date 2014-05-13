@@ -78,7 +78,6 @@ class attributes(models.Model):
 
 class purchase_order(models.Model):
     """docstring for purchase_order"""
-    total = models.IntegerField()
     buyer_id = models.ForeignKey(User)
     is_debit = models.BooleanField()
     organisation = models.ForeignKey(admin_organisations)
@@ -92,6 +91,11 @@ class purchased_item(models.Model):
     price = models.IntegerField()
     discount= models.IntegerField()
     item = models.ForeignKey(product)
+    def save(self):
+	if not self.id:
+		self.price = self.item.price
+	super(purchased_item,self).save()
+
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 

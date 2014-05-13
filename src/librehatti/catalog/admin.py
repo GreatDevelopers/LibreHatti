@@ -38,7 +38,7 @@ class customUserAdd(UserAdmin):
 
 class PurchasedItemInline(admin.StackedInline):
 	model = purchased_item
-	fields = ['item','price','discount']
+	fields = ['item','discount']
 	extra = 10
 
 class PurchaseOrderAdmin(admin.ModelAdmin):
