@@ -92,7 +92,7 @@ class purchased_item(models.Model):
     price = models.IntegerField()
     discount= models.IntegerField()
     item = models.ForeignKey(product)
-    uef __unicode__(self):
+    def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 
 class catalog(models.Model):
