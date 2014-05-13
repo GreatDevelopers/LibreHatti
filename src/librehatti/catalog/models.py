@@ -92,7 +92,6 @@ class purchased_item(models.Model):
     price = models.IntegerField()
     discount= models.IntegerField()
     item = models.ForeignKey(product)
-    organisation = models.ForeignKey(admin_organisations)
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 
