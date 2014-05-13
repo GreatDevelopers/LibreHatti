@@ -89,11 +89,12 @@ class purchased_item(models.Model):
     """docstring for purchased_item"""
     purchase_order = models.ForeignKey(purchase_order)
     price = models.IntegerField()
+    qty = models.IntegerField()
     discount= models.IntegerField()
     item = models.ForeignKey(product)
     def save(self):
 	if not self.id:
-		self.price = self.item.price
+		self.price = self.item.price * self.qty
 	super(purchased_item,self).save()
 
     def __unicode__(self):
