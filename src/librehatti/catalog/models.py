@@ -1,6 +1,5 @@
 from django.db import models
 from django.forms import ModelForm
-from authentication.models import *
 
 """
 Models for cart module
@@ -16,7 +15,7 @@ class product(models.Model):
     name = models.CharField(max_length = 100)
     category = models.ForeignKey(category)
     price = models.IntegerField()
-    organisation = models.ForeignKey(admin_organisations)
+    organisation = models.ForeignKey('useraccounts.admin_organisations')
     def __unicode__(self):
         return self.name
 
@@ -31,7 +30,8 @@ class purchase_order(models.Model):
     """docstring for purchase_order"""
     buyer_id = models.ForeignKey(User)
     is_debit = models.BooleanField()
-    organisation = models.ForeignKey(admin_organisations)
+    delivery_address = models.ForeignKey('useraccounts.address')
+    organisation = models.ForeignKey('useraccounts.admin_organisations')
     date_time = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
 	return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime('%b %d, %Y'))

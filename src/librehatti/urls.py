@@ -9,7 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
 	url(r'^$', 'librehatti.catalog.views.index'),
 	url(r'^catalog/', include('librehatti.catalog.urls')),
-	url(r'^authentication/', include("authentication.urls")),
+	url(r'^useraccounts/', include("useraccounts.urls")),
     # Examples:
     # url(r'^$', 'librehatti.views.home', name='home'),
     # url(r'^librehatti/', include('librehatti.foo.urls')),
