@@ -1,10 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 class organisation_type(models.Model):
-    """docstring for organisation_type"""
+    
     type_desc = models.CharField(max_length = 200)
     def __unicode__(self):
         return self.type_desc
@@ -12,7 +10,6 @@ class organisation_type(models.Model):
 
 
 class address(models.Model):
-    """docstring for address"""
     street_address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     pin = models.CharField(max_length=10)
@@ -22,9 +19,7 @@ class address(models.Model):
         return self.street_address + ", " + self.city
 
 class user(models.Model):
-    """
-
-    """
+   
     user = models.OneToOneField(User) 
     address = models.ForeignKey(address)
     telephone = models.CharField(max_length = 500)
@@ -36,7 +31,6 @@ class user(models.Model):
         abstract = True
 
 class admin_organisations(user):
-    """docstring for organisation"""
     title = models.CharField(max_length = 200)
     organisation_type = models.ForeignKey(organisation_type)
     def __unicode__(self):
@@ -44,7 +38,7 @@ class admin_organisations(user):
 
 
 class customer(user):
-    """docstring for customer"""
+    
     title = models.CharField(max_length = 200, blank=True, null=True)
     is_org = models.BooleanField();
     org_type = models.ForeignKey(organisation_type)
