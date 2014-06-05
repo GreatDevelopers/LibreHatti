@@ -1,20 +1,22 @@
-#check
 from django.db import models
 from django.forms import ModelForm
 
+
 class category(models.Model):
-    name = models.CharField(max_length = 100)
-    parent = models.ForeignKey('self',blank = True, null = True)
+    name = models.CharField(max_length=100)
+    parent = models.ForeignKey('self', blank=True, null=True)
     def __unicode__(self):
         return unicode(self.name)
 
+
 class product(models.Model):
-    name = models.CharField(max_length = 100)
+    name = models.CharField(max_length=100)
     category = models.ForeignKey(category)
     price = models.IntegerField()
     organisation = models.ForeignKey('useraccounts.admin_organisations')
     def __unicode__(self):
         return self.name
+
 
 class attributes(models.Model):
     name = models.CharField(max_length=200)
@@ -22,6 +24,7 @@ class attributes(models.Model):
     is_string = models.BooleanField()
     def __unicode__(self):
         return self.name
+
 
 class purchase_order(models.Model):
     buyer_id = models.ForeignKey(User)
@@ -32,6 +35,7 @@ class purchase_order(models.Model):
     def __unicode__(self):
         return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
                ('%b %d, %Y'))
+
 
 class purchased_item(models.Model):
     purchase_order = models.ForeignKey(purchase_order)
@@ -47,9 +51,10 @@ class purchased_item(models.Model):
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 
+
 class catalog(models.Model):
     attribute = models.ForeignKey(attributes)
-    value = models.CharField(max_length = 200)
+    value = models.CharField(max_length=200)
     product = models.ForeignKey(product)
     def __unicode__(self):
         return self.attribute.name;

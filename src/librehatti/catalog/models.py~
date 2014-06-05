@@ -1,11 +1,13 @@
 from django.db import models
 from django.forms import ModelForm
 
+
 class category(models.Model):
     name = models.CharField(max_length = 100)
     parent = models.ForeignKey('self',blank = True, null = True)
     def __unicode__(self):
         return unicode(self.name)
+
 
 class product(models.Model):
     name = models.CharField(max_length = 100)
@@ -15,12 +17,14 @@ class product(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class attributes(models.Model):
     name = models.CharField(max_length=200)
     is_number = models.BooleanField()
     is_string = models.BooleanField()
     def __unicode__(self):
         return self.name
+
 
 class purchase_order(models.Model):
     buyer_id = models.ForeignKey(User)
@@ -29,7 +33,9 @@ class purchase_order(models.Model):
     organisation = models.ForeignKey('useraccounts.admin_organisations')
     date_time = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
-        return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime('%b %d, %Y'))
+        return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
+               ('%b %d, %Y'))
+
 
 class purchased_item(models.Model):
     purchase_order = models.ForeignKey(purchase_order)
