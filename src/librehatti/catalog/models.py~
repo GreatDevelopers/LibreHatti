@@ -1,4 +1,3 @@
-#check
 from django.db import models
 from django.forms import ModelForm
 
@@ -30,8 +29,7 @@ class purchase_order(models.Model):
     organisation = models.ForeignKey('useraccounts.admin_organisations')
     date_time = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
-        return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
-               ('%b %d, %Y'))
+        return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime('%b %d, %Y'))
 
 class purchased_item(models.Model):
     purchase_order = models.ForeignKey(purchase_order)
