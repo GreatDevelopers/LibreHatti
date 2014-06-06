@@ -2,13 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class organisation_type(models.Model):    
+class OrganisationType(models.Model):    
     type_desc = models.CharField(max_length=200)
     def __unicode__(self):
         return self.type_desc
 
 
-class address(models.Model):
+class Address(models.Model):
     street_address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     pin = models.CharField(max_length=10)
@@ -18,9 +18,9 @@ class address(models.Model):
         return self.street_address + ',' + self.city
 
 
-class user(models.Model):   
+class HattiUser(models.Model):   
     user = models.OneToOneField(User) 
-    address = models.ForeignKey(address)
+    address = models.ForeignKey(Address)
     telephone = models.CharField(max_length=500)
     date_joined  = models.DateTimeField(auto_now_add=True)
     fax = models.CharField(max_length=100)
@@ -30,17 +30,17 @@ class user(models.Model):
         abstract=True
 
 
-class admin_organisations(user):
+class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
-    organisation_type = models.ForeignKey(organisation_type)
+    organisation_type = models.ForeignKey(Organisation_Type)
     def __unicode__(self):
         return self.title
 
 
-class customer(user):
+class Customer(Hattiuser):
     title = models.CharField(max_length=200, blank=True, null=True)
     is_org = models.BooleanField();
-    org_type = models.ForeignKey(organisation_type)
+    org_type = models.ForeignKey(OrganisationType)
     company = models.CharField(max_length=200)
     def __unicode__(self, arg):
 	return unicode(self.user)

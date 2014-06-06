@@ -18,7 +18,7 @@ class Address(models.Model):
         return self.street_address + ',' + self.city
 
 
-class user(models.Model):   
+class HattiUser(models.Model):   
     user = models.OneToOneField(User) 
     address = models.ForeignKey(Address)
     telephone = models.CharField(max_length=500)
@@ -30,14 +30,14 @@ class user(models.Model):
         abstract=True
 
 
-class AdminOrganisations(user):
+class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
     organisation_type = models.ForeignKey(Organisation_Type)
     def __unicode__(self):
         return self.title
 
 
-class Customer(user):
+class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)
     is_org = models.BooleanField();
     org_type = models.ForeignKey(OrganisationType)

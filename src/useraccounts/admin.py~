@@ -9,13 +9,16 @@ admin.site.register(organisation_type)
 admin.site.register(customer)
 admin.site.unregister(User)
 
+
 class AddressInline(admin.StackedInline):
      model = address
+
 
 class CustomerInline(admin.StackedInline):
      model = customer
 
-class customUserAdd(UserAdmin):
+
+class CustomUserAdd(UserAdmin):
     add_fieldsets = (
         ('Add Customer', {
             'classes': ('wide',),
@@ -25,5 +28,5 @@ class customUserAdd(UserAdmin):
     )
     inlines = [CustomerInline]
 
-admin.site.register(User,customUserAdd)
+admin.site.register(User,CustomUserAdd)
 
