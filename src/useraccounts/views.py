@@ -10,10 +10,10 @@ def register(request):
                 form = UserCreationForm(request.POST)
                 if form.is_valid():
                         new_user = form.save()
-                        return HttpResponseRedirect("/catalog/")
+                        return HttpResponseRedirect('/catalog/')
         else:
                 form = UserCreationForm()
 
-        return render(request, "useraccounts/signup.html", {
+        return render(request, 'useraccounts/signup.html', {
                 'form': form,
         })

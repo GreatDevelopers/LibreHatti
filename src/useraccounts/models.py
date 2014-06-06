@@ -15,7 +15,7 @@ class address(models.Model):
     province = models.CharField(max_length=100)
     nationality = models.CharField(max_length=100)
     def __unicode__(self):
-        return self.street_address + ", " + self.city
+        return self.street_address + ',' + self.city
 
 
 class user(models.Model):   

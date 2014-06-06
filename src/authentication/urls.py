@@ -10,6 +10,6 @@ urlpatterns = patterns('',
         'authentication/login.html'}),
         (r'^logout$', 'django.contrib.auth.views.logout', {'next_page': 
         next_page}),
-        (r'^signup$', 'authentication.views.register')
+        (r'^signup$', 'authentication.views.register'),
 )
 

@@ -41,7 +41,7 @@ STATIC_ROOT = '/home/ishwerdas/Librehatti/static/'
 TATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    "/home/ishwerdas/LibreHatti/static",
+    '/home/ishwerdas/LibreHatti/static',
 
 )
 
@@ -83,7 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'librehatti.catalog',
-    'authentication'
+    'authentication',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -109,6 +109,6 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
-    }
+        }
+    },
 }

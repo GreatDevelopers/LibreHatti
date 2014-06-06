@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class organisation_type(models.Model):
-    type_desc = models.CharField(max_length = 200)
+    type_desc = models.CharField(max_length=200)
     def __unicode__(self):
         return self.type_desc
-        
 
 
 class address(models.Model):
@@ -17,28 +17,31 @@ class address(models.Model):
     def __unicode__(self):
         return self.street_address + ", " + self.city
 
+
 class user(models.Model):
     user = models.OneToOneField(User) 
     address = models.ForeignKey(address)
-    telephone = models.CharField(max_length = 500)
-    date_joined  = models.DateTimeField(auto_now_add = True)
-    fax = models.CharField(max_length = 100)
-    avatar = models.CharField(max_length = 100, null=True, blank=True)
-    tagline = models.CharField(max_length = 140)
+    telephone = models.CharField(max_length=500)
+    date_joined  = models.DateTimeField(auto_now_add=True)
+    fax = models.CharField(max_length=100)
+    avatar = models.CharField(max_length=100, null=True, blank=True)
+    tagline = models.CharField(max_length=140)
     class Meta:
         abstract = True
 
+
 class admin_organisations(user):
-    title = models.CharField(max_length = 200)
+    title = models.CharField(max_length=200)
     organisation_type = models.ForeignKey(organisation_type)
     def __unicode__(self):
         return self.title
 
 
 class customer(user):
-    title = models.CharField(max_length = 200, blank=True, null=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
     is_org = models.BooleanField();
     org_type = models.ForeignKey(organisation_type)
     company = models.CharField(max_length = 200)
     def __unicode__(self, arg):
 	return unicode(self.user)
+
