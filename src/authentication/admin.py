@@ -2,10 +2,10 @@ from django.contrib import admin
 from authentication.models import *
 from django.contrib.auth.admin import UserAdmin
 
-admin.site.register(admin_organisations)
-admin.site.register(address)
-admin.site.register(organisation_type)
-admin.site.register(customer)
+admin.site.register(AdminOrganisations)
+admin.site.register(Address)
+admin.site.register(OrganisationType)
+admin.site.register(Customer)
 admin.site.unregister(User)
 
 
@@ -17,7 +17,7 @@ class CustomerInline(admin.StackedInline):
     model = customer
 
 
-class customUserAdd(UserAdmin):
+class CustomUserAdd(UserAdmin):
     add_fieldsets = (
         ('Add Customer', {
             'classes': ('wide',),
@@ -28,5 +28,5 @@ class customUserAdd(UserAdmin):
     inlines = [CustomerInline]
 
 
-admin.site.register(User,customUserAdd)
+admin.site.register(User,CustomUserAdd)
 

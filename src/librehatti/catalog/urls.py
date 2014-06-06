@@ -4,5 +4,5 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('librehatti.catalog.views',
         url(r'^$', 'index'),
-        url(r'^addCategory/','addCategories'),
+        url(r'^addCategory/','add_categories'),
 )

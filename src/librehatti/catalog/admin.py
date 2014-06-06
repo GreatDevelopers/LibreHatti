@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import *
 
 admin.autodiscover()
-admin.site.register(category)
-admin.site.register(attributes)
+admin.site.register(Category)
+admin.site.register(Attributes)
 admin.site.register(catalog)
 
 
@@ -29,6 +29,6 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         inlines = [PurchasedItemInline]
 	
 
-admin.site.register(purchase_order, PurchaseOrderAdmin)
-admin.site.register(product, ProductAdmin) 
+admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
+admin.site.register(Product, ProductAdmin) 
 

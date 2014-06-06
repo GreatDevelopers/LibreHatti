@@ -6,13 +6,13 @@ from librehatti.catalog.forms import *
 
 def index(request):
         error = {}
-        categorylist = category.objects.all()
+        categorylist = Category.objects.all()
 
         if categorylist.count() == 0:
                 nocategory = True
                 return render(request, 'catalog.html', {'nocategory': 
                        nocategory})
-        productlist = product.objects.all();
+        productlist = Product.objects.all();
 
         if productlist.count() == 0:
                 noproduct = True
@@ -24,7 +24,7 @@ def index(request):
         pass
 
 
-def addCategories(request):
+def add_categories(request):
 
         if request.method == 'POST' :
                 form = addCategory(request.POST)
@@ -36,3 +36,4 @@ def addCategories(request):
         return render(request, 'addCategory.html', {
                 'form':form,
         })
+
