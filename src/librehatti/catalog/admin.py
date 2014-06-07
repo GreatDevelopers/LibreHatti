@@ -5,7 +5,7 @@ from django.contrib.auth.admin import *
 admin.autodiscover()
 admin.site.register(Category)
 admin.site.register(Attributes)
-admin.site.register(catalog)
+admin.site.register(Catalog)
 
 
 class CatalogInline(admin.TabularInline):
