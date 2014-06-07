@@ -3,29 +3,32 @@ from django.contrib import admin
 from django.contrib.auth.admin import *
 
 admin.autodiscover()
-admin.site.register(category)
-admin.site.register(attributes)
-admin.site.register(catalog)
+admin.site.register(Category)
+admin.site.register(Attributes)
+admin.site.register(Catalog)
+
 
 class CatalogInline(admin.TabularInline):
-	model = catalog
-	fields = ['attribute','value']
-	extra = 10
+        model = catalog
+        fields = ['attribute', 'value']
+        extra = 10
+
 
 class ProductAdmin(admin.ModelAdmin):
-    fields = ['name','category','price','organisation']
-    inlines = [CatalogInline] 
+        fields = ['name', 'category', 'price', 'organisation']
+        inlines = [CatalogInline] 
 
 
 class PurchasedItemInline(admin.StackedInline):
-	model = purchased_item
-	fields = ['item','qty','discount']
-	extra = 10
+        model = purchased_item
+        fields = ['item', 'qty', 'discount']
+        extra = 10
+
 
 class PurchaseOrderAdmin(admin.ModelAdmin):
-	inlines = [PurchasedItemInline]
+        inlines = [PurchasedItemInline]
 	
 
-admin.site.register(purchase_order, PurchaseOrderAdmin)
-admin.site.register(product, ProductAdmin) 
+admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
+admin.site.register(Product, ProductAdmin) 
 
