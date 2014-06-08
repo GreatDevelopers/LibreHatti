@@ -10,11 +10,11 @@ admin.site.unregister(User)
 
 
 class AddressInline(admin.StackedInline):
-    model = address
+    model = Address
 
 
 class CustomerInline(admin.StackedInline):
-    model = customer
+    model = Customer
 
 
 class CustomUserAdd(UserAdmin):
