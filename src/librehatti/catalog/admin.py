@@ -9,24 +9,24 @@ admin.site.register(Catalog)
 
 
 class CatalogInline(admin.TabularInline):
-        model = catalog
-        fields = ['attribute', 'value']
-        extra = 10
+    model = catalog
+    fields = ['attribute', 'value']
+    extra = 10
 
 
 class ProductAdmin(admin.ModelAdmin):
-        fields = ['name', 'category', 'price', 'organisation']
-        inlines = [CatalogInline] 
+    fields = ['name', 'category', 'price', 'organisation']
+    inlines = [CatalogInline] 
 
 
 class PurchasedItemInline(admin.StackedInline):
-        model = purchased_item
-        fields = ['item', 'qty', 'discount']
-        extra = 10
+    model = purchased_item
+    fields = ['item', 'qty', 'discount']
+    extra = 10
 
 
 class PurchaseOrderAdmin(admin.ModelAdmin):
-        inlines = [PurchasedItemInline]
+    inlines = [PurchasedItemInline]
 	
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
