@@ -9,7 +9,7 @@ admin.site.register(Catalog)
 
 
 class CatalogInline(admin.TabularInline):
-    model = catalog
+    model = Catalog
     fields = ['attribute', 'value']
     extra = 10
 
@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class PurchasedItemInline(admin.StackedInline):
-    model = purchased_item
+    model = PurchasedItem
     fields = ['item', 'qty', 'discount']
     extra = 10
 

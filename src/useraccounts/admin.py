@@ -6,7 +6,7 @@ from useraccounts.models import *
 admin.site.register(AdminOrganisations)
 admin.site.register(Address)
 admin.site.register(OrganisationType)
-admin.site.register(customer)
+admin.site.register(Customer)
 admin.site.unregister(User)
 
 
