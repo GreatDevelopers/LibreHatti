@@ -32,7 +32,7 @@ class HattiUser(models.Model):
 
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
-    organisation_type = models.ForeignKey(Organisation_Type)
+    organisation_type = models.ForeignKey(OrganisationType)
     def __unicode__(self):
         return self.title
 
