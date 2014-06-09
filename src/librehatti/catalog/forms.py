@@ -4,4 +4,4 @@ from librehatti.catalog.models import *
 
 class AddCategory(forms.Form):
     category_name = forms.CharField(max_length=256)
-    categories = forms.ModelChoiceField(queryset=category.objects.all())
+    categories = forms.ModelChoiceField(queryset=Category.objects.all())
