@@ -10,9 +10,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'automation1',                     
+        'NAME': 'librehatti_db',                     
         'USER': 'root',
-        'PASSWORD': 'piyush',
+        'PASSWORD': 'jaskaran',
         'HOST': 'localhost',                      
         'PORT': '',                   
     }
@@ -36,12 +36,12 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/ishwerdas/Librehatti/static/'
+STATIC_ROOT = '/home/jaskaran/virtualenvironment/Libhatti/Librehatti/static/'
 
-TATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/ishwerdas/LibreHatti/static',
+#    '/home/jaskaran/virtualenvironment/Libhatti/LibreHatti/static',
 
 )
 
@@ -83,7 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'librehatti.catalog',
-    'authentication',
+    'useraccounts',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

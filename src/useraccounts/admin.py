@@ -6,16 +6,16 @@ from useraccounts.models import *
 admin.site.register(AdminOrganisations)
 admin.site.register(Address)
 admin.site.register(OrganisationType)
-admin.site.register(customer)
+admin.site.register(Customer)
 admin.site.unregister(User)
 
 
 class AddressInline(admin.StackedInline):
-     model = address
+     model = Address
 
 
 class CustomerInline(admin.StackedInline):
-     model = customer
+     model = Customer
 
 
 class CustomUserAdd(UserAdmin):
