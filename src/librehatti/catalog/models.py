@@ -47,7 +47,7 @@ class PurchasedItem(models.Model):
     def save(self):
         if not self.id:
             self.price = self.item.price * self.qty
-        super(purchased_item,self).save()
+        super(PurchasedItem,self).save()
 
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
