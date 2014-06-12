@@ -12,7 +12,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'librehatti_db',                     
         'USER': 'root',
-        'PASSWORD': 'jaskaran',
+        'PASSWORD': 'ashu',
         'HOST': 'localhost',                      
         'PORT': '',                   
     }
@@ -36,12 +36,12 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/jaskaran/virtualenvironment/Libhatti/Librehatti/static/'
+STATIC_ROOT = ''
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-#    '/home/jaskaran/virtualenvironment/Libhatti/LibreHatti/static',
+'/home/ashu/LibreHatti/static',
 
 )
 
