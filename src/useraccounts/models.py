@@ -42,5 +42,5 @@ class Customer(HattiUser):
     is_org = models.BooleanField();
     org_type = models.ForeignKey(OrganisationType)
     company = models.CharField(max_length=200)
-    def __unicode__(self, arg):
+    def __unicode__(self):
 	return unicode(self.user)
