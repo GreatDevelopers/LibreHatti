@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>Lab Reports</title>
+</head>
+<body>
+    <form action='{% url 'reports:add_dept' %}' method='post'> 
+    {% csrf_token %}
+    <b>Material:</b>
+        <select>
+            {% for name in forms.material_name %}
+                <option value="{{name}}" > </option>
+            {% endfor %}
+        </select>
+        <p><b>Time span:</b></p>
+        <p>From:<input type="text" name="From" />
+            To:  <input type="text" name="To" /></p>
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
