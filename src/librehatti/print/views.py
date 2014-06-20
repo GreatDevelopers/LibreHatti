@@ -5,19 +5,6 @@ from django.http import HttpResponse
 from librehatti.catalog.models import Category, PurchaseOrder,PurchasedItem
 
 
-def dates(start_date, end_date):
-	import datetime
-	from django import forms
-	if start_date > datetime.date.today() or end_date > datetime.date.today():
-		raise forms.ValidationError("The date cannot be in the future!"
-                      )
-	elif end_date < start_date :
-		raise forms.ValidationError(
-                      "The start_date is greater than end_date!")
-	else:
-		pass 
-
-
 def add_material(request):
     purchase_data = PurchaseOrder.objects.all()
     if request.method == 'POST':
