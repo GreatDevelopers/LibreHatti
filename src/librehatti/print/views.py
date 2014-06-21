@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from librehatti.catalog.models import *
 from forms import DeptForm
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from librehatti.catalog.models import Category, PurchaseOrder,PurchasedItem
 
 
@@ -25,19 +25,21 @@ def add_material(request):
             total_cost_temp = PurchasedItem.objects.filter(id__in=
                               purchase_data1).aggregate(Sum('sub_total'))
             total_cost = total_cost_temp['total_cost__sum']
-            return HttpResponseRedirect('/print/add_material')
+            return HttpResponseRedirect('/print/addmaterial')
             return render(request, 'reports.html', {'purchase_data' :
             purchase_data, 'start_date':start_date,'end_date':end_date,
 	    'total_cost':total_cost})
 
-
-       
         else:
             form = DeptForm()
             material_name = Category.objects.values('name')
             return render(request,'print/form.html',{'material_name' : material_name, 
                  'form': form})
-
+    else:
+        form = DeptForm()
+        material_name = Category.objects.values('name')
+        return render(request,'print/form.html',{'material_name' : material_name, 
+                 'form': form})
 
 
        
