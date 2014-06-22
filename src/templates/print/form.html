@@ -6,15 +6,15 @@
     <form action='librehatti/print/views/add_material' method='post'> 
     {% csrf_token %}
     <b>Material:</b>
-        <select>
-            {% for name in forms.material_name %}
-                <option value="{{name}}" > </option>
-            {% endfor %}
-        </select>
-        <p><b>Time span:</b></p>
-        <p>From:<input type="text" name="From" />
-            To:  <input type="text" name="To" /></p>
-        <input type="submit" value="Submit" />
+    {% for name in forms.material_name %}
+    <select>
+        <option value='{{name}}' > {{name}} </option> 
+    </select>
+    {% endfor %}
+    <p><b>Time span:</b></p>
+    <p>From:<small>(dd/mm/yyyy)</small> <input type="text" name="From" />
+        To:<small>(dd/mm/yyyy)</small> <input type="text" name="To" /></p>
+    <input type="submit" value="Submit" />
     </form>
 </body>
 </html>
