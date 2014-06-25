@@ -44,3 +44,10 @@ class Customer(HattiUser):
     company = models.CharField(max_length=200)
     def __unicode__(self):
 	return unicode(self.user)
+
+
+class Surcharge(models.Model):
+    tax = models.CharField(max_length=200)
+    value = models.IntegerField(default=0)
+    def __unicode__(self):
+	return self.tax

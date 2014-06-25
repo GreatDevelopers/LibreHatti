@@ -33,6 +33,10 @@ class PurchaseOrder(models.Model):
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
+    total = models.IntegerField(default=0)
+    total_discount = models.IntegerField(default=0)
+    tds = models.IntegerField(default=0)
+    taxes = models.ForeignKey('useraccounts.Surcharge')
     def __unicode__(self):
         return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
                ('%b %d, %Y'))
