@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -92,14 +92,15 @@ table-layout:fixed;
 <tr> 
   <td>{{ forloop.counter }}</td>
   <td>{{ purchased_item.item}}</td>
-  <td>{{ purchased_item.price }} </td>
+ <td> {{ per_price }} </td>
   <td>{{ purchased_item.qty}} sample ./s
-   <td>{{ total }}</td>
-
-
+   <td>{{  purchased_item.price  }}</td>
+ <!--name : {{ p.item.name }} -->
+        
 </tr>
 
 {% endfor %}
+ 
  {% endif %}
 
 <tr>
