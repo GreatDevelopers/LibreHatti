@@ -1,11 +1,10 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 	
 <meta charset='UTF-8'>
 
-	<link rel="stylesheet" href="style.css" />
 
 	<title>bill</title>
   
@@ -33,20 +32,19 @@
 
   
      
-<p style="font-size:100%">STC No. {{ STC_NO }}</P>
+<p style="font-size:100%">STC No. {{ STC_No }}</P>
 
-<p style="font-size:100%;text-align:left;">PAN No. {{ PAN_No. }}<span style="float:right;">Dated:{{ bill_date|date:"F, j, Y"}} </P>
+<p style="font-size:100%;text-align:left;">PAN No. {{ PAN_No }} &nbsp; &nbsp;<span style="float:right;">Dated : {{ purchase_order.date_time|date:"F, j, Y"}} </P>
 
 <p> To, </p>
 
-<p> {{delivery_address}} </p>
+<p> {{purchase_order.delivery_address}} </p>
 
-<p> Organisation:{{Organisation}}</p>
+<p> Organisation:{{purchase_order.organisation.title}}</p>
 
-<p> Buyer Id: {{buyer_id}} </p>
+<p> Buyer Id: {{purchase_order.buyer_id}} </p>
 
-<p> Ref: Your Letter No.{{L_No.}}, dated:{{ bill_date|date:"F, j, Y"}} , respectively.</p>
-
+<p> Ref: Your Letter No. {{ L_No}}, &nbsp; dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.</p>
 <p> Site: </p>
 
 
@@ -74,34 +72,27 @@ table-layout:fixed;
 
 <tr>
 
-  <th>S.no.</th>
+  <th> S.No. </th>
   <th>Charges For Following</th>
-  <th>Price</th>
- 
-  <th>Per</th>
+  <th>Description</th>
+   <th>Per</th>
   <th>Total</h>
-
-  
-
-  
+</tr>
 </tr>
 
-
-{% if purchaseditem %}
-{% for purchased_item in purchaseditem %}
-<tr> 
-  <td>{{ forloop.counter }}</td>
-  <td>{{ purchased_item.item}}</td>
- <td> {{ per_price }} </td>
-  <td>{{ purchased_item.qty}} sample ./s
-   <td>{{  purchased_item.price  }}</td>
- <!--name : {{ p.item.name }} -->
-        
+{% if purchased_item %}
+{% for purchaseditem in purchased_item %}
+ <td> {{ forloop.counter }} </td>
+ <td> {{ purchaseditem.item__name }} </td>
+ <td> {{ purchaseditem.qty }} sample./s  </td>
+ <td> {{ purchaseditem.item__price }} </td>
+ <td>  {{purchaseditem.price }}</td>
+     
 </tr>
 
 {% endfor %}
  
- {% endif %}
+{% endif %}
 
 <tr>
 	<td><b>Total </b></td>
