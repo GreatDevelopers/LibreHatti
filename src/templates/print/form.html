@@ -3,12 +3,12 @@
 <title>Lab Reports</title>
 </head>
 <body>
-    <form action='{% url 'reports:add_dept' %}' method='post'> 
-    {% csrf_token %}
+    <form action='' method='POST'> 
+    {% csrf_token %} 
     <b>Material:</b>
-        <select>
-            {% for name in forms.material_name %}
-                <option value="{{name}}" > </option>
+        <select name = 'material'>
+            {% for i in material_name %}
+                <option value={{i.name}} name={{i.name}} >{{i.name}} </option>
             {% endfor %}
         </select>
         <p><b>Time span:</b></p>

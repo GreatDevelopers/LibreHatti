@@ -10,5 +10,6 @@ urlpatterns = patterns('',
         url(r'^$', 'librehatti.catalog.views.index'),
         url(r'^catalog/', include('librehatti.catalog.urls')),
         url(r'^useraccounts/', include('useraccounts.urls')),
+        url(r'^print/', include('librehatti.print.urls')),
         url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
