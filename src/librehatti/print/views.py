@@ -15,7 +15,7 @@ def report(request):
     
     number = test.item_id
     tested_item = test.item
-    sum_in_words = helper.intName(sum)
+    sum_in_words = helper.num2eng(sum)
     nature_of_consistency = 'nature_of_consistency'
     val1 = 345
     val2 = 85
