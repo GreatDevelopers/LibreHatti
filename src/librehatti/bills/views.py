@@ -9,4 +9,4 @@ def proforma(request):
     QuotedOrder_list = QuotedOrder.objects.all()
     QuotedItem_list = QuotedItem.objects.all()
     return render(request, 'bills/quote.html', 
-                 {'QuotedOrder_list' : QuotedOrder_list})
+                 {'QuotedOrder_list' : QuotedOrder_list, 'QuotedItem_list' : QuotedItem_list})
