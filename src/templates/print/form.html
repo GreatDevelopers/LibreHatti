@@ -1,14 +1,21 @@
 <html>
 <head>
 <title>Lab Reports</title>
+
+<script type = "text/javascript">
+    function check(e)
+    {
+        e.form.submit();
+    }
+</script>
 </head>
 <body>
-    <form action='' method='POST'> 
+    <form action='' method='POST' name="labreport"> 
     {% csrf_token %} 
     <b>Material:</b>
         <select name = 'material'>
             {% for i in material_name %}
-                <option value={{i.name}} name={{i.name}} >{{i.name}} </option>
+                <option value='{{i.name}}' name='{{i.name}}' onchange="check(this)" >{{i.name}} </option>
             {% endfor %}
         </select>
         <p><b>Time span:</b></p>
