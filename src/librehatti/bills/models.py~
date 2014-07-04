@@ -27,12 +27,6 @@ class QuotedItem(models.Model):
     def __unicode__(self):
         return '%s' % (self.quote_item) + ' - ' '%s' % (self.quote_order)
 
-class ConfirmForm(ModelForm):
-	
-	class Meta:
-		model = QuotedItem
-		fields= ('quote_item', 'quote_qty') 	
-			
-		
+
 	
 	

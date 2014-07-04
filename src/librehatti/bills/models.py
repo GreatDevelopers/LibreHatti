@@ -13,7 +13,7 @@ class QuotedOrder(models.Model):
         return '%s' % (self.quote_buyer_id) +' - ' '%s' % (self.quote_date_time.strftime ('%b %d, %Y'))
 
 class QuotedItem(models.Model):
-    quote_order = models.ForeignKey(PurchaseOrder)
+    quote_order = models.ForeignKey(QuotedOrder)
     quote_price = models.IntegerField()
     quote_qty = models.IntegerField()
     quote_discount= models.IntegerField()

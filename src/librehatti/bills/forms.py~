@@ -7,6 +7,5 @@ from librehatti.bills.models import *
 
 
 class ConfirmForm(ModelForm):
-     class Meta:
-         model = QuotedItem
-         fields = ('quote_item', 'quote_qty')
+     quote_item = forms.CharField()
+     quote_qty = forms.IntegerField()
