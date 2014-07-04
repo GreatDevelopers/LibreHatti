@@ -28,7 +28,7 @@ class Attributes(models.Model):
 
 
 class PurchaseOrder(models.Model):
-    buyer_id = models.ForeignKey('useraccounts.Customer')
+    buyer_id = models.ForeignKey(User)
     is_debit = models.BooleanField()
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')

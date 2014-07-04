@@ -12,4 +12,6 @@ urlpatterns = patterns('',
         url(r'^useraccounts/', include('useraccounts.urls')),
         url(r'^print/', include('librehatti.print.urls')),
         url(r'^admin/', include(admin.site.urls)),
+      	 url(r'^search/','librehatti.report.search.search'),
+        url(r'^search_result/','librehatti.report.views.search_result'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
