@@ -12,8 +12,8 @@ class TaDa(models.Model):
     end_test_date = Model.DateField()
     testing_site= Model.CharField(max_length=100)
     testing_staff = Model.CharField(max_length=100)
-    def __unicode__(self):
-		return self.suspence
+    #def __unicode__(self):
+	#	return self.suspence
 
 
 		
