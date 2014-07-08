@@ -1,10 +1,22 @@
 from django.shortcuts import render
-from librehatti.catalog.models import *
+from librehatti.catalog.models import Category, PurchaseOrder,PurchasedItem
+from django.db.models import Sum
 
-
-def generate_bill(request):
-    ORDER_NO = 3;
-    order = PurchaseOrder.objects.filter(id=ORDER_NO)
-    date = order.date_time.strftime('%b %d, %Y'))0
-    name = order.buyer_id.first_name+order.buyer_id.last_name+
-           order.buyer_id.title
+def add_material(request):
+  if request.method == 'POST':
+    material = request.POST['material']
+    start_date = request.POST['From']
+    end_date = request.POST['To']
+    purchase_item= PurchasedItem.objects.filter(purchase_order__date_time__range
+                  =(start_date,end_date)).filter(item__category__name=material).values_list( 
+                    'purchase_order_id','purchase_order__date_time',
+                   'purchase_order__buyer_id__username',
+                  'purchase_order__buyer_id__customer__title','price')
+    total=PurchasedItem.objects.filter(purchase_order__date_time__range 
+        =(start_date,end_date)).aggregate(Sum('price')).get('price__sum', 0.00)
+    return render(request, 'print/lab_reports.html', { 'purchase_item':purchase_item,
+                 'start_date':start_date,'end_date':end_date,'total_cost':total})
+  else:     
+    material_name = Category.objects.values('name')
+    return render(request,'print/form.html',{'material_name': material_name})    
+    
