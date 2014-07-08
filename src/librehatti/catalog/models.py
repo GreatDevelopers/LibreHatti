@@ -13,7 +13,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category)
-    price = models.IntegerField()
+    price_per_unit = models.IntegerField()
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     def __unicode__(self):
         return self.name
@@ -33,6 +33,8 @@ class PurchaseOrder(models.Model):
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
+    total_discount = models.IntegerField()
+    tds = models.IntegerField()
     def __unicode__(self):
         return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
                ('%b %d, %Y'))
@@ -40,13 +42,11 @@ class PurchaseOrder(models.Model):
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
-    price = models.IntegerField()
     qty = models.IntegerField()
-    discount= models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self):
         if not self.id:
-            self.price = self.item.price * self.qty
+            self.price = self.item.price_per_unit * self.qty
         super(PurchasedItem,self).save()
 
     def __unicode__(self):
@@ -60,3 +60,12 @@ class Catalog(models.Model):
     def __unicode__(self):
         return self.attribute.name;
 
+class Surcharge(models.Model):
+    taxes = models.CharField(max_length=200)
+    value = models.IntegerField()
+    taxes_included = models.BooleanField()
+    tax_effected_from = models.DateField()
+    tax_valid_till = models.DateField()
+    Remark = models.CharField(max_length=1000)
+    def __unicode__(self):
+         return self.taxes
