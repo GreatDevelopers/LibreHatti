@@ -1,3 +1,4 @@
 from django.contrib import admin
+from librehatti.suspense.models import SuspenseOrder
 
-# Register your models here.
+admin.site.register(SuspenseOrder)
