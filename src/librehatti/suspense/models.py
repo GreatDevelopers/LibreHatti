@@ -13,3 +13,22 @@ class SuspenseClearance(models.Model):
     field_testing_staff = models.CharField(max_length=200)
     Test_date = models.DateTimeField(auto_now_add=True)
     Clear_date = models.DateTimeField(auto_now_add=True)
+
+class Department(models.Model):
+    title = models.CharField(max_length=50)
+    address = models.CharField(max_length=150)
+    phone = models.CharField(max_length=20, blank=True)
+    dean = models.CharField(max_length=50, blank=True)
+    def __unicode__(self):
+        return self.title
+
+class Staff(models.Model):
+    department = models.ForeignKey(Department)
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=50)
+    daily_income = models.IntegerField(blank=True)
+    position = models.CharField(max_length=100)
+    lab = models.ForeignKey(Lab)
+    email =models.EmailField(blank=True)
+    def __unicode__(self):
+        return self.name
