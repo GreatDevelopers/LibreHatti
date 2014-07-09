@@ -6,6 +6,7 @@ admin.autodiscover()
 admin.site.register(Category)
 admin.site.register(Attributes)
 admin.site.register(Catalog)
+admin.site.register(Surcharge)
 
 
 class CatalogInline(admin.TabularInline):
@@ -15,13 +16,13 @@ class CatalogInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    fields = ['name', 'category', 'price', 'organisation']
+    fields = ['name', 'category', 'price_per_unit', 'organisation']
     inlines = [CatalogInline] 
 
 
 class PurchasedItemInline(admin.StackedInline):
     model = PurchasedItem
-    fields = ['item', 'qty', 'discount']
+    fields = ['item', 'qty', ]
     extra = 10
 
 
