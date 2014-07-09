@@ -1,7 +1,5 @@
 <html>
 <head>
- 
-	<meta http-equiv="refresh" content="15">
 	<style type="text/css">
 	h1{margin-left: 30%;}
 	h1.as{margin-left: 35%;} 
@@ -42,8 +40,7 @@
 	<tr>
  		<th> Client </th>
 		<th> Address </th>
-		<th> unknown </th>
-                <th> unknown </th>
+                <th> Telephone </th>
 		<th> Produce</th>
 		
 	</tr>
@@ -51,8 +48,7 @@
         <tr>
 		<td> {{m.quote_buyer_id.username}}</td>
 		<td> {{m.quote_delivery_address}}</td>
-		<td> {{m.}}</td>
-                <td> {{m.}}</td>
+                <td> {{m.quote_buyer_id.customer.telephone}}</td>	
 		<td>
 		<a href="/bills/generateproforma/{{m.id}}" style="text-decoration:none">
                 <input type="submit" value="Generate Proforma" name="Generate Proforma">
