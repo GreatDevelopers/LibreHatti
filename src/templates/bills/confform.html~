@@ -4,8 +4,10 @@
 </head>
 <body>
 
+{{item}}
+
     <h1>CONFIRM ITEMS</h1>
-    <form action="/bills/confirm/final/{{quoted_order.quote_buyer_id.username}}/" method="POST"> {% csrf_token %}
+    <form action="/bills/confirm/?client={% for id in client_id %}{{id.quote_buyer_id__id}}{% endfor %}" method="POST"> {% csrf_token %}
     <table>
     <tr>
     <th>Item</th>
@@ -13,22 +15,19 @@
     </tr>
 
      {% for i in quoted_item %}
-      
     <tr>
          
-    <td>Item:<input type="text" name = "quote_item" value="{{i.quote_item.name}}"></td>  
+    <td>Item:<input type="text" name = "quote_item" value="{{i.quote_item__name}}"></td>  
     <td>Quantity:<input type="text" name="quote_qty" value="{{i.quote_qty}}"></td>
+    <td>Discount:<input type="text" name="discount" value="{{i.quote_discount}}"></td>
        
    
     </tr> 
       
    {% endfor %} 
-   </table
+   </table>
 
-     
-    
-    <a href="/bills/confirm/final/{{quoted_order.quote_buyer_id.username}}">
-    <input type="submit" value="Submit" name="submit"/> </a>
+    <input type="submit" value="Submit" name="submit"/>
     </form>
 </body>
 </html>

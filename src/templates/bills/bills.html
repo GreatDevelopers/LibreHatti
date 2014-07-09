@@ -51,17 +51,27 @@ dated:{{quoted_order.date_time}} , respectively.
 </br>
 </br>
 </br>
-
-<table>
+<table style = "width:1200px;">
 <tr>
-
+{{total_cost}}
   <th>S.no.</th>
   <th>Charges For Following</th>
+  <th>Quantity</th>
   <th>Price</th>
-  <th>Per</th>
   <th>Total</h>
 
 </tr>
+
+<!--{% for i in quoted_item %}
+<tr>
+{% for j in i%} 
+          
+                 <<td>{{ forloop.counter }}</td>
+		<td> {{j}}</td>
+		
+{% endfor %}		
+    </tr>
+{% endfor %}-->
 
 {% if QuotedItem %}
 {% for i in QuotedItem %}
