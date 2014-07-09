@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',
+    'librehatti.prints',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
