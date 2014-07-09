@@ -32,7 +32,7 @@ class PurchaseOrder(models.Model):
     is_debit = models.BooleanField()
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField(auto_now_add=True
     is_suspense = models.BooleanField(default=False)
     choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque', 'Cheque'))
     mode_of_payment = models.CharField(max_length=25, default='cash', choices=choices)
