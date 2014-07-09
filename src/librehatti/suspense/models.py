@@ -1,8 +1,13 @@
 from django.db import models
+from librehatti.catalog.models import PurchaseOrder
 
-# Create your models here.
+
+class SuspenseOrder(models.Model):
+    purchase_order_id = models.ForeignKey(PurchaseOrder)
+    transportation = models.IntegerField()
+
+
 class SuspenseClearance(models.Model):
-
     #suspense_id = models.ForeignKey('SuspenseOrder')
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
@@ -14,6 +19,7 @@ class SuspenseClearance(models.Model):
     Test_date = models.DateTimeField(auto_now_add=True)
     Clear_date = models.DateTimeField(auto_now_add=True)
 
+
 class Department(models.Model):
     title = models.CharField(max_length=50)
     address = models.CharField(max_length=150)
@@ -21,6 +27,7 @@ class Department(models.Model):
     dean = models.CharField(max_length=50, blank=True)
     def __unicode__(self):
         return self.title
+
 
 class Staff(models.Model):
     department = models.ForeignKey(Department)
