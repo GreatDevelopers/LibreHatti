@@ -1,0 +1,38 @@
+<html>
+<head>
+<title> Proforma Bill</title>
+</head>
+<div style="font-size:24px" align='center'>{{quoted_order.quote_organisation}}</div>
+<div style="font-size:14px" align='center'>{{quoted_order.quote_delivery_address}}</div>
+<div style="font-size:14px" align='center'>  <i>Ph :</i> {{quoted_order.quote_organisation.telephone}}
+<i>Fax :</i> {{quote_order.faxno}}</div><br><br>
+<div align='left'>Buyer Id : {{ quoted_order.quote_buyer_id.username }}<br>STC No. AAATN1978LSD001<br>PAN No. AAATN1978L</div>
+<br>
+<body>
+<h2 align="center">PROFORMA BILL</h2>
+<br><br><br>
+<div style="position:absolute;top:290px;left:35px;">No. : GNDEC/TCC/B/{{ job_no }}</div> 
+<div style="position:absolute;top:290px;right:0px;">Dated:  {{quoted_order.quote_date_time}} </div>
+<br/><br/><br/>
+<br>
+<table  style="border:1px solid black;border-collapse:collapse;width:1000px"; align="center">
+
+<tr>
+<th style="border:1px solid black;"> Items</th>
+<th style="border:1px solid black;"> Category </th>
+<th style="border:1px solid black;"> Price </th>
+<th style="border:1px solid black;"> Quantity</th>
+<th style="border:1px solid black;"> Total Amount</th>
+</tr>
+
+<tr style="border:1px solid black;text-align:centre;">
+<td style="border:1px solid black;">{{ quoted_item.quote_item.name }}</td>
+<td style="border:1px solid black;">{{ quoted_item.quote_item.category.name }}</td>
+<td  style="border:1px solid black;">{{ quoted_item.quote_item.price }}</td>
+<td style="border:1px solid black;">{{ quoted_item.quote_qty }}</td>
+<td  style="border:1px solid black;">{{ quoted_item.quote_price }}</td>
+</tr>
+</table>
+<br><br>
+
+ Total cost of all the items: {{ total_cost }}
