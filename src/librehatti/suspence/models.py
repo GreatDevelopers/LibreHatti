@@ -1,5 +1,4 @@
 from django.db import models
-from librehatti.catalog.models import PurchaseOrder
 
 
 class SuspenceOrder(models.Model):
@@ -39,7 +38,7 @@ class Staff(models.Model):
     email =models.EmailField(blank=True)
     def __unicode__(self):
         return self.name
-        
+
 class TaDa(models.Model):
     #suspence = models.ForeignKey(SuspenceOrder)
     departure_time_from_tcc= models.TimeField()
