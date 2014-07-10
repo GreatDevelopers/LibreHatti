@@ -7,7 +7,7 @@ class SuspenceOrder(models.Model):
     transportation = models.IntegerField()
 
 
-class SuspenseClearance(models.Model):
+class SuspenceClearance(models.Model):
     #suspence_id = models.ForeignKey('SuspenceOrder')
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
