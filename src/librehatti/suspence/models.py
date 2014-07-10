@@ -2,13 +2,13 @@ from django.db import models
 from librehatti.catalog.models import PurchaseOrder
 
 
-class SuspenseOrder(models.Model):
+class SuspenceOrder(models.Model):
     purchase_order_id = models.ForeignKey(PurchaseOrder)
     transportation = models.IntegerField()
 
 
 class SuspenseClearance(models.Model):
-    #suspense_id = models.ForeignKey('SuspenseOrder')
+    #suspence_id = models.ForeignKey('SuspenceOrder')
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
