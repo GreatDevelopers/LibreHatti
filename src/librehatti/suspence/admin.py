@@ -1,4 +1,4 @@
 from django.contrib import admin
-from librehatti.suspence.models import SuspenseOrder
+from librehatti.suspence.models import SuspenceOrder
 
-admin.site.register(SuspenseOrder)
+admin.site.register(SuspenceOrder)
