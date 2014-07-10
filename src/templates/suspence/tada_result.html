@@ -5,27 +5,44 @@
 	
 <meta charset='UTF-8'>
 
-	<link rel="stylesheet" type="text/css" href="style.css" />
-
 	<title>TA/DA bill</title>
+	<style>
+		table, th, td{
+    	border: 1px solid black;
+		}
+		th,td
+		{
+		padding:3px;border-style:inset;
+		}
+		table
+		{
+		table-layout:fixed;
+		}
+		.table{padding-left:5em;}
+		.a{margin-top:100px; margin-left:400px;}
+		.b{margin-top:70px;margin-left:750px;}
+		.c{margin-top:60px;margin-left:400px;}
+		.d{margin-top:70px; margin-left:400px;}
+	</style>
 </head>
 
 <body>
 
 <h1 style="text-align:center">T.A./D.A  FORM FOR CONSULTANCY WORK</h1>     
-<p>Name of the Department/Client:Swami ganga nand Ji Bhuriwale Memorial Trust<p>
-<p class="ab">Vide Receipt No.23
+<p>Name of the Department/Client: Swami ganga nand Ji Bhuriwale Memorial Trust </br>
+	Amount claimed from Department/Client: Rs.{{total_cost}} </p>
+<p  style="float:right">Vide Receipt No.23 
 </br>
 Date:  {% now "F jS o" %}</p>
-<table>
+<table style="width:100%">
 <thead>
 <tr>
 <th rowspan = "3">Name</th>
 </tr>
-<th colspan = "3";style="valign:left; scope="col">Departure(up)</th>
-<th colspan = "3"; scope="col">Arrival(up)</th>
-<th colspan = "3";style="valign:left; scope="col">Departure(down)</th>
-<th colspan = "3";style="valign:left; scope="col">Arrival(down)</th>
+<th colspan = "3">Departure(up)</th>
+<th colspan = "3">Arrival(up)</th>
+<th colspan = "3">Departure(down)</th>
+<th colspan = "3">Arrival(down)</th>
 <th>D.A.</th>
 <th>Signature</th>
 </tr>
@@ -47,10 +64,10 @@ Date:  {% now "F jS o" %}</p>
 </tr>
 </thead>
 <tbody>
-{% for s in staff %}
+{% for person in staff %}
 {% for ta_da in obj %} 
 <tr>
-<td>{{s}}</td>
+<td>{{person}}</td>
 <td>{{ta_da.start_test_date}}</td>
 <td>{{ta_da.departure_time_from_tcc}}</td>
 <td>{{ta_da.source_site }}</td>
@@ -71,7 +88,7 @@ Date:  {% now "F jS o" %}</p>
 
 
 <tr>
-<td colspan = "13">Total</td>
+<td colspan = "13"><center>Total </center></td>
 </span>
 <td>{{total_cost}}</td>
 </tr>

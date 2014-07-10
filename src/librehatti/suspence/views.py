@@ -33,8 +33,8 @@ def tada_result(request):
        j=i['id__max']
        staff = testing_staff.split(",")
        total_cost = 0
-       for s in staff:
+       for person in staff:
          total_cost= total_cost + int(tada_amount)
        obj1 = TaDa.objects.filter(id=j).values('departure_time_from_tcc' ,'arrival_time_at_site','departure_time_from_site','arrival_time_at_tcc', 'tada_amount','start_test_date','end_test_date','source_site', 'testing_site','testing_staff')
        #total_cost = TaDa.objects.filter(id=j).aggregate(Sum('tada_amount')).get('tada_amount__sum', 0.00)
-       return render(request, '11.html', { 'obj':obj1, 'total_cost':total_cost, 'staff':staff})
+       return render(request, 'tada_result.html', { 'obj':obj1, 'total_cost':total_cost, 'staff':staff})
