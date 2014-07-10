@@ -47,9 +47,10 @@ Date:</p>
 </tr>
 </thead>
 <tbody>
+{% for s in staff %}
 {% for ta_da in obj %} 
 <tr>
-<td>{{ta_da.testing_staff}}</td>
+<td>{{s}}</td>
 <td>{{ta_da.start_test_date}}</td>
 <td>{{ta_da.departure_time_from_tcc}}</td>
 <td>{{ta_da.source_site }}</td>
@@ -66,6 +67,9 @@ Date:</p>
 
 </tr>
 {% endfor %}
+{% endfor %}
+
+
 <tr>
 <td colspan = "13">Total</td>
 </span>
