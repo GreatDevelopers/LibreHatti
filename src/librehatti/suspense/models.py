@@ -1,13 +1,13 @@
 from django.db import models
 
 
-class SuspenceOrder(models.Model):
+class SuspenseOrder(models.Model):
     purchase_order_id = models.ForeignKey(PurchaseOrder)
     transportation = models.IntegerField()
 
 
-class SuspenceClearance(models.Model):
-    #suspence_id = models.ForeignKey('SuspenceOrder')
+class SuspenseClearance(models.Model):
+    suspense_id = models.ForeignKey('SuspenseOrder')
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
@@ -40,7 +40,7 @@ class Staff(models.Model):
         return self.name
 
 class TaDa(models.Model):
-    #suspence = models.ForeignKey(SuspenceOrder)
+    suspense = models.ForeignKey(SuspenseOrder)
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
@@ -51,10 +51,10 @@ class TaDa(models.Model):
     testing_site= models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
    # def __unicode__(self):
-	#	return self.suspence
+	#	return self.suspense
 
 
-		
- 
-    
-    
+
+
+
+
