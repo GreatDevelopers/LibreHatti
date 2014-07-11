@@ -4,7 +4,7 @@ from librehatti.catalog.models import PurchaseOrder
 
 class SuspenseOrder(models.Model):
     purchase_order_id = models.IntegerField()
-    transportation = models.IntegerField(default=0)
+    distance = models.IntegerField(default=0)
 
 
 class SuspenseClearance(models.Model):
