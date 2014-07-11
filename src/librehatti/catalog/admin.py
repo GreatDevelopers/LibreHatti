@@ -36,8 +36,9 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         if obj.is_suspense == True:
             return HttpResponseRedirect('/suspense/susp/')
         else:
+            obj.save()
             return HttpResponseRedirect('/admin/catalog/purchaseorder/')
-       
+
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
