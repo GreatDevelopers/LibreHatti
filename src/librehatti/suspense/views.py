@@ -54,7 +54,7 @@ def wtransport(request):
 
 def suspense(request):
 	form = SuspenseForm()   
-	return render(request,'test.html',{'form':form})
+	return render(request,'form.html',{'form':form})
 def save_charges(request):
 	if request.method=='GET':
 		
