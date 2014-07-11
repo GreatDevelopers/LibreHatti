@@ -1,5 +1,9 @@
 from django.forms import ModelForm
 from models import TaDa
+from django import forms
+
+class TaDaSearch(forms.Form):
+		ref_no = forms.IntegerField()
 
 class TaDaForm(ModelForm):
 	class Meta:
@@ -14,3 +18,4 @@ class TaDaForm(ModelForm):
        # widgets = {
         #'departure_time_from_tcc': forms.TimeInput(format='%H:%M')
         #}
+

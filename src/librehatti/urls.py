@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 
+
 admin.autodiscover()
 
 
@@ -12,4 +13,5 @@ urlpatterns = patterns('',
         url(r'^useraccounts/', include('useraccounts.urls')),
         url(r'^admin/', include(admin.site.urls)),
         url(r'^bill/','librehatti.print.views.bill'),
+        url(r'^suspense/', include('librehatti.suspense.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
