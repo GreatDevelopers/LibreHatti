@@ -7,7 +7,6 @@ admin.autodiscover()
 admin.site.register(Category)
 admin.site.register(Attributes)
 admin.site.register(Catalog)
-#admin.site.register(SuspenseOrder)
 
 class CatalogInline(admin.TabularInline):
     model = Catalog
