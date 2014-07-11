@@ -9,9 +9,9 @@ def add_material(request):
     end_date = request.POST['To']
     purchase_item= PurchasedItem.objects.filter(purchase_order__date_time__range
                   =(start_date,end_date)).filter(item__category__name=material).values_list( 
-                    'purchase_order_id','purchase_order__date_time',
+                   'purchase_order_id','purchase_order__date_time',
                    'purchase_order__buyer_id__username',
-                  'purchase_order__buyer_id__customer__title','price')
+                   'purchase_order__buyer_id__customer__title','price')
     total=PurchasedItem.objects.filter(purchase_order__date_time__range 
         =(start_date,end_date)).aggregate(Sum('price')).get('price__sum', 0.00)
     return render(request, 'print/lab_reports.html', { 'purchase_item':purchase_item,
