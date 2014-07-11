@@ -10,5 +10,5 @@ class Clearance_form(ModelForm):
 
 class SuspenseForm(forms.Form):
         Purchase_order = forms.ChoiceField(choices=CHOICES)
-        transportation=forms.IntegerField()
+        distance=forms.IntegerField()
       
