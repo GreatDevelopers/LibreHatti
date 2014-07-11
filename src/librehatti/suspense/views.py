@@ -59,7 +59,7 @@ def save_charges(request):
 	if request.method=='GET':
 		
 		option=request.GET['Purchase_order']
-		charges=request.GET['transportation']
+		charges=request.GET['distance']
 		obj = SuspenseOrder(purchase_order_id=option, transportation=charges)
 		obj.save()
 		return HttpResponse('Thanks!')		
