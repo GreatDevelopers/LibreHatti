@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from models import SuspenseClearance
-from forms import Clearance_form
+from django.http import HttpResponse
+from librehatti.catalog.models import *
+from librehatti.suspense.models import *
+from librehatti.suspense.forms import *
 import datetime
 
 def clearance_search(request):
@@ -48,5 +51,17 @@ def with_transport(request):
 
 def wtransport(request):
     return render(request,'suspense/wtransport.html')
+
+def suspense(request):
+	form = SuspenseForm()   
+	return render(request,'test.html',{'form':form})
+def save_charges(request):
+	if request.method=='GET':
+		
+		option=request.GET['Purchase_order']
+		charges=request.GET['transportation']
+		obj = SuspenseOrder(purchase_order_id=option, transportation=charges)
+		obj.save()
+		return HttpResponse('Thanks!')		
 
 
