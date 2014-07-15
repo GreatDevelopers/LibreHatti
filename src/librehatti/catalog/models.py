@@ -35,7 +35,7 @@ class PurchaseOrder(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField()
     tds = models.IntegerField()
-	is_suspense = models.BooleanField(default=False)
+    is_suspense = models.BooleanField(default=False)
     choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque', 'Cheque'))
     mode_of_payment = models.CharField(max_length=25, default='cash', choices=choices)
     def __unicode__(self):
