@@ -15,8 +15,8 @@ class SuspenseClearance(models.Model):
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200)
     field_testing_staff = models.CharField(max_length=200)
-    Test_date = models.DateTimeField(auto_now_add=True)
-    Clear_date = models.DateTimeField(auto_now_add=True)
+    test_date = models.DateTimeField()
+    clear_date = models.DateTimeField()
 
 
 class Department(models.Model):
