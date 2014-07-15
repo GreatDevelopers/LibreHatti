@@ -2,8 +2,6 @@ from django.contrib import admin
 from librehatti.bills.models import *
 #from django.contrib.auth.admin import *
 
-
-
 class QuotedItemInline(admin.StackedInline):
     model = QuotedItem
     fields = ['quote_item', 'quote_qty', 'quote_discount']
