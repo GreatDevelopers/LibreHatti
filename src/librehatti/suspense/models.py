@@ -34,7 +34,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=50)
     daily_income = models.IntegerField(blank=True)
     position = models.CharField(max_length=100)
-    lab = models.ForeignKey(Lab)
+    #lab = models.ForeignKey(Lab)
     email =models.EmailField(blank=True)
     def __unicode__(self):
         return self.name
