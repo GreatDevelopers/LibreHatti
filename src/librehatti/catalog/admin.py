@@ -29,7 +29,6 @@ class PurchasedItemInline(admin.StackedInline):
 class PurchaseOrderAdmin(admin.ModelAdmin):
     exclude=('is_suspense',)
     inlines = [PurchasedItemInline]
-<<<<<<< HEAD
     model = PurchaseOrder
     def response_add(self, request, obj, post_url_continue=None):
         if obj.is_suspense == True:
@@ -37,8 +36,6 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
         else:
             obj.save()
             return HttpResponseRedirect('/admin/catalog/purchaseorder/')
-=======
->>>>>>> 88d7275c7a935efdf8007e147d410f33a2411529
 
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
