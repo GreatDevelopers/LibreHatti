@@ -14,5 +14,4 @@ class QuotedOrderAdmin(admin.ModelAdmin):
     inlines = [QuotedItemInline]
 
 admin.site.register(QuotedOrder, QuotedOrderAdmin)
-admin.site.register(QuotedOrder)
 admin.site.register(QuotedItem)
