@@ -1,20 +1,46 @@
 <html>
 <head>
 <title>Lab Reports</title>
+ 
+<script type = "text/javascript">
+    function check(e)
+    {
+        e.form.submit();
+    }
+</script>
 </head>
 <body>
-    <form action='' method='POST'> 
-    {% csrf_token %} 
-    <b>Material:</b>
-        <select name = 'material'>
-            {% for i in material_name %}
-                <option value={{i.name}} name={{i.name}} >{{i.name}} </option>
+    <form action='' method='POST' name="labreport">
+    {% csrf_token %}
+    <p><b>Lab:</b>
+    
+        <select name = 'Lab'>
+            {% for i in lab_info %}
+                <option value='{{i.id}}' name='{{i.id}}' onchange="check(this)" >{{i.parent}} </option>
             {% endfor %}
         </select>
+    </p> 
+       
+    <p><b>Test:</b>
+        <select name = 'Test'>
+            {% for j in test_info %}
+                <option value='{{j.id}}' name='{{j.name}}' onchange="check(this)" >{{j.name}} </option>
+            {% endfor %}
+        </select>
+    </p>
+        
+    <p><b>Material:</b>
+        <select name = 'Material'>
+            {% for j in material_info %}
+                <option value='{{k.id}}' name='{{k.name}}' onchange="check(this)" >{{k.name}} </option>
+            {% endfor %}
+        </select>
+    </p>    
+
         <p><b>Time span:</b></p>
-        <p>From:<input type="text" name="From" />
-            To:  <input type="text" name="To" /></p>
-        <input type="submit" value="Submit" />
+        <p>From:<input type="date" id="datepicker"> 
+            To: <input type="date" id="datepicker"></p>
+        <input type="submit" value="Submit" 
     </form>
 </body>
 </html>
