@@ -3,7 +3,7 @@ from models import TaDa
 from django import forms
 
 class TaDaSearch(forms.Form):
-		ref_no = forms.IntegerField()
+    ref_no = forms.IntegerField()
 
 class TaDaForm(ModelForm):
 	class Meta:

@@ -44,6 +44,9 @@ def tada_result(request):
        for person in staff:
          total_cost= total_cost + int(tada_amount)
        rupees_in_words = num2eng(total_cost)
-       obj1 = TaDa.objects.filter(id=j).values('departure_time_from_tcc' ,'arrival_time_at_site','departure_time_from_site','arrival_time_at_tcc', 'tada_amount','start_test_date','end_test_date','source_site', 'testing_site','testing_staff')
+       obj1 = TaDa.objects.filter(id=j).values('departure_time_from_tcc' ,
+       'arrival_time_at_site','departure_time_from_site','arrival_time_at_tcc', 
+       'tada_amount','start_test_date','end_test_date','source_site', 'testing_site','testing_staff')
        #total_cost = TaDa.objects.filter(id=j).aggregate(Sum('tada_amount')).get('tada_amount__sum', 0.00)
-       return render(request, 'suspense/tada_result.html', { 'obj':obj1, 'total_cost':total_cost, 'staff':staff, 'rupees_in_words':rupees_in_words })
+       return render(request, 'suspense/tada_result.html', { 'obj':obj1, 
+       'total_cost':total_cost, 'staff':staff, 'rupees_in_words':rupees_in_words })
