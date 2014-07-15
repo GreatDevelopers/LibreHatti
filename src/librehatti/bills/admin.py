@@ -7,7 +7,6 @@ class QuotedItemInline(admin.StackedInline):
     fields = ['quote_item', 'quote_qty', 'quote_discount']
     extra = 10
 
-
 class QuotedOrderAdmin(admin.ModelAdmin):
     inlines = [QuotedItemInline]
 
