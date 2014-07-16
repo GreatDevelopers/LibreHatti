@@ -40,4 +40,3 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
-

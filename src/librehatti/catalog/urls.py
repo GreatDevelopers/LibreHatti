@@ -3,6 +3,6 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = patterns('librehatti.catalog.views',
-        url(r'^$', 'index'),
-        url(r'^addCategory/','add_categories'),
+    url(r'^$', 'index'),
+    url(r'^addCategory/','add_categories'),
 )

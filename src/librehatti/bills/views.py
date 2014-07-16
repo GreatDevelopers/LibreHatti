@@ -34,7 +34,6 @@ def proforma(request):
     return render(request, 'bills/quote.html', 
                  {'QuotedOrder_list' : QuotedOrder_list})
 
-
 def gen_proforma(request, client_id):
     
     quoted_order=QuotedOrder.objects.get(quote_buyer_id_id=client_id)

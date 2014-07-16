@@ -3,6 +3,8 @@ from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
 from librehatti.suspense.models import SuspenseOrder
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
@@ -38,6 +40,7 @@ class PurchaseOrder(models.Model):
     is_suspense = models.BooleanField(default=False)
     choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque', 'Cheque'))
     mode_of_payment = models.CharField(max_length=25, default='cash', choices=choices)
+
     def __unicode__(self):
         return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
                ('%b %d, %Y'))
@@ -47,7 +50,6 @@ class PurchaseOrder(models.Model):
 			self.is_suspense=True
 	super(PurchaseOrder, self).save(*args, **kwargs) 
 
-    
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
