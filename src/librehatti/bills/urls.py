@@ -4,7 +4,6 @@ from librehatti.bills import views
 urlpatterns = patterns('librehatti.bills.views',
         url(r'^proforma/', 'proforma') , 
         url(r'^generateproforma/(?P<client_id>\d+)/', 'gen_proforma'),
-		url(r'^list_quoted', views.list_quoted, name ='list_quoted'),
+	url(r'^list_quoted', views.list_quoted, name ='list_quoted'),
        	url(r'^confirm/',views.confirm, name='confirm'),
-
 )

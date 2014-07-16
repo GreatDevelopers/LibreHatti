@@ -8,4 +8,3 @@ for i in a:
 		purchase_ids.append((i.id,i.id))
 suspense_ids=tuple(purchase_ids)
 CHOICES=suspense_ids
-	

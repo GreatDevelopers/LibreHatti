@@ -2,7 +2,7 @@ import re
 from django.db.models import Q
 
 def normalize_query(query_string,
-	findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
                     normspace=re.compile(r'\s{2,}').sub):
     ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
         and grouping quoted words together.

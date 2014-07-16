@@ -20,25 +20,25 @@ def clearance(request):
 
 def clearance_result(request):
     if 'Submit' in request.GET:
-       ref_no = request.GET['job']       
-       work_charge = request.GET['work_charge']
-       labour_charge = request.GET['labour_charge']
-       car_taxi_charge= request.GET['car_taxi_charge']
-       boring_charge_external= request.GET['boring_charge_external']
-       boring_charge_internal= request.GET['boring_charge_internal']
-       lab_testing_staff=request.GET['lab_testing_staff']
-       field_testing_staff= request.GET['field_testing_staff']
-       Test_date= request.GET['Test_date']
-       obj= SuspenseClearance(work_charge =work_charge ,labour_charge=labour_charge,
-       car_taxi_charge=car_taxi_charge,boring_charge_external=boring_charge_external,
-       boring_charge_internal=boring_charge_internal,lab_testing_staff=lab_testing_staff,field_testing_staff=field_testing_staff,
-       Test_date=Test_date)
-       obj.save()
-       temp = {'ref_no': ref_no,'work_charge':work_charge ,'labour_charge':labour_charge,
-       'car_taxi_charge':car_taxi_charge,'boring_charge_external':boring_charge_external,
-       'boring_charge_internal':boring_charge_internal,'lab_testing_staff':lab_testing_staff,'field_testing_staff':field_testing_staff,
-       'Test_date':Test_date}
-       return render(request, 'suspense/clearance_result.html', temp) 
+        ref_no = request.GET['job']       
+        work_charge = request.GET['work_charge']
+        labour_charge = request.GET['labour_charge']
+        car_taxi_charge= request.GET['car_taxi_charge']
+        boring_charge_external= request.GET['boring_charge_external']
+        boring_charge_internal= request.GET['boring_charge_internal']
+        lab_testing_staff=request.GET['lab_testing_staff']
+        field_testing_staff= request.GET['field_testing_staff']
+        Test_date= request.GET['Test_date']
+        obj= SuspenseClearance(work_charge =work_charge ,labour_charge=labour_charge,
+        car_taxi_charge=car_taxi_charge,boring_charge_external=boring_charge_external,
+        boring_charge_internal=boring_charge_internal,lab_testing_staff=lab_testing_staff,field_testing_staff=field_testing_staff,
+        Test_date=Test_date)
+        obj.save()
+        temp = {'ref_no': ref_no,'work_charge':work_charge ,'labour_charge':labour_charge,
+        'car_taxi_charge':car_taxi_charge,'boring_charge_external':boring_charge_external,
+        'boring_charge_internal':boring_charge_internal,'lab_testing_staff':lab_testing_staff,'field_testing_staff':field_testing_staff,
+        'Test_date':Test_date}
+        return render(request, 'suspense/clearance_result.html', temp) 
 
 def other_charges(request):
     return render(request,'suspense/othercharge.html')
@@ -53,15 +53,13 @@ def wtransport(request):
     return render(request,'suspense/wtransport.html')
 
 def suspense(request):
-	form = SuspenseForm()   
-	return render(request,'form.html',{'form':form})
+        form = SuspenseForm()   
+        return render(request,'form.html',{'form':form})
+
 def save_charges(request):
-	if request.method=='GET':
-		
-		option=request.GET['Purchase_order']
-		charges=request.GET['distance']
-		obj = SuspenseOrder(purchase_order_id=option, transportation=charges)
-		obj.save()
-		return HttpResponse('Thanks!')		
-
-
+	if request.method=='GET':		
+	    option=request.GET['Purchase_order']
+	    charges=request.GET['distance']
+	    obj = SuspenseOrder(purchase_order_id=option, transportation=charges)
+	    obj.save()
+	    return HttpResponse('Thanks!')
