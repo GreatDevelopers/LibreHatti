@@ -5,10 +5,11 @@ from librehatti.catalog.models import PurchaseOrder
 class SuspenseOrder(models.Model):
     purchase_order_id = models.IntegerField()
     transportation = models.IntegerField()
-
+    
+    
 
 class TaDa(models.Model):
-    #suspense = models.ForeignKey(SuspenceOrder)
+    suspense = models.IntegerField()
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
@@ -19,8 +20,8 @@ class TaDa(models.Model):
     source_site = models.CharField(max_length=100)
     testing_site= models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
-    #def __unicode__(self):
-    # return self.suspense
+    def __unicode__(self):
+       return self.suspense
 
 
 		
