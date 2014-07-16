@@ -32,7 +32,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     model = PurchaseOrder
     def response_add(self, request, obj, post_url_continue=None):
         if obj.is_suspense == True:
-            return HttpResponseRedirect('/suspense/susp/')
+            return HttpResponseRedirect('/suspense/')
         else:
             obj.save()
             return HttpResponseRedirect('/admin/catalog/purchaseorder/')

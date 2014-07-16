@@ -8,7 +8,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'librehatti.catalog.views.index'),
-    url(r'^suspense/', 'librehatti.suspense.views.susp'),
     url(r'^catalog/', include('librehatti.catalog.urls')),
     url(r'^useraccounts/', include('useraccounts.urls')),
     url(r'^print/', include('librehatti.prints.urls')),
