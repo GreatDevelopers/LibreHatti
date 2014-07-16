@@ -5,7 +5,8 @@ from librehatti.catalog.models import PurchaseOrder
 class SuspenseOrder(models.Model):
     purchase_order_id = models.IntegerField()
     transportation = models.IntegerField()
-    
+    def __unicode__(self):
+        return '%s' % (self.id)
     
 
 class TaDa(models.Model):
