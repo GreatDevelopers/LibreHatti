@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from models import SuspenseClearance
 from librehatti.suspense.choices import CHOICES
-
+from django import forms
 
 # Create your forms here.
 class Clearance_form(ModelForm):

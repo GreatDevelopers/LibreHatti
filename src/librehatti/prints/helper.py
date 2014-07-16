@@ -1,14 +1,11 @@
 #To convert digits into words
  
- def num2eng(n):
-  words = ''
-
+def num2eng(n):
+    words = ''
     units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine','Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
     tens = ['','Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
 
-
     for group in ['', 'Hundred', 'Thousand', 'Lakh', 'Crore']:
-
         if group in ['', 'Thousand', 'Lakh']:
             n, digits = n // 100, n % 100
         elif group == 'Hundred':
