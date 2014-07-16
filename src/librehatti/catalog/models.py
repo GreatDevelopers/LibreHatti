@@ -58,7 +58,7 @@ class PurchasedItem(models.Model):
     discount= models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
-	    if not self.id:
+        if not self.id:
             self.price_per_unit = self.item.price * self.qty
 	    if self.item.category.parent.name=='Field Work':
 	        a=self.purchase_order.id
