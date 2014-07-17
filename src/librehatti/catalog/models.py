@@ -53,13 +53,13 @@ class PurchaseOrder(models.Model):
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
-    price_per_unit = models.IntegerField()
+    price = models.IntegerField()
     qty = models.IntegerField()
-    discount= models.IntegerField()
+    #discount= models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
         if not self.id:
-            self.price_per_unit = self.item.price * self.qty
+            self.price = self.item.price_per_unit * self.qty
 	    if self.item.category.parent.name=='Field Work':
 	        a=self.purchase_order.id
 	        b=PurchaseOrder.objects.filter(id=a).update(is_suspense=True)
