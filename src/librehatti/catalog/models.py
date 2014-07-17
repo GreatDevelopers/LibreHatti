@@ -60,7 +60,7 @@ class PurchasedItem(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.price = self.item.price_per_unit * self.qty
-	    if self.item.category.parent.name=='Field Work':
+	    if self.item.category.parent=='Field Work':
 	        a=self.purchase_order.id
 	        b=PurchaseOrder.objects.filter(id=a).update(is_suspense=True)
 	    
