@@ -3,6 +3,7 @@ import useraccounts
 from librehatti.catalog.models import *
 from django.contrib.auth.models import User
 
+
 class QuotedOrder(models.Model):
     quote_buyer_id = models.ForeignKey(User)
     quote_is_debit = models.BooleanField()
@@ -10,7 +11,9 @@ class QuotedOrder(models.Model):
     quote_organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     quote_date_time = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
-        return '%s' % (self.quote_buyer_id) +' - ' '%s' % (self.quote_date_time.strftime ('%b %d, %Y'))
+        return '%s' % (self.quote_buyer_id) +' - ' '%s' % (
+                       self.quote_date_time.strftime ('%b %d, %Y'))
+
 
 class QuotedItem(models.Model):
     quote_order = models.ForeignKey(QuotedOrder)
