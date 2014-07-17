@@ -38,16 +38,19 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField()
     tds = models.IntegerField()
     is_suspense = models.BooleanField(default=False)
-    choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque', 'Cheque'))
-    mode_of_payment = models.CharField(max_length=25, default='cash', choices=choices)
+    choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque',
+              'Cheque'))
+    mode_of_payment = models.CharField(max_length=25, default='cash', 
+                      choices=choices)
 
     def __unicode__(self):
         return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
                ('%b %d, %Y'))
 
     def save(self, *args, **kwargs):
-	if self.mode_of_payment=='cheque' or self.mode_of_payment=='demand_draft':
-			self.is_suspense=True
+	if self.mode_of_payment=='cheque' or self.mode_of_payment==
+            'demand_draft':
+            self.is_suspense=True
 	super(PurchaseOrder, self).save(*args, **kwargs) 
 
 
@@ -55,7 +58,6 @@ class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     price = models.IntegerField()
     qty = models.IntegerField()
-    #discount= models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
         if not self.id:
