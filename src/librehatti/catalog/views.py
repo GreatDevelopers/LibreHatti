@@ -33,5 +33,5 @@ def add_categories(request):
     else:
         form = addCategory()
     return render(request, 'addCategory.html', {
-            'form':form,
+            'form':form
     })
