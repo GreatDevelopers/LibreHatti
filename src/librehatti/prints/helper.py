@@ -2,8 +2,11 @@
  
 def num2eng(n):
     words = ''
-    units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine','Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
-    tens = ['','Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+    units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 
+             'Eight', 'Nine','Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+             'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
+    tens = ['','Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy',
+            'Eighty', 'Ninety']
 
     for group in ['', 'Hundred', 'Thousand', 'Lakh', 'Crore']:
         if group in ['', 'Thousand', 'Lakh']:
@@ -17,7 +20,8 @@ def num2eng(n):
             words = units [digits] + ' ' + group + ' ' + words
         elif digits in range (20, 100):
             ten_digit, unit_digit = digits // 10, digits % 10
-            words = tens [ten_digit] + ' ' + units [unit_digit] + ' ' + group + ' ' + words
+            words = tens [ten_digit] + ' ' + units [unit_digit] + ' ' + group +
+                    ' ' + words
         elif digits >= 100:
             words = num2eng (digits) + ' crore ' + words
     
