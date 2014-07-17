@@ -24,7 +24,7 @@ class QuotedItem(models.Model):
     confirm_status = models.IntegerField(default=0)
     def save(self):
         if not self.id:
-            self.quote_price = self.quote_item.price * self.quote_qty
+            self.quote_price = self.quote_item.price_per_unit * self.quote_qty
         super(QuotedItem,self).save()
 
     def __unicode__(self):
