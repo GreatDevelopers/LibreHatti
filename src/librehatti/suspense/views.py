@@ -7,8 +7,10 @@ from librehatti.suspense.models import *
 from librehatti.suspense.forms import *
 import datetime
 
+
 def clearance_search(request):
     return render(request,'suspense/suspense_first.html')
+
 
 def clearance(request):
     if 'Search' in request.GET:
@@ -19,6 +21,7 @@ def clearance(request):
                     })
         temp = {'q':ref_no,'cl_report':cl_report,}
         return render(request, 'suspense/suspenseform.html',temp)
+
 
 def clearance_result(request):
     if 'Submit' in request.GET:
@@ -46,23 +49,29 @@ def clearance_result(request):
                 field_testing_staff, 'Test_date':Test_date}
         return render(request, 'suspense/clearance_result.html', temp) 
 
+
 def other_charges(request):
         obj = SuspenseClearance.objects.filter(id=1).values('boring_charge_external','labour_charge','car_taxi_charge')
         total = SuspenseClearance.objects.filter(id=1).aggregate(Sum('boring_charge_external','labour_charge','car_taxi_charge')) 
         return render(request,'suspense/othercharge.html',{'obj':obj,'total':total})
 
+
 def withouttransport(request):
     return render(request,'suspense/withouttransport.html')
+
 
 def with_transport(request):
     return render(request,'suspense/with_transport.html')
 
+
 def wtransport(request):
     return render(request,'suspense/wtransport.html')
+
 
 def suspense(request):
         form = SuspenseForm()   
         return render(request,'suspense/form.html',{'form':form})
+
 
 def save_charges(request):
 	if request.method=='GET':		
