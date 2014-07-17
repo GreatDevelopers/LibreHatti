@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Sum
 from models import SuspenseClearance
 from django.http import HttpResponse
 from librehatti.catalog.models import *
@@ -46,7 +47,9 @@ def clearance_result(request):
         return render(request, 'suspense/clearance_result.html', temp) 
 
 def other_charges(request):
-    return render(request,'suspense/othercharge.html')
+        obj = SuspenseClearance.objects.filter(id=1).values('boring_charge_external','labour_charge','car_taxi_charge')
+        total = SuspenseClearance.objects.filter(id=1).aggregate(Sum('boring_charge_external','labour_charge','car_taxi_charge')) 
+        return render(request,'suspense/othercharge.html',{'obj':obj,'total':total})
 
 def withouttransport(request):
     return render(request,'suspense/withouttransport.html')
