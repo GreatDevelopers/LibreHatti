@@ -41,7 +41,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/shweta/new/LibreHatti/static',
+    '/home/shweta/shagun/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
