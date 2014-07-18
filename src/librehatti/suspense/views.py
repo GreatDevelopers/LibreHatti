@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from models import SuspenseClearance
 from django.http import HttpResponse
-from librehatti.catalog.models import *
-from librehatti.suspense.models import *
-from librehatti.suspense.forms import *
+from librehatti.suspense.models import SuspenseClearance
+from librehatti.suspense.models import SuspenseOrder
+from librehatti.suspense.forms import Clearance_form
+from librehatti.suspense.forms import SuspenseForm
+
 import datetime
 
 def clearance_search(request):
