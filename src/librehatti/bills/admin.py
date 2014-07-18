@@ -3,8 +3,6 @@ from librehatti.bills.models import QuotedItem
 from librehatti.bills.models import QuotedOrder
 
 
-
-
 class QuotedItemInline(admin.StackedInline):
     model = QuotedItem
     fields = ['quote_item', 'quote_qty', 'quote_discount']
@@ -16,4 +14,3 @@ class QuotedOrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(QuotedOrder, QuotedOrderAdmin)
-
