@@ -48,8 +48,7 @@ class PurchaseOrder(models.Model):
                ('%b %d, %Y'))
 
     def save(self, *args, **kwargs):
-	if self.mode_of_payment=='cheque' or self.mode_of_payment==
-            'demand_draft':
+	if self.mode_of_payment=='cheque' or self.mode_of_payment=='demand_draft':
             self.is_suspense=True
 	super(PurchaseOrder, self).save(*args, **kwargs) 
 
