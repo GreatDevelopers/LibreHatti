@@ -14,4 +14,4 @@ class QuotedOrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(QuotedOrder, QuotedOrderAdmin)
-admin.site.register(QuotedItem)
+
