@@ -14,10 +14,10 @@
    </div>
 <!-- Header right end--><br>
 <br>
-<div align='left'>A sum of Rs. {{ }}  Other charges Rs{{}} has been deposited by :- </div> 
-<div align='left'>{{}} </div> <br>
-<div align='left'> vide receipt no. {{}} dated {{}} and was transferred vide letter No.{{}}dated {{}}</div> <br>
-<div align='left'>A sum of Rs. {{}} was spent for testing on {{date}} as detailed below. </div> <br>
+<div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has been deposited by :- </div> 
+<div align='left'>{{sasa}} </div> <br>
+<div align='left'> vide receipt no. {{asd}} dated {{asd}} and was transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
+<div align='left'>A sum of Rs. {{ads}} was spent for testing on {{date}} as detailed below. </div> <br>
 
 <style>
 table, td, th {
@@ -38,23 +38,26 @@ th {
 <table align="left">
 <tr>
 <td>TA/DA OF STAFF </td>
-<td>{{}}</td>
+<td>{{dfs}}</td>
 </tr>
 <tr>
 <td>BORING CHARGES </td>
-<td>{{}}</td>
+
+<td>{{suspense.boring_charge_external}}</td>
+
 </tr>
 <tr>
 <td>LABOUR CHARGES </td>
-<td>{{}}</td>
+<td>{{suspense.labour_charge}}</td>
 </tr>
 <tr>
 <td>CAR/TAXI CHARGES</td>
-<td>{{}}</td>
+<td>{{suspense.car_taxi_charge}}</td>
 </tr>
 <tr>
 <td>TOTAL RS.</td>
-<td>{{}}</td>
+<td>{{total}}</td>
+{% endfor %}
 </tr>
 
 </table>
@@ -72,7 +75,7 @@ th {
 <br>
 <!-- Header right begin-->
    <div style = "text-align:left; float:left">
-The Transport Bill No. {{}} dated {{}} for Rs. {{}} is attached.This sum of Rs. {{}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{}} spent by Dean Testing and Consultancy may please paid to him.
+The Transport Bill No. {{asd}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
      <br>
     <br>
 <br>
