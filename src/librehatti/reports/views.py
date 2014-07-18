@@ -86,10 +86,7 @@ def search_result(request):
                 if Debit, Date, 'Amount greater than'(gt), 
                 'Amount lesser than'(lt) checkboxes are selected
                 """
-                if 'debit' in selected_fields_order and 'date' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints and 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(
                               id=entries.id,purchase_order__is_debit=1,
@@ -103,9 +100,7 @@ def search_result(request):
                 if  Date, 'Amount greater than'(gt), 'Amount lesser than'
                 (lt) checkboxes are selected
                 """            
-                if 'date' and 'gt' in selected_fields_constraints and 'lt' in
-                    selected_fields_constraints and not 'debit' in 
-                    selected_fields_order:
+                if 'date' and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints and not 'debit' in selected_fields_order:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__date_time__range=(start_date,
@@ -118,10 +113,7 @@ def search_result(request):
                 if Debit, 'Amount greater than'(gt), 'Amount lesser than'
                 (lt) checkboxes are selected
                 """         
-                if 'debit' in selected_fields_order and not 'date' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints and 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1,price__gt=amt_g,
@@ -133,10 +125,7 @@ def search_result(request):
                 if Debit, Date, 'Amount lesser than'(lt) checkboxes are 
                 selected
                 """                                                           
-                if 'debit' in selected_fields_order and 'date' in 
-                   selected_fields_constraints  and 'lt' in 
-                   selected_fields_constraints and not 'gt' in 
-                   selected_fields_constraints:
+                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints  and 'lt' in selected_fields_constraints and not 'gt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1, price__lt=
@@ -148,10 +137,7 @@ def search_result(request):
                 if Debit, Date, 'Amount greater than'(gt) checkboxes are 
                 selected
                 """            
-                if 'debit' in selected_fields_order and 'date' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit=1,
@@ -164,10 +150,7 @@ def search_result(request):
                 if  'Amount greater than'(gt), 'Amount lesser than'(lt) 
                 checkboxes are selected
                 """            
-                if not 'debit' in selected_fields_order and not 'date' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints and 'lt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
                     for value in search_fields:
 
                         obj = PurchasedItem.objects.filter(id=entries.id,
@@ -179,10 +162,7 @@ def search_result(request):
                 if Debit, 'Amount lesser than'(lt) checkboxes are 
                 selected
                 """            
-                if 'debit' in selected_fields_order and not 'date' in                  
-                    selected_fields_constraints and not 'gt' in 
-                    selected_fields_constraints and 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1,price_lt= 
@@ -194,10 +174,7 @@ def search_result(request):
                 if Debit, 'Amount greater than'(gt), checkboxes are 
                 selected
                 """                                          
-                if 'debit' in selected_fields_order and not 'date' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'lt' in selected_fields_constraints and 'gt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1, price__gt=
@@ -209,10 +186,7 @@ def search_result(request):
                 if  Date, 'Amount greater than'(gt) checkboxes are 
                 selected
                 """                                                           
-                if not 'debit' in selected_fields_order and not 'lt' in 
-                    selected_fields_constraints and 'date' in 
-                    selected_fields_constraints and 'gt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and not 'lt' in selected_fields_constraints and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__date_time__range=(start_date,
@@ -224,10 +198,7 @@ def search_result(request):
                 if  Date, 'Amount lesser than'(lt) checkboxes are 
                 selected
                 """            
-                if not 'debit' in selected_fields_order and not 'gt' in 
-                    selected_fields_constraints and 'date' in 
-                    selected_fields_constraints and 'lt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and not 'gt' in selected_fields_constraints and 'date' in selected_fields_constraints and 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__date_time__range=(start_date,
@@ -238,10 +209,7 @@ def search_result(request):
                 """
                 if Debit, Date checkboxes are selected
                 """            
-                if 'debit' in selected_fields_order and 'date' in 
-                    selected_fields_constraints and not 'gt' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1,
@@ -253,10 +221,7 @@ def search_result(request):
                 """
                 if Debit checkbox is selected
                 """             
-                if 'debit' in selected_fields_order and not 'date' in 
-                    selected_fields_constraints and not 'gt' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__is_debit = 1).values(value)
@@ -266,10 +231,7 @@ def search_result(request):
                 """
                 if Date checkbox is selected
                 """            
-                if not 'debit' in selected_fields_order and  'date' in 
-                    selected_fields_constraints and  not 'gt' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and  'date' in selected_fields_constraints and  not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               purchase_order__date_time__range=(start_date,
@@ -280,10 +242,7 @@ def search_result(request):
                 """
                 if  'Amount greater than'(gt) checkboxes is selected
                 """                                                           
-                if not 'debit' in selected_fields_order and 'gt' in 
-                    selected_fields_constraints and not 'date' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and 'gt' in selected_fields_constraints and not 'date' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id, 
                               price__gt=amt_g).values(value)
@@ -293,10 +252,7 @@ def search_result(request):
                 """
                 if 'Amount lesser than'(lt) checkbox is selected
                 """            
-                if not 'debit' in selected_fields_order and 'lt' in 
-                    selected_fields_constraints and not 'date' in 
-                    selected_fields_constraints and not 'gt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and 'lt' in selected_fields_constraints and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=entries.id,
                               price__lt=amt_l).values(value)
@@ -307,10 +263,7 @@ def search_result(request):
                 greater than'(gt), 'Amount lesser than'(lt) are 
                 selected
                 """            
-                if not 'debit' in selected_fields_order and not 'date' in 
-                    selected_fields_constraints and not 'gt' in 
-                    selected_fields_constraints and not 'lt' in 
-                    selected_fields_constraints:
+                if not 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
                     for value in search_fields:
                         obj = PurchasedItem.objects.filter(id=
                               entries.id).values(value)
