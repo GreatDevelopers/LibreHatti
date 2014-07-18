@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from librehatti.catalog.models import PurchaseOrder, PurchasedItem
-from librehatti.bills.models import *
+from librehatti.bills.models import QuotedItem, QuotedOrder
 from django.contrib.auth.models import User
 import useraccounts
 from django.db.models import Sum

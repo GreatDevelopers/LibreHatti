@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
 from useraccounts.models import *
 
 admin.site.register(AdminOrganisations)

@@ -1,5 +1,5 @@
 from django import forms
-from librehatti.bills.models import *
+from librehatti.bills.models import QuotedItem
 
 #class ConfirmForm(ModelForm):
     #class Meta:
