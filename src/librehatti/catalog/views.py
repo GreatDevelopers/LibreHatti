@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from librehatti.catalog.models import *
-from librehatti.catalog.forms import *
+from librehatti.catalog.models import Category, Product
+from librehatti.catalog.forms import Category
 
 
 def index(request):

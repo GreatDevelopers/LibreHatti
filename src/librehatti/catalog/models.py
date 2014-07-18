@@ -79,7 +79,7 @@ class Catalog(models.Model):
         return self.attribute.name;
 
 class Surcharge(models.Model):
-    taxes = models.CharField(max_length=200)
+    tax_name = models.CharField(max_length=200)
     value = models.IntegerField()
     taxes_included = models.BooleanField()
     tax_effected_from = models.DateField()
