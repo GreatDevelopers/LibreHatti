@@ -1,5 +1,5 @@
 from django.contrib import admin
-from librehatti.bills.models import *
+from librehatti.bills.models import QuotedOrder, QuotedItem
 #from django.contrib.auth.admin import *
 
 
