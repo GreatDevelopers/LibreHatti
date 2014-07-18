@@ -10,8 +10,9 @@ from librehatti.bills.forms import ConfirmForm
 
 def proforma(request):
     """
-    This function lists all those customers who have added Purchased Order.
-    The user has the option to either generate proforma or confirm it. 
+    This function lists all those customers who have added Purchased
+    Order. The user has the option to either generate proforma or 
+    confirm it. 
     """
     QuotedOrder_list = PurchaseOrder.objects.all()
     return render(request, 'bills/quote.html', 
@@ -21,8 +22,8 @@ def proforma(request):
 def gen_proforma(request, client_id):
     """
     It generates the Proforma Bill when the user clicks Generate 
-    Proforma Button. The bill will display the item name, quantity and the 
-    total.
+    Proforma Button. The bill will display the item name, quantity
+    and the total.
     """
     quoted_order=QuotedOrder.objects.get(quote_buyer_id_id=client_id)
     quoted_item = QuotedItem.objects.filter(quote_order_id=
