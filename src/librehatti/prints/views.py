@@ -10,10 +10,6 @@ from django.db.models import Sum
 
 def bill(request):
     purchase_order = PurchaseOrder.objects.all()
-    purchased_item = PurchasedItem.objects.filter().values(
-                     'item__name' ,'qty','item__price','price') 
-    total = PurchasedItem.objects.filter().aggregate(Sum('price')).get(
-                                                     'price__sum', 0.00)
     purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
                      'item__price_per_unit','price') 
     total = PurchasedItem.objects.filter().aggregate(Sum('price')).get(
