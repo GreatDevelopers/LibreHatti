@@ -7,6 +7,10 @@ from librehatti.catalog.forms import AddCategory
 
 
 def index(request):
+    """
+    It lists all the products and the user can select any product
+    and can add them to the cart.
+    """
     error = {}
     categorylist = Category.objects.all()
 
@@ -27,6 +31,9 @@ def index(request):
 
 
 def add_categories(request):
+    """
+    It allows the user to add categories. 
+    """
 
     if request.method == 'POST' :
         form = AddCategory(request.POST)
