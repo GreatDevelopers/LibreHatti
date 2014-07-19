@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-	
+    
     <meta charset='UTF-8'>
 
-	<link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
 
-	<title>bill</title>
+    <title>bill</title>
 </head>
     <div style="font-size:24px" align='center'><b>{{purchased_order.organisation.organisation_type}}</b></div>
 
@@ -51,7 +51,7 @@
             <tr>
                 {% for j in i%}
                 <td> {{j}}</td>
-                {% endfor %}		
+                {% endfor %}        
             </tr>        
             {% endfor %}
 
@@ -98,7 +98,7 @@
                 <td><b>G.Total (Rupees {{ net_total_eng }} only)</b> </td>
                 <td colspan="2"></td>
                 <td  align="right"><b>{{ cdftotal }} {{ bill.net_total}}</b></td>
-            </tr>	
+            </tr>   
         </table>
     </div>
 

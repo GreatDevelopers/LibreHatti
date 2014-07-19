@@ -1,13 +1,13 @@
 <html>
 <head>
     <style type="text/css">
-	h1{margin-left: 30%;}
-	h1.as{margin-left: 35%;} 
-        table{width: 60%; margin-left:15%;}	
-	th{padding:10px;}
-	td{padding-left:40px;
-	   padding-top: 25px;
-	   padding-bottom: 25px;}
+        h1{margin-left: 30%;}
+        h1.as{margin-left: 35%;} 
+        table{width: 60%; margin-left:15%;} 
+        th{padding:10px;}
+        td{padding-left:40px;
+           padding-top: 25px;
+           padding-bottom: 25px;}
         p.bs{margin-left: 25%;}
     </style>
  
@@ -32,31 +32,29 @@
     <br>
     <br>
     <table border="1" >
-	<tr>
+        <tr>
             <th> Client </th>
-	    <th> Address </th>
+            <th> Address </th>
             <th> Telephone </th>
             <th> Produce</th>
-	</tr>
+        </tr>
         {% for m in QuotedOrder_list %}
         <tr>
-	    <td> {{m.quote_buyer_id.username}}</td>
-	    <td> {{m.quote_delivery_address}}</td>
-            <td> {{m.quote_buyer_id.customer.telephone}}</td>	
-	    <td>
+            <td> {{m.quote_buyer_id.username}}</td>
+            <td> {{m.quote_delivery_address}}</td>
+            <td> {{m.quote_buyer_id.customer.telephone}}</td>   
+            <td>
                 <a href="/bills/generateproforma/{{m.id}}" style="text-decoration:none">
                     <input type="submit" value="Generate Proforma" name="Generate Proforma">
-		</a>
-		<br>
-		<a href="/bills/confirm/{{m.id}}">
-		    <input type="submit" value="Confirm" name="Confirm">
-		</a>
-	    </td>
+                </a>
+                <br>
+                <a href="/bills/confirm/{{m.id}}">
+                    <input type="submit" value="Confirm" name="Confirm">
+                </a>
+             </td>
         </tr>
         {% endfor %}
     </table>
  
 </body>
 </html>
-
-
