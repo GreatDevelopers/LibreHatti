@@ -7,12 +7,13 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'automation',                     
         'USER': 'root',
-        'PASSWORD': 'saloni11',
+        'PASSWORD': 'shweta',
         'HOST': 'localhost',                      
         'PORT': '',                   
     }
@@ -41,7 +42,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/shweta/new/LibreHatti/static',
+    '/home/shweta/gd/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
