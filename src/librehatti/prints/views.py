@@ -22,8 +22,7 @@ def add_material(request):
     """
     lab = request.GET['lab']
     material_info = Category.objects.filter(parent__name=lab)
-    return render( request, 'prints/add_material.html', {'lab':lab,
-                 'material_info' : material_info}) 
+    return render( request, 'prints/add_material.html', {'lab':lab, 'material_info' : material_info}) 
  
 
 
@@ -35,7 +34,7 @@ def add_test(request):
     if 'Submit' in request.GET:
         material = request.GET['material']
         
-        test_info = Product.objects.filter(name=material)
+        test_info = Product.objects.filter(category__name=material)
         return render( request, 'prints/add_test.html', {
                       'material':material,'test_info' : test_info})
         
@@ -44,11 +43,11 @@ def lab_report(request):
     It generates the report which lists all the orders for the test 
     selected and the in the entered Time Span.
     """
-    test = request.GET['test']
-    start_date = request.GET['From']
-    end_date = request.GET['To']
+    test = request.POST['test']
+    start_date = request.POST['From']
+    end_date = request.POST['To']
     purchase_item= PurchasedItem.objects.filter(purchase_order__date_time__range
-                  =(start_date,end_date),item__name=material).values( 
+                  =(start_date,end_date),item__name=test).values( 
                     'purchase_order_id','purchase_order__date_time',
                    'purchase_order__buyer_id__username',
                   'purchase_order__buyer_id__customer__title',
@@ -72,7 +71,7 @@ def bill(request):
     purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
                      'item__price_per_unit','price') 
     total = PurchasedItem.objects.filter().aggregate(Sum('price')).get( 'price__sum', 0.00)
-    surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
+    surcharge = Surcharge.objects.filter().values('taxes' ,'value')
     surcharge_total=0
     i=0 
     tax_list = []
