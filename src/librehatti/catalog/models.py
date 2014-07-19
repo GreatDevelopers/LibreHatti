@@ -48,8 +48,13 @@ class PurchaseOrder(models.Model):
                ('%b %d, %Y'))
 
     def save(self, *args, **kwargs):
+<<<<<<< HEAD
+	if self.mode_of_payment=='cheque' or self.mode_of_payment=='demand_draft':
+            self.is_suspense=True
+=======
 	if self.mode_of_payment == 'cheque' or self.mode_of_payment == 'demand_draft':
             self.is_suspense = True
+>>>>>>> upstream/dirty
 	super(PurchaseOrder, self).save(*args, **kwargs) 
 
 
