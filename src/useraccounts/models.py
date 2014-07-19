@@ -1,11 +1,11 @@
 """
-Models for the catalog is described in this file
+Models for the useraccounts are..
 """
 from django.db import models
 from django.contrib.auth.models import User
 
 """
-Organisation name or type 
+describes the type of organisation where the user deals
 """
 class OrganisationType(models.Model):    
     type_desc = models.CharField(max_length=200)
@@ -13,7 +13,7 @@ class OrganisationType(models.Model):
         return self.type_desc
 
 """
-Organisation details 
+describes the address details of the organisation 
 """
 class Address(models.Model):
     street_address = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class Address(models.Model):
         return self.street_address + ',' + self.city
 
 """
-User details 
+describes the details of the user 
 """
 class HattiUser(models.Model):   
     user = models.OneToOneField(User) 
@@ -39,7 +39,7 @@ class HattiUser(models.Model):
         abstract=True
 
 """
-describes title of organisation and its type 
+This class inherits the details of HattiUser specifying the title of organisation and its type   
 """
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
@@ -48,8 +48,7 @@ class AdminOrganisations(HattiUser):
         return self.title
 
 """
-describes the name of company or organisation if buyer owns it
-or buyer is not individual 
+This class inherits the details of HattiUser whether customer is organisation type or individual thus customer will confirm the Is org checkbox and then specifying the type of oganisation and its company name 
 """
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)

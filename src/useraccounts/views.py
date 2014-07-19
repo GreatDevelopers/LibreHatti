@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 """
-displays the register and login button for user
+this function displays the register and login button for user
 """
 def register(request):
     """
