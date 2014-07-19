@@ -17,8 +17,8 @@ def add_lab(request):
 
 def add_material(request):
     """
-    Depending on the Lab selected, this function displays the form where
-    the user selects Material.
+    Depending on the Lab selected, this function displays the form 
+    where the user selects Material.
     """
     lab = request.GET['lab']
     material_info = Category.objects.filter(parent__name=lab)
