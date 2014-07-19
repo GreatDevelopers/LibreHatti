@@ -16,7 +16,7 @@ def bill(request):
                      'item__price_per_unit','price') 
     total = PurchasedItem.objects.filter().aggregate(Sum('price')).get(
                      'price__sum', 0.00)
-    surcharge = Surcharge.objects.filter().values('taxes' ,'value')
+    surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
     surcharge_total=0
     i=0 
     tax_list = []
