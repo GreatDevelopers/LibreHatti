@@ -11,6 +11,11 @@ from django.db.models import Sum
     
 
 def bill(request):
+    """
+    It generates a Bill for the user which lists all the items, 
+    their quantity , subtotal and then adds it to the surcharges
+    and generates the Grand total.
+    """
     purchase_order = PurchaseOrder.objects.all()
     purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
                      'item__price_per_unit','price') 
