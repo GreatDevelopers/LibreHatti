@@ -18,10 +18,10 @@
         <h1>{{ title }}</h1>
         <table>
             <tr>
-	        {% for field in result_fields %}
-	            {% for value in field %}
-	                <th>{{value}}</th>
-	            {% endfor %}
+            {% for field in result_fields %}
+                {% for value in field %}
+                    <th>{{value}}</th>
+                {% endfor %}
                     {% if order_id %}
                         <th>Options</th>
                     {% endif %}
@@ -42,7 +42,7 @@
                     {%endfor%}
              </tr>
              {%endfor%}
-        </table>	
+        </table>    
 
         {% if error %}
             <h3 class="else"> Please select atleast one field </h3>
