@@ -22,7 +22,8 @@ def add_material(request):
     """
     lab = request.GET['lab']
     material_info = Category.objects.filter(parent__name=lab)
-    return render( request, 'prints/add_material.html', {'lab':lab, 'material_info' : material_info}) 
+    return render( request, 'prints/add_material.html', {'lab':lab,
+                 'material_info' : material_info}) 
  
 
 
@@ -57,7 +58,8 @@ def lab_report(request):
     total=PurchasedItem.objects.filter(purchase_order__date_time__range 
         =(start_date,end_date)).aggregate(Sum('price')).get('price__sum', 0.00)
     return render(request, 'prints/lab_reports.html', { 'purchase_item':
-          purchase_item,'start_date':start_date,'end_date':end_date,'total_cost':total})
+                  purchase_item,'start_date':start_date,'end_date':end_date,
+                 'total_cost':total})
 
        
 def bill(request):
