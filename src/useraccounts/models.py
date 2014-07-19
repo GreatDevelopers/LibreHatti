@@ -39,7 +39,8 @@ class HattiUser(models.Model):
         abstract=True
 
 """
-This class inherits the details of HattiUser specifying the title of organisation and its type   
+This class inherits the details of HattiUser specifying the title of 
+organisation and its type   
 """
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
@@ -48,7 +49,10 @@ class AdminOrganisations(HattiUser):
         return self.title
 
 """
-This class inherits the details of HattiUser whether customer is organisation type or individual thus customer will confirm the Is org checkbox and then specifying the type of oganisation and its company name 
+This class inherits the details of HattiUser whether customer is
+organisation type or individual thus customer will confirm the Is org
+checkbox and then specifying the type of oganisation and its company
+ name 
 """
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)

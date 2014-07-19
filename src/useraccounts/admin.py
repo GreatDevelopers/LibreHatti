@@ -9,7 +9,9 @@ from django.contrib.auth.admin import UserAdmin
 from useraccounts.models import *
 
 """
-these fields are required in admin interface to add the details of particular organisation with which the user deals and also customer details whether its individual or owner of a company
+these fields are required in admin interface to add the details of 
+particular organisation with which the user deals and also customer 
+details whether its individual or owner of a company
 """
 admin.site.register(AdminOrganisations)
 admin.site.register(Address)
@@ -18,19 +20,24 @@ admin.site.register(Customer)
 admin.site.unregister(User)
 
 """
-This class is used to add, edit or delete the address of the organisation or user
+This class is used to add, edit or delete the address of the 
+organisation or user
 """
 class AddressInline(admin.StackedInline):
      model = Address
 
 """
-This class is used to add, edit or delete the details of customer mentioning the address along with ithe information whether customer is org_type or not
+This class is used to add, edit or delete the details of customer 
+mentioning the address along with ithe information whether customer 
+is org_type or not
 """
 class CustomerInline(admin.StackedInline):
      model = Customer
 
 """
-This class is used to add new customer, edit or delete existing customers specifying the username , email, first and last name and confirming the passwords
+This class is used to add new customer, edit or delete existing 
+customers specifying the username , email, first and last name and 
+confirming the passwords
 """
 class CustomUserAdd(UserAdmin):
     add_fieldsets = (
