@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-	
-<meta charset='UTF-8'>
-<meta http-equiv="refresh" content="5">
+    
+    <meta charset='UTF-8'>
+    <meta http-equiv="refresh" content="5">
     <style type="text/css">
         h1{font-size: 24px;}
         h1.a{font-size: 14px;}
-	h1.b{font-size: 24px;}
+        h1.b{font-size: 24px;}
         h1.c{font-size: 14px;}
-	p.d{text-align: center;}
-	p.f{text-align: left;}
-	p.g{text-align: right;}
-	table{width: 100%; align:left; border-collapse:collapse;}
-	th,td{padding:5px;}
-	</style>
-	<title>bill</title>
+        p.d{text-align: center;}
+        p.f{text-align: left;}
+        p.g{text-align: right;}
+        table{width: 100%; align:left; border-collapse:collapse;}
+        th,td{padding:5px;}
+    </style>
+    <title>bill</title>
 </head>
 <body>      
 
@@ -33,11 +33,11 @@
     <b>Email </b>: {{tcc@gndec.ac}} 
     <b>Ph </b>: {{quoted_order.quote_organisation.telephone}}  
     <b>Fax </b>: {{quoted_order.quote_organisation.fax}}</p>
-    <h2 align="center">CONFIRMATION BILL</h2>	
-   <p style="position:absolute;top:290px;left:35px;">
-   No. : GNDEC/TCC/B/{{ job_no }}</p>
-   <p style="position:absolute;top:290px;right:0px;">
-   Dated : {{purchased_order.date_time}} </p>
+    <h2 align="center">CONFIRMATION BILL</h2>   
+    <p style="position:absolute;top:290px;left:35px;">
+     No. : GNDEC/TCC/B/{{ job_no }}</p>
+    <p style="position:absolute;top:290px;right:0px;">
+     Dated : {{purchased_order.date_time}} </p>
    
     <p class='f'>STC No.{{STC_NO.}}<br>
      PAN No. {{PAN_NO.}}<br>
@@ -51,51 +51,50 @@
     </br>
     </br>
 
-<table>
-<tr>
+    <table>
+        <tr>
 
-  <th>S.no.</th>
-  <th>Charges For Following</th>
-  <th>Price</th>
-  <th>Per</th>
-  <th>Total</h>
+            <th>S.no.</th>
+            <th>Charges For Following</th>
+            <th>Price</th>
+            <th>Per</th>
+            <th>Total</h>
 
-</tr>
+        </tr>
 
-{% if PurchasedItem %}
-{% for purchased_item in PurchasedItem %}
+        {% if PurchasedItem %}
+        {% for purchased_item in PurchasedItem %}
 
-<tr> 
+        <tr> 
 
-  <td>{{ forloop.counter }}</td>
-  <td>{{ purchased_item.item }}</td>
-  <td>{{ purchased_item.price }} </td>
-  <td>{{ purchased_item.qty sample ./s }} 
-  <td>{{ purchased_item.total 
-    <p}}</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ purchased_item.item }}</td>
+            <td>{{ purchased_item.price }} </td>
+            <td>{{ purchased_item.qty sample ./s }} </td> 
+            <td>{{ purchased_item.total }}</td>
+    
+        </tr>
 
-</tr>
+        {% endfor %}
+        {% endif %}
 
-{% endfor %}
-{% endif %}
-
-<tr>
-	<td><b>Total </b></td>
-	<td>  </td>
-	<td>  </td>
-        <td>  </td>
-        <td><b>{{total_cost}}</b></td>
-</tr> 
+        <tr>
+            <td><b>Total </b></td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td><b>{{total_cost}}</b></td>
+        </tr> 
        
-</table>
+    </table>
 
 
-<div style="float:right;text-align:bottom">
+    <div style="float:right;text-align:bottom">
 
-<!-- Dean is liable to change-->
-<p> Dean Training And Consultancy Cell </p> 
-</div>
-         	
+        <!-- Dean is liable to change-->
+        <p> Dean Training And Consultancy Cell </p> 
+    </div>
+            
 </body>
 
 </html>
