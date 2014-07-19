@@ -1,5 +1,5 @@
 from django import forms
-from librehatti.bills.models import *
+
 
 #class ConfirmForm(ModelForm):
     #class Meta:

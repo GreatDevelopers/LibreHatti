@@ -1,7 +1,7 @@
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
-from librehatti.suspense.models import *
+
 
 admin.autodiscover()
 admin.site.register(Category)
