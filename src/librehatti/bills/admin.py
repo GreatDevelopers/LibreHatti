@@ -1,6 +1,6 @@
 from django.contrib import admin
-from librehatti.bills.models import *
-#from django.contrib.auth.admin import *
+from librehatti.bills.models import QuotedItem
+from librehatti.bills.models import QuotedOrder
 
 
 class QuotedItemInline(admin.StackedInline):
@@ -14,4 +14,3 @@ class QuotedOrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(QuotedOrder, QuotedOrderAdmin)
-

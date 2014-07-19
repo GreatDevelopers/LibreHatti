@@ -4,7 +4,8 @@ from django.db import models
 class SuspenseOrder(models.Model):
     purchase_order_id = models.IntegerField()
     distance = models.IntegerField(default=0)
-
+    def __unicode__(self):
+        return '%s' % (self.id)
 
 class SuspenseClearance(models.Model):
     suspense_id = models.ForeignKey('SuspenseOrder')
@@ -40,7 +41,7 @@ class Staff(models.Model):
         return self.name
 
 class TaDa(models.Model):
-    suspense = models.ForeignKey(SuspenseOrder)
+    suspense = models.IntegerField()
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
@@ -48,7 +49,8 @@ class TaDa(models.Model):
     tada_amount = models.IntegerField()
     start_test_date = models.DateField()
     end_test_date = models.DateField()
+    source_site = models.CharField(max_length=100)
     testing_site= models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
-   # def __unicode__(self):
-	#	return self.suspense
+    def __unicode__(self):
+       return self.suspense
