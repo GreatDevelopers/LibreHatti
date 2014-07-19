@@ -1,14 +1,14 @@
 <html>
     <head>
         <title>
-        Results of your Search 
+            Results of your Search 
         </title> 
         <style>
-        .else { color : red ; }
-        h1{text-align: center;}
-        h2, .else { text-align :center; margin-top:5%; }
-        table{display: inline-block;text-align: center;}
-        table,th,td{border: 1px solid black; border-collapse: collapse;}
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
         </style>
     </head>
     <body>
@@ -18,31 +18,30 @@
         <h1>{{ title }}</h1>
         <table>
             <tr>
-	            {% for field in result_fields %}
-	                {% for value in field %}
+	        {% for field in result_fields %}
+	            {% for value in field %}
 	                <th>{{value}}</th>
-	                {% endfor %}
+	            {% endfor %}
                     {% if order_id %}
-                    <th>Options</th>
+                        <th>Options</th>
                     {% endif %}
                 {% endfor %}
             </tr>
             <tr>
                 {% for result in results %}
                     {% for value in result %}
-                     <td>
+                    <td>
                         {% for item in value.items %}
                             {% if item.0 == 'purchase_order__id' %}
-                            <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>  
+                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>  
                             {% else %}
                                 {{item.1}}
                             {% endif %}
                         {% endfor %}
                      </td>
-
                     {%endfor%}
-                     </tr>
-                {%endfor%}
+             </tr>
+             {%endfor%}
         </table>	
 
         {% if error %}
