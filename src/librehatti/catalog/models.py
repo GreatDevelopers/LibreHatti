@@ -17,7 +17,8 @@ class Category(models.Model):
         return unicode(self.name)
 
 """
-This class defines the name of product, category, price of eact item of that product and the organisation with which user deals
+This class defines the name of product, category, price of eact item 
+of that product and the organisation with which user deals
 """
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -38,7 +39,8 @@ class Attributes(models.Model):
         return self.name
 
 """
-This class defines the details about user, its organisation, along with total discount and payment of job, and mode of payment
+This class defines the details about user, its organisation, along 
+with total discount and payment of job, and mode of payment
 """
 class PurchaseOrder(models.Model):
     buyer_id = models.ForeignKey(User)
@@ -64,7 +66,9 @@ class PurchaseOrder(models.Model):
 	super(PurchaseOrder, self).save(*args, **kwargs) 
 
 """
-This class defines the item name, total price after multiplying the no. of item with price of each item, and inheriting the fields of PurchaseOrder class
+This class defines the item name, total price after multiplying the 
+no. of item with price of each item, and inheriting the fields of
+ PurchaseOrder class
 """
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
@@ -94,7 +98,8 @@ class Catalog(models.Model):
     def __unicode__(self):
         return self.attribute.name;
 """
-This class defines the type of taxes, value, validation of taxes mentioning the startdate and end date 
+This class defines the type of taxes, value, validation of taxes 
+mentioning the startdate and end date 
 """
 class Surcharge(models.Model):
     taxes = models.CharField(max_length=200)
