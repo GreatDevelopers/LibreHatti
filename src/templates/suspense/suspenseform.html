@@ -3,21 +3,21 @@
         <title>
             Suspense Job
         </title>
-	<style>
-	    .button { width : 100px; height: 25px;}
-	</style>
+        <style>
+            .button { width : 100px; height: 25px;}
+        </style>
     </head>
     <body> 
         <h1> Search Result for Ref No. = {{q}} are: </h2>
-	<table>
-	    <form action='/clresult/' method="get">
-		<tr>
+        <table>
+            <form action='/clresult/' method="get">
+                <tr>
                     <td> <label for="q">Ref No: </label><input id="id_job" type="text" name="job" value=" {{q}} "></td>
                 </tr>
                 <tr> 
                     <td> {{ cl_report.as_p }} <input type="submit" name="Submit"  value="Submit"> </td>
- 		</tr>		
+                </tr>       
             </form>
-	</table>
+        </table>
     </body>
 </html>
