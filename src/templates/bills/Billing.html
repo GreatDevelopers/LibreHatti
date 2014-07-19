@@ -15,7 +15,7 @@
 	p.g{text-align: right;}
 	table{width: 100%; align:left; border-collapse:collapse;}
 	th,td{padding:5px;}
-	</style>
+    </style>
 	<title>bill</title>
 </head>
 <body>      
@@ -34,10 +34,10 @@
     <b>Ph </b>: {{quoted_order.quote_organisation.telephone}}  
     <b>Fax </b>: {{quoted_order.quote_organisation.fax}}</p>
     <h2 align="center">CONFIRMATION BILL</h2>	
-   <p style="position:absolute;top:290px;left:35px;">
-   No. : GNDEC/TCC/B/{{ job_no }}</p>
-   <p style="position:absolute;top:290px;right:0px;">
-   Dated : {{purchased_order.date_time}} </p>
+    <p style="position:absolute;top:290px;left:35px;">
+     No. : GNDEC/TCC/B/{{ job_no }}</p>
+    <p style="position:absolute;top:290px;right:0px;">
+     Dated : {{purchased_order.date_time}} </p>
    
     <p class='f'>STC No.{{STC_NO.}}<br>
      PAN No. {{PAN_NO.}}<br>
@@ -52,48 +52,48 @@
     </br>
 
 <table>
-<tr>
+    <tr>
 
-  <th>S.no.</th>
-  <th>Charges For Following</th>
-  <th>Price</th>
-  <th>Per</th>
-  <th>Total</h>
+        <th>S.no.</th>
+        <th>Charges For Following</th>
+        <th>Price</th>
+        <th>Per</th>
+        <th>Total</h>
 
-</tr>
+    </tr>
 
 {% if PurchasedItem %}
 {% for purchased_item in PurchasedItem %}
 
-<tr> 
+    <tr> 
 
-  <td>{{ forloop.counter }}</td>
-  <td>{{ purchased_item.item }}</td>
-  <td>{{ purchased_item.price }} </td>
-  <td>{{ purchased_item.qty sample ./s }} 
-  <td>{{ purchased_item.total 
-    <p}}</td>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ purchased_item.item }}</td>
+        <td>{{ purchased_item.price }} </td>
+        <td>{{ purchased_item.qty sample ./s }} 
+        <td>{{ purchased_item.total 
+        <p}}</td>
 
-</tr>
+    </tr>
 
 {% endfor %}
 {% endif %}
 
-<tr>
+    <tr>
 	<td><b>Total </b></td>
 	<td>  </td>
 	<td>  </td>
         <td>  </td>
         <td><b>{{total_cost}}</b></td>
-</tr> 
+    </tr> 
        
 </table>
 
 
 <div style="float:right;text-align:bottom">
 
-<!-- Dean is liable to change-->
-<p> Dean Training And Consultancy Cell </p> 
+    <!-- Dean is liable to change-->
+    <p> Dean Training And Consultancy Cell </p> 
 </div>
          	
 </body>
