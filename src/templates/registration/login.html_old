@@ -3,16 +3,16 @@
 
 {% block content %}
 <form method="post" action=".">{% csrf_token %}
-  {{ form.as_p }}
-  {% for field in form %}
+    {{ form.as_p }}
+    {% for field in form %}
         <div class="fieldWrapper">
             {{ field.errors }}
             {{ field.label_tag }}: {{ field }}
         </div>
     {% endfor %}
 
-  <input type="submit" value="{% trans 'Log in' %}" />
-  <input type="hidden" name="next" value="{{ next }}" />
+    <input type="submit" value="{% trans 'Log in' %}" />
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 <p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
