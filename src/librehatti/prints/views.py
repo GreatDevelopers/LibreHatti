@@ -1,9 +1,9 @@
 #from django.http import HttpResponse
 #from useraccounts.models import *
 #from helper import *
+from django import forms
 from django.shortcuts import *
-from librehatti.catalog.models import Category, Product, PurchaseOrder,
-PurchasedItem,Surcharge
+from librehatti.catalog.models import *
 from django.db.models import Sum
 
     
@@ -17,14 +17,15 @@ def add_lab(request):
 
 def add_material(request):
     """
-    Depending on the Lab selected, this function displays the form 
-    where the user selects Material.
+    Depending on the Lab selected, this function displays the form where
+    the user selects Material.
     """
     lab = request.GET['lab']
     material_info = Category.objects.filter(parent__name=lab)
-    return render( request, 'prints/add_material.html', {'lab':lab,
-                 'material_info' : material_info}) 
+    return render( request, 'prints/add_material.html', {'lab':lab, 'material_info' : material_info}) 
  
+
+
 def add_test(request):
     """
     Depending on the Lab and Material selected, this function displays
@@ -56,8 +57,7 @@ def lab_report(request):
     total=PurchasedItem.objects.filter(purchase_order__date_time__range 
         =(start_date,end_date)).aggregate(Sum('price')).get('price__sum', 0.00)
     return render(request, 'prints/lab_reports.html', { 'purchase_item':
-                  purchase_item,'start_date':start_date,'end_date':end_date,
-                 'total_cost':total})
+          purchase_item,'start_date':start_date,'end_date':end_date,'total_cost':total})
 
        
 def bill(request):
@@ -68,11 +68,10 @@ def bill(request):
     and generates the Grand total.
     """
     purchase_order = PurchaseOrder.objects.all()
-    purchased_item = PurchasedItem.objects.filter().values('item__name',
-                    'qty','item__price_per_unit','price') 
-    total = PurchasedItem.objects.filter().aggregate(Sum('price')).get(
-                                                      'price__sum', 0.00)
-    surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
+    purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
+                     'item__price_per_unit','price') 
+    total = PurchasedItem.objects.filter().aggregate(Sum('price')).get( 'price__sum', 0.00)
+    surcharge = Surcharge.objects.filter().values('taxes' ,'value')
     surcharge_total=0
     i=0 
     tax_list = []
@@ -84,9 +83,13 @@ def bill(request):
         surcharge_total=surcharge_total+tax	        
         tax_data = zip(surcharge, tax_list)
     grand_total = surcharge_total  + total
-    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 
-                 'L_No':'123', 'purchase_order':purchase_order, 
-                 'purchased_item' : purchased_item, 'total_cost': total,
-                 'tax_data': tax_data, 'surcharge_total':surcharge_total,
-                 'grand_total':grand_total })
-    
+    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
+                   '123', 'purchase_order':purchase_order, 'purchased_item' : 
+                    purchased_item, 'total_cost': total,'tax_data': tax_data, 
+                   'surcharge_total':surcharge_total, 'grand_total':grand_total
+                  })
+    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
+                 '123', 'purchase_order':purchase_order, 'purchased_item' : 
+                 purchased_item, 'total_cost': total,'surcharge_total':
+                 surcharge_total, 'tax_data' : tax_data, 'grand_total':
+                 grand_total})
