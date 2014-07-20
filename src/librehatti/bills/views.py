@@ -44,7 +44,7 @@ def confirm(request):
     the quantity that he wants to confirm. 
     """  
     if request.method == "POST":
-    form = ConfirmForm(request.POST)
+        form = ConfirmForm(request.POST)
         if form.is_valid:
             client = User.objects.get(id = request.GET['client'])
             quote_qty = request.POST["quote_qty"]
