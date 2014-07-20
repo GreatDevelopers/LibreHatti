@@ -4,9 +4,6 @@
 from django.shortcuts import *
 from librehatti.catalog.models import Category, Product, PurchaseOrder,
 PurchasedItem,Surcharge
-from django import forms
-from django.shortcuts import *
-from librehatti.catalog.models import *
 from django.db.models import Sum
 
     
@@ -18,7 +15,6 @@ def add_lab(request):
 
     return render(request,'prints/add_lab.html',{'lab_info':lab_info})
 
-
 def add_material(request):
     """
     Depending on the Lab selected, this function displays the form 
@@ -29,23 +25,6 @@ def add_material(request):
     return render( request, 'prints/add_material.html', {'lab':lab,
                  'material_info' : material_info}) 
  
-
-
-
-
-def add_material(request):
-    """
-    Depending on the Lab selected, this function displays the form 
-    where the user selects Material.
-    """
-    lab = request.GET['lab']
-    material_info = Category.objects.filter(parent__name=lab)
-    return render( request, 'prints/add_material.html', {'lab':lab,
-                 'material_info' : material_info}) 
- 
-
-
-
 def add_test(request):
     """
     Depending on the Lab and Material selected, this function displays
@@ -89,17 +68,11 @@ def bill(request):
     and generates the Grand total.
     """
     purchase_order = PurchaseOrder.objects.all()
-
     purchased_item = PurchasedItem.objects.filter().values('item__name',
                     'qty','item__price_per_unit','price') 
     total = PurchasedItem.objects.filter().aggregate(Sum('price')).get(
                                                       'price__sum', 0.00)
-
-    purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
-                     'item__price_per_unit','price') 
-    total = PurchasedItem.objects.filter().aggregate(Sum('price')).get( 'price__sum', 0.00)
-
-    surcharge = Surcharge.objects.filter().values('taxes' ,'value')
+    surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
     surcharge_total=0
     i=0 
     tax_list = []
@@ -116,13 +89,4 @@ def bill(request):
                  'purchased_item' : purchased_item, 'total_cost': total,
                  'tax_data': tax_data, 'surcharge_total':surcharge_total,
                  'grand_total':grand_total })
-    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 
-                  'L_No': '123', 'purchase_order':purchase_order, 'purchased_item' : 
-                    purchased_item, 'total_cost': total,'tax_data': tax_data, 
-                   'surcharge_total':surcharge_total, 'grand_total':grand_total
-                  })
-    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
-                 '123', 'purchase_order':purchase_order, 'purchased_item' : 
-                 purchased_item, 'total_cost': total,'surcharge_total':
-                 surcharge_total, 'tax_data' : tax_data, 'grand_total':
-                 grand_total})
+    
