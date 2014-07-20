@@ -1,0 +1,78 @@
+<html>
+<head>
+
+	
+	<style type="text/css">
+	h1{margin-left: 25%;}
+	h1.as{margin-left: 34%;} 
+
+	
+	 	table{width: 60%; margin-left:15%;border-collapse:collapse;}	
+		th{padding:10px;}
+		td{padding-left:40px;
+			padding-top: 25px;
+		    padding-bottom: 25px;}
+
+		h9.bs{text-align:center;}
+		
+	</style>
+
+<title>Lab Reports</title>  
+</head>
+
+
+<body>
+<h1>Guru Nanak Dev Engineering College</h1>
+<h1 class='as'>Testing and Consultancy</h1>
+ 
+<p class="bs"><center> Website:http//tcc.gndec.ac.in &nbsp;&nbsp;&nbsp; 
+                              &nbsp;&nbsp;&nbsp;&nbsp;Email:tcc@gndec.ac.in<br>
+                              <br>Ph:0161-2491193,5064509 &nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;Fax:0161-5064742 </center>
+                              </p>
+ 
+ 
+<br>
+<br>
+<br>
+<h2 align="center">Lab Report</h2>
+<br><br><br>
+	<table border="1" >
+	<tr>
+ 		<th>Receipt No.</th>
+		<th> Date </th>
+		<th> Client </th>
+        <th> Company </th>
+		<th> Amount</th>
+		
+	</tr>  
+ 
+{% for i in purchase_item %}
+
+<tr>
+
+          
+        <td> {{i.purchase_order_id}}</td>
+		<td> {{i.purchase_order__date_time}}</td>
+		{% ifequal i.purchase_order__buyer_id__customer__is_org  1 %}
+		<td> {{i.purchase_order__buyer_id__customer__title}}</td>
+		<td> {{i.purchase_order__buyer_id__customer__title}}</td>
+		{% else %} 
+		<td> {{i.purchase_order__buyer_id__username}}</td>
+		<td> {{i.purchase_order__buyer_id__customer__company}}</td>
+		{% endifequal %}
+		<td> {{i.price}}</td>
+		
+		
+    </tr>
+
+                 
+{% endfor %}
+<tr> 
+           <td colspan='4'> <center><b>Sum</center></b></td>
+          
+           <td>{{total_cost}}</td>
+    </tr>      
+</table>
+     
+</html>
