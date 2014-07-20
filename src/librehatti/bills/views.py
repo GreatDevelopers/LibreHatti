@@ -9,21 +9,21 @@ from librehatti.bills.forms import ConfirmForm
 
 
 def list_quoted(request):
+    quoted = QuotedItem.objects.values('quote_order__id',
+            'quote_order__quote_buyer_id__username').filter(confirm_status = 0)
     quoted_order = QuotedOrder.objects.get(pk=1)
     quoted_item = QuotedItem.objects.filter(quote_order_id=1).values('quote_item__name', 'quote_qty')
     i_d = quoted_order.quote_buyer_id_id
-    form = ConfirmForm(initial={'quote_item':'item1', 'qty1':'quote_qty'})
-    return render(request, 'bills/confform.html', {'quoted_order' : quoted_order,'form':form,
-                 'quoted_item' : quoted_item,  'id' : i_d})
+    return render(request,'bills/confform.html',{'quoted':quoted, 'quoted_order' : quoted_order,
+                 'quoted_item' : quoted_item,  'id' : i_d}) 
 
 
 
-def confirm(request):
+def confirm(request,client_id):
     if request.method == 'POST':
         form = ConfirmForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            return HttpResponse('helo')
             quote_qty = request.POST ["quote_qty"]
             quote_item = request.POST ["quote_item"]
             #return HttpResponse('quote_qty')
@@ -32,8 +32,8 @@ def confirm(request):
             #obj.purchase_order= PurchaseOrder.objects.get(id=client_id)
             #obj.save()
             #quoted_item = PurchasedItem.objects.filter(client_id=buyer_id).values( 'item__name','qty')
-            
-            return render(request, 'bills/bills.html',{'form':form})
+            form = ConfirmForm(initial={'quote_item':'quote_item', 'quote_qty':'quote_qty'})
+            return render(request, 'bills/confform.html',{'form':form})
 
     else:
              client_id = 1
