@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime
 
 class SuspenseOrder(models.Model):
     purchase_order_id = models.IntegerField()
@@ -8,7 +8,7 @@ class SuspenseOrder(models.Model):
         return '%s' % (self.id)
 
 class SuspenseClearance(models.Model):
-    suspense_id = models.ForeignKey('SuspenseOrder')
+    suspense_id = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
@@ -16,8 +16,8 @@ class SuspenseClearance(models.Model):
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200)
     field_testing_staff = models.CharField(max_length=200)
-    test_date = models.DateTimeField()
-    clear_date = models.DateTimeField()
+    test_date = models.DateField(default=datetime.date.today)
+    clear_date = models.DateField(default=datetime.date.today)
 
 
 class Department(models.Model):

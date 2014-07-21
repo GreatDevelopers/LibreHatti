@@ -10,7 +10,6 @@ from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
 from librehatti.prints.helper import num2eng
-
 import datetime
 
 
@@ -24,7 +23,7 @@ def clearance(request):
         cl_report = Clearance_form(initial = {'work_charge':0, 'labour_charge':
                     0, 'car_taxi_charge':0,'boring_charge_external':0,
                     'boring_charge_internal':0,'Test_date':datetime.date.today
-                    })
+                     })
         temp = {'q':ref_no,'cl_report':cl_report,}
         return render(request, 'suspense/suspenseform.html',temp)
 
@@ -39,13 +38,13 @@ def clearance_result(request):
         boring_charge_internal= request.GET['boring_charge_internal']
         lab_testing_staff=request.GET['lab_testing_staff']
         field_testing_staff= request.GET['field_testing_staff']
-        Test_date= request.GET['Test_date']
-        obj= SuspenseClearance(work_charge=work_charge, labour_charge=
-             labour_charge, car_taxi_charge=car_taxi_charge, 
+        Test_date= request.GET['test_date']
+        obj= SuspenseClearance(suspense_id=ref_no, work_charge=work_charge,
+             labour_charge=labour_charge, car_taxi_charge=car_taxi_charge, 
              boring_charge_external=boring_charge_external,
              boring_charge_internal=boring_charge_internal,lab_testing_staff=
              lab_testing_staff,field_testing_staff=field_testing_staff,
-             Test_date=Test_date)
+             test_date=Test_date)
         obj.save()
         temp = {'ref_no': ref_no,'work_charge':work_charge ,'labour_charge':
                 labour_charge, 'car_taxi_charge':car_taxi_charge,
@@ -57,9 +56,9 @@ def clearance_result(request):
 
 
 def other_charges(request):
-        obj = SuspenseClearance.objects.filter(id=1).values('boring_charge_external','labour_charge','car_taxi_charge')
-        total = SuspenseClearance.objects.filter(id=1).aggregate(Sum('boring_charge_external','labour_charge','car_taxi_charge')) 
-        return render(request,'suspense/othercharge.html',{'obj':obj,'total':total})
+        obj = SuspenseClearance.objects.filter(id=1).values(
+              'boring_charge_external','labour_charge','car_taxi_charge')
+        return render(request,'suspense/othercharge.html',{'obj':obj})
 
 
 def withouttransport(request):
