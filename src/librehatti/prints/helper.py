@@ -24,5 +24,4 @@ def num2eng(n):
                     unit_digit] + ' ' + group + ' ' + words
         elif digits >= 100:
             words = num2eng (digits) + ' crore ' + words
-    
-	return words
+    return words

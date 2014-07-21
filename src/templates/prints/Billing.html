@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset='UTF-8'>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <title>bill</title>
+      
+</head>
+
+<body>
+
+    <div style="text-align:center">
+     
+        <h1>GURU NANAK DEV ENGINEERING COLLEGE</h1>   
+        <p>Punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</p>     
+        <p style="font-size:200%">Testing & consultancy cell        </p>  
+        <p>Gill Park, Gill Road, Ludhiana-141006</p> 
+        <p>Website:http//tcc.gndec.ac.in Email:tcc@gndec.ac.in Ph:0161-2491193,5064509 Fax:0161-5064742</p>   
+        <h2 style="text-align:center;font-size:175%;"> Bill</h2>
+
+    </div>
+
+    <p style="font-size:100%">STC No. {{ STC_NO }}        </P>
+    <p style="font-size:100%;text-align:left;">PAN No. {{ PAN_No. }}<span style="float:right;">Dated:{{ bill_date|date:"F, j, Y"}} </P>
+    </br> To,
+    </br> {{delivery_address}}
+    </br> Organisation:{{Organisation}}
+    </br> Buyer Id: {{buyer_id}}
+    </br> Ref: Your Letter No.{{L_No.}}, dated:{{ bill_date|date:"F, j, Y"}} , respectively.
+    </br> Site: 
+    </br>
+    </br>
+    </br>
+
+    <table>
+        <tr>
+
+            <th>S.no.</th>
+            <th>Charges For Following</th>
+            <th>Price</th>
+            <th>Per</th>
+            <th>Total</h>
+
+        </tr>
+
+        {% if PurchasedItem %}
+        {% for purchased_item in PurchasedItem %}
+
+        <tr> 
+
+            <td>{{ forloop.counter }}</td>
+            <td>{{ purchased_item.item }}</td>
+            <td>{{ purchased_item.price }} </td>
+            <td>{{ purchased_item.qty sample ./s }}</td> 
+            <td>{{ purchased_item.total }}</td>
+
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+
+        <tr>
+     
+            <td><b>Total </b></td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td><b>{{total_cost}}</b></td>
+        </tr> 
+       
+    </table>
+
+    <div style="float:right;text-align:bottom">
+        <!-- Dean is liable to change-->
+        <p> Dean Training And Consultancy Cell </p> 
+    </div>
+            
+</body>
+
+</html>

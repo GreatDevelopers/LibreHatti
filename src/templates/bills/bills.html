@@ -2,146 +2,136 @@
 <html lang="en">
 
 <head>
-	
+    
 <meta charset='UTF-8'>
 
-	<link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
 
-	<title>bill</title>
+    <title>bill</title>
       
 </head>
 
 <body>
 
-<div style="text-align:center">
+    <div style="text-align:center">
      
-<h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
-<p>{{quoted_order.quote_organisation.tagline}}</p>       
-<h1 style="font-sixe:14px">{{quoted_order.quote_organisation.title}}
-</h1>  
-<p>{{quoted_order.quote_organisation.address}}</p> 
-<p><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
- <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}  <i>Ph :</i> 
-{{quoted_order.quote_organisation.telephone}} 
- <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
-<br><br>  
-<h2 style="text-align:center;font-size:175%;"> Bill</h2>
+        <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
+        <p>{{quoted_order.quote_organisation.tagline}}</p>       
+        <h1 style="font-sixe:14px">{{quoted_order.quote_organisation.title}}</h1>  
+        <p>{{quoted_order.quote_organisation.address}}</p> 
+        <p><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
+           <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
+           <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
+           <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
+        <br/><br/>  
+        <h2 style="text-align:center;font-size:175%;"> Bill</h2>
+    </div>
 
-</div>
-<div style="font-size:100%;">
-<p>STC No. {{ STC_NO }}</P>
-<p>PAN No. {{ PAN_No. }}
-</div>
+    <div style="font-size:100%;">
+        <p>STC No. {{ STC_NO }}</P>
+        <p>PAN No. {{ PAN_No. }}
+    </div>
 
-<div style="position:absolute;top:290px;left:35px;">
-No. : GNDEC/TCC/B/{{ job_no }}</div>
-<div style="position:absolute;top:290px;right:0px;">
-Dated : {{quoted_order.date_time}} </div>
-<br>
-<br>
-<br>
+    <div style="position:absolute;top:290px;left:35px;">
+    No. : GNDEC/TCC/B/{{ job_no }}    </div>
+    <div style="position:absolute;top:290px;right:0px;">
+    Dated : {{quoted_order.date_time}}         </div>
+    <br/>
+    <br/>
+    <br/>
 
-</br> To,
-</br> {{quote_delivery_address}}
-</br> Organisation:{{quote_organisation}}
-</br> Buyer Id : {{ purchased_order.buyer_id.username }}
-</br> Ref: Your Letter No.{{L_No.}}, 
-dated:{{quoted_order.date_time}} , respectively.
- 
-</br>
-</br>
-</br>
-<table style = "width:1200px;">
-<tr>
-{{total_cost}}
-  <th>S.no.</th>
-  <th>Charges For Following</th>
-  <th>Quantity</th>
-  <th>Price</th>
-  <th>Total</h>
+    <br/> To,
+    <br/> {{quote_delivery_address}}
+    <br/> Organisation:{{quote_organisation}}
+    <br/> Buyer Id : {{ purchased_order.buyer_id.username }}
+    <br/> Ref: Your Letter No.{{L_No.}}, 
+          dated:{{quoted_order.date_time}} , respectively.
+    <br/>
+    <br/>
+    <br/>
 
-</tr>
+    <table style = "width:1200px;">
+        <tr>
+            {{total_cost}}
+            <th>S.no.</th>
+            <th>Charges For Following</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
 
-<!--{% for i in quoted_item %}
-<tr>
-{% for j in i%} 
-          
-                 <<td>{{ forloop.counter }}</td>
-		<td> {{j}}</td>
-		
-{% endfor %}		
-    </tr>
-{% endfor %}-->
+        </tr>
 
-{% if QuotedItem %}
-{% for i in QuotedItem %}
+        {% if QuotedItem %}
+        {% for i in QuotedItem %}
 
-<tr> 
-  <td>{{ forloop.counter }}</td>
-  <td>{{ i.quote_item }}</td>
-  <td>{{ i.quote_price }} </td>
-  <td>{{ i.quote_qty  }}</td> 
-  <td>{{ i.total }}</td>
-</tr>
+        <tr> 
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.quote_item }}</td>
+            <td>{{ i.quote_price }}</td>
+            <td>{{ i.quote_qty  }}</td> 
+            <td>{{ i.total }}</td>
+        </tr>
 
-{% endfor %}
-{% endif %}
+        {% endfor %}
+        {% endif %}
 
-<tr>
-	<td><b>Total </b></td>
-	<td colspan="3"></td>
-        <td align="right"> <b>{{total_cost}}</b></td>
-</tr> 
+        <tr>
+            <td><b>Total</b></td>
+            <td colspan="3"></td>
+            <td align="right"><b>{{total_cost}}</b></td>
+        </tr> 
 
-</br>
-{% if bill.trans_total != None %}
-<tr>
-     <td>Transportation Charges</td>
-     <td colspan="3"></td>
-     <td align="right">{{bill.trans_total}}</td>
-</tr>
+        <br/>
+         {% if bill.trans_total != None %}
+        <tr>
+            <td>Transportation Charges</td>
+            <td colspan="3"></td>
+            <td align="right">{{bill.trans_total}}</td>
+        </tr>
 
-<tr>
-     <td>Total Amount</td>
-     <td colspan="3"></td>
-     <td align="right">{{bill.trans_net_total}}</td>
-</tr>
-{% endif %}
+        <tr>
+            <td>Total Amount</td>
+            <td colspan="3"></td>
+            <td align="right">{{bill.trans_net_total}}</td>
+        </tr>
+        {% endif %}
 
-<tr>
-     <td>Service Tax  @ {{ servicetaxprint }}% </td>
-     <td colspan="3"></td>
-     <td align="right">{{ bill.service_tax }}</td>
-</tr>
+        <tr>
+            <td>Service Tax  @ {{ servicetaxprint }}%</td>
+            <td colspan="3"></td>
+            <td align="right">{{ bill.service_tax }}</td>
+        </tr>
 
-<tr>
-     <td>Education Cess  @ {{ educationtaxprint }}% </td>
-     <td colspan="3"></td>
-     <td align="right">{{ bill.education_tax }}</td>
-</tr>
+        <tr>
+            <td>Education Cess  @ {{ educationtaxprint }}%</td>
+            <td colspan="3"></td>
+            <td align="right">{{ bill.education_tax }}</td>
+        </tr>
 
 
-<tr>
-     <td><b>G.Total (Rupees {{ net_total_eng }} only)</b> </td>
-     <td colspan="3"></td>
-     <td  align="right"><b>{{ cdftotal }} {{ bill.net_total}}</b></td>
-</tr>	
+        <tr>
+            <td><b>G.Total (Rupees {{ net_total_eng }} only)</b></td>
+            <td colspan="3"></td>
+            <td  align="right"><b>{{ cdftotal }} {{ bill.net_total}}</b></td>
+        </tr>   
 
        
-</table>
+    </table>
 
 
-<div style="position:absolute;right:30px;top:1050px;">
+    <div style="position:absolute;right:30px;top:1050px;">
+        <!-- Dean is liable to change-->
+        <p> Dean Training And Consultancy Cell</p> 
+    </div>
 
-<!-- Dean is liable to change-->
-<p> Dean Training And Consultancy Cell </p> 
-</div>
+    <br/>
+    <div style="position:absolute;top:1050px;">
+        I/We here by agree to the terms & conditions as mentioned above
+    </div>
 
-<br><div style="position:absolute;top:1050px;">
-I/We here by agree to the terms & conditions as mentioned above</div>
-
-<div style="position:absolute;right:30px;top:1100px;">
-(Signature of Client/Deptt. Representative)</div>
+    <div style="position:absolute;right:30px;top:1100px;">
+        (Signature of Client/Deptt. Representative)
+    </div>
 </body>
 
 </html>

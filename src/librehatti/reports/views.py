@@ -3,7 +3,7 @@ from helper import get_query
 from django.shortcuts import render
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
-
+from useraccounts.models import Customer
 
 def search_result(request):
     """
@@ -20,8 +20,8 @@ def search_result(request):
     avail_list_dict_client = {'name':'user__username', 'city':'address__city',
                               'phone':'telephone','joining date':'date_joined',
                               'company':'company'}
-    avail_list_dict_order = {'quantity':'qty','unit price':'item__price',
-                             'item':'item__name','discount':'discount','debit':
+    avail_list_dict_order = {'quantity':'qty','unit price':'item__price_per_unit',
+                             'item':'item__name','discount':'purchase_order__total_discount','debit':
                              'purchase_order__is_debit', 'total price':'price'}
     avail_list = []
     avail_list2=[]

@@ -1,35 +1,35 @@
 <html>
     <head>
         <title>
-        Index
+            Index
         </title>
-	    <style>
-		form { margin-left : 45% }
-		.head { text-align : center; margin-top : 5% ;}
-		.button { width : 100px; height: 25px;}
-	    </style>
+        <style>
+            form { margin-left : 45% }
+            .head { text-align : center; margin-top : 5% ;}
+            .button { width : 100px; height: 25px;}
+        </style>
     </head>
     <body> 
-	    <h2 class="head"> Select one or more fields
-	    </h2>
-		<table>
-		<form action='/search_result/' method="get">
-		    <tr>   
-		        <td>Display search as <input type="text" name="search"></td>
-		    </tr>
-			<tr>
-				<td><input type="submit"  name="Client" value="Client Search"></td>
-				<td><input type="submit"  name="Order" value="Order Search"></td>
-			</tr>
-		    <tr>
-				<td><input type="checkbox"  name="pdfrequest" value="1">PDF Form Output</td>
-				<td>{{ client_form.as_p }}</td>
-				<td>{{ order_form.as_p }}</td>
-			</tr>
-			<tr> 
-			    <td> {{ add_constraints.as_p }} </td>
-			 </tr>
-		</form>
-		</table>
+        <h2 class="head"> Select one or more fields
+        </h2>
+        <table>
+            <form action='/search_result/' method="get">
+                <tr>   
+                    <td>Display search as <input type="text" name="search"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit"  name="Client" value="Client Search"></td>
+                    <td><input type="submit"  name="Order" value="Order Search"></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"  name="pdfrequest" value="1">PDF Form Output</td>
+                    <td>{{ client_form.as_p }}</td>
+                    <td>{{ order_form.as_p }}</td>
+                </tr>
+                <tr> 
+                    <td> {{ add_constraints.as_p }} </td>
+                </tr>
+            </form>
+        </table>
     </body>
 </html>
