@@ -11,6 +11,8 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^tada_form/', 'tada_form'),
                    url(r'^tada_result/','tada_result'),
                    url(r'^tada_search/','tada_search'),
-                   
+                   url(r'^withouttransport/','withouttransport'),
+                   url(r'^with_transport/','with_transport'),
+                   url(r'^wtransport/','wtransport'),
               )                    
         
