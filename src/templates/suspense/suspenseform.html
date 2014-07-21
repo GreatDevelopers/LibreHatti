@@ -8,12 +8,12 @@
         </style>
     </head>
     <body> 
-        <h1> Search Result for Ref No. = {{q}} are: </h2>
+        <h1> Search Result for Ref No. = {{ref_no}} are: </h2>
         <table>
             <form action='/suspense/clresult/' method="get">
                 <tr>
-                    <td> <label for="q">Ref No: </label><input id="id_job" 
-                             type="text" name="job" value=" {{q}} "></td>
+                    <td> Ref No: </label><input id="id_job" 
+                             type="text" name="job" value=" {{ref_no}} "></td>
                 </tr>
                 <tr> 
                     <td> {{ cl_report.as_p }} <input type="submit" 
