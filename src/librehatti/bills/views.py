@@ -84,10 +84,10 @@ def transport_bill(request):
             if 'button1' in request.POST:
                     vehicle_id = request.POST['vehicle_id']
                     job_id = request.POST['job_id']
-                    kilometer = request.POST['kilometer']          
+                    kilometer = float(request.POST['kilometer'])          
                     date = request.POST['date']
                     rate = float(request.POST['rate'])
-                    total = rate*float(kilometer)
+                    total = rate*kilometer
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
