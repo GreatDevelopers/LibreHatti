@@ -20,7 +20,6 @@ def confirm(request, client_id):
 
 def final(request, client_id):
     if request.method == 'GET':
-    	
        name1 = request.GET['quote_item']
        qty1 = request.GET['quote_qty']
        obj = PurchasedItem(qty=qty1)
@@ -30,6 +29,8 @@ def final(request, client_id):
        obj.save()
        #total_cost = PurchasedItem.objects.filter(client_id=order_id).aggregate(Sum('price')).get('price__sum', 0.00)
        return render(request, 'bills/bills.html', { 'quoted_item':quoted_item })
+
+
 def proforma(request):
     QuotedOrder_list = PurchaseOrder.objects.all()
     return render(request, 'bills/quote.html', 

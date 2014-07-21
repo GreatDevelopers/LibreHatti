@@ -17,15 +17,15 @@ class QuotedOrder(models.Model):
 
 class QuotedItem(models.Model):
     quote_order = models.ForeignKey(QuotedOrder)
-    quote_price = models.IntegerField()
+    quote_price = models.IntegerField(default = 0)
     quote_qty = models.IntegerField()
     quote_discount= models.IntegerField(default = 0)
     quote_item = models.ForeignKey(Product)
     confirm_status = models.IntegerField(default=0)
-    def save(self):
+    def add(self):
         if not self.id:
             self.quote_price = self.quote_item.price_per_unit * self.quote_qty
-        super(QuotedItem,self).save()
+        super(QuotedItem,self).add()
 
     def __unicode__(self):
         return '%s' % (self.quote_item) + ' - ' '%s' % (self.quote_order)
