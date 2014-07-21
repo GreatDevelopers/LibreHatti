@@ -1,10 +1,13 @@
 <html> 
     <head>
-    <link rel="stylesheet" type="text/css" href="http://192.168.15.178/static/css2/css/report.css " /><title>Bill</title></head>
+        <title>Bill</title></head>
 
-        <div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
-        <div style="font-size:14px" align='center'>Gill Park,Gill Road,Ludhiana - 141006</div>
-        <div style="font-size:24px" align='center'>Testing & Consultancy Cell</div>
+        <div style="font-size:24px" align='center'><b>Guru Nanak Dev 
+            Engineering College</b></div>
+        <div style="font-size:14px" align='center'>Gill Park,Gill Road,Ludhiana
+              - 141006</div>
+        <div style="font-size:24px" align='center'>Testing & Consultancy Cell
+        </div>
         <br>
         <br>
 
@@ -15,10 +18,13 @@
         </div>
         <!-- Header right end-->    <br>
         <br>
-        <div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has been deposited by :- </div> 
+        <div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has
+            been deposited by :- </div> 
         <div align='left'>{{sasa}} </div> <br>
-        <div align='left'> vide receipt no. {{asd}} dated {{asd}} and was transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
-        <div align='left'>A sum of Rs. {{ads}} was spent for testing on {{date}} as detailed below. </div> <br>
+        <div align='left'> vide receipt no. {{asd}} dated {{asd}} and was 
+            transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
+        <div align='left'>A sum of Rs. {{ads}} was spent for testing on 
+            {{date}} as detailed below. </div> <br>
 
         <style>
             table, td, th {
@@ -40,6 +46,7 @@
                 <td>{{dfs}}</td>
             </tr>
             <tr>
+                {% for suspense in obj %}
                 <td>BORING CHARGES </td>
                 <td>{{suspense.boring_charge_external}}</td>
 
@@ -72,7 +79,10 @@
         <br>
         <!-- Header right begin-->
         <div style = "text-align:left; float:left">
-            The Transport Bill No. {{asd}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
+            The Transport Bill No. {{asd}} dated {{asd}} for Rs. {{sad}} is 
+            attached.This sum of Rs. {{sad}} may be transferred from other 
+            charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} 
+            spent by Dean Testing and Consultancy may please paid to him.
         <br>
         <br>
         <br>

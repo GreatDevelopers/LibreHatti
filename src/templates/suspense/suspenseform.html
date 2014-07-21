@@ -10,12 +10,14 @@
     <body> 
         <h1> Search Result for Ref No. = {{q}} are: </h2>
         <table>
-            <form action='/clresult/' method="get">
+            <form action='/suspense/clresult/' method="get">
                 <tr>
-                    <td> <label for="q">Ref No: </label><input id="id_job" type="text" name="job" value=" {{q}} "></td>
+                    <td> <label for="q">Ref No: </label><input id="id_job" 
+                             type="text" name="job" value=" {{q}} "></td>
                 </tr>
                 <tr> 
-                    <td> {{ cl_report.as_p }} <input type="submit" name="Submit"  value="Submit"> </td>
+                    <td> {{ cl_report.as_p }} <input type="submit" 
+                                           name="Submit"  value="Submit"> </td>
                 </tr>       
             </form>
         </table>
