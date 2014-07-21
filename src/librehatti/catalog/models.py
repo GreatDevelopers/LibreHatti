@@ -2,7 +2,6 @@ from django.db import models
 from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
-from librehatti.suspense.models import SuspenseOrder
 
 
 class Category(models.Model):

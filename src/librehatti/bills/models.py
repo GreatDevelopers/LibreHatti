@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 
 
 class QuotedOrder(models.Model):
+    """
+    QuotedOrder Class defines all the fields required to place quote
+    order. Quote order is the one which has not been confirmed yet
+    and the user has the option whether to confirm it or not. 
+    """
     quote_buyer_id = models.ForeignKey(User)
     quote_is_debit = models.BooleanField()
     quote_delivery_address = models.ForeignKey('useraccounts.Address')
@@ -16,6 +21,10 @@ class QuotedOrder(models.Model):
 
 
 class QuotedItem(models.Model):
+    """
+    QuotedItem Class defines all the fields required to add the 
+    quote item.
+    """
     quote_order = models.ForeignKey(QuotedOrder)
     quote_price = models.IntegerField()
     quote_qty = models.IntegerField()
