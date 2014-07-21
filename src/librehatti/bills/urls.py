@@ -8,5 +8,4 @@ urlpatterns = patterns('librehatti.bills.views',
        	url(r'^confirm/',views.confirm, name='confirm'),
        	url(r'^transport/', 'transport'),
         url(r'^transp/', 'transport_bill'),
-        #url(r'^add/', 'add_another'),
 )

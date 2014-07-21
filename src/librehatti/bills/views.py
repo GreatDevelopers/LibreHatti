@@ -95,8 +95,6 @@ def transport_bill(request):
 
                     obj.save()
                     temp = Transport.objects.filter(job_id=obj.job_id)
-
-                    #temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
                     return render(request,'bills/transport_bill.html', 
@@ -104,12 +102,6 @@ def transport_bill(request):
                             'total_amount' : total_amount}) 
 
             else:
-                    #temp = Transport.objects.filter(job_id=obj.job_id)
-                    #form = TransportForm1()
-                    #for i in temp:
-                     #   vehicle_id = i.vehicle_id
-                      #  job_id = i.job_id
-                       # rate = i.rate
                     vehicle_id = request.POST['vehicle_id']
                     job_id = request.POST['job_id']
                     kilometer = float(request.POST['kilometer'])
