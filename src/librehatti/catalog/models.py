@@ -17,8 +17,8 @@ class Category(models.Model):
         return unicode(self.name)
 
 """
-This class defines the name of product, category, price of eact item 
-of that product and the organisation with which user deals
+This class defines the name of product, category, price of eact item of 
+that product and the organisation with which user deals
 """
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -39,8 +39,8 @@ class Attributes(models.Model):
         return self.name
 
 """
-This class defines the details about user, its organisation, along 
-with total discount and payment of job, and mode of payment
+This class defines the details about user, its organisation, along with 
+total discount and payment of job, and mode of payment
 """
 class PurchaseOrder(models.Model):
     buyer_id = models.ForeignKey(User)
