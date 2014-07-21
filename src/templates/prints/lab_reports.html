@@ -1,7 +1,7 @@
 <html>
 <head>
 
-	<meta http-equiv="refresh" content="15">
+	
 	<style type="text/css">
 	h1{margin-left: 25%;}
 	h1.as{margin-left: 34%;} 
@@ -17,7 +17,7 @@
 		
 	</style>
 
-<title>Proforma Bill</title>  
+<title>Lab Reports</title>  
 </head>
 
 
@@ -35,7 +35,8 @@
 <br>
 <br>
 <br>
-
+<h2 align="center">Lab Report</h2>
+<br><br><br>
 	<table border="1" >
 	<tr>
  		<th>Receipt No.</th>
@@ -47,16 +48,31 @@
 	</tr>  
  
 {% for i in purchase_item %}
+
 <tr>
-{% for j in i%} 
+
           
-                 
-		<td> {{j}}</td>
+        <td> {{i.purchase_order_id}}</td>
+		<td> {{i.purchase_order__date_time}}</td>
+		{% ifequal i.purchase_order__buyer_id__customer__is_org  1 %}
+		<td> {{i.purchase_order__buyer_id__customer__title}}</td>
+		<td> {{i.purchase_order__buyer_id__customer__title}}</td>
+		{% else %} 
+		<td> {{i.purchase_order__buyer_id__username}}</td>
+		<td> {{i.purchase_order__buyer_id__customer__company}}</td>
+		{% endifequal %}
+		<td> {{i.price}}</td>
 		
-{% endfor %}		
+		
     </tr>
+
                  
 {% endfor %}
+<tr> 
+           <td colspan='4'> <center><b>Sum</center></b></td>
+          
+           <td>{{total_cost}}</td>
+    </tr>      
 </table>
-       <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Sum : {{ total_cost}}</b>
+     
 </html>

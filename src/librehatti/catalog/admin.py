@@ -7,7 +7,7 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
-from librehatti.suspense.models import *
+
 
 
 """

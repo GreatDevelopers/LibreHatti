@@ -1,4 +1,4 @@
-from librehatti.catalog.models import *
+from librehatti.catalog.models import PurchaseOrder
 
 purchase_ids=[]
 a = PurchaseOrder.objects.all()

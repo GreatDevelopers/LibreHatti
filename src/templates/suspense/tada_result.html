@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='UTF-8'>
+        <title>TA/DA bill</title>
+        <style>
+            table, th, td{
+                border: 1px solid black;
+            }
+            th,td
+            {
+                padding:3px;border-style:inset;
+            }
+            table
+            {
+                table-layout:fixed;
+            }
+            .table{padding-left:5em;}
+            .a{margin-top:100px; margin-left:400px;}
+            .b{margin-top:70px;margin-left:750px;}
+            .c{margin-top:60px;margin-left:400px;}
+            .d{margin-top:70px; margin-left:400px;}
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align:center">T.A./D.A  FORM FOR CONSULTANCY WORK</h1>     
+        <p>Name of the Department/Client: Swami ganga nand Ji Bhuriwale Memorial Trust </br>
+        Amount claimed from Department/Client: Rs.{{total_cost}} </p>
+        <p style="float:right">Vide Receipt No.23 
+            </br>
+            Date:  {% now "F jS o" %}</p>
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th rowspan = "3">Name</th>
+                </tr>
+                    <th colspan = "3">Departure(up)</th>
+                    <th colspan = "3">Arrival(up)</th>
+                    <th colspan = "3">Departure(down)</th>
+                    <th colspan = "3">Arrival(down)</th>
+                    <th>D.A.</th>
+                    <th>Signature</th>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in staff %}
+                    {% for ta_da in obj %} 
+                        <tr>
+                            <td>{{person}}</td>
+                            <td>{{ta_da.start_test_date}}</td>
+                            <td>{{ta_da.departure_time_from_tcc}}</td>
+                            <td>{{ta_da.source_site }}</td>
+                            <td>{{ta_da.start_test_date}}</td>
+                            <td>{{ta_da.arrival_time_at_site}}</td>
+                            <td>{{ta_da.testing_site}}</td>
+                            <td>{{ta_da.end_test_date}}</td>
+                            <td>{{ta_da.departure_time_from_site}}</td>
+                            <td>{{ta_da.testing_site}}</td>
+                            <td>{{ta_da.end_test_date}}</td>
+                            <td>{{ta_da.arrival_time_at_tcc}}</td>
+                            <td>{{ta_da.source_site}}</td>
+                            <td>{{ta_da.tada_amount}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                        <tr>
+                            <td colspan = "13"><center>Total </center></td>
+                            </span>
+                            <td>{{total_cost}}</td>
+                        </tr>
+            </tbody>
+        </table>
+        <p class="a">T.A./D.A. Bill have been entered on page .......</br>
+        of TA/DA & Other Charges register.Head TA/DA
+        </p>
+        <!-- Dean is liable to change-->
+        <p class="b"> Dean T&C </p> 
+        <p class="c">Passed for payment for Rs. {{total_cost}}/</br>
+            ( Rupees {{rupees_in_words }} only ).
+        </p>
+        <p class = "d">Dean T&C &nbsp &nbsp &nbsp &nbsp &nbsp Supt.Actt &nbsp &nbsp &nbsp &nbsp &nbsp Director
+    </body>
+</html>
+
