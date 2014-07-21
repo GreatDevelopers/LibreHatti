@@ -105,5 +105,4 @@ def transport_bill(request):
     else:
         form = TransportForm1()
     return render(request, 'bills/form.html', {'TransportForm':form})         
->>>>>>> upstream/dirty
   
