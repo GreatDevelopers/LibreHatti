@@ -37,14 +37,13 @@ th {
 
 <table align="left">
 <tr>
+{% for suspense in obj %}
 <td>TA/DA OF STAFF </td>
 <td>{{dfs}}</td>
 </tr>
 <tr>
 <td>BORING CHARGES </td>
-
 <td>{{suspense.boring_charge_external}}</td>
-
 </tr>
 <tr>
 <td>LABOUR CHARGES </td>
@@ -75,7 +74,7 @@ th {
 <br>
 <!-- Header right begin-->
    <div style = "text-align:left; float:left">
-The Transport Bill No. {{asd}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
+The Transport Bill No. {{a}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
      <br>
     <br>
 <br>
