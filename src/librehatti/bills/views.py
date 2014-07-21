@@ -18,7 +18,7 @@ def list_quoted(request):
 
 def confirm(request):
     if request.method == "POST":
-	form = ConfirmForm(request.POST)
+        form = ConfirmForm(request.POST)
         if form.is_valid:
             client = User.objects.get(id = request.GET['client'])
             quote_qty = request.POST["quote_qty"]
@@ -47,24 +47,25 @@ def gen_proforma(request, client_id):
     quoted_item = QuotedItem.objects.filter(quote_order_id=
                   client_id).values_list('quote_item__name',
                 'quote_item__category__name', 'quote_item__price', 'quote_qty',
-                'quote_price')	
+                'quote_price')  
     total = QuotedItem.objects.filter(quote_order_id=client_id).aggregate(Sum(
             'quote_price')).get('quote_price__sum', 0.00)
     return render(request, 'bills/p_bill.html',{ 'quoted_order':quoted_order,
-                 'quoted_item' : quoted_item, 'total_cost': total })	 
+                 'quoted_item' : quoted_item, 'total_cost': total })     
 
 
 def transport(request):
-    form = transportform()
-    temp = {'transportform':form}
+    form = TransportForm1()
+    temp = {'TransportForm':form}
     return render (request, 'bills/form.html',temp)
 
 
 def transport_bill(request):
     if request.method == 'POST':
-        form = transportform(request.POST)
+        form = TransportForm1(request.POST)
         c = {}
         if form.is_valid():
+           
             if 'button1' in request.POST:
                     vehicle_id = request.POST['vehicle_id']
                     job_id = request.POST['job_id']
@@ -73,17 +74,26 @@ def transport_bill(request):
                     rate = float(request.POST['rate'])
                     total = rate*float(kilometer)
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
-                                    kilometer=kilometer, Date=date, rate=rate, 
-                                    total=total) 
+                           kilometer=kilometer, Date=date, rate=rate, 
+                           total=total) 
+
                     obj.save()
                     temp = Transport.objects.filter(job_id=obj.job_id)
+
+                    #temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
                     return render(request,'bills/transport_bill.html', 
-                           {'temp' : temp, 'words' : num2eng(int(total)), 
+                           {'temp' : temp, 'words' : num2eng(total_amount), 
                             'total_amount' : total_amount}) 
-            if 'button2' in request.POST:          
-                    form1 = transportform()
+
+            else:
+                    #temp = Transport.objects.filter(job_id=obj.job_id)
+                    #form = TransportForm1()
+                    #for i in temp:
+                     #   vehicle_id = i.vehicle_id
+                      #  job_id = i.job_id
+                       # rate = i.rate
                     vehicle_id = request.POST['vehicle_id']
                     job_id = request.POST['job_id']
                     kilometer = float(request.POST['kilometer'])
@@ -96,7 +106,7 @@ def transport_bill(request):
                     obj.save()
                          
     else:
-        form = transportform()
-    return render(request, 'bills/form.html', {'transportform':form})         
+        form = TransportForm1()
+    return render(request, 'bills/form.html', {'TransportForm':form})         
   
   
