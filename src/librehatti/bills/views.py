@@ -79,7 +79,6 @@ def transport(request):
 def transport_bill(request):
     if request.method == 'POST':
         form = TransportForm1(request.POST)
-        c = {}
         if form.is_valid():
            
             if 'button1' in request.POST:
@@ -92,7 +91,6 @@ def transport_bill(request):
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
-
                     obj.save()
                     temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
