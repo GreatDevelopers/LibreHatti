@@ -3,7 +3,7 @@ from helper import get_query
 from django.shortcuts import render
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
-
+from useraccounts.models import Customer
 
 def search_result(request):
     """

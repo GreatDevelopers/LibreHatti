@@ -1,0 +1,121 @@
+<html>
+<head>
+    <style type="text/css">
+        h1
+        {
+            margin-left: 30%;
+        }
+        h1.head
+        {
+            margin-left: 35%;
+            font-weight: 200;
+        }
+        table
+        {
+            width: 60%;
+            margin-left:15%;
+        }
+        p.note
+        {
+            margin-left:15%;
+        }
+        span
+        {
+            float:left;
+        }
+        p.head1
+        {
+            text-align: right;
+        }
+        th,td
+        {
+            padding:10px;
+        }
+    </style>
+
+    <title> 
+        Report Generation
+    </title>
+</head>
+<body>
+    <h1>Guru Nanak Dev Engineering College</h1>
+    <h1 class='head'>Testing and Consultancy</h1>
+    <p class='head1'>No.TCC Job/Voucher : {{receipt_number}}</p>
+    <p class='head1'><span>Director,</span>Dated:{{date}} </p> 
+    <p>Recieved a sum of Rs.{{sum}}/-({{sum_in_words}}) Vide Cash from {{customer}} , {{place}}, on account of testing of {{test}}.</p>
+    <br>
+    <p>Vide Receipt No. : {{receipt_number}} Dated : {{date}}</p>
+    <p>Nature of Consistency : {{nat}} Ratio 30:70</p>
+
+    <table border='1'>
+
+        <tr>
+            <th colspan="3">THE DISTRIBUTION MAY BE MADE AS </th>
+        </tr>
+        <tr>
+            <th rowspan="5">CREDITS</th>
+            <td>COLLEGE INCOME 15%</td>
+            <td>{{val1}}</td>
+        </tr>
+        <tr>
+            <td>ADMN. CHARGES 5%</td>
+            <td>{{val2}}</td>
+        </tr>
+        <tr>
+            <td>CONSULTANCY ASST.</td>
+            <td>{{val3}}</td>
+        </tr>   
+        <tr>    
+            <td>DEV. FUND (CONSULTANCY)</td>
+            <td>{{val3}}</td>
+        </tr>
+        <tr>
+            <td>TOTAL(Rs.)</td>
+            <td>{{val4}}</td>
+        </tr>   
+
+    </table> 
+    <br>     
+    <br>
+    <br>
+    <table border='1'>
+        <tr>
+            <th>NAME OF EMPLOYEES</th>
+            <th>DESIGNATION</th>
+        </tr>
+        <tr>
+            <td>Dr.J.N. Jha</td>
+            <td>Professor</td>
+        </tr>
+        <tr>
+            <td>Dr. Kulbir Singh Gill</td>
+            <td>Assoc. Professor</td>   
+        </tr>
+        <tr>
+            <td>Prof. Gurdeepak Singh</td>
+            <td>Assoc. Professor</td>   
+        </tr>
+        <tr>
+            <td>K.S. Bedi</td>
+            <td>Assoc. Professor</td>   
+        </tr>
+        <tr>
+            <td>Prof. Harjinder Singh</td>
+            <td>Assoc. Professor</td>   
+        </tr>
+        <tr>
+            <td>Prof. Manpreet Singh</td>
+            <td>Professor</td>  
+        </tr>
+        <tr>
+            <td>Sh. Nandan Singh</td>
+            <td>Lab Attendant</td>  
+        </tr>
+    </table>
+    <p class='note'>THE WORK HAS BEEN EXECUTED BY THE PERSONS ABOVE.</p>
+    <br>
+    <br>
+    <br>
+    <p class='head1'><span>Account Clerk(Consultancy)</span>DEAN TESTING AND CONSULTANCY</p>
+</body>
+</html>

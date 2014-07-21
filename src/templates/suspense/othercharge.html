@@ -1,88 +1,85 @@
 <html> 
-<head>
-<link rel="stylesheet" type="text/css" href="http://192.168.15.178/static/css2/css/report.css " /><title>Bill</title></head>
-<div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
-<div style="font-size:14px" align='center'>Gill Park,Gill Road,Ludhiana - 141006</div>
-<div style="font-size:24px" align='center'>Testing & Consultancy Cell</div>
-<br>
-<br>
+    <head>
+    <link rel="stylesheet" type="text/css" href="http://192.168.15.178/static/css2/css/report.css " /><title>Bill</title></head>
 
-<!-- Header right begin-->
-   <div style = "text-align:right; float:right">
-    No:__________ <br>
-    Date:_________
-   </div>
-<!-- Header right end--><br>
-<br>
-<div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has been deposited by :- </div> 
-<div align='left'>{{sasa}} </div> <br>
-<div align='left'> vide receipt no. {{asd}} dated {{asd}} and was transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
-<div align='left'>A sum of Rs. {{ads}} was spent for testing on {{date}} as detailed below. </div> <br>
+        <div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
+        <div style="font-size:14px" align='center'>Gill Park,Gill Road,Ludhiana - 141006</div>
+        <div style="font-size:24px" align='center'>Testing & Consultancy Cell</div>
+        <br>
+        <br>
 
-<style>
-table, td, th {
-    border: 1px solid black;
-}
+        <!-- Header right begin-->
+        <div style = "text-align:right; float:right">
+            No:__________ <br>
+            Date:_________
+        </div>
+        <!-- Header right end-->    <br>
+        <br>
+        <div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has been deposited by :- </div> 
+        <div align='left'>{{sasa}} </div> <br>
+        <div align='left'> vide receipt no. {{asd}} dated {{asd}} and was transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
+        <div align='left'>A sum of Rs. {{ads}} was spent for testing on {{date}} as detailed below. </div> <br>
 
-table {
-    width: 18%;
-}
-
-th {
-    height: 50px;
-}
-</style>
-
-<table>
-
-<table align="left">
-<tr>
-{% for suspense in obj %}
-<td>TA/DA OF STAFF </td>
-<td>{{dfs}}</td>
-</tr>
-<tr>
-<td>BORING CHARGES </td>
-<td>{{suspense.boring_charge_external}}</td>
-</tr>
-<tr>
-<td>LABOUR CHARGES </td>
-<td>{{suspense.labour_charge}}</td>
-</tr>
-<tr>
-<td>CAR/TAXI CHARGES</td>
-<td>{{suspense.car_taxi_charge}}</td>
-</tr>
-<tr>
-<td>TOTAL RS.</td>
-<td>{{total}}</td>
-{% endfor %}
-</tr>
-
-</table>
-<br>
-<br>
-<!-- Header left begin-->
-   <div style = "text-align:right; float:right">
-    <br>
+        <style>
+            table, td, th {
+                border: 1px solid black;
+            }
+        
+            table {
+                width: 18%;
+            }
     
-   </div>
-<!-- Header left end--><br>
+            th {
+                height: 50px;
+            }
+        </style>
 
-<br>
-<br>
-<br>
-<!-- Header right begin-->
-   <div style = "text-align:left; float:left">
-The Transport Bill No. {{a}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
-     <br>
-    <br>
-<br>
-<br>
-<!-- Header right begin-->
-   <div style = "text-align:right; float:right">
-  DEAN Testing and Consultancy Cell
-   </div>
-<!-- Header right end-->
-</head>
+        <table align="left">
+            <tr>
+                <td>TA/DA OF STAFF </td>
+                <td>{{dfs}}</td>
+            </tr>
+            <tr>
+                <td>BORING CHARGES </td>
+                <td>{{suspense.boring_charge_external}}</td>
+
+            </tr>
+            <tr>
+                <td>LABOUR CHARGES </td>
+                <td>{{suspense.labour_charge}}</td>
+            </tr>
+            <tr>
+                <td>CAR/TAXI CHARGES</td>
+                <td>{{suspense.car_taxi_charge}}</td>
+            </tr>
+            <tr>
+                <td>TOTAL RS.</td>
+                <td>{{total}}</td>
+                {% endfor %}
+            </tr>
+
+        </table>
+        <br>
+        <br>
+        <!-- Header left begin-->
+        <div style = "text-align:right; float:right">
+            <br>
+        </div>
+        <!-- Header left end-->    <br>
+
+        <br>
+        <br>
+        <br>
+        <!-- Header right begin-->
+        <div style = "text-align:left; float:left">
+            The Transport Bill No. {{asd}} dated {{asd}} for Rs. {{sad}} is attached.This sum of Rs. {{sad}} may be transferred from other charges to Consultancy Transport Fund.The sum of Rs. {{adasd}} spent by Dean Testing and Consultancy may please paid to him.
+        <br>
+        <br>
+        <br>
+        <br>
+        <!-- Header right begin-->
+        <div style = "text-align:right; float:right">
+            DEAN Testing and Consultancy Cell
+        </div>
+        <!-- Header right end-->
 </html>
