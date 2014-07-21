@@ -6,8 +6,7 @@
     </head>
     <h2>Search a Job</h2>
     <form action="/suspense/clreport/" method="GET">
-        <label for="q">Ref No: </label>
-        <input type="text" name="q" value="">
-        <input type="submit" name="Search" value="Search">
-    </form>
+            <p> {{search_form.as_p}} </p>
+            <p> <input type="submit" value="Search" name="Search"> </p>
+        </form>
 </html>
