@@ -13,7 +13,7 @@ class OrganisationType(models.Model):
         return self.type_desc
 
 """
-describes the address details of the organisation 
+describes the address details of the admin organisation 
 """
 class Address(models.Model):
     street_address = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class Address(models.Model):
         return self.street_address + ',' + self.city
 
 """
-describes the details of the user 
+describes the details of the user's organisation 
 """
 class HattiUser(models.Model):   
     user = models.OneToOneField(User) 
@@ -52,7 +52,7 @@ class AdminOrganisations(HattiUser):
 This class inherits the details of HattiUser whether customer is
 organisation type or individual thus customer will confirm the Is org
 checkbox and then specifying the type of oganisation and its company
- name 
+name 
 """
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)

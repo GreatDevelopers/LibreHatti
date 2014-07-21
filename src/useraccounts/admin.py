@@ -1,8 +1,8 @@
 """
 %% admin.py %%
-This file display usage information that admin requires to edit or add
-in database tables, classes in admin interface. This
-make the data entry easy as one need to do it through MySQL server.
+This file display usage information that admin requires to edit or add 
+in database tables, classes in admin interface. This make the data entry
+easy as one need to do it through MySQL server.
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -20,16 +20,16 @@ admin.site.register(Customer)
 admin.site.unregister(User)
 
 """
-This class is used to add, edit or delete the address of the 
-organisation or user
+This class is used to add, edit or delete the address of the organisation
+or user
 """
 class AddressInline(admin.StackedInline):
      model = Address
 
 """
 This class is used to add, edit or delete the details of customer 
-mentioning the address along with ithe information whether customer 
-is org_type or not
+mentioning the address along with ithe information whether customer is  
+org_type or not
 """
 class CustomerInline(admin.StackedInline):
      model = Customer
