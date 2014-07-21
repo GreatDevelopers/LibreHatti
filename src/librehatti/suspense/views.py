@@ -14,17 +14,19 @@ import datetime
 
 
 def clearance_search(request):
-    return render(request,'suspense/suspense_first.html')
+    form = TaDaSearch
+    return render(request,'suspense/suspense_first.html',{
+                  'search_form': form})
 
 
 def clearance(request):
     if 'Search' in request.GET:
-        ref_no = request.GET['q']
+        ref_no = request.GET['ref_no']
         cl_report = Clearance_form(initial = {'work_charge':0, 'labour_charge':
                     0, 'car_taxi_charge':0,'boring_charge_external':0,
                     'boring_charge_internal':0,'Test_date':datetime.date.today
                      })
-        temp = {'q':ref_no,'cl_report':cl_report,}
+        temp = {'ref_no':ref_no,'cl_report':cl_report,}
         return render(request, 'suspense/suspenseform.html',temp)
 
 
