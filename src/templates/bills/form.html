@@ -1,0 +1,27 @@
+<html>
+
+    <head>
+        <style type="text/css">
+            span.s1{margin-left: 9%;}
+            span.s2{margin-left: 8%;}
+    	    span.s3{margin-left: 10%;}
+    	    span.sm{margin-left: 4%;}
+        </style>
+        <title>transport</title>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <form action='/bills/transp/' method='POST'> {% csrf_token %} 
+                        {{TransportForm.as_p}}
+                        <input type="submit" value="Generate Bill" name='button1' />
+                        <input type="submit" value="Add Another" name='button2' />
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </body>
+
+</html>

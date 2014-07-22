@@ -1,0 +1,53 @@
+<html>
+<head>
+
+    <meta http-equiv="refresh" content="15">
+    <style type="text/css">
+
+        table{width: 60%; margin-left:15%;border-collapse:collapse;} 
+        th{padding:10px;}
+        td{padding-left:40px;
+           padding-top: 25px;
+           padding-bottom: 25px;} 
+    </style>
+
+    <title>Proforma Bill</title>  
+</head>
+
+<body>
+
+    <div style="text-align: center">
+        <h1>GURU NANAK DEV ENGINEERING COLLEGE</h1>   
+        <p>Punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</p>     
+        <p style="font-size:200%">Testing & consultancy cell</p>  
+        <p>Gill Park, Gill Road, Ludhiana-141006</p> 
+        <p>Website:http//tcc.gndec.ac.in Email:tcc@gndec.ac.in Ph:0161-2491193,5064509 Fax:0161-5064742</p>   
+        <h2 style="text-align:center;font-size:175%;">Proforma Bill</h2>
+    </div>
+
+
+    <div align='left'>Client Name : {{ quoted_order.quote_buyer_id.username }}<br>STC No. AAATN1978LSD001<br>PAN No. AAATN1978L</div>
+
+    <br>
+    <table border="1" >
+        <tr>
+            <th>Items </th>
+            <th> Category </th>
+            <th> Unit Price </th>
+            <th> Quantity </th>
+            <th> Total</th> 
+        </tr>  
+ 
+        {% for i in quoted_item %}
+        <tr>
+            {% for j in i%}   
+            <td> {{j}}</td>
+            {% endfor %}    
+        </tr>
+                 
+        {% endfor %}
+       
+    </table>
+
+    <br> <b> Sum : {{total_cost}}</b>
+</html>

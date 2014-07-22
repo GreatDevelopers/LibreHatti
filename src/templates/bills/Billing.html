@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset='UTF-8'>
+    <meta http-equiv="refresh" content="5">
+    <style type="text/css">
+        h1{font-size: 24px;}
+        h1.a{font-size: 14px;}
+        h1.b{font-size: 24px;}
+        h1.c{font-size: 14px;}
+        p.d{text-align: center;}
+        p.f{text-align: left;}
+        p.g{text-align: right;}
+        table{width: 100%; align:left; border-collapse:collapse;}
+        th,td{padding:5px;}
+    </style>
+    <title>bill</title>
+</head>
+<body>      
+
+    <h1><center>{{quoted_order.quote_organisation.organisation_type}}
+    </center></h1>
+    <h1 class='a'><center>{{purchased_order.organisation.tagline}}
+    </center></h1>
+    <h1 class='b'><center> {{quoted_order.quote_organisation.title}}
+    </center></h1>
+    <h1 class='c'><center> {{quoted_order.quote_organisation.address}}
+    </center></h1>
+
+    <p class='d'><b>Website</b>: {{http//tcc.gndec.ac.in}} 
+    <b>Email </b>: {{tcc@gndec.ac}} 
+    <b>Ph </b>: {{quoted_order.quote_organisation.telephone}}  
+    <b>Fax </b>: {{quoted_order.quote_organisation.fax}}</p>
+    <h2 align="center">CONFIRMATION BILL</h2>   
+    <p style="position:absolute;top:290px;left:35px;">
+     No. : GNDEC/TCC/B/{{ job_no }}</p>
+    <p style="position:absolute;top:290px;right:0px;">
+     Dated : {{purchased_order.date_time}} </p>
+   
+    <p class='f'>STC No.{{STC_NO.}}<br>
+     PAN No. {{PAN_NO.}}<br>
+     To,
+     {{quote_delivery_address}}
+     Organisation:{{quote_organisation}}
+     Buyer Id : {{quoted_order.quote_buyer_id.username}}
+     Ref: Your Letter No.{{L_No.}}, 
+     dated:{{quoted_order.quote_date_time}} , respectively.
+    </br>
+    </br>
+    </br>
+
+    <table>
+        <tr>
+
+            <th>S.no.</th>
+            <th>Charges For Following</th>
+            <th>Price</th>
+            <th>Per</th>
+            <th>Total</h>
+
+        </tr>
+
+        {% if PurchasedItem %}
+        {% for purchased_item in PurchasedItem %}
+
+        <tr> 
+
+            <td>{{ forloop.counter }}</td>
+            <td>{{ purchased_item.item }}</td>
+            <td>{{ purchased_item.price }} </td>
+            <td>{{ purchased_item.qty sample ./s }} </td> 
+            <td>{{ purchased_item.total }}</td>
+    
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+
+        <tr>
+            <td><b>Total </b></td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td><b>{{total_cost}}</b></td>
+        </tr> 
+       
+    </table>
+
+
+    <div style="float:right;text-align:bottom">
+
+        <!-- Dean is liable to change-->
+        <p> Dean Training And Consultancy Cell </p> 
+    </div>
+            
+</body>
+
+</html>

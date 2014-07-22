@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>Forms</title>
+    </head>
+
+    <body>
+        <form method="GET" action='/print/add_material'>
+            
+            <b> Select Lab: </b>
+            <select name = 'lab'>
+                {% for i in lab_info %}
+                    <option value={{i.parent}} name={{i.parent}} >{{i.parent}} </option>
+                {% endfor %}
+            </select>
+            <p><input type="submit" name="Submit" value="Submit"></p>
+        </form>  
+    </body>
+</html>

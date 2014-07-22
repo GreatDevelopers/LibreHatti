@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Forms</title>
+    </head>
+
+    <body>
+        <p> Material selected : <b>{{material}}</b> </p>
+        <form method="POST" action='/print/lab_report'>
+            {% csrf_token %}
+            <b> Select Test: </b>
+            <select name = 'test'>
+                {% for i in test_info %}
+                    <option value={{i.name}} name={{i.name}} >{{i.name}} </option>
+                {% endfor %}
+            </select>
+            <p><b>Time span:</b></p>
+            <p>From:<input type="date" name="From"></p>
+            <p>To:  <input type="date" name="To"></p> 
+            <p><input type="submit" value="Submit"></p>
+        </form> 
+    </body>
+</html>

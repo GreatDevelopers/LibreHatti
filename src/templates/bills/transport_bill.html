@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <style type="text/css">
+            h1{margin-left: 30%;}
+            h1.as{margin-left: 35%;} 
+            span.a{float: left;}
+            span.s1{margin-left: 30%;}
+            span.s2{margin-left: 10%;}
+            span.s3{margin-left: 10%;}
+            p.c{text-align: right;} 
+            p.f{text-align: right;}
+            p.r{margin-left: 67%;}
+            p.e{margin-left: 30%;}
+            p.t{margin-left: 30%;}
+            p.b{text-align: center}
+            table{width: 60%; margin-left:15%; border-collapse:collapse;}
+            <!--th{padding:10px;}td{padding-left:40px;}-->
+        </style>
+        <title> Transport Bill</title>
+    </head>
+
+    <body>
+        <h1>Guru Nanak Dev Engineering College</h1>
+        <h1 class='as'>Testing and Consultancy</h1>
+        <p class='c'> <span class='a'> Bill no.:{{bill_no}} </span> Dated : {{date_of_use}}</p>
+        <p class='b'> To: {} </p>
+
+        <table border="1"> 
+            <tr>
+                <th>Date of Use</th>
+                <th>No. of km</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+
+            {% for i in temp %}
+            <tr>
+                <th>{{i.vehicle_id}}<br>{{i.Date}}</th>
+                <th>{{i.kilometer}}</th>
+                <th>{{i.rate}}</th>
+                <th>{{i.total}}</th>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p class='f'>DEAN TESTING AND CONSULTANCY</p>
+        <p class='e'> TA.DA Bill has been entered on the page..... of       
+            TA.DA & other Charges Register.<br/>Head other charges</p>       
+        <p class='r'> Dean T&C</p>  
+        <p class='t'> Passed for Payment <b>Rs. {{total_amount}}<br>{{words}}</b></center></p>
+            <br/>
+        <p> <span class='s1'> Dean T&C</span> <span class='s2'> Supt. Actt 
+            </span> <span class='s3'> Director </span>         </p>
+    </body>
+
+</html>

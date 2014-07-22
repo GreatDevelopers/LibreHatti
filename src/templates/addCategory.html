@@ -1,0 +1,6 @@
+{% extends base_template|default:"base.html" %} {% load i18n %} {% block content %}
+<form action="/categoryAdd/" method="pst"> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="submit" />
+</form>
+{% endblock %}
