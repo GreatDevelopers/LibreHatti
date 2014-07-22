@@ -40,12 +40,11 @@ class PurchaseOrder(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField()
     tds = models.IntegerField()
-    is_suspense = models.BooleanField(default=False)
     mode_of_payment = models.ForeignKey(ModeOfPayment)
 
     def __unicode__(self):
         return '%s' % (self.id)
-               
+
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
@@ -58,8 +57,8 @@ class PurchasedItem(models.Model):
 	    if self.item.category.parent=='Field Work':
 	        a=self.purchase_order.id
 	        b=PurchaseOrder.objects.filter(id=a).update(is_suspense=True)
-	    
-        super(PurchasedItem, self).save(*args, **kwargs) 
+
+        super(PurchasedItem, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
