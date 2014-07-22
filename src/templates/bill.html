@@ -11,10 +11,10 @@
                      h1.b{text-align:center;font-size: 24px;}
                      p.c{text-align: center;}
                      p.d{text-align: center;}
-                     h2.e{text-align: center;font-size:175%;}
+                     h2.e{text-align: center;font-size:175%;padding-top:18px;}
                      p.f{font-size:100%;}
                      p.g{position:absolute;top:338px;right:0px;}
-                     p.h{display:block;}
+                     p.h{position:absolute;top:350px;left:30px;}
                      p.i{float:right;text-align:bottom;}
                     table, th, td{
                         border: 1px solid black;
@@ -37,19 +37,18 @@
     <i>Email:</i>{{purchased_order.organisation.email1}}
     <i>Ph :</i>{{purchased_order.organisation.telephone}} 
     <i>Fax :</i> {{purchased_order.organisation.fax}}</p>
-    <br>
 
     <h2 class='e'>Bill</h2></br>
     <p class='f'>STC No. {{ STC_NO }}</P>
     <p class='f'>PAN No. {{ PAN_No. }</p>
     <p class='g'>Dated : {{ purchase_order.date_time|date:"F, j, Y"}} </p>
-    <p class='h'> To, <br><br>
-    {{purchase_order.delivery_address}} <br><br>
-    Organisation:{{purchase_order.organisation.title}}<br><br>
-    Buyer Id: {{purchase_order.buyer_id}} <br><br>
-    Ref: Your Letter No. {{ L_No}}, &nbsp; 
-    dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.<br><br>
-    Site: </p><br>
+    <p> To, </p>
+    <p>{{purchase_order.delivery_address}} </p>
+    <p>Organisation:{{purchase_order.organisation.title}}</p>
+    <p>Buyer Id: {{purchase_order.buyer_id}}</p>
+    <p>Ref: Your Letter No. {{ L_No}},  
+    <p class='h'>dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.</p>
+    <p>Site: </p>
 
 <table>
     <tr>
@@ -65,16 +64,16 @@
     {% for purchaseditem in purchased_item %}
         <td> {{ forloop.counter }} </td>
         <td> {{ purchaseditem.item__name }} </td>
-        <td>   {{ purchaseditem.qty }} sample./s  </td>
-        <td>   {{ purchaseditem.item__price }} </td>
-        <td>  {{purchaseditem.price }}</td>
+        <td> {{ purchaseditem.qty }} sample./s </td>
+        <td> {{ purchaseditem.item__price }} </td>
+        <td> {{purchaseditem.price }} </td>
     {% endfor %}
     {% endif %}
     </tr>
 
     <tr>
         <td><b>Sub-Total </b></td>
-        <td colspan="3">  </td>
+        <td colspan="3"></td>
         <td><b>{{total_cost}}</b></td>
     </tr>
 
