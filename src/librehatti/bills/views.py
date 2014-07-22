@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.bills.models import QuotedOrder
-from librehatti.bills.models import QuotedItem
+from librehatti.catalog.models import PurchaseOrder, PurchasedItem
+from librehatti.bills.models import *
 from django.contrib.auth.models import User
 import useraccounts
 from django.db.models import Sum
-from librehatti.bills.forms import ConfirmForm
+from librehatti.bills.forms import *
+from librehatti.prints.helper import num2eng
+from django.db.models import Max
 
 
 def proforma(request):
@@ -70,8 +70,48 @@ def list_quoted(request):
     return render(request,'bills/quoted_list.html',{'quoted':quoted}) 
 
 
+def transport(request):
+    form = TransportForm1()
+    temp = {'TransportForm':form}
+    return render (request, 'bills/form.html',temp)
 
 
+def transport_bill(request):
+    if request.method == 'POST':
+        form = TransportForm1(request.POST)
+        if form.is_valid():
+           
+            if 'button1' in request.POST:
+                    vehicle_id = request.POST['vehicle_id']
+                    job_id = request.POST['job_id']
+                    kilometer = float(request.POST['kilometer'])          
+                    date = request.POST['date']
+                    rate = float(request.POST['rate'])
+                    total = rate*kilometer
+                    obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
+                           kilometer=kilometer, Date=date, rate=rate, 
+                           total=total) 
+                    obj.save()
+                    temp = Transport.objects.filter(job_id=obj.job_id)
+                    total_amount = Transport.objects.filter(job_id=obj.job_id
+                           ).aggregate(Sum('total')).get('total__sum', 0.00)
+                    return render(request,'bills/transport_bill.html', 
+                           {'temp' : temp, 'words' : num2eng(total_amount), 
+                            'total_amount' : total_amount}) 
 
-
-
+            else:
+                    vehicle_id = request.POST['vehicle_id']
+                    job_id = request.POST['job_id']
+                    kilometer = float(request.POST['kilometer'])
+                    date = request.POST['date']
+                    rate = float(request.POST['rate'])
+                    total = rate * kilometer
+                    obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
+                                    kilometer=kilometer, Date=date, rate=rate, 
+                                    total=total) 
+                    obj.save()
+                         
+    else:
+        form = TransportForm1()
+    return render(request, 'bills/form.html', {'TransportForm':form})         
+  
