@@ -18,13 +18,13 @@
         </div>
         <!-- Header right end-->    <br>
         <br>
-        <div align='left'>A sum of Rs. {{ dasd}}  Other charges Rs{{sdas}} has
+        <div align='left'>A sum of Rs. {{total}}  Other charges Rs {{testing}} has
             been deposited by :- </div> 
         <div align='left'>{{sasa}} </div> <br>
-        <div align='left'> vide receipt no. {{asd}} dated {{asd}} and was 
+        <div align='left'> vide receipt no. {{sdsd}} dated {{dsds}} and was 
             transferred vide letter No.{{sdas}}dated {{ads}}</div> <br>
-        <div align='left'>A sum of Rs. {{ads}} was spent for testing on 
-            {{date}} as detailed below. </div> <br>
+        <div align='left'>A sum of Rs. {{testing}} was spent for testing on 
+            {{test_date}} as detailed below. </div> <br>
 
         <style>
             table, td, th {
@@ -43,26 +43,24 @@
         <table align="left">
             <tr>
                 <td>TA/DA OF STAFF </td>
-                <td>{{dfs}}</td>
+                <td>{{ amnt }}</td>
             </tr>
             <tr>
-                {% for suspense in obj %}
                 <td>BORING CHARGES </td>
-                <td>{{suspense.boring_charge_external}}</td>
+                <td>{{ boring_ext }}</td>
 
             </tr>
             <tr>
                 <td>LABOUR CHARGES </td>
-                <td>{{suspense.labour_charge}}</td>
+                <td>{{ lbr_chrg }}</td>
             </tr>
             <tr>
                 <td>CAR/TAXI CHARGES</td>
-                <td>{{suspense.car_taxi_charge}}</td>
+                <td>{{ car_charge }}</td>
             </tr>
             <tr>
                 <td>TOTAL RS.</td>
                 <td>{{total}}</td>
-                {% endfor %}
             </tr>
 
         </table>

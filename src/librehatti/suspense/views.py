@@ -59,8 +59,19 @@ def clearance_result(request):
 
 def other_charges(request):
         obj = SuspenseClearance.objects.filter(id=1).values(
-              'boring_charge_external','labour_charge','car_taxi_charge')
-        return render(request,'suspense/othercharge.html',{'obj':obj})
+              'boring_charge_external','labour_charge','car_taxi_charge','test_date')
+        for i in obj:
+          boring_ext = int(i.get('boring_charge_external'))
+          lbr_chrg = int(i.get('labour_charge'))
+          car_charge = int(i.get('car_taxi_charge'))
+          test_date = i.get('test_date').date
+        tada_amount = TaDa.objects.filter(id=1).values('tada_amount')
+        for i in tada_amount:
+          amnt = int(i.get('tada_amount'))
+        total = (boring_ext + lbr_chrg + car_charge + amnt)
+        testing = (boring_ext + lbr_chrg + car_charge)
+        return render(request,'suspense/othercharge.html',
+                         {'boring_ext':boring_ext, 'lbr_chrg':lbr_chrg,'car_charge':car_charge,'amnt':amnt,'total':total,'test_date':test_date,'testing':testing})
 
 
 def withouttransport(request):
