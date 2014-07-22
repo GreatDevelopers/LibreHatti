@@ -10,15 +10,15 @@
                      h1.b{text-align:center;font-size: 24px;}
                      p.c{text-align: center;}
                      p.d{text-align: center;}
-                     h2.e{text-align: center;font-size:175%;}
-                     p.f{font-size:100%;}
-                     p.g{position:absolute;top:430px;left:0px;}
-                     p.h{position:absolute;top:340px;right:0px;}
-                     p.i{display:block;}
-                     p.j{position:absolute;right:30px;top:1050px;}
-                     p.k{position:absolute;top:1050px;}
-                     p.l{position:absolute;right:30px;top:1100px;}
+                     h2.e{text-align: center;font-size:175%;padding-top:18px;}
+                     p.f{padding-top:15px;font-size:100%;}
+                     p.g{position:absolute;top:400px;left:0px;}
+                     p.h{position:absolute;top:350px;right:0px;}
+                     p.i{position:absolute;right:30px;top:1050px;}
+                     p.j{position:absolute;top:1050px;}
+                     p.k{position:absolute;right:30px;top:1100px;}
                     table, th, td{
+                        padding-top:0px;
                         border: 1px solid black;
                         width : 100%;
                     }
@@ -40,23 +40,21 @@
     <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
     <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
     <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
-    <br>
 
-    <h2 class='e'>Confirmation Bill</h2></br>
-    <p class='f'>STC No. {{ STC_NO }}</P>
-    <p class='f'>PAN No. {{ PAN_No. }</p>
+    <h2 class='e'>Confirmation Bill</h2>
+    <p class='f'>STC No. {{ STC_NO }}</br>
+    PAN No. {{ PAN_No. }</p>
     <p class='g'>No. : GNDEC/TCC/B/{{ job_no }}</p>
     <p class='h'>Dated : {{quoted_order.date_time}}</p>
     <br><br>
 
-    <p class='i'> To,<br>
-    {{quote_delivery_address}}<br>
-    Organisation:{{quote_organisation}}<br>
-    Buyer Id : {{ purchased_order.buyer_id.username }}<br>
-    Ref: Your Letter No.{{L_No.}},<br> 
-    dated:{{quoted_order.date_time}} , respectively.
+    <p> To,</p>
+    <p>{{quote_delivery_address}}</p>
+    <p>Organisation:{{quote_organisation}}</p>
+    <p>Buyer Id : {{ purchased_order.buyer_id.username }}</p>
+    <p>Ref: Your Letter No.{{L_No.}},</p> 
+    <p>dated:{{quoted_order.date_time}} , respectively.
     </p>
-    <br><br><br>
 
 <table>
     <tr>
@@ -82,7 +80,7 @@
       <td><b>Total</b></td>
       <td colspan="3"></td>
             <td align="right"><b>{{total_cost}}</b></td>
-    </tr><br>
+    </tr>
 
     {% if bill.trans_total != None %}
     <tr>
@@ -114,8 +112,8 @@
 </table>
 
     <!--Dean is liable to change-->
-    <p class='j'> Dean Training And Consultancy Cell</p>
-    <p class='k'>I/We here by agree to the terms & conditions as mentioned above</p>
-    <p class='l'>(Signature of Client/Deptt. Representative)</p>
+    <p class='i'> Dean Training And Consultancy Cell</p>
+    <p class='j'>I/We here by agree to the terms & conditions as mentioned above</p>
+    <p class='k'>(Signature of Client/Deptt. Representative)</p>
 </body>
 </html>
