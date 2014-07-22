@@ -2,110 +2,104 @@
 <html lang="en">
 
 <head>
-    
     <meta charset='UTF-8'>
-    <title>bill</title>
-    
+        <link rel="stylesheet" type="text/css" href="style.css" />
+            <title>bill</title>
+                <style>
+                     h1{text-align:center;font-size: 24px;}
+                     h1.a{text-align:center;font-size: 14px;}
+                     h1.b{text-align:center;font-size: 24px;}
+                     p.c{text-align: center;}
+                     p.d{text-align: center;}
+                     h2.e{text-align: center;font-size:175%;}
+                     p.f{font-size:100%;}
+                     p.g{position:absolute;top:338px;right:0px;}
+                     p.h{display:block;}
+                     p.i{float:right;text-align:bottom;}
+                    table, th, td{
+                        border: 1px solid black;
+                        width : 100%;
+                    }
+                    th,td{
+                        padding:3px;border-style:inset;
+                    }
+                    table{
+                        table-layout:fixed;
+                    }
+                </style>
 </head>
-
 <body>
-    <div style="text-align:center">     
-        <h1>GURU NANAK DEV ENGINEERING COLLEGE</h1>
-        <p>punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</p>  
-        <p style="font-size:200%">Testing & consultancy cell</p>
-        <p>Gill Park, Gill Road, Ludhiana-141006</p>
-        <p>Website:http//tcc.gndec.ac.in Email:tcc@gndec.ac.in Ph:0161-2491193,5064509 Fax:0161-5064742</p>
-        <h2 style="text-align:center;font-size:175%;"> Bill</h2>
-    </div>
- 
-    <p style="font-size:100%">STC No. {{ STC_No }}</P>
-    <p style="font-size:100%;text-align:left;">PAN No. {{ PAN_No }} &nbsp; &nbsp;<span style="float:right;">Dated : {{ purchase_order.date_time|date:"F, j, Y"}} </P>
-    <p> To, </p>
-    <p> {{purchase_order.delivery_address}} </p>
-    <p> Organisation:{{purchase_order.organisation.title}}</p>
-    <p> Buyer Id: {{purchase_order.buyer_id}} </p>
-    <p> Ref: Your Letter No. {{ L_No}}, &nbsp; dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.</p>
-    <p> Site: </p>
+    <h1>{{purchased_order.organisation.organisation_type}}</h1>
+    <h1 class='a'>{{purchased_order.organisation.tagline}}</h1>       
+    <h1 class='b'>{{purchased_order.organisation.title}}</h1>  
+    <p class ='c'>{{purchased_order.organisation.address}}</p> 
+    <p class='d'><i>Website :</i> {{purchased_order.organisation.url}}
+    <i>Email:</i>{{purchased_order.organisation.email1}}
+    <i>Ph :</i>{{purchased_order.organisation.telephone}} 
+    <i>Fax :</i> {{purchased_order.organisation.fax}}</p>
+    <br>
 
-    <style>
+    <h2 class='e'>Bill</h2></br>
+    <p class='f'>STC No. {{ STC_NO }}</P>
+    <p class='f'>PAN No. {{ PAN_No. }</p>
+    <p class='g'>Dated : {{ purchase_order.date_time|date:"F, j, Y"}} </p>
+    <p class='h'> To, <br><br>
+    {{purchase_order.delivery_address}} <br><br>
+    Organisation:{{purchase_order.organisation.title}}<br><br>
+    Buyer Id: {{purchase_order.buyer_id}} <br><br>
+    Ref: Your Letter No. {{ L_No}}, &nbsp; 
+    dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.<br><br>
+    Site: </p><br>
 
-        table,th,td
-        {
-            border:1px solid black;
-        }
-        th,td
-        {
-            padding:3px;
-        }
-        th,td{border-style:inset>
-            table
-        {
-            table-layout:fixed;
-        }
+<table>
+    <tr>
+        <th> S.No. </th>
+        <th>Charges For Following</th>
+        <th>Description</th>
+        <th>Per</th>
+        <th>Total</h>
+    </tr>
 
-    </style>
+    <tr>
+    {% if purchased_item %}
+    {% for purchaseditem in purchased_item %}
+        <td> {{ forloop.counter }} </td>
+        <td> {{ purchaseditem.item__name }} </td>
+        <td>   {{ purchaseditem.qty }} sample./s  </td>
+        <td>   {{ purchaseditem.item__price }} </td>
+        <td>  {{purchaseditem.price }}</td>
+    {% endfor %}
+    {% endif %}
+    </tr>
 
-    <div style="table-align:center">
-        <table style="width:1200px;align:center;">
+    <tr>
+        <td><b>Sub-Total </b></td>
+        <td colspan="3">  </td>
+        <td><b>{{total_cost}}</b></td>
+    </tr>
 
-            <tr>
-                <th> S.No. </th>
-                <th>Charges For Following</th>
-                <th>Description</th>
-                <th>Per</th>
-                <th>Total</h>
-            </tr>
+    {% for tax, tax_list in tax_data %}
+    <tr>
+        <td>{{tax.taxes}}@{{tax.value}}%</td>
+        <td colspan="3" ></td>
+        <td>{{ tax_list }}</td>
+    </tr>
+    {% endfor %}
 
-            <tr>
-                {% if purchased_item %}
-                    {% for purchaseditem in purchased_item %}
-                        <td> {{ forloop.counter }} </td>
-                        <td> {{ purchaseditem.item__name }} </td>
-                        <td>   {{ purchaseditem.qty }} sample./s  </td>
-                        <td>   {{ purchaseditem.item__price }} </td>
-                        <td>  {{purchaseditem.price }}</td>
-                    {% endfor %}
-                {% endif %}
-            </tr>
+     <tr>
+         <td><b>Surcharge Total</b></td>
+         <td colspan ="3">  </td>
+         <td>{{surcharge_total}}</td> 
+     </tr>
 
-            <tr>
-                <td><b>Sub-Total </b></td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td><b>{{total_cost}}</b></td>
-            </tr>
-            {% for tax, tax_list in tax_data %}
-                <tr>
-                    <td>{{tax.taxes}}@{{tax.value}}%</td>
-                    <td colspan="3" ></td>
-                    <td>{{ tax_list }}</td>
-                </tr>
-            {% endfor %}
-
-            <tr>
-                <td><b>Surcharge Total</b></td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>{{surcharge_total}}</td> 
-            </tr>
-            <tr>
-                <td><b>Grand-Total </b></td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td><b>{{grand_total}}</b></td>
-            </tr>
-   
-        </table>
-    </div>
-
-    <div style="float:right;text-align:bottom">
+     <tr>
+         <td><b>Grand-Total </b></td>
+         <td colspan = "3">  </td>
+         <td><b>{{grand_total}}</b></td>
+     </tr>
+</table>
         <!-- Dean is liable to change-->
-        <p> Dean Of Training And Consultancy Cell </p> 
-    </div>          
+        <p class='i'> Dean Of Training And Consultancy Cell </p>          
 </body>
-
 </html>
 
