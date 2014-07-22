@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 urlpatterns = patterns('librehatti.suspense.views',
-                   url(r'^$', 'suspense'),
+                   url(r'^add_distance', 'add_distance'),
                    url(r'^save/', 'save_charges'),
                    url(r'^clreport/','clearance'),
                    url(r'^clresult/','clearance_result'),

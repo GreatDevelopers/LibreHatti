@@ -1,8 +1,9 @@
 from django.db import models
 import datetime
+from librehatti import catalog
 
 class SuspenseOrder(models.Model):
-    purchase_order_id = models.IntegerField()
+    purchase_order = models.ForeignKey('catalog.PurchaseOrder')
     distance = models.IntegerField(default=0)
     def __unicode__(self):
         return '%s' % (self.id)

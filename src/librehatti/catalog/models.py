@@ -27,6 +27,10 @@ class Attributes(models.Model):
     def __unicode__(self):
         return self.name
 
+class ModeOfPayment(models.Model):
+    method = models.CharField(max_length=25, default='cash')
+    def __unicode__(self):
+        return self.method
 
 class PurchaseOrder(models.Model):
     buyer_id = models.ForeignKey(User)
@@ -37,20 +41,11 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField()
     tds = models.IntegerField()
     is_suspense = models.BooleanField(default=False)
-    choices = (('cash', 'Cash'), ('demand_draft', 'Demand Draft'), ('cheque',
-              'Cheque'))
-    mode_of_payment = models.CharField(max_length=25, default='cash', 
-                      choices=choices)
+    mode_of_payment = models.ForeignKey(ModeOfPayment)
 
     def __unicode__(self):
-        return '%s' % (self.buyer_id) +' - ' '%s' % (self.date_time.strftime
-               ('%b %d, %Y'))
-
-    def save(self, *args, **kwargs):
-	if self.mode_of_payment == 'cheque' or self.mode_of_payment == 'demand_draft':
-            self.is_suspense = True
-	super(PurchaseOrder, self).save(*args, **kwargs) 
-
+        return '%s' % (self.id)
+               
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)

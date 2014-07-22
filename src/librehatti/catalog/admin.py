@@ -8,6 +8,7 @@ admin.site.register(Category)
 admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
+admin.site.register(ModeOfPayment)
 
 class CatalogInline(admin.TabularInline):
     model = Catalog
@@ -31,11 +32,9 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
     def response_add(self, request, obj, post_url_continue=None):
-        if obj.is_suspense == True:
-            return HttpResponseRedirect('/suspense/')
-        else:
-            obj.save()
-            return HttpResponseRedirect('/admin/catalog/purchaseorder/')
+        request.session['old_post'] = request.POST
+        request.session['purchase_order_id'] = obj.id
+        return HttpResponseRedirect('/suspense/add_distance/')
 
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)

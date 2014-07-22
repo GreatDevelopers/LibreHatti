@@ -14,9 +14,9 @@ class Clearance_form(ModelForm):
 		  'lab_testing_staff','field_testing_staff','test_date']
 
 
-class SuspenseForm(forms.Form):
-        Purchase_order = forms.ChoiceField(choices=CHOICES)
-        distance=forms.IntegerField()
+class SuspenseForm(ModelForm):
+    class Meta:
+        model = SuspenseOrder
       
 class TaDaSearch(forms.Form):
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
