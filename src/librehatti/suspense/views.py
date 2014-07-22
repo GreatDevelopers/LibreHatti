@@ -103,12 +103,31 @@ def withouttransport(request):
                           'boring_int':boring_int})
 
 
+def wtransport(request):
+    tada_amount = TaDa.objects.filter(id=1).values('tada_amount')
+    for i in tada_amount:
+        amnt = int(i.get('tada_amount'))
+    obj = SuspenseClearance.objects.filter(id=1).values(
+            'boring_charge_internal','labour_charge','car_taxi_charge',
+            'test_date','boring_charge_external','work_charge')
+    for i in obj:
+        boring_int = int(i.get('boring_charge_internal'))
+        boring_ext = int(i.get('boring_charge_external'))
+        lbr_chrg = int(i.get('labour_charge'))
+        car_charge = int(i.get('car_taxi_charge'))
+        test_date = i.get('test_date').date
+        work_charge = int(i.get('work_charge'))
+    total = (boring_ext + lbr_chrg + car_charge + amnt + boring_int 
+             + work_charge)
+    testing = ( total - amnt )
+    return render(request,'suspense/wtransport.html',{'amnt':amnt,
+                          'total':total,'test_date':test_date,
+                          'testing':testing,'work_charge':work_charge,
+                          'boring_int':boring_int})
+
+
 def with_transport(request):
     return render(request,'suspense/with_transport.html')
-
-
-def wtransport(request):
-    return render(request,'suspense/wtransport.html')
 
 
 def suspense(request):

@@ -35,7 +35,7 @@
         <!-- Header right end--> </head> <br>
         <br>
         <div align='left'>Director, </div>  
-        <div align='left'>Recieved a sum of Rs {{total}}/- </div> <br>
+        <div align='left'>Recieved a sum of Rs {{ total }}/- </div> <br>
         <div align='left'>Vide Cash,from :Swami Ganga Nand Ji Bhuriwala 
            Memorial Trust,(Regd),Dham Talwandi,,Dist Ludhiana </div> 
         <div align='left'>Vide bill no :{{bill_no}} Dated:{{dated}} </div> 
@@ -87,7 +87,7 @@
                     <tr>
                         <td rowspan=9><br><br><br>CREDITS<br><br></td>
                         <td>COLLEGE INCOME 15%</td>
-                        <td rowspan=9><br><br>2014-07-10<br><br><br></td>
+                        <td rowspan=9><br><br>{{test_date}}<br><br><br></td>
                         <td>{{20}}</td>
                     </tr>
 
@@ -105,23 +105,23 @@
                     </tr>
                     <tr>
                         <td>WORK CHARGES</td>
-                        <td>{{45}}</td>
+                        <td>{{work_charge}}</td>
                     </tr>
                     <tr>
                         <td>T.A./D.A. OF STAFF</td>
-                        <td>{{78}}</td>
+                        <td>{{amnt}}</td>
                     </tr>
                     <tr>
                         <td>OTHER CHARGES</td>
-                        <td>{{76}}</td>
+                        <td>{{testing}}</td>
                     </tr>
                     <tr>
                         <td>BORING CHARGES(internal)</td>
-                        <td>{{12}}</td>
+                        <td>{{boring_int}}</td>
                     </tr>
                     <tr>
                         <td>TOTAL</td>
-                        <td>{{34}}</td>
+                        <td>{{total}}</td>
                     </tr>
             </table>
         </div>
