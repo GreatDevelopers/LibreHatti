@@ -1,17 +1,12 @@
 from django.db import models
 import useraccounts
-from librehatti.catalog.models import *
+from librehatti.catalog.models import Product
 from django.contrib.auth.models import User
 
 
 class QuotedOrder(models.Model):
-    """
-    QuotedOrder Class defines all the fields required to place quote
-    order. Quote order is the one which has not been confirmed yet
-    and the user has the option whether to confirm it or not. 
-    """
     quote_buyer_id = models.ForeignKey(User)
-    quote_is_debit = models.BooleanField()
+    quote_is_debit = models.BooleanField(default = False)
     quote_delivery_address = models.ForeignKey('useraccounts.Address')
     quote_organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     quote_date_time = models.DateTimeField(auto_now_add=True)
@@ -21,10 +16,6 @@ class QuotedOrder(models.Model):
 
 
 class QuotedItem(models.Model):
-    """
-    QuotedItem Class defines all the fields required to add the 
-    quote item.
-    """
     quote_order = models.ForeignKey(QuotedOrder)
     quote_price = models.IntegerField()
     quote_qty = models.IntegerField()
@@ -38,15 +29,4 @@ class QuotedItem(models.Model):
 
     def __unicode__(self):
         return '%s' % (self.quote_item) + ' - ' '%s' % (self.quote_order)
-
-
-class Transport(models.Model):
-    vehicle_id = models.CharField(max_length=20)
-    job_id = models.IntegerField()
-    kilometer = models.FloatField()
-    rate = models.FloatField(default=10.0)  
-    Date = models.DateField(blank=True)
-    total = models.IntegerField()
-    def __unicode__(self):
-        return '%s' % (self.vehicle_id)
 

@@ -2,7 +2,6 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
 
-
 admin.autodiscover()
 admin.site.register(Category)
 admin.site.register(Attributes)

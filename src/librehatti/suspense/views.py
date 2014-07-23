@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.db.models import Sum, Max
 from models import SuspenseClearance
 from models import TaDa
-from django.http import  HttpResponseRedirect
-from librehatti.catalog.models import ModeOfPayment
+from django.http import  HttpResponseRedirect, HttpResponse
+from librehatti.catalog.models import Product
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.forms import Clearance_form
@@ -11,13 +11,30 @@ from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
 from librehatti.prints.helper import num2eng
+
 import datetime
 
 
 def add_distance(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
-    if old_post['mode_of_payment'] != '1':
+    items = []
+    suspense = 0
+    for id in range(0,10):
+        items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
+  
+    for item in items:
+        if item:
+            parents = Product.objects.values(
+              'category__parent__name').filter(id = item)
+    
+    for parent in parents:
+        for key, value in parent.iteritems():
+            if value == 'Field Work':
+                suspense = 1
+                break
+
+    if old_post['mode_of_payment'] != '1' or suspense == 1:
         if request.method == 'POST':
             form = SuspenseForm(request.POST)
             if form.is_valid:

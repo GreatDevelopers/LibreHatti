@@ -2,7 +2,7 @@ from django.forms import ModelForm, TextInput
 from models import SuspenseClearance
 from models import TaDa
 from models import SuspenseOrder
-from librehatti.suspense.choices import CHOICES
+
 from django import forms
 
 # Create your forms here.
@@ -17,6 +17,7 @@ class Clearance_form(ModelForm):
 class SuspenseForm(ModelForm):
     class Meta:
         model = SuspenseOrder
+        exclude = ('is_cleared',)
       
 class TaDaSearch(forms.Form):
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
