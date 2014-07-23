@@ -17,5 +17,4 @@ urlpatterns = patterns('',
     url(r'^bill/', 'librehatti.prints.views.bill'),
     url(r'^bills/', include('librehatti.bills.urls')),
     url(r'^suspense/', include('librehatti.suspense.urls')),
-    url(r'^bills/', include('librehatti.bills.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
