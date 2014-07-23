@@ -14,7 +14,7 @@
         
             {% for i in quoted_item %}
             <tr>         
-                <td>Item:<input type="text" name = "quote_item" value="{{i.quote_item.name}}"></td>  
+                <td>Item:<input type="text" name = "quote_item" value="{{i.quote_item__name}}"></td>  
                 <td>Quantity:<input type="text" name="quote_qty" value="{{i.quote_qty}}"></td>
             </tr>   
             {% endfor %} 
