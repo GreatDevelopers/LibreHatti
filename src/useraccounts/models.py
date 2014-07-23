@@ -56,7 +56,7 @@ name
 """
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)
-    is_org = models.BooleanField();
+    is_org = models.BooleanField(default = False);
     org_type = models.ForeignKey(OrganisationType)
     company = models.CharField(max_length=200)
     def __unicode__(self):

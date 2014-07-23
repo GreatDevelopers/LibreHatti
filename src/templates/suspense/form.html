@@ -3,7 +3,8 @@
         <title>Forms</title>
     </head>
     <body>
-        <form method="GET" action='suspense/save'>
+        <form method="POST" action=''>
+        {% csrf_token %} 
             {{form.as_p}}
             <input type="submit" value="Submit">
         </form> 
