@@ -37,7 +37,6 @@ class Attributes(models.Model):
     def __unicode__(self):
         return self.name
 
-<<<<<<< HEAD
 """
 This class defines the details about user, its organisation, along with 
 total discount and payment of job, and mode of payment
