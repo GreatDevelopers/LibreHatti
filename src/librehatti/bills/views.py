@@ -34,7 +34,6 @@ def final(request, client_id):
        obj.purchase_order= PurchaseOrder(id=client_id)
        quoted_item = PurchasedItem.objects.values_list( 'item__name','qty')
        obj.save()
-       #total_cost = PurchasedItem.objects.filter(client_id=order_id).aggregate(Sum('price')).get('price__sum', 0.00)
        return render(request, 'bills/bills.html',{'quoted_item':quoted_item})
 
 def proforma(request):
