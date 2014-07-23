@@ -1,3 +1,8 @@
+"""
+%% urls.py %%
+
+This file define the urls used in the software for suspense application. In this regular expression are used, which are used to connect the url with the functions defined.
+"""
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
