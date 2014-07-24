@@ -1,16 +1,24 @@
+"""
+models of catalog are..
+"""
 from django.db import models
 from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
 
-
+"""
+This class defines the name of category and parent category of product 
+"""
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
     def __unicode__(self):
         return unicode(self.name)
 
-
+"""
+This class defines the name of product, category, price of eact item of 
+that product and the organisation with which user deals
+"""
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category)
@@ -19,7 +27,9 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
-
+"""
+This class defines the features of product
+"""
 class Attributes(models.Model):
     name = models.CharField(max_length=200)
     is_number = models.BooleanField(default = True)
@@ -27,6 +37,10 @@ class Attributes(models.Model):
     def __unicode__(self):
         return self.name
 
+"""
+This class defines the details about user, its organisation, along with 
+total discount and payment of job, and mode of payment
+"""
 class ModeOfPayment(models.Model):
     method = models.CharField(max_length=25)
     def __unicode__(self):
@@ -60,13 +74,19 @@ class PurchasedItem(models.Model):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 
 
+"""
+This class defines the features, value of product
+"""
 class Catalog(models.Model):
     attribute = models.ForeignKey(Attributes)
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product)
     def __unicode__(self):
         return self.attribute.name;
-
+"""
+This class defines the type of taxes, value, validation of taxes 
+mentioning the startdate and end date 
+"""
 class Surcharge(models.Model):
     taxes = models.CharField(max_length=200)
     value = models.IntegerField()

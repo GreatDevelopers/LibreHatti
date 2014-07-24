@@ -16,8 +16,7 @@ def index(request):
 
     if categorylist.count() == 0:
         nocategory = True
-        return render(request, 'catalog.html', {'nocategory': 
-                       nocategory})
+        return render(request, 'catalog.html', {'nocategory': nocategory})
     productlist = Product.objects.all();
 
     if productlist.count() == 0:
