@@ -15,27 +15,31 @@ def confirm(request, client_id):
     quoted_item = QuotedItem.objects.filter(quote_order_id=
                   int(client_id)).values('quote_item__name','quote_qty',
                   'quote_price')
-    total_cost = QuotedItem.objects.filter(quote_order_id=
-              int(client_id)).aggregate(Sum('quote_price')).get('price__sum',0.00)
-    form = ConfirmForm(initial={'quote_item':'quote_item', 
-           'quote_qty':'quote_qty'})
+    form = ConfirmForm(initial={'quote_item':'quote_item','quote_qty':'quote_qty'})
     i_d = quoted_order.quote_buyer_id_id
     return render(request, 'bills/confform.html',{'quoted_order':quoted_order, 
-                 'quoted_item' : quoted_item, 'total_cost' : total_cost, 
-                 'id' : i_d,'form':form})
+                 'quoted_item' : quoted_item,'id':i_d,'form':form})
 
-
-def final(request, client_id):
-    if request.method == 'GET':
-       name1 = request.GET['quote_item']
-       qty1 = request.GET['quote_qty']
-       obj = PurchasedItem(qty=qty1)
-       obj.item= Product(name=name1)
-       obj.purchase_order= PurchaseOrder(id=client_id)
-       quoted_item = PurchasedItem.objects.values_list( 'item__name','qty')
-       obj.save()
-       return render(request, 'bills/bills.html',{'quoted_item':quoted_item})
-
+def final(request,name):
+    if request.method == 'POST':
+        form = ConfirmForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            qty1 = request.POST ['quote_qty']
+            item1 = request.POST ['quote_item']
+            total_cost = PurchasedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('price')).get('price__sum', 0.00)
+            return render(request, 'bills/confirm.html', {'total_cost' : total_cost, 'form':form })
+        else:
+    
+             client_id = 1
+             quoted_order = QuotedOrder.objects.get(pk=int(client_id))
+             quoted_item = QuotedItem.objects.filter().values('quote_item__name', 'quote_qty', 'quote_price')
+             
+             total_cost = QuotedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('quote_price')).get('price__sum', 0.00)
+             i_d = quoted_order.quote_buyer_id_id
+             return render(request, 'bills/confirm.html', {'quoted_order' : quoted_order, 
+                 'quoted_item' : quoted_item, 'total_cost' : total_cost, 'id' : i_d,'form':form})
+      
 def proforma(request):
     """
     This function lists all those customers who have added Purchased
