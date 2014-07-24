@@ -12,7 +12,7 @@
                      p.d{text-align: center;}
                      h2.e{text-align: center;font-size:175%;padding-top:18px;}
                      p.f{padding-top:15px;font-size:100%;}
-                     p.g{position:absolute;top:400px;left:0px;}
+                     p.g{position:absolute;top:350px;left:0px;}
                      p.h{position:absolute;top:350px;right:0px;}
                      p.i{position:absolute;right:30px;top:1050px;}
                      p.j{position:absolute;top:1050px;}
@@ -58,21 +58,21 @@
 
 <table>
     <tr>
-      {{total_cost}}
+
       <th>S.no.</th>
       <th>Charges For Following</th>
       <th>Quantity</th>
       <th>Price</th>
       <th>Total</th>
     </tr>
-    {% if QuotedItem %}
-    {% for i in QuotedItem %}
+    {% if quoted_item %}
+    {% for p in quoted_item %}
     <tr> 
       <td>{{ forloop.counter }}</td>
-      <td>{{ i.quote_item }}</td>
-      <td>{{ i.quote_price }}</td>
-      <td>{{ i.quote_qty  }}</td> 
-      <td>{{ i.total }}</td>
+      <td>{{ p.quote_item__name}}</td>
+      <td>{{ p.quote_qty }}</td>
+      <td>{{ p.quote_price  }}</td> 
+      <td>{{ p.total }}</td>
     </tr>
     {% endfor %}
     {% endif %}
