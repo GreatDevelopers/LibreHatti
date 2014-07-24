@@ -1,0 +1,47 @@
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder}{\section{librehatti.\-catalog.\-models.\-Purchase\-Order Class Reference}
+\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder}\index{librehatti.\-catalog.\-models.\-Purchase\-Order@{librehatti.\-catalog.\-models.\-Purchase\-Order}}
+}
+Inheritance diagram for librehatti.\-catalog.\-models.\-Purchase\-Order\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_aabe49ee20451298a11e44e2474872fb0}{def {\bfseries \-\_\-\-\_\-unicode\-\_\-\-\_\-}}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_aabe49ee20451298a11e44e2474872fb0}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a2768a892466a2be1f40b05ab7d4d6d56}{tuple {\bfseries buyer\-\_\-id} = models.\-Foreign\-Key(User)}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a2768a892466a2be1f40b05ab7d4d6d56}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abe0c5fe56c845603360c5c0b27885337}{tuple {\bfseries is\-\_\-debit} = models.\-Boolean\-Field(default = False)}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abe0c5fe56c845603360c5c0b27885337}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a906409ea32a270b2d2aa9c4cef6919e2}{tuple {\bfseries delivery\-\_\-address} = models.\-Foreign\-Key('useraccounts.\-Address')}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a906409ea32a270b2d2aa9c4cef6919e2}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_aa8ad9c440b1993397b7189f58d878fd0}{tuple {\bfseries organisation} = models.\-Foreign\-Key('useraccounts.\-Admin\-Organisations')}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_aa8ad9c440b1993397b7189f58d878fd0}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abd767c1140af50d0ce7e5f0229cfaa17}{tuple {\bfseries date\-\_\-time} = models.\-Date\-Time\-Field(auto\-\_\-now\-\_\-add=True)}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abd767c1140af50d0ce7e5f0229cfaa17}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abb45b6bc4b47e0563a020ebd64aaa173}{tuple {\bfseries total\-\_\-discount} = models.\-Integer\-Field()}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_abb45b6bc4b47e0563a020ebd64aaa173}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a2666468af212f2b0e606dec24b6f0edd}{tuple {\bfseries tds} = models.\-Integer\-Field()}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_a2666468af212f2b0e606dec24b6f0edd}
+
+\item 
+\hypertarget{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_ad331d566b7b412ad4ac420e7ea6cd931}{tuple {\bfseries mode\-\_\-of\-\_\-payment} = models.\-Foreign\-Key(\hyperlink{classlibrehatti_1_1catalog_1_1models_1_1ModeOfPayment}{Mode\-Of\-Payment})}\label{classlibrehatti_1_1catalog_1_1models_1_1PurchaseOrder_ad331d566b7b412ad4ac420e7ea6cd931}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+models.\-py\end{DoxyCompactItemize}
