@@ -1,0 +1,296 @@
+ <!DOCTYPE html>
+<html>
+<style>
+*{
+
+
+margin:0;
+padding:0;}
+h1 {
+font-size:30px;
+text-align:center;
+margin-left: 15px;
+    }
+h2 {text-align:center;
+
+margin-left: 25px;
+}
+r{
+position: relative;
+top: 80px;
+text-align:center;
+}
+
+
+#a
+{text-align:left; float:left;}
+#a1
+{text-align:right; float:right;
+position:relative;
+top:-150px;}
+#m
+{text-align:left; float:left;
+position:relative;
+left:-150px;
+top:23px;}
+#m1
+{text-align:right; float:right;
+position:absolute;
+right:5px;
+top:-30px;}
+#k
+{position:relative;
+top:65px;
+left:-262px;
+}
+#k1
+{position:relative;
+top:80px;
+left:1px;
+}
+#k2
+{position:relative;
+top:90px;
+
+}
+#b3
+{position:absolute;
+top:200px;
+height:50px;
+width:100%;
+font-size: 17px;
+}
+#b4
+{position:absolute;
+top:220px;
+height:50px;
+width:100%;
+font-size: 17px;
+}
+#b5
+{position:absolute;
+top:300px;
+height:50px;
+width:100%;
+font-size: 17px;
+}
+table {
+  
+   
+
+	cellpadding:10px;
+	border-spacing:5px;
+	width:100%;
+}
+caption {
+    font-variant:small-caps;
+    font-size:24px;
+}
+tr {
+    vertical-align:top;
+     border: 1px solid black;
+}
+th {
+  
+    font-size:18px;
+     border: 1px solid black;
+    padding:10px;
+}
+td {
+    padding:2px 10px;
+    font-size:14px;
+    vertical-align:top;
+     border: 1px solid black;
+   
+}
+.t1
+            {margin-right: 0px;
+                margin-top: 200px;
+
+                width: 100%;
+                color:black;
+                height: 50px;
+            }
+    
+            .t2
+            {
+
+                padding: 0px;
+                height: 100px;
+                margin-right: 0px;
+                margin-top: 200px;
+                width: 50%;
+            }
+            .t3
+            {
+                margin-top: 0px;
+                padding: 0px;
+                height: 100px;
+                margin-right: 100px;
+                width: 50%;
+ }
+#b6
+{position:absolute;
+height:50px;
+width:100%;
+font-size: 17px;
+margin-top:-10px
+}
+#b7
+{position:absolute;
+margin-top: 60px;
+}
+
+
+#b8
+{
+margin-top: 120px;
+height:50px;
+width:100%;
+font-size: 17px;
+}
+.alignleft{float:left;
+margin-top: 10px;
+}
+.alignright{
+float:right; 
+margin-top:-50px;
+margin-right:20px;
+}
+#b9
+{
+position:relative;
+top:20px;
+height:50px;
+font-size: 17px;
+}
+.alignright{
+float:right; 
+margin-top:150px;
+}
+#b10
+{
+position:relative;
+top:150px;
+height:50px;
+font-size: 17px}
+#b12
+{text-align:left;
+position:relative;
+top:100px;
+left:370px;
+height:50px;
+font-size: 17px}
+</style>
+<head>
+<title>TEMPLATE</title>
+
+<link rel="stylesheet" type="text/css" href="http://192.168.15.178/static/css2/css/report.css " />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+<h1>Guru Nanak Dev Engineering College</h1>
+<h2><p>Gill Park,Gill Road,Ludhiana-141006</p>
+<p>Testing and Consultancy Cell</p></h2>
+ <div id="a">
+  <p class="alignleft">Voucher No:_______</p></div>
+<div id="a1">
+  <p class="alignright">Main/Mat. No:__</p>
+</div>
+<div id="m">
+  <p class="alignleft">Dated:_______</p></div>
+<div id="m1">
+  <p class="alignright">Dated:________</p>
+</div>
+<div id="k">
+<p>Director, </p><p>Received a sum of Rs {{money}}</p> 
+</div>
+<div id="k1">
+<p>Vide Cash, from </p><p>Vide Bill No.</p>
+<p>On account of:Soil for BC  Vide Receipt No: </p> 
+</div>
+<div id="k2">
+<p>Nature of Consultancy:INSTITUTIONAL, Ratio: {{a:b}}</p> 
+</div>
+              
+
+<div class ="t1">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">THE DISTRIBUTION MAY BE MADE AS</th>
+                        <th>DATE OF TESTING</th>
+                        <th> </th>
+                    </tr>
+    
+                    <tr>
+                        <td rowspan=5><div id="r">CREDITS</td></div>
+                        <td>COLLEGE INCOME 15%</td>
+                        <td rowspan=5>2014-07-10</td>
+                        <td>{{20}}</td>
+                    </tr>
+    
+                    <tr>
+                        <td>ADMN. CHARGES 5%</td> 
+                        <td>{{34}}</td>
+                    </tr>
+    
+                    <tr>
+                        <td>CONSULTANCY ASST.(CONSULTANCY)</td>
+                        <td>{{56}}</td>
+                    </tr>
+    
+                    <tr>
+                        <td>DEV.FUND(CONSULTANCY)</td>
+                        <td>{{34}}</td>
+                    </tr>
+    
+                    <tr>
+                        <td>TOTAL</td>
+                        <td>{{34}}</td>
+                    </tr>
+            </table>
+        </div>
+        
+<div class ="t2">
+            <table>
+                <tr>
+                    <th>Field Testing Staff</th>
+                    <th>Lab Testing Staff </th>
+                </tr>
+                <tr>
+                    <td>{{1,2}}</td>
+                    <td>{{3,4}}</td>
+            </table> 
+        </div>
+<div id=b6> THE WORK HAS BEEN EXECUTED BY ABOVE PERSONS AS MENTIONED ABOVE</div>
+<div id=b7>
+<p>Voucher No:________</p>
+<p>Dated:______</p>        
+</div>        
+<div id= b9>
+<p class="alignright">DEAN TESTING AND CONSULTANCY CELL </p></div>
+<div id=b10>
+<p>Account Clerk(Consultancy)      </div>
+<div id=b12><p>  Supdt. Accounts </p>
+</div>
+ <div class ="t3">
+            <table>
+                <tr>
+                    <th>Code </th>
+                    <th>NAME OF EMPLOYEES </th>
+                    <th>DESIGNATION</th>
+                </tr>   
+                <tr>
+                    <td>{{code}}</td>
+                    <td>{{name}}</td>
+                    <td>{{designation}}</td>
+                </tr>
+            </table> 
+        </div>               
+
+                   
+</body>
+</html>
+
