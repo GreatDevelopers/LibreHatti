@@ -41,11 +41,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-<<<<<<< HEAD
-    '/home/aashita/LibreHatti/static',
-=======
     '/home/amitt/github/LibreHatti/static',
->>>>>>> upstream/dirty
 )
 
 STATICFILES_FINDERS = (
