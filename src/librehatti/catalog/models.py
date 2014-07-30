@@ -88,7 +88,7 @@ This class defines the type of taxes, value, validation of taxes
 mentioning the startdate and end date 
 """
 class Surcharge(models.Model):
-    taxes = models.CharField(max_length=200)
+    tax_name = models.CharField(max_length=200)
     value = models.IntegerField()
     taxes_included = models.BooleanField(default = False)
     tax_effected_from = models.DateField()
