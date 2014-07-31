@@ -42,12 +42,14 @@
             <td> {{m.quote_delivery_address}}</td>
             <td> {{m.quote_buyer_id.customer.telephone}}</td>   
             <td>
-                <a href="/bills/generateproforma/{{m.id}}" style="text-decoration:none">
-                    <input type="submit" value="Generate Proforma" name="Generate Proforma">
+                <a href="/bills/generateproforma/{{m.id}}" 
+                 style="text-decoration:none">
+                 <input type="submit" value="Generate Proforma" name="Generate Proforma">
                 </a>
                 <br>
-                <a href="/bills/confirm/{{m.id}}" style = "text-decoration:none">
-                    <input type="submit" value="Confirm" name="Confirm">
+                <a href="/bills/confirm/{{m.id}}" 
+                style = "text-decoration:none">
+                <input type="submit" value="Confirm" name="Confirm">
                 </a>
              </td>
         </tr>
