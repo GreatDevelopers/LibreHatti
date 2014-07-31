@@ -3,12 +3,23 @@
 
     <meta http-equiv="refresh" content="15">
     <style type="text/css">
-
-        table{width: 60%; margin-left:15%;border-collapse:collapse;} 
+         h1{text-align:center;font-size: 24px;}
+         h1.a{text-align:center;font-size: 14px;}
+         h1.b{text-align:center;font-size: 24px;}
+         p.c{text-align: center;}
+         h2.d{text-align: center;font-size:175%;padding-top:18px;}
+         p.e{padding-top:15px;font-size:100%;}
+         p.f{position:absolute;top:350px;left:0px;}
+         p.g{position:absolute;top:350px;right:0px;}
+         p.h{position:absolute;right:30px;top:1050px;}
+         p.i{position:absolute;top:1050px;}
+         p.j{position:absolute;right:30px;top:1100px;}
+        table{table-layout:fixed;width: 60%; margin-left:15%;} 
         th{padding:10px;}
         td{padding-left:40px;
            padding-top: 25px;
            padding-bottom: 25px;} 
+        th, td {border-style:inset;}
     </style>
 
     <title>Proforma Bill</title>  
@@ -16,19 +27,30 @@
 
 <body>
 
-    <div style="text-align: center">
-        <h1>GURU NANAK DEV ENGINEERING COLLEGE</h1>   
-        <p>Punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</p>     
-        <p style="font-size:200%">Testing & consultancy cell</p>  
-        <p>Gill Park, Gill Road, Ludhiana-141006</p> 
-        <p>Website:http//tcc.gndec.ac.in Email:tcc@gndec.ac.in Ph:0161-2491193,5064509 Fax:0161-5064742</p>   
-        <h2 style="text-align:center;font-size:175%;">Proforma Bill</h2>
-    </div>
+   <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
+    <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
+    <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
+    <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
+    <p class='c'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
+    <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
+    <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
+    <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
 
+    <h2 class='d'>Confirmation Bill</h2>
+    <p class='e'>STC No. AAATN1978LSD001</br>
+    PAN No.  AAATN1978L</p>
+    <p class='f'>No. : GNDEC/TCC/B/{{ quoted_order.quote_buyer_id}}</p>
+    <p class='g'>Dated : {{quoted_order.quote_date_time}}</p>
+    <br><br>
 
-    <div align='left'>Client Name : {{ quoted_order.quote_buyer_id.username }}<br>STC No. AAATN1978LSD001<br>PAN No. AAATN1978L</div>
+    <p> To,</p>
+    <p>{{quoted_order.quote_delivery_address.address}}</p>
+    <p>Organisation:{{quoted_order.quote_organisation.organisation_type}}</p>
+    <p>Buyer Id : {{ quoted_order.quote_buyer_id.username }}</p>
+    <p>Ref: Your Letter No.1,</p> 
+    <p>dated:{{quoted_order.quote_date_time}} , respectively.
+    </p>
 
-    <br>
     <table border="1" >
         <tr>
             <th>Items </th>
@@ -50,4 +72,9 @@
     </table>
 
     <br> <b> Sum : {{total_cost}}</b>
+ <!--Dean is liable to change-->
+    <p class='h'> Dean Training And Consultancy Cell</p>
+    <p class='i'>I/We here by agree to the terms & conditions as mentioned above</p>
+    <p class='j'>(Signature of Client/Deptt. Representative)</p>
+</body>
 </html>
