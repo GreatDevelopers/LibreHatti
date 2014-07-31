@@ -43,23 +43,10 @@ def final(request,name):
                           int(client_id)).aggregate(Sum(
                           'quote_price')).get('quote_price__sum', 0.00)
              i_d = quoted_order.quote_buyer_id_id
-             surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
-             surcharge_total=0
-             i=0 
-             tax_list = []
-             tax_data = []	
-             for tax in surcharge:
-                 tax_list.append(float((tax['value']*total)/100))
-    
-             for tax in tax_list:
-                 surcharge_total=surcharge_total+tax	        
-                 tax_data = zip(surcharge, tax_list)
-             grand_total = surcharge_total  + total_cost
              return render(request,'bills/confirm_bill.html',
                     {'quoted_order':quoted_order,'quoted_item' : quoted_item,
                     'total_cost':total_cost, 'id':i_d, 'form':form,
-                    'surcharge_total':surcharge_total, 'tax_data' : tax_data, 
-                    'grand_total':grand_total})
+                    })
       
 def proforma(request):
     """
@@ -85,7 +72,7 @@ and the total.
                 'quote_qty','quote_price')	
     total = QuotedItem.objects.filter(quote_order_id=client_id).aggregate(Sum(
             'quote_price')).get('quote_price__sum', 0.00)
-    return render(request, 'bills/p_bill.html',{ 'quoted_order':quoted_order,
+    return render(request, 'bills/proforma_bill.html',{ 'quoted_order':quoted_order,
                  'quoted_item' : quoted_item, 'total_cost': total })	
   
 
