@@ -48,11 +48,11 @@ def final(request,name):
       
 def proforma(request):
     """
-    This function lists all those customers who have added Purchased
+    This function lists all those customers who have added Quote
     Order. The user has the option to either generate proforma or 
     confirm it. 
     """
-    QuotedOrder_list = PurchaseOrder.objects.all()
+    QuotedOrder_list = QuotedOrder.objects.all()
     return render(request, 'bills/quote.html', 
                  {'QuotedOrder_list' : QuotedOrder_list})
 
