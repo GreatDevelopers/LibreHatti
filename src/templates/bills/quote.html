@@ -1,9 +1,11 @@
 <html>
 <head>
     <style type="text/css">
-        h1{margin-left: 30%;}
-        h1.as{margin-left: 35%;} 
-        table{width: 60%; margin-left:15%;} 
+         h1{text-align:center;font-size: 24px;}
+         h1.a{text-align:center;font-size: 14px;}
+         h1.b{text-align:center;font-size: 24px;}
+         p.c{text-align: center;}
+        table{margin-top:150px;width: 60%; margin-left:18%;} 
         th{padding:10px;}
         td{padding-left:40px;
            padding-top: 25px;
@@ -15,22 +17,18 @@
 </head>
 
 <body>
+     {% for quoted_order in QuotedOrder_list %}
+     <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
+     <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
+     <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
+     <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
+     <p class='c'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
+     <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
+     <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
+     <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
  
-    <h1>Guru Nanak Dev Engineering College</h1>
-    <h1 class='as'>Testing and Consultancy</h1>
- 
-    <p class="bs"><center> Website:http//tcc.gndec.ac.in &nbsp;&nbsp;&nbsp; 
-                              &nbsp;&nbsp;&nbsp;&nbsp;Email:tcc@gndec.ac.in<br>
-                              <br>Ph:0161-2491193,5064509 &nbsp;&nbsp;&nbsp;
-                              &nbsp;&nbsp;&nbsp;&nbsp;Fax:0161-5064742 </center>
-    </p>
- 
- 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+     {% endfor %}
+
     <table border="1" >
         <tr>
             <th> Client </th>
@@ -48,7 +46,7 @@
                     <input type="submit" value="Generate Proforma" name="Generate Proforma">
                 </a>
                 <br>
-                <a href="/bills/confirm/{{m.id}}">
+                <a href="/bills/confirm/{{m.id}}" style = "text-decoration:none">
                     <input type="submit" value="Confirm" name="Confirm">
                 </a>
              </td>
