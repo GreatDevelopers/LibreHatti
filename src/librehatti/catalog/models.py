@@ -47,7 +47,7 @@ class ModeOfPayment(models.Model):
         return self.method
 
 class PurchaseOrder(models.Model):
-    buyer_id = models.ForeignKey(User)
+    buyer = models.ForeignKey(User)
     is_debit = models.BooleanField(default = False)
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
@@ -55,7 +55,7 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField()
     tds = models.IntegerField()
     mode_of_payment = models.ForeignKey(ModeOfPayment)
-
+    is_canceled = models.BooleanField(default = False)
     def __unicode__(self):
         return '%s' % (self.id)
                
