@@ -57,6 +57,8 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     model = PurchaseOrder
     actions = [mark_cancel]
     list_filter = ['date_time']
+    search_fields = ['id']
+    list_per_page = 20 
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
