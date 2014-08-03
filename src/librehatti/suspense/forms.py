@@ -25,3 +25,4 @@ class TaDaSearch(forms.Form):
 class TaDaForm(ModelForm):
 	class Meta:
 		model = TaDa
+    exclude = ('',)
