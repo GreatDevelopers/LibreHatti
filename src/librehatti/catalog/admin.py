@@ -8,6 +8,7 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
 
+from librehatti.catalog.actions import mark_cancel
 
 admin.autodiscover()
 admin.site.register(Category)
@@ -50,9 +51,14 @@ inherits the fields of PurchaseOrder derscribing the delivery address of
 buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(admin.ModelAdmin):
-    exclude=('is_suspense',)
+    exclude=('is_canceled',)
+    list_display = ['id','buyer','delivery_address','date_time','is_canceled']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
+    actions = [mark_cancel]
+    list_filter = ['date_time']
+    search_fields = ['id']
+    list_per_page = 20 
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
