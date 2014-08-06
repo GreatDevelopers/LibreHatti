@@ -95,6 +95,6 @@ class Surcharge(models.Model):
     tax_valid_till = models.DateField()
     Remark = models.CharField(max_length=1000)
     def __unicode__(self):
-         return self.taxes
+         return self.tax_name
 
 
