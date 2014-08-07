@@ -23,6 +23,6 @@ class TaDaSearch(forms.Form):
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
 
 class TaDaForm(ModelForm):
-	class Meta:
-		model = TaDa
-    exclude = ('',)
+    class Meta:
+        model = TaDa
+        exclude = ('',)
