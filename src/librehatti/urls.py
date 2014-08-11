@@ -3,6 +3,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from reports.register_generator import GenerateRegister
+
 admin.autodiscover()
 
 
@@ -17,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^bill/', 'librehatti.prints.views.bill'),
     url(r'^bills/', include('librehatti.bills.urls')),
     url(r'^suspense/', include('librehatti.suspense.urls')),
+    url(r'^generate_register/', GenerateRegister.as_view()),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
