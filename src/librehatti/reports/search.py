@@ -6,7 +6,13 @@ from django.http import HttpResponse
 
 def search(request):
     """
-    view to display "search.html" i.e. the search interface or form
+    View to display "search.html" i.e. the search interface or form.
+    
+    First it'll check which type of request is i.e; 'search' request or 
+    'generate register' request. On the basis of that, it'll assign code to 
+    search_type_code which will be used in template.
+
+    It'll raise an exception if anyone give invalid value in 'type'.
     """
     try:
         if request.GET['type'] == 'search':

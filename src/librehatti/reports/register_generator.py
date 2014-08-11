@@ -20,6 +20,10 @@ from datetime import datetime, timedelta
 class GenerateRegister(View):
 
     def __init__(self):
+        """
+        Initializing required lists.
+        """
+
     	self.result_fields = []
         self.list_dict = {'name':'purchase_order__buyer__username', 
             'city':'purchase_order__buyer__customer__address__city',
@@ -33,6 +37,10 @@ class GenerateRegister(View):
 
 
     def view_register(self,request):
+        """
+        Converting data from dict to list form so that it can be render easily.
+        Calling template to be rendered.
+        """
 
     	generated_data_list = []
 
@@ -50,7 +58,10 @@ class GenerateRegister(View):
         return render(request,'reports/generated_register.html',temp)
 
     def apply_filters(self,request):
-        
+        """
+        Applying selected filters.
+        """
+
         if 'date' in self.selected_fields_constraints:
             self.details = self.client_details.filter(
             	purchase_order__date_time__range = (
@@ -59,6 +70,10 @@ class GenerateRegister(View):
         return self.view_register(request)
 
     def fetch_values(self,request):
+        """
+        Fetching values from database.
+        """
+
     	self.details = PurchasedItem.objects.values(*self.fields_list).\
     	    filter(purchase_order__is_canceled = 0)
 
@@ -66,6 +81,10 @@ class GenerateRegister(View):
 
 
     def convert_values(self,request):
+        """
+        Mapping selected values to there names specified in 'list_dict' in this
+        file.
+        """
 
     	self.fields_list = []
     	for value in self.selected_fields_client:
@@ -78,6 +97,11 @@ class GenerateRegister(View):
 
 
     def get(self,request):
+        """
+        Retrieve values from URL.
+        Convert date into datetime format.
+        """
+
     	self.title = request.GET['title']
 
     	start_date_temp = datetime.strptime(request.GET['start_date'],
@@ -86,7 +110,10 @@ class GenerateRegister(View):
     		start_date_temp.day) + timedelta(hours=0) 
 
     	end_date_temp = datetime.strptime(request.GET['end_date'], '%Y-%m-%d')
-    	self.end_date = datetime(end_date_temp.year, end_date_temp.month, 
+
+        #adding 24 hours in date will convert '2014-8-10' to '2014-8-10 00:00:00'
+    	
+        self.end_date = datetime(end_date_temp.year, end_date_temp.month, 
     		end_date_temp.day) + timedelta(hours=24) 
 
         self.selected_fields_client = request.GET.getlist('client_fields')
