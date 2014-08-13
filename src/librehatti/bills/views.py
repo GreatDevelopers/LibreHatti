@@ -10,13 +10,43 @@ from librehatti.prints.helper import num2eng
 from django.db.models import Max
 
 
+def confirm(request, client_id):
+    quoted_order = QuotedOrder.objects.get(pk=int(client_id))
+    quoted_item = QuotedItem.objects.filter(quote_order_id=
+                  int(client_id)).values('quote_item__name','quote_qty',
+                  'quote_price')
+    form = ConfirmForm(initial={'quote_item':'quote_item','quote_qty':'quote_qty'})
+    i_d = quoted_order.quote_buyer_id_id
+    return render(request, 'bills/confform.html',{'quoted_order':quoted_order, 
+                 'quoted_item' : quoted_item,'id':i_d,'form':form})
+
+def final(request,name):
+    if request.method == 'POST':
+        form = ConfirmForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            qty1 = request.POST ['quote_qty']
+            item1 = request.POST ['quote_item']
+            total_cost = PurchasedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('price')).get('price__sum', 0.00)
+            return render(request, 'bills/confirm.html', {'total_cost' : total_cost, 'form':form })
+        else:
+    
+             client_id = 1
+             quoted_order = QuotedOrder.objects.get(pk=int(client_id))
+             quoted_item = QuotedItem.objects.filter().values('quote_item__name', 'quote_qty', 'quote_price')
+             
+             total_cost = QuotedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('quote_price')).get('price__sum', 0.00)
+             i_d = quoted_order.quote_buyer_id_id
+             return render(request, 'bills/confirm.html', {'quoted_order' : quoted_order, 
+                 'quoted_item' : quoted_item, 'total_cost' : total_cost, 'id' : i_d,'form':form})
+      
 def proforma(request):
     """
-    This function lists all those customers who have added Purchased
+    This function lists all those customers who have added Quote
     Order. The user has the option to either generate proforma or 
     confirm it. 
     """
-    QuotedOrder_list = PurchaseOrder.objects.all()
+    QuotedOrder_list = QuotedOrder.objects.all()
     return render(request, 'bills/quote.html', 
                  {'QuotedOrder_list' : QuotedOrder_list})
 
@@ -37,37 +67,6 @@ def gen_proforma(request, client_id):
     return render(request, 'bills/p_bill.html',{ 'quoted_order':quoted_order,
                  'quoted_item' : quoted_item, 'total_cost': total })	 
   
-
-def confirm(request):
-    """
-    diplays the form where user inputs his name, item name and 
-    the quantity that he wants to confirm. 
-    """  
-    if request.method == "POST":
-        form = ConfirmForm(request.POST)
-        if form.is_valid:
-            client = User.objects.get(id = request.GET['client'])
-            quote_qty = request.POST["quote_qty"]
-            quote_item = request.POST["quote_item"]
-            return HttpResponse(client)
-    else:
-        quote_order_id = request.GET['id']
-        quoted_item = objects.filter.quote(order_id_quote = 
-                      order_QuotedItem_id).values('quote_item__name', 
-                      'quote_qty','quote_discount')
-        client_id = QuotedOrder.objects.values("quote_buyer_id__id").filter(
-                    id = quote_order_id)
-        form = ConfirmForm(initial={'quote_item':'item1', 'qty1':'quote_qty'})
-        return render(request, 'bills/confform.html', {'form':form,
-                     'client_id':client_id, 'quoted_item' : quoted_item})
-
-def list_quoted(request):
-    """
-    It generates the confirmed bill when the user confirms the order.
-    """
-    quoted = QuotedItem.objects.values('quote_order__id',
-            'quote_order__quote_buyer_id__username').filter(confirm_status = 0)
-    return render(request,'bills/quoted_list.html',{'quoted':quoted}) 
 
 
 def transport(request):

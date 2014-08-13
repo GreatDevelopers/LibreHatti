@@ -13,7 +13,6 @@ def search_result(request):
     title = 'Search'
     results=[]
     result_fields = []
-    purchase_order_id = ''
     selected_fields_client = request.GET.getlist('client_fields')
     selected_fields_order = request.GET.getlist('order')
     selected_fields_constraints = request.GET.getlist('additional_constraints')
@@ -74,7 +73,6 @@ def search_result(request):
         query_string = ''
         found_entries = ''
         search_fields.append('purchase_order__id')
-        purchase_order_id = 'enable'
         if ('search' in request.GET) and request.GET['search'].strip():
             query_string = request.GET['search']
             entry_query = get_query(query_string,search_fields)
@@ -274,8 +272,8 @@ def search_result(request):
     if 'search' in request.GET:
         title = request.GET['search']
     return render(request, 'reports/search_result.html', {'results':
-                  results,'title': title,'result_fields':result_fields,
-                  'order_id':purchase_order_id})
+                results,'title': title,'result_fields':result_fields,
+                })
 
 
 

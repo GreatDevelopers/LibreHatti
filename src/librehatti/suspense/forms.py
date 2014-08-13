@@ -2,7 +2,7 @@ from django.forms import ModelForm, TextInput
 from models import SuspenseClearance
 from models import TaDa
 from models import SuspenseOrder
-from librehatti.suspense.choices import CHOICES
+
 from django import forms
 
 # Create your forms here.
@@ -14,13 +14,15 @@ class Clearance_form(ModelForm):
 		  'lab_testing_staff','field_testing_staff','test_date']
 
 
-class SuspenseForm(forms.Form):
-        Purchase_order = forms.ChoiceField(choices=CHOICES)
-        distance=forms.IntegerField()
+class SuspenseForm(ModelForm):
+    class Meta:
+        model = SuspenseOrder
+        exclude = ('is_cleared',)
       
 class TaDaSearch(forms.Form):
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
 
 class TaDaForm(ModelForm):
-	class Meta:
-		model = TaDa
+    class Meta:
+        model = TaDa
+        exclude = ('',)
