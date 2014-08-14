@@ -107,6 +107,21 @@ def with_transport(request):
 
 def wtransport(request):
     return render(request,'suspense/wtransport.html')
+
+
+def suspense(request):
+        form = SuspenseForm()   
+        return render(request,'suspense/form.html',{'form':form})
+
+
+def save_charges(request):
+	if request.method=='GET':		
+	    option=request.GET['Purchase_order']
+	    charges=request.GET['distance']
+	    obj = SuspenseOrder(purchase_order_id=option, 
+                                transportation=charges)
+	    obj.save()
+	    return HttpResponse('Thanks!')
 	    
 	    
 def tada_search(request):
