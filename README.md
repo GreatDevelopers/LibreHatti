@@ -58,7 +58,7 @@ Steps for Installation of LibreHatti.
 2) Create a database for LibreHatti.
     
     $ mysql -u root -p
-    $ create database librehatti
+    $ create database librehatti;
     $ quit
     
 3) Edit settings.py file. Things to be edited are:
@@ -68,8 +68,6 @@ Line No 10 : DATABASES
     NAME : librehatti
     USER : Your MySQL username
     PASSWORD : Your MySQl password
-    
-Line No 39 : STATIC_ROOT
     
 Line No 43 : STATICFILES_DIRS
     
