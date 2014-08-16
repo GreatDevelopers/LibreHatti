@@ -61,7 +61,7 @@ Steps for Installation of LibreHatti.
     $ create database librehatti
     $ quit
     
-3) Edit settings.py file. Things to be edited are:
+3) Edit settings.py file in LibreHatti/src/librehatti directory. Things to be edited are:
 
 Line No 10 : DATABASES
     
