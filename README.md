@@ -46,13 +46,13 @@ Run following commands in terminal
 
 Run following commands in terminal
     
-   $ sudo pip install https://www.djangoproject.com/download/1.7.b4/tarball/
+    $ sudo pip install https://www.djangoproject.com/download/1.7.b4/tarball/
 
 7) docutils
 
 Run following commands in terminal
 
-   $ sudo pip install docutils
+    $ sudo pip install docutils
 
 Steps for Installation of LibreHatti.
 
