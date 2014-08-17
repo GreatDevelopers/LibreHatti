@@ -4,10 +4,11 @@ CLIENT_FIELD_CHOICES = (
 	)
 	  
 CLIENT_ORDER_CHOICES=(
-    ('item', 'Item'), ('quantity', 'Quantity'), ('unit price', 'Unit Price'), 
+   
     ('discount', 'Discount'), ('debit', 'Debit'), 
-    ('total price', 'Total Price'),
+    ('mode of payment','Payment Mode'),
 	)
+
 		
 CONSTRAINT_CHOICES = (
     ('date', 'Date'), ('gt', 'Amount greater than'), ('lt', 'Amount lesser than'),

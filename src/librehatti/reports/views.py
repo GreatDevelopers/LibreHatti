@@ -1,279 +1,162 @@
-# Create your views here.
+"""
+%% actions.py %%
+This file contains the functions that will be used to generate registers.
+"""
+
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import View
+
 from helper import get_query
+
 from django.shortcuts import render
+
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
+from librehatti.suspense.models import SuspenseOrder
+
 from useraccounts.models import Customer
 
-def search_result(request):
-    """
-    searches and displays the results for the query entered according 
-    to the checkboxes selected
-    """
-    title = 'Search'
-    results=[]
-    result_fields = []
-    selected_fields_client = request.GET.getlist('client_fields')
-    selected_fields_order = request.GET.getlist('order')
-    selected_fields_constraints = request.GET.getlist('additional_constraints')
-    avail_list_dict_client = {'name':'user__username', 'city':'address__city',
-                              'phone':'telephone','joining date':'date_joined',
-                              'company':'company'}
-    avail_list_dict_order = {'quantity':'qty','unit price':'item__price_per_unit',
-                             'item':'item__name','discount':'purchase_order__total_discount','debit':
-                             'purchase_order__is_debit', 'total price':'price'}
-    avail_list = []
-    avail_list2=[]
-    start_date = request.GET['start_date']
-    end_date = request.GET['end_date']  
-    amt_g = request.GET['amount_greater_than']
-    amt_l = request.GET['amount_less_than']
-    
-    """
-    For client Search
-    """
-    if 'Client' in request.GET:
-        result_fields.append(selected_fields_client)
-        search_fields = []
-        for value in selected_fields_client:
-            search_value = avail_list_dict_client[value]
-            search_fields.append(search_value)
+from datetime import datetime, timedelta
 
-        query_string = ''
-        found_entries = None
-        if ('search' in request.GET) and request.GET['search'].strip():
-            query_string = request.GET['search']
-            entry_query = get_query(query_string, search_fields)
-            found_entries = Customer.objects.filter(entry_query)
-            for entries in found_entries:
-                temp = []
-                if 'date' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = Customer.objects.filter(id=entries.id,
-                        date_joined__range=(start_date,end_date)).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                else:                    
-                    for value in search_fields:
-                        obj = Customer.objects.filter(id=entries.id).values(
-                              value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                results.append(temp)
-                
-    """
-    For Order Search
-    """                
-    if 'Order' in request.GET:
-        result_fields.append(selected_fields_order)
-        search_fields = []
-        for value in selected_fields_order:
-            search_value = avail_list_dict_order[value]
-            search_fields.append(search_value)
-        query_string = ''
-        found_entries = ''
-        search_fields.append('purchase_order__id')
-        if ('search' in request.GET) and request.GET['search'].strip():
-            query_string = request.GET['search']
-            entry_query = get_query(query_string,search_fields)
-            found_entries = PurchasedItem.objects.filter(entry_query)
-            for entries in found_entries:
-                temp=[]
-                
-                """
-                if Debit, Date, 'Amount greater than'(gt), 
-                'Amount lesser than'(lt) checkboxes are selected
-                """
-                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(
-                              id=entries.id,purchase_order__is_debit=1,
-                              purchase_order__date_time__range=(start_date,
-                              end_date), price__gt= amt_g, price__lt= 
-                              amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if  Date, 'Amount greater than'(gt), 'Amount lesser than'
-                (lt) checkboxes are selected
-                """            
-                if 'date' and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints and not 'debit' in selected_fields_order:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__date_time__range=(start_date,
-                              end_date),price__gt=amt_g, price__lt= 
-                              amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Debit, 'Amount greater than'(gt), 'Amount lesser than'
-                (lt) checkboxes are selected
-                """         
-                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1,price__gt=amt_g,
-                              price__lt=amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result) 
-                            
-                """
-                if Debit, Date, 'Amount lesser than'(lt) checkboxes are 
-                selected
-                """                                                           
-                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints  and 'lt' in selected_fields_constraints and not 'gt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1, price__lt=
-                              amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Debit, Date, 'Amount greater than'(gt) checkboxes are 
-                selected
-                """            
-                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit=1,
-                              purchase_order__date_time__range=(start_date,
-                              end_date), price__gt=amt_g).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if  'Amount greater than'(gt), 'Amount lesser than'(lt) 
-                checkboxes are selected
-                """            
-                if not 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
-                    for value in search_fields:
+class SearchResult(View):
 
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              price__gt=amt_g,price__lt=amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Debit, 'Amount lesser than'(lt) checkboxes are 
-                selected
-                """            
-                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1,price_lt= 
-                              amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)  
-                            
-                """
-                if Debit, 'Amount greater than'(gt), checkboxes are 
-                selected
-                """                                          
-                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'lt' in selected_fields_constraints and 'gt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1, price__gt=
-                              amt_g).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result) 
-                             
-                """
-                if  Date, 'Amount greater than'(gt) checkboxes are 
-                selected
-                """                                                           
-                if not 'debit' in selected_fields_order and not 'lt' in selected_fields_constraints and 'date' in selected_fields_constraints and 'gt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__date_time__range=(start_date,
-                              end_date),price__gt=amt_g).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if  Date, 'Amount lesser than'(lt) checkboxes are 
-                selected
-                """            
-                if not 'debit' in selected_fields_order and not 'gt' in selected_fields_constraints and 'date' in selected_fields_constraints and 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__date_time__range=(start_date,
-                              end_date), price__lt=amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Debit, Date checkboxes are selected
-                """            
-                if 'debit' in selected_fields_order and 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1,
-                              purchase_order__date_time__range=(start_date,
-                              end_date)).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Debit checkbox is selected
-                """             
-                if 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__is_debit = 1).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if Date checkbox is selected
-                """            
-                if not 'debit' in selected_fields_order and  'date' in selected_fields_constraints and  not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              purchase_order__date_time__range=(start_date,
-                              end_date)).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                              
-                """
-                if  'Amount greater than'(gt) checkboxes is selected
-                """                                                           
-                if not 'debit' in selected_fields_order and 'gt' in selected_fields_constraints and not 'date' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id, 
-                              price__gt=amt_g).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                            
-                """
-                if 'Amount lesser than'(lt) checkbox is selected
-                """            
-                if not 'debit' in selected_fields_order and 'lt' in selected_fields_constraints and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=entries.id,
-                              price__lt=amt_l).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                """
-                if none of the checkboxes - Debit, Date, 'Amount 
-                greater than'(gt), 'Amount lesser than'(lt) are 
-                selected
-                """            
-                if not 'debit' in selected_fields_order and not 'date' in selected_fields_constraints and not 'gt' in selected_fields_constraints and not 'lt' in selected_fields_constraints:
-                    for value in search_fields:
-                        obj = PurchasedItem.objects.filter(id=
-                              entries.id).values(value)
-                        for temp_result in obj:
-                            temp.append(temp_result)
-                results.append(temp)
-                
-    if 'search' in request.GET:
-        title = request.GET['search']
-    return render(request, 'reports/search_result.html', {'results':
-                results,'title': title,'result_fields':result_fields,
-                })
+    def __init__(self):
+        """
+        Initializing required lists.
+        """
+	self.purchase_order_id='enable'
+	
+    	self.result_fields = []
+        self.list_dict = {'name':'purchase_order__buyer__username', 
+            'city':'purchase_order__buyer__customer__address__city',
+            'phone':'purchase_order__buyer__customer__telephone',
+            'joining date':'purchase_order__buyer__customer__date_joined',
+            'company':'purchase_order__buyer__customer__company',
+            
+            'discount':'purchase_order__total_discount',
+            'debit':'purchase_order__is_debit', 
+	    'mode of payment':'purchase_order__mode_of_payment__method',
+        }
 
 
+    def view_register(self,request):
+        """
+        Converting data from dict to list form so that it can be render easily.
+        Calling template to be rendered.
+        """
+
+    	generated_data_list = []
+
+        for data in self.details:
+        	temporary = []
+        	for field in self.fields_list:
+        		temporary.append(data[field])
+        	generated_data_list.append(temporary)
+
+        temp = {'client':self.selected_fields_client,
+            'order':self.selected_fields_order, 'result':generated_data_list,
+            'title':self.title,'order_id':self.purchase_order_id,'records':self.results,
+        }
+
+        return render(request,'reports/search_result.html',temp)
+
+    def apply_filter(self,request):
+	self.results=[]
+	self.r=get_query(self.title,self.fields_list)
+	
+
+	if 'Client' in request.GET:
+		self.found_entries = PurchasedItem.objects.filter(self.r)
+		for entries in self.found_entries:
+        		self.temp = []
+                	for value in self.fields_list:
+                 	       obj = PurchasedItem.objects.filter(id=entries.id).values(
+                        	      value)
+                      	       for temp_result in obj:
+              	               	self.temp.append(temp_result)
+                        self.results.append(self.temp)
+        if 'Order' in request.GET:
+                try:
+			if request.GET['suspense']:
+				self.found_entries = SuspenseOrder.objects.filter(self.r)
+		
+				for entries in self.found_entries:
+        				self.temp = []
+                			for value in self.fields_list:
+                		 	      	self.obj = SuspenseOrder.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
+                		      	        for temp_result in self.obj:
+              			               		self.temp.append(temp_result)
+                		        self.results.append(self.temp)
+		except:
+			self.found_entries = PurchasedItem.objects.filter(self.r)
+		
+			for entries in self.found_entries:
+        			self.temp = []
+                		for value in self.fields_list:
+                	 	      	self.obj = PurchasedItem.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
+                	      	        for temp_result in self.obj:
+              		               		self.temp.append(temp_result)
+                	        self.results.append(self.temp)
+
+        
+        
+        return self.view_register(request)
+
+    def default_fields(self,request):
+	
+	if 'Client' in request.GET and not self.selected_fields_client:
+		self.selected_fields_client.append('name')
+		self.selected_fields_client.append('city')
+	if 'Order' in request.GET and not self.selected_fields_order:
+		self.selected_fields_client.append('name')
+		self.selected_fields_client.append('city')
+		self.selected_fields_order.append('debit')
+		self.selected_fields_order.append('mode of payment')
+	
+	return self.convert_values(request)
+
+
+    def fetch_values(self,request):
+        """
+        Fetching values from database.
+        """
+
+    	self.details = PurchasedItem.objects.values(*self.fields_list).\
+    	    filter(purchase_order__is_canceled = 0)
+
+        return self.apply_filter(request)
+
+
+    def convert_values(self,request):
+        """
+        Mapping selected values to there names specified in 'list_dict' in this
+        file.
+        """
+
+    	self.fields_list = []
+    	for value in self.selected_fields_client:
+    		self.fields_list.append(self.list_dict[value])
+
+        for value in self.selected_fields_order:
+        	self.fields_list.append(self.list_dict[value])
+	if 'Client' in request.GET:
+		self.fields_list.append('purchase_order__buyer__id')	
+	else: 
+		self.fields_list.append('purchase_order__id')
+	
+        return self.fetch_values(request)
+
+
+    def get(self,request):
+        """
+        Retrieve values from URL.
+        Convert date into datetime format.
+        """	
+        self.title = request.GET['search']
+        self.selected_fields_client = request.GET.getlist('client_fields')
+        self.selected_fields_order = request.GET.getlist('order')
+        self.result_fields.append(self.selected_fields_client)
+        self.result_fields.append(self.selected_fields_order)
+
+        return self.default_fields(request)
 
