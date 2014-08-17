@@ -20,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^bills/', include('librehatti.bills.urls')),
     url(r'^suspense/', include('librehatti.suspense.urls')),
     url(r'^generate_register/', GenerateRegister.as_view()),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
