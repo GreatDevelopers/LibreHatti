@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from forms import ClientForm
 from forms import OrderForm
-
+from forms import AddConstraints
 
 
 def search_form(request):
@@ -16,7 +16,6 @@ def search_form(request):
 
     It'll raise an exception if anyone give invalid value in 'type'.
     """
-    
     try:
         if request.GET['type'] == 'search':
             submit_url = '/search_result/'
@@ -32,6 +31,7 @@ def search_form(request):
             search_type_code = '2'
 	    client_form = ClientForm()
     	    order_form = OrderForm()
+            add_constraints=  AddConstraints()
 	    temp = {'client_form':client_form,'order_form':order_form, 
             'add_constraints':add_constraints,'code':search_type_code,
             'url':submit_url}
