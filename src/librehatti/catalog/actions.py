@@ -9,7 +9,7 @@ from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 
 """
-Function to mark orders as cancel.
+Function to mark orders as active.
 """
 def mark_active(modeladmin, request, queryset):
     rows_updated = queryset.update(is_active = True)
@@ -24,6 +24,9 @@ def mark_active(modeladmin, request, queryset):
         content_type_id=content.pk,object_id=obj.pk,action_flag=CHANGE,
         object_repr = "Order Activated",change_message="")
 
+"""
+Function to mark orders as inactive/cancelled.
+"""
 def mark_inactive(modeladmin, request, queryset):
     rows_updated = queryset.update(is_active = False)
     if rows_updated == 1:
