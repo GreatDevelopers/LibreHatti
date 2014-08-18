@@ -1,0 +1,19 @@
+\contentsline {chapter}{\numberline {1}Hierarchical Index}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Class Hierarchy}{1}{section.1.1}
+\contentsline {chapter}{\numberline {2}Class Index}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Class List}{3}{section.2.1}
+\contentsline {chapter}{\numberline {3}Class Documentation}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Attributes Class Reference}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Catalog Class Reference}{5}{section.3.2}
+\contentsline {section}{\numberline {3.3}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}admin.\discretionary {-}{}{}Catalog\discretionary {-}{}{}Inline Class Reference}{6}{section.3.3}
+\contentsline {section}{\numberline {3.4}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Category Class Reference}{6}{section.3.4}
+\contentsline {section}{\numberline {3.5}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Mode\discretionary {-}{}{}Of\discretionary {-}{}{}Payment Class Reference}{7}{section.3.5}
+\contentsline {section}{\numberline {3.6}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Product Class Reference}{7}{section.3.6}
+\contentsline {section}{\numberline {3.7}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}admin.\discretionary {-}{}{}Product\discretionary {-}{}{}Admin Class Reference}{8}{section.3.7}
+\contentsline {section}{\numberline {3.8}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Purchased\discretionary {-}{}{}Item Class Reference}{8}{section.3.8}
+\contentsline {section}{\numberline {3.9}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}admin.\discretionary {-}{}{}Purchased\discretionary {-}{}{}Item\discretionary {-}{}{}Inline Class Reference}{9}{section.3.9}
+\contentsline {section}{\numberline {3.10}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Purchase\discretionary {-}{}{}Order Class Reference}{9}{section.3.10}
+\contentsline {section}{\numberline {3.11}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}admin.\discretionary {-}{}{}Purchase\discretionary {-}{}{}Order\discretionary {-}{}{}Admin Class Reference}{10}{section.3.11}
+\contentsline {section}{\numberline {3.12}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}tests.\discretionary {-}{}{}Simple\discretionary {-}{}{}Test Class Reference}{10}{section.3.12}
+\contentsline {section}{\numberline {3.13}librehatti.\discretionary {-}{}{}catalog.\discretionary {-}{}{}models.\discretionary {-}{}{}Surcharge Class Reference}{11}{section.3.13}
+\contentsline {chapter}{Index}{12}{section*.25}
