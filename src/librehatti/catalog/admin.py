@@ -10,12 +10,25 @@ from django.contrib.auth.admin import *
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
+from django.contrib.admin.models import LogEntry
+
 admin.autodiscover()
 admin.site.register(Category)
 admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
+
+"""
+This class is used to see logs in a detailed format. It is far much better than
+django recent actions widget.
+"""
+class LogEntryAdmin(admin.ModelAdmin):
+    model = LogEntry
+    list_display = ['id','user','object_repr','content_type','action_time']
+    list_filter = ['action_time']
+    search_fields = ['object_repr']
+    list_per_page = 20
 
 """
 This class is used to add, edit or delete the attribute and value of 
@@ -34,7 +47,8 @@ purchasing or testing
 """
 class ProductAdmin(admin.ModelAdmin):
     fields = ['name', 'category', 'price_per_unit', 'organisation']
-    inlines = [CatalogInline] 
+    inlines = [CatalogInline]
+    
 
 """
 This class is used to add, edit or delete the details of item purchased 
@@ -67,3 +81,4 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
+admin.site.register(LogEntry, LogEntryAdmin)
