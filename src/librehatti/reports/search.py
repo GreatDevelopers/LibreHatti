@@ -24,8 +24,9 @@ class SearchResult(View):
         """
         Initializing required lists.
         """
+        
         self.purchase_order_id='enable'
-    	self.result_fields = []
+        self.result_fields = []
         self.list_dict = {'name':'purchase_order__buyer__username', 
             'city':'purchase_order__buyer__customer__address__city',
             'phone':'purchase_order__buyer__customer__telephone',
@@ -64,42 +65,39 @@ class SearchResult(View):
         Filtering according to the search term entered.
         """
         
-        self.results=[]
-	    self.r=get_query(self.title,self.fields_list)
-	
+        self.results= []
+        self.entry_query= get_query(self.title,self.fields_list)
         if 'Client' in request.GET:
-		    self.found_entries = PurchasedItem.objects.filter(self.r)
-		    for entries in self.found_entries:
-		        self.temp = []
+            self.found_entries = PurchasedItem.objects.filter(self.entry_query)
+            for entries in self.found_entries:
+                self.temp = []
                 for value in self.fields_list:
                     obj = PurchasedItem.objects.filter(id=entries.id).values(
                         	value)
                     for temp_result in obj:
-              	        self.temp.append(temp_result)
+                        self.temp.append(temp_result)
                 self.results.append(self.temp)
                 
         if 'Order' in request.GET:
             try:
-			    if request.GET['suspense']:
-				self.found_entries = SuspenseOrder.objects.filter(self.r)
-		
-				for entries in self.found_entries:
-        	        self.temp = []
-                	for value in self.fields_list:
-                        self.obj = SuspenseOrder.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
-                		    for temp_result in self.obj:
-              			        self.temp.append(temp_result)
-                    self.results.append(self.temp)
-		    except:
-			    self.found_entries = PurchasedItem.objects.filter(self.r)
-		
-			    for entries in self.found_entries:
-        			self.temp = []
+                if request.GET['suspense']:
+                    self.found_entries = SuspenseOrder.objects.filter(self.entry_query)
+                    for entries in self.found_entries:
+                        self.temp = []
+                        for value in self.fields_list:
+                            self.obj = SuspenseOrder.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
+                            for temp_result in self.obj:
+                                self.temp.append(temp_result)
+                        self.results.append(self.temp)
+            except:
+                self.found_entries = PurchasedItem.objects.filter(self.entry_query)
+                for entries in self.found_entries:
+                    self.temp = []
                     for value in self.fields_list:
-                	    self.obj = PurchasedItem.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
-                	        for temp_result in self.obj:
-              		            self.temp.append(temp_result)
-                	self.results.append(self.temp)
+                        self.obj = PurchasedItem.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
+                        for temp_result in self.obj:
+                            self.temp.append(temp_result)
+                    self.results.append(self.temp)
 
         return self.view_results(request)
 
@@ -108,18 +106,18 @@ class SearchResult(View):
         """
         Displays the default fields if no checkboxes are selected.
         """	
-	
-	    if 'Client' in request.GET and not self.selected_fields_client:
-		    self.selected_fields_client.append('name')
-		    self.selected_fields_client.append('city')
+
+        if 'Client' in request.GET and not self.selected_fields_client:
+            self.selected_fields_client.append('name')
+            self.selected_fields_client.append('city')
 		
-	    if 'Order' in request.GET and not self.selected_fields_order:
-		    self.selected_fields_client.append('name')
-		    self.selected_fields_client.append('city')
-		    self.selected_fields_order.append('debit')
-		    self.selected_fields_order.append('mode of payment')
-	
-	    return self.convert_values(request)
+        if 'Order' in request.GET and not self.selected_fields_order:
+            self.selected_fields_client.append('name')
+            self.selected_fields_client.append('city')
+            self.selected_fields_order.append('debit')
+            self.selected_fields_order.append('mode of payment')
+
+        return self.convert_values(request)
 
 
     def fetch_values(self,request):
@@ -145,9 +143,9 @@ class SearchResult(View):
 
         for value in self.selected_fields_order:
         	self.fields_list.append(self.list_dict[value])
-	    if 'Client' in request.GET:
+        if 'Client' in request.GET:
 		    self.fields_list.append('purchase_order__buyer__id')	
-	    else: 
+        else: 
 		    self.fields_list.append('purchase_order__id')
 	
         return self.fetch_values(request)
@@ -158,6 +156,7 @@ class SearchResult(View):
         Retrieve values from URL.
         Convert date into datetime format.
         """	
+        
         self.title = request.GET['search']
         self.selected_fields_client = request.GET.getlist('client_fields')
         self.selected_fields_order = request.GET.getlist('order')
