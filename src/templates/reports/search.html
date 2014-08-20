@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>
+            Index
+        </title>
+        <style>
+            form { margin-left : 45% }
+            .head { text-align : center; margin-top : 5% ;}
+            .button { width : 100px; height: 25px;}
+        </style>
+    </head>
+    <body> 
+        <h2 class="head"> Select one or more fields
+        </h2>
+        <table>
+            <form action={{url}} method="get">
+                {% ifequal '1' code  %}
+                <tr>   
+                    <td>Display search as <input type="text" name="search"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit"  name="Client" value="Client Search"></td>
+                    <td><input type="submit"  name="Order" value="Order Search"></td>
+                </tr>
+                {% else %}
+                    <tr>   
+                    <td>Title of Register <input type="text" name="title"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit"  name="" value="Generate Register"></td>
+                </tr>
+                {% endifequal %}
+                <tr>
+                    <td><input type="checkbox"  name="pdfrequest" value="1">PDF Form Output</td>
+                    <td>{{ client_form.as_p }}</td>
+                    <td>{{ order_form.as_p }}</td>
+                </tr>
+                <tr> 
+                    <td> {{ add_constraints.as_p }} </td>
+                </tr>
+            </form>
+        </table>
+    </body>
+</html>

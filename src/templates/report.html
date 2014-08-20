@@ -1,0 +1,31 @@
+<html>
+    <h1 style="text-align:center;">GURU NANAK DEV ENGINEERING COLLEGE</h1>
+   
+    <p style="text-align:center;">punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</p>
+    <p style="text-align:center;font-size:200%;">Testing & Consultancy Cell</p>
+    <p style="text-align:center;">Gill Park, Gill Road, Ludhiana-141006</p>
+    <p style="text-align:center;">Website:http//tcc.gndec.ac.in Email:tcc@gndec.ac.in Ph:0161-2491193,5064509 Fax:0161-5064742</p>
+
+    <head><title>Lab Reports</title></head>
+    <table  style="border:1px solid black;border-collapse:collapse;width:1000px">
+        <caption>LAB REPORT </caption>
+        <tr>
+            <th style="border:1px solid black;"> Receipt No.</th>
+            <th style="border:1px solid black;"> Date </th>
+            <th style="border:1px solid black;"> Client </th>
+            <th style="border:1px solid black;"> Company</th>
+            <th style="border:1px solid black;"> Amount</th>
+        </tr>
+        {{% for m in material}}
+        <tr style="border:1px solid black;text-align:centre;">
+            <td style="border:1px solid black;">{{ m.Receipt}</td>
+            <td style="border:1px solid black;">{{m.Date}}</td>
+            <td style="border:1px solid black;">{{m.Client}}</td>
+            <td style="border:1px solid black;">{{m.Company}}</td>
+            <td style="border:1px solid black;">{{m.Amount}}</td>
+        </tr>
+        {%endfor %}
+    </table>
+</html>
+
+

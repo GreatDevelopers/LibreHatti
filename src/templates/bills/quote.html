@@ -1,0 +1,60 @@
+<html>
+<head>
+    <style type="text/css">
+        h1{margin-left: 30%;}
+        h1.as{margin-left: 35%;} 
+        table{width: 60%; margin-left:15%;} 
+        th{padding:10px;}
+        td{padding-left:40px;
+           padding-top: 25px;
+           padding-bottom: 25px;}
+        p.bs{margin-left: 25%;}
+    </style>
+ 
+    <title>Quotes</title>  
+</head>
+
+<body>
+ 
+    <h1>Guru Nanak Dev Engineering College</h1>
+    <h1 class='as'>Testing and Consultancy</h1>
+ 
+    <p class="bs"><center> Website:http//tcc.gndec.ac.in &nbsp;&nbsp;&nbsp; 
+                              &nbsp;&nbsp;&nbsp;&nbsp;Email:tcc@gndec.ac.in<br>
+                              <br>Ph:0161-2491193,5064509 &nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;Fax:0161-5064742 </center>
+    </p>
+ 
+ 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table border="1" >
+        <tr>
+            <th> Client </th>
+            <th> Address </th>
+            <th> Telephone </th>
+            <th> Produce</th>
+        </tr>
+        {% for m in QuotedOrder_list %}
+        <tr>
+            <td> {{m.quote_buyer_id.username}}</td>
+            <td> {{m.quote_delivery_address}}</td>
+            <td> {{m.quote_buyer_id.customer.telephone}}</td>   
+            <td>
+                <a href="/bills/generateproforma/{{m.id}}" style="text-decoration:none">
+                    <input type="submit" value="Generate Proforma" name="Generate Proforma">
+                </a>
+                <br>
+                <a href="/bills/confirm/{{m.id}}">
+                    <input type="submit" value="Confirm" name="Confirm">
+                </a>
+             </td>
+        </tr>
+        {% endfor %}
+    </table>
+ 
+</body>
+</html>

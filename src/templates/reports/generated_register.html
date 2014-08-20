@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>
+            {{title}}
+        </title> 
+        <style>
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
+        </style>
+    </head>
+    <body>
+        <h1>{{title}}</h1>
+        <table>
+            
+            <tr>
+                {% for field in client %}
+                <th>{{field}}</th>
+                {% endfor %}
+
+                {% for field in order %}
+                <th>{{field}}</th>
+                {% endfor %}
+            </tr>
+            {% for value in result %}
+                <tr>    
+                {% for data in value %}
+                    <td>{{data}}</td>
+                {% endfor %}       
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% if error %}
+            <h3 class="else"> Please select atleast one field </h3>
+        {% endif %}
+    </body>
+</html>

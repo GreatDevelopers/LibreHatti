@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='UTF-8'>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+            <title>bill</title>
+                <style>
+                     h1{text-align:center;font-size: 24px;}
+                     h1.a{text-align:center;font-size: 14px;}
+                     h1.b{text-align:center;font-size: 24px;}
+                     p.c{text-align: center;}
+                     p.d{text-align: center;}
+                     h2.e{text-align: center;font-size:175%;padding-top:18px;}
+                     p.f{font-size:100%;}
+                     p.g{position:absolute;top:338px;right:0px;}
+                     p.h{position:absolute;top:350px;left:30px;}
+                     p.i{float:right;text-align:bottom;}
+                    table, th, td{
+                        border: 1px solid black;
+                        width : 100%;
+                    }
+                    th,td{
+                        padding:3px;border-style:inset;
+                    }
+                    table{
+                        table-layout:fixed;
+                    }
+                </style>
+</head>
+<body>
+    <h1>{{purchased_order.organisation.organisation_type}}</h1>
+    <h1 class='a'>{{purchased_order.organisation.tagline}}</h1>       
+    <h1 class='b'>{{purchased_order.organisation.title}}</h1>  
+    <p class ='c'>{{purchased_order.organisation.address}}</p> 
+    <p class='d'><i>Website :</i> {{purchased_order.organisation.url}}
+    <i>Email:</i>{{purchased_order.organisation.email1}}
+    <i>Ph :</i>{{purchased_order.organisation.telephone}} 
+    <i>Fax :</i> {{purchased_order.organisation.fax}}</p>
+
+    <h2 class='e'>Bill</h2></br>
+    <p class='f'>STC No. {{ STC_NO }}</P>
+    <p class='f'>PAN No. {{ PAN_No. }</p>
+    <p class='g'>Dated : {{ purchase_order.date_time|date:"F, j, Y"}} </p>
+    <p> To, </p>
+    <p>{{purchase_order.delivery_address}} </p>
+    <p>Organisation:{{purchase_order.organisation.title}}</p>
+    <p>Buyer Id: {{purchase_order.buyer_id}}</p>
+    <p>Ref: Your Letter No. {{ L_No}},  
+    <p class='h'>dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.</p>
+    <p>Site: </p>
+
+<table>
+    <tr>
+        <th> S.No. </th>
+        <th>Charges For Following</th>
+        <th>Description</th>
+        <th>Per</th>
+        <th>Total</h>
+    </tr>
+
+    <tr>
+    {% if purchased_item %}
+    {% for purchaseditem in purchased_item %}
+        <td> {{ forloop.counter }} </td>
+        <td> {{ purchaseditem.item__name }} </td>
+        <td> {{ purchaseditem.qty }} sample./s </td>
+        <td> {{ purchaseditem.item__price }} </td>
+        <td> {{purchaseditem.price }} </td>
+    {% endfor %}
+    {% endif %}
+    </tr>
+
+    <tr>
+        <td><b>Sub-Total </b></td>
+        <td colspan="3"></td>
+        <td><b>{{total_cost}}</b></td>
+    </tr>
+
+    {% for tax, tax_list in tax_data %}
+    <tr>
+        <td>{{tax.taxes}}@{{tax.value}}%</td>
+        <td colspan="3" ></td>
+        <td>{{ tax_list }}</td>
+    </tr>
+    {% endfor %}
+
+     <tr>
+         <td><b>Surcharge Total</b></td>
+         <td colspan ="3">  </td>
+         <td>{{surcharge_total}}</td> 
+     </tr>
+
+     <tr>
+         <td><b>Grand-Total </b></td>
+         <td colspan = "3">  </td>
+         <td><b>{{grand_total}}</b></td>
+     </tr>
+</table>
+        <!-- Dean is liable to change-->
+        <p class='i'> Dean Of Training And Consultancy Cell </p>          
+</body>
+</html>
+

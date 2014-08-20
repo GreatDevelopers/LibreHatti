@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title>display items</title>
+</head>
+<body>
+    <h1>CONFIRM ITEMS</h1>
+
+    <form action="/bills/confirm/final/{{quoted_order.quote_buyer_id_id}}/" method="POST"> {% csrf_token %}
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+        
+            {% for j in quoted_item %}
+            <tr>         
+                <td>Item:<input type="text" name = "quote_item" value="{{j.quote_item__name}}"></td>  
+                <td>Quantity:<input type="text" name="quote_qty" value="{{j.quote_qty}}"></td>
+            </tr>   
+            {% endfor %} 
+        </table
+       
+        <a href="/bills/confirm/final/{{quoted_order.quote_buyer_id_id}}/">
+        <input type="submit" value="Submit" name="submit"/> </a>
+    </form>
+</body>
+</html>

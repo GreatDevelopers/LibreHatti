@@ -1,0 +1,57 @@
+{% extends base_template|default:"base.html" %} {% load i18n %} {% block content %} {% if nocategory %}
+<div class="text-center">
+    <h1>No Categories. Please add some Categories</h1>
+    <a href="{% url 'admin:index' %}" class="btn btn-primary btn-large">Add Category</a>
+</div>
+{% else %}
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            {% if noproducts %}
+            <h1>No Products. Please add some.</h1>
+            <a href="{% url 'admin:index' %}" class="btn btn-large btn-primary">Add Products</a>
+            {% endif %}
+            <div class="row clearfix">
+                {% for product in productlist %}
+                <div class="col-md-3 column well ui-widget-content draggable product" id="{{ product.id }}product">
+                    <input type="checkbox" />
+                    <span>{{ product.name }}</span>
+                    <button class="btn btn-xs btn-primary">Add to Cart</button>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="droppable">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="cart" class="cart">
+    <ul id="cartitems">
+
+    </ul>
+</div>
+<script type="text/javascript">
+
+    //This function will be used to add itrms in the cart. Only one piece 
+    $(".product button").click(function() {
+
+    //First read the id of the product
+    var parent = parseInt($(this).parent("div")[0].id);    
+
+    // We have the product id. Get the name show
+    var name = $(this).siblings("span").html();
+    cart.addItem(name, parent, 1);
+    });
+
+    //This will make the element draggable
+    $(".draggable").draggable();
+    
+    //This will make it droppable
+    $(".droppable").droppable({
+
+    });
+</script>
+
+{% endif %} {% endblock %}

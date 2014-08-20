@@ -1,0 +1,23 @@
+{% extends base_template|default:"base.html" %} {% load i18n %} {% load bootstrap %} {% block content %}
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div class="col-md-4 column">
+                </div>
+                <div class="col-md-4 column">
+                    <form method="post" action=".">{% csrf_token %}
+                        <div class="form-group">
+                            {% for field in form %} {{ field.errors }} {{ field.label_tag }} {{field|addcss:"form-control"}} {% endfor %}
+                        </div>
+                        <input type="submit" value="{% trans 'Submit' %}" />
+                    </form>
+                </div>
+                <div class="col-md-4 column">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
