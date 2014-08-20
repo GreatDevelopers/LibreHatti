@@ -10,6 +10,7 @@ class QuotedOrder(models.Model):
     quote_delivery_address = models.ForeignKey('useraccounts.Address')
     quote_organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     quote_date_time = models.DateTimeField(auto_now_add=True)
+    is_canceled = models.BooleanField(default = False)
     def __unicode__(self):
         return '%s' % (self.quote_buyer_id) +' - ' '%s' % (
                        self.quote_date_time.strftime ('%b %d, %Y'))

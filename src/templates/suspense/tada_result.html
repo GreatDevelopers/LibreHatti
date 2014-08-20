@@ -24,9 +24,9 @@
     </head>
     <body>
         <h1 style="text-align:center">T.A./D.A  FORM FOR CONSULTANCY WORK</h1>     
-        <p>Name of the Department/Client: Swami ganga nand Ji Bhuriwale Memorial Trust </br>
+        <p>Name of the Department/Client: {{purchased_order.organisation.title}} </br>
         Amount claimed from Department/Client: Rs.{{total_cost}} </p>
-        <p style="float:right">Vide Receipt No.23 
+        <p style="float:right">Vide Receipt No.{{receipt_no}} 
             </br>
             Date:  {% now "F jS o" %}</p>
         <table style="width:100%">
