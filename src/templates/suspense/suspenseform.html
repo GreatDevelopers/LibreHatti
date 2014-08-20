@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>
+            Suspense Job
+        </title>
+        <style>
+            .button { width : 100px; height: 25px;}
+        </style>
+    </head>
+    <body> 
+        <h1> Search Result for Ref No. = {{ref_no}} are: </h2>
+        <table>
+            <form action='/suspense/clresult/' method="get">
+                <tr>
+                    <td> Ref No:<input id="id_job" 
+                             type="text" name="job" value=" {{ref_no}} "></td>
+                </tr>
+                <tr> 
+                    <td> {{ cl_report.as_p }} <input type="submit" 
+                                           name="Submit"  value="Submit"> </td>
+                </tr>       
+            </form>
+        </table>
+    </body>
+</html>

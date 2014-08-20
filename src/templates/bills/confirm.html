@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='UTF-8'>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+            <title>bill</title>
+                <style>
+                     h1{text-align:center;font-size: 24px;}
+                     h1.a{text-align:center;font-size: 14px;}
+                     h1.b{text-align:center;font-size: 24px;}
+                     p.c{text-align: center;}
+                     p.d{text-align: center;}
+                     h2.e{text-align: center;font-size:175%;padding-top:18px;}
+                     p.f{padding-top:15px;font-size:100%;}
+                     p.g{position:absolute;top:350px;left:0px;}
+                     p.h{position:absolute;top:350px;right:0px;}
+                     p.i{position:absolute;right:30px;top:1050px;}
+                     p.j{position:absolute;top:1050px;}
+                     p.k{position:absolute;right:30px;top:1100px;}
+                    table, th, td{
+                        padding-top:0px;
+                        border: 1px solid black;
+                        width : 100%;
+                    }
+                    th,td{
+                        padding:3px;border-style:inset;
+                    }
+                    table{
+                        table-layout:fixed;
+                    }
+                </style>
+
+</head>  
+<body>
+    <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
+    <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
+    <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
+    <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
+    <p class='d'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
+    <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
+    <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
+    <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
+
+    <h2 class='e'>Confirmation Bill</h2>
+    <p class='f'>STC No. {{ STC_NO }}</br>
+    PAN No. {{ PAN_No. }</p>
+    <p class='g'>No. : GNDEC/TCC/B/{{ job_no }}</p>
+    <p class='h'>Dated : {{quoted_order.date_time}}</p>
+    <br><br>
+
+    <p> To,</p>
+    <p>{{quote_delivery_address}}</p>
+    <p>Organisation:{{quote_organisation}}</p>
+    <p>Buyer Id : {{ purchased_order.buyer_id.username }}</p>
+    <p>Ref: Your Letter No.{{L_No.}},</p> 
+    <p>dated:{{quoted_order.date_time}} , respectively.
+    </p>
+
+<table>
+    <tr>
+
+      <th>S.no.</th>
+      <th>Charges For Following</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+    {% if quoted_item %}
+    {% for p in quoted_item %}
+    <tr> 
+      <td>{{ forloop.counter }}</td>
+      <td>{{ p.quote_item__name}}</td>
+      <td>{{ p.quote_qty }}</td>
+      <td>{{ p.quote_price  }}</td> 
+      <td>{{ p.total }}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    <tr>
+      <td><b>Total</b></td>
+      <td colspan="3"></td>
+            <td align="right"><b>{{total_cost}}</b></td>
+    </tr>
+
+    {% if bill.trans_total != None %}
+    <tr>
+      <td>Transportation Charges</td>
+      <td colspan="3"></td>
+      <td align="right">{{bill.trans_total}}</td>
+    </tr>
+    <tr>
+      <td>Total Amount</td>
+      <td colspan="3"></td>
+      <td align="right">{{bill.trans_net_total}}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td>Service Tax  @ {{ servicetaxprint }}%</td>
+      <td colspan="3"></td>
+      <td align="right">{{ bill.service_tax }}</td>
+    </tr>
+    <tr>
+      <td>Education Cess  @ {{ educationtaxprint }}%</td>
+      <td colspan="3"></td>
+      <td align="right">{{ bill.education_tax }}</td>
+    </tr>
+    <tr>
+      <td><b>G.Total (Rupees {{ net_total_eng }} only)</b></td>
+      <td colspan="3"></td>
+      <td  align="right"><b>{{ cdftotal }} {{ bill.net_total}}</b></td>
+    </tr>   
+</table>
+
+    <!--Dean is liable to change-->
+    <p class='i'> Dean Training And Consultancy Cell</p>
+    <p class='j'>I/We here by agree to the terms & conditions as mentioned above</p>
+    <p class='k'>(Signature of Client/Deptt. Representative)</p>
+</body>
+</html>

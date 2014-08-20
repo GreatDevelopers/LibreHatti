@@ -10,9 +10,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'librehatti_db',                     
-        'USER': 'root',
-        'PASSWORD': 'ashu',
+        'NAME': 'amitt',                     
+        'USER': 'amit',
+        'PASSWORD': 'amitt',
         'HOST': 'localhost',                      
         'PORT': '',                   
     }
@@ -41,8 +41,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-'/home/ashu/LibreHatti/static',
-
+    '/home/amitt/github/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
@@ -81,9 +80,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',
+    'librehatti.prints',
+    'librehatti.suspense',
+    'librehatti.bills',
+    'librehatti.reports',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

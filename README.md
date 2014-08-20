@@ -46,8 +46,13 @@ Run following commands in terminal
 
 Run following commands in terminal
     
-    sudo pip install https://www.djangoproject.com/download/1.7.b4/tarball/
+    $ sudo pip install https://www.djangoproject.com/download/1.7.b4/tarball/
 
+7) docutils
+
+Run following commands in terminal
+
+    $ sudo pip install docutils
 
 Steps for Installation of LibreHatti.
 
@@ -58,18 +63,16 @@ Steps for Installation of LibreHatti.
 2) Create a database for LibreHatti.
     
     $ mysql -u root -p
-    $ create database librehatti
+    $ create database librehatti;
     $ quit
     
-3) Edit settings.py file. Things to be edited are:
+3) Edit settings.py file in LibreHatti/src/librehatti directory. Things to be edited are:
 
 Line No 10 : DATABASES
     
     NAME : librehatti
     USER : Your MySQL username
     PASSWORD : Your MySQl password
-    
-Line No 39 : STATIC_ROOT
     
 Line No 43 : STATICFILES_DIRS
     

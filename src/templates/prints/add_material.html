@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>Forms</title>
+    </head>
+
+    <body>
+        <p> Lab selected : <b>{{lab}}</b> </p>
+        <form method="GET" action='/print/add_test'> 
+            <b> Select Material: </b>
+            <select name = 'material'>
+                {% for i in material_info %}
+                    <option value={{i.name}} name={{i.name}} >{{i.name}} </option>
+                {% endfor %}
+            </select>
+            <p><input type="submit" name= "Submit" value="Submit"></p>
+        </form> 
+    </body>
+</html>

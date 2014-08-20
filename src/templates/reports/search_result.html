@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>
+            Results of your Search 
+        </title> 
+        <style>
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
+        </style>
+    </head>
+    <body>
+        {% for a in order_id %}
+        {{a}}
+        {% endfor %}
+        <h1>{{ title }}</h1>
+        <table>
+            <tr>
+            {% for field in result_fields %}
+                {% for value in field %}
+                    <th>{{value}}</th>
+                {% endfor %}
+                    {% if order_id %}
+                        <th>Options</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for result in results %}
+                    {% for value in result %}
+                    <td>
+                        {% for item in value.items %}
+                            {% if item.0 == 'purchase_order__id' %}
+                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>  
+                            {% else %}
+                                {{item.1}}
+                            {% endif %}
+                        {% endfor %}
+                     </td>
+                    {%endfor%}
+             </tr>
+             {%endfor%}
+        </table>    
+
+        {% if error %}
+            <h3 class="else"> Please select atleast one field </h3>
+        {% endif %}
+    </body>
+</html>

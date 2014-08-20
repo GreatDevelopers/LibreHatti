@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title> 
+            TA/DA Form
+        </title>
+        <style>
+            h2 { text-align : center;}
+            .form { margin-left:40%;  }
+            .button {margin-left:50%; }
+        </style>
+    </head>
+    <body>
+        <form action="/suspense/tada_result" method = "get">
+            <h2> TA/DA Form </h2>
+            <!--<p> <center>  <label for="ref_no"> Ref Number<input type="text" name="ref_no" value= {{ref_no}}></center> </p> -->
+            <ul class="form">{{ form.as_p }} </ul>
+            <p class = "button" > <input type="submit" value="Submit" name="Submit"> </p>
+        </form>
+    </body>
+</html>
