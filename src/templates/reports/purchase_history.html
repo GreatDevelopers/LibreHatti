@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>
+Purchase History
+</title>
+<style>
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
+        </style>
+</head>
+<body>
+<h1> Purchase History </h1>
+<table>
+<tr>
+<th>S.No.</th>
+<th>Purchase Order No.</th>
+<th>Mode of Payment</th>
+<th>Purchase Date</th>
+<th>Options</th>
+</tr>
+{% for i in purchases %}
+
+<tr>
+<td>{{forloop.counter}}</td>
+<td>{{i.id}}</td>
+<td>{{i.mode_of_payment}}</td>
+<td>{{i.date_time|date}}</td>
+
+<td><a href = '/details/?order_id={{i.id}}'>View Details</a></td>
+</tr>
+
+{% endfor %}
+
+
+</body>
+
+</html>

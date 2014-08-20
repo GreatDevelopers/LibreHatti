@@ -1,9 +1,9 @@
 from django import forms
+
 from search_choices import CLIENT_FIELD_CHOICES
 from search_choices import CLIENT_ORDER_CHOICES
 from search_choices import CONSTRAINT_CHOICES
 import datetime
-
 
 """
 displays checkboxes for Client Search
@@ -20,7 +20,6 @@ class OrderForm(forms.Form):
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
 
-
 """
 displays checkboxes for Constraints
 """
@@ -29,5 +28,5 @@ class AddConstraints(forms.Form):
     end_date = forms.DateField(required=False, initial= datetime.date.today())
     additional_constraints = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices= CONSTRAINT_CHOICES)
-    amount_greater_than = forms.FloatField(required=False, initial = 0)
-    amount_less_than = forms.FloatField(required=False, initial = 1000000)
+    #amount_greater_than = forms.FloatField(required=False, initial = 0)
+    #amount_less_than = forms.FloatField(required=False, initial = 1000000)
