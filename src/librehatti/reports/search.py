@@ -47,15 +47,15 @@ class SearchResult(View):
     	generated_data_list = []
 
         for data in self.details:
-        	temporary = []
-        	for field in self.fields_list:
-        		temporary.append(data[field])
-        	generated_data_list.append(temporary)
+            temporary = []
+            for field in self.fields_list:
+        	temporary.append(data[field])
+            generated_data_list.append(temporary)
 
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,'records':self.results,
-        }
+            }
 
         return render(request,'reports/search_result.html',temp)
 
@@ -73,7 +73,7 @@ class SearchResult(View):
                 self.temp = []
                 for value in self.fields_list:
                     obj = PurchasedItem.objects.filter(id=entries.id).values(
-                        	value)
+                            value)
                     for temp_result in obj:
                         self.temp.append(temp_result)
                 self.results.append(self.temp)
@@ -125,7 +125,7 @@ class SearchResult(View):
         Fetching values from database.
         """
 
-    	self.details = PurchasedItem.objects.values(*self.fields_list).\
+        self.details = PurchasedItem.objects.values(*self.fields_list).\
     	    filter(purchase_order__is_canceled = 0)
 
         return self.apply_filter(request)
@@ -137,17 +137,17 @@ class SearchResult(View):
         file.
         """
 
-    	self.fields_list = []
-    	for value in self.selected_fields_client:
-    		self.fields_list.append(self.list_dict[value])
+        self.fields_list = []
+        for value in self.selected_fields_client:
+            self.fields_list.append(self.list_dict[value])
 
         for value in self.selected_fields_order:
-        	self.fields_list.append(self.list_dict[value])
+            self.fields_list.append(self.list_dict[value])
         	
         if 'Client' in request.GET:
-		    self.fields_list.append('purchase_order__buyer__id')	
+            self.fields_list.append('purchase_order__buyer__id')	
         else: 
-		    self.fields_list.append('purchase_order__id')
+            self.fields_list.append('purchase_order__id')
 	
         return self.fetch_values(request)
 
@@ -165,4 +165,3 @@ class SearchResult(View):
         self.result_fields.append(self.selected_fields_order)
 
         return self.default_fields(request)
-

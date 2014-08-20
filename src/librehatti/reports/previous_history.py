@@ -6,19 +6,19 @@ from librehatti.catalog.models import PurchasedItem
 
 
 def history(request):
-	"""
-	displays the purchase history of the client
-	"""
+    """
+    displays the purchase history of the client
+    """
 	
-	user_id = request.GET['user_id']
-	purchases = PurchaseOrder.objects.filter(buyer__id=user_id)
-	return render(request,'reports/purchase_history.html',{'purchases':purchases})
+    user_id = request.GET['user_id']
+    purchases = PurchaseOrder.objects.filter(buyer__id=user_id)
+    return render(request,'reports/purchase_history.html',{'purchases':purchases})
 
 def details(request):
-	"""
-	displays the details of the purchase of the client
-	"""
+    """
+    displays the details of the purchase of the client
+    """
 	
-	order_id = request.GET['order_id']
-	purchases = PurchasedItem.objects.filter(purchase_order__id=order_id)
-	return render(request,'reports/history_details.html',{'purchases':purchases})
+    order_id = request.GET['order_id']
+    purchases = PurchasedItem.objects.filter(purchase_order__id=order_id)
+    return render(request,'reports/history_details.html',{'purchases':purchases})
