@@ -13,7 +13,7 @@
          p.g{position:absolute;top:350px;right:0px;}
          p.h{position:absolute;right:30px;top:1050px;}
          p.i{position:absolute;top:1050px;}
-         p.j{position:absolute;right:30px;top:1150px;}
+         p.j{position:absolute;right:30px;top:1100px;}
         table{table-layout:fixed;width: 60%; margin-left:15%;} 
         th{padding:10px;}
         td{padding-left:40px;
@@ -59,16 +59,16 @@
             <th> Quantity </th>
             <th> Total</th> 
         </tr>  
-     
+ 
         {% for i in quoted_item %}
-        <tr> 
-            {% for j in i%} 
-            <td> {{ j }}</td>
+        <tr>
+            {% for j in i%}   
+            <td> {{j}}</td>
             {% endfor %}    
         </tr>
                  
         {% endfor %}
-        {% endif %}
+       
     </table>
 
     <br> <b> Sum : {{total_cost}}</b>
