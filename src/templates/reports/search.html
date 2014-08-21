@@ -12,6 +12,7 @@
     <body> 
         <h2 class="head"> Select one or more fields
         </h2>
+	
         <table>
             <form action={{url}} method="get">
                 {% ifequal '1' code  %}
@@ -31,9 +32,9 @@
                 </tr>
                 {% endifequal %}
                 <tr>
-                    <td><input type="checkbox"  name="pdfrequest" value="1">PDF Form Output</td>
                     <td>{{ client_form.as_p }}</td>
-                    <td>{{ order_form.as_p }}</td>
+                    <td>{{ order_form.as_p }}
+			<ui><li><input type='checkbox' value='suspense' name='suspense'>Is suspense</input></li></ui></td>
                 </tr>
                 <tr> 
                     <td> {{ add_constraints.as_p }} </td>
