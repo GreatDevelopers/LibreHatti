@@ -12,7 +12,7 @@ def index(request):
     It lists all the products and the user can select any product
     and can add them to the cart.
     """
-    error = {}
+    """error = {}
     categorylist = Category.objects.all()
 
     if categorylist.count() == 0:
@@ -24,15 +24,16 @@ def index(request):
         noproduct = True
         return render(request, 'catalog.html', {'noproduct': noproduct})
 
-    return render(request,'catalog.html', {'productlist': productlist, 
+    return render(request,'catalog.html', {'productlist': productlist,
                'categorylist': categorylist})
 
-    pass
+    pass"""
+    return render(request,'index.html',{})
 
 
 def add_categories(request):
     """
-    It allows the user to add categories. 
+    It allows the user to add categories.
     """
 
     if request.method == 'POST' :
