@@ -99,7 +99,7 @@ class Surcharge(models.Model):
 
 
 class Transport(models.Model):
-    vehicle_id = models.CharField(max_length=20)
+    vehicle_id = models.ForeignKey()
     job_id = models.IntegerField()
     kilometer = models.FloatField()
     rate = models.FloatField(default=10.0)  
@@ -107,3 +107,11 @@ class Transport(models.Model):
     total = models.IntegerField()
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
+
+
+class Vehicle(models.Model):
+    vehicle_id = models.CharField(max_length=20)
+    vehicle_no = models.CharField(max_length=20)
+    vehicle_name = models.CharField(max_length=20)
+    def __unicode__(self):
+        return '%s' % (self.vehicle_name)
