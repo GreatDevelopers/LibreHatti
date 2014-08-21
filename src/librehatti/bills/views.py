@@ -60,8 +60,9 @@ def gen_proforma(request, client_id):
     quoted_order=QuotedOrder.objects.get(quote_buyer_id_id=client_id)
     quoted_item = QuotedItem.objects.filter(quote_order_id=
                   client_id).values_list('quote_item__name',
-                'quote_item__category__name', 'quote_item__price', 'quote_qty',
-                'quote_price')	
+                'quote_item__category__name', 'quote_item__price_per_unit', 'quote_qty',
+                'quote_price')
+                	
     total = QuotedItem.objects.filter(quote_order_id=client_id).aggregate(Sum(
             'quote_price')).get('quote_price__sum', 0.00)
     return render(request, 'bills/p_bill.html',{ 'quoted_order':quoted_order,
