@@ -1,5 +1,5 @@
 <h2>URL List</h2>
 
-<a href = '/search/?type=search'>Search</a><br>
-<a href = '/search/?type=register'>Registers</a><br>
-<a href = '/bills/proforma'>Proforma</a><br>
+<a href = '{% url 'librehatti.reports.search.search' %}?type=search'>Search</a><br>
+<a href = '{% url 'librehatti.reports.search.search' %}?type=register'>Registers</a><br>
+<a href = '{% url 'librehatti.bills.views.proforma' %}'>Proforma</a><br>
