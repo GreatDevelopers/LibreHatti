@@ -61,7 +61,6 @@ def lab_report(request):
                    purchase_item,'start_date':start_date,'end_date':end_date,
                   'total_cost':total})
 
-       
 def bill(request):
     
     """
@@ -69,25 +68,15 @@ def bill(request):
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
     """
-    purchase_order = PurchaseOrder.objects.all()
-    purchased_item = PurchasedItem.objects.filter().values('item__name', 'qty',
-                     'item__price_per_unit','price') 
-    total = PurchasedItem.objects.filter().aggregate(Sum('price')).get( 
-                                                     'price__sum', 0.00)
-    surcharge = Surcharge.objects.filter().values('tax_name' ,'value')
-    surcharge_total=0
-    i=0 
-    tax_list = []
-    tax_data = []	
-    for tax in surcharge:
-        tax_list.append(float((tax['value']*total)/100))
-    
-    for tax in tax_list:
-        surcharge_total=surcharge_total+tax	        
-        tax_data = zip(surcharge, tax_list)
-    grand_total = surcharge_total  + total
-    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
+    id = request.GET['order_id']
+    purchase_order = PurchaseOrder.objects.filter(id = id)
+    purchased_item = PurchasedItem.objects.filter(purchase_order_id = id).values(
+    'item__name', 'qty','item__price_per_unit','price') 
+    total = PurchasedItem.objects.filter(purchase_order_id=id).aggregate(Sum(
+    'price')).get('price__sum', 0.00)
+    # TODO:
+    # Surcharges and Grand Total are not yet there. Data will come
+    # from Bills table. Amrit and Aseem are working on it.
+    return render(request, 'prints/bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
                  '123', 'purchase_order':purchase_order, 'purchased_item' : 
-                 purchased_item, 'total_cost': total,'surcharge_total':
-                 surcharge_total, 'tax_data' : tax_data, 'grand_total':
-                 grand_total})
+                 purchased_item, 'total_cost': total})
