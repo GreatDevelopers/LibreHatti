@@ -33,7 +33,7 @@
                     <td>
                         {% for item in value.items %}
                             {% if item.0 == 'purchase_order__id' %}
-                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>  
+                                <a href = 'prints/bill/?order_id={{item.1}}'>Generate Bill</a>  
                             {% else %}
                                 {{item.1}}
                             {% endif %}
