@@ -8,7 +8,7 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
 
-from librehatti.catalog.actions import mark_cancel
+from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.contrib.admin.models import LogEntry
 
@@ -65,11 +65,11 @@ inherits the fields of PurchaseOrder derscribing the delivery address of
 buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(admin.ModelAdmin):
-    exclude=('is_canceled',)
-    list_display = ['id','buyer','delivery_address','date_time','is_canceled']
+    exclude=('is_active',)
+    list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
-    actions = [mark_cancel]
+    actions = [mark_active, mark_inactive] 
     list_filter = ['date_time']
     search_fields = ['id']
     list_per_page = 20 

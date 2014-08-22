@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>
+            Purchase History
+        </title>
+        <style>
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
+        </style>
+    </head>
+    <body>
+        <h1> Purchase Details </h1>
+        <table>
+            <tr>
+                <th>S.No.</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price Per Unit</th>
+                <th>Discount</th>
+                <th>Total Price</th>
+            </tr>
+            {% for i in purchases %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.item.name}}</td>
+                <td>{{i.qty}}</td>
+                <td>{{i.item.price_per_unit}}</td>
+                <td>{{i.purchase_order.total_discount}}</td>
+                <td>{{i.price}}</td>
+            </tr>
+            {% endfor %}
+
+    </body>
+</html>
