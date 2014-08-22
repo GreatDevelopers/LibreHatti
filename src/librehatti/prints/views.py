@@ -86,7 +86,7 @@ def bill(request):
         surcharge_total=surcharge_total+tax	        
         tax_data = zip(surcharge, tax_list)
     grand_total = surcharge_total  + total
-    return render(request, 'bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
+    return render(request, 'prints/bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
                  '123', 'purchase_order':purchase_order, 'purchased_item' : 
                  purchased_item, 'total_cost': total,'surcharge_total':
                  surcharge_total, 'tax_data' : tax_data, 'grand_total':
