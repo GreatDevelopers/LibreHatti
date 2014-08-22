@@ -55,7 +55,7 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField()
     tds = models.IntegerField()
     mode_of_payment = models.ForeignKey(ModeOfPayment)
-    is_canceled = models.BooleanField(default = False)
+    is_active = models.BooleanField(default = True)
     def __unicode__(self):
         return '%s' % (self.id)
                
