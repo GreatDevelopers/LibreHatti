@@ -20,6 +20,9 @@ def add_distance(request):
     purchase_order_id = request.session.get('purchase_order_id')
     items = []
     suspense = 0
+    suffix = "/search_result/?search="
+    prefix = "&Order=Order+Search"
+    url = suffix + str(purchase_order_id) + prefix
     for id in range(0,10):
         items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
   
@@ -39,13 +42,13 @@ def add_distance(request):
             form = SuspenseForm(request.POST)
             if form.is_valid:
                 form.save()
-                return HttpResponseRedirect('/admin/catalog/purchaseorder/')
+                return HttpResponseRedirect(url)
         else:
             form = SuspenseForm(initial = {'purchase_order':purchase_order_id,
               'distance':0}) 
             return render(request,'suspense/form.html',{'form':form,'test':'test'})
     else:
-        return HttpResponseRedirect('/admin/catalog/purchaseorder/')
+        return HttpResponseRedirect(url)
 
 def clearance_search(request):
     form = TaDaSearch

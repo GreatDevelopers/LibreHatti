@@ -97,6 +97,14 @@ class Surcharge(models.Model):
     def __unicode__(self):
          return self.tax_name
 
+"""
+This class defines the taxes applied on the purchase order
+"""
+class taxesapplied(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    surcharge = models.ForeignKey(Surcharge)
+    tax = models.IntegerField()
+
 
 class Transport(models.Model):
     vehicle_id = models.CharField(max_length=20)
@@ -107,3 +115,13 @@ class Transport(models.Model):
     total = models.IntegerField()
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
+"""
+This class defines the grand total of the purchase order
+"""
+
+class bill(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    total_cost = models.IntegerField()
+    total_tax = models.IntegerField()
+    grand_total = models.IntegerField()
+
