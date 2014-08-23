@@ -82,7 +82,7 @@ class Catalog(models.Model):
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product)
     def __unicode__(self):
-        return self.attribute.name;
+        return self.attribute.name
 """
 This class defines the type of taxes, value, validation of taxes 
 mentioning the startdate and end date 
