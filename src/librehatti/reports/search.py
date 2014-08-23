@@ -126,7 +126,7 @@ class SearchResult(View):
         """
 
         self.details = PurchasedItem.objects.values(*self.fields_list).\
-            filter(purchase_order__is_canceled = 0)
+            filter(purchase_order__is_active = 1)
 
         return self.apply_filter(request)
 
