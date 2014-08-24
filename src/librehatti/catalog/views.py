@@ -45,16 +45,16 @@ def add_categories(request):
     })
 
 def select_secondary_category(request):
-    lab = request.GET['cat_id']
-    materials = Category.objects.filter(parent=lab)
+    sec_category = request.GET['cat_id']
+    materials = Category.objects.filter(parent=sec_category)
     material_dict = {}
     for material in materials:
         material_dict[material.id] = material.name
     return HttpResponse(simplejson.dumps(material_dict))
 
 def select_item(request):
-    cat_id = request.GET['cat_id']
-    products = Product.objects.filter(category = cat_id)
+    sub_sec_category = request.GET['cat_id']
+    products = Product.objects.filter(category = sub_sec_category)
     product_dict = {}
     for product in products:
         product_dict[product.id] = product.name
