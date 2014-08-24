@@ -3,8 +3,7 @@ from django.shortcuts import render
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.forms import AddCategory
-
-
+import simplejson
 
 def index(request):
     """
@@ -44,3 +43,19 @@ def add_categories(request):
     return render(request, 'addCategory.html', {
             'form':form
     })
+
+def select_secondary_category(request):
+    sec_category = request.GET['cat_id']
+    materials = Category.objects.filter(parent=sec_category)
+    material_dict = {}
+    for material in materials:
+        material_dict[material.id] = material.name
+    return HttpResponse(simplejson.dumps(material_dict))
+
+def select_item(request):
+    sub_sec_category = request.GET['cat_id']
+    products = Product.objects.filter(category = sub_sec_category)
+    product_dict = {}
+    for product in products:
+        product_dict[product.id] = product.name
+    return HttpResponse(simplejson.dumps(product_dict))

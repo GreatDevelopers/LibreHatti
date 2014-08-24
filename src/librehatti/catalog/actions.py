@@ -39,5 +39,3 @@ def mark_inactive(modeladmin, request, queryset):
         LogEntry.objects.log_action(user_id=request.user.id, 
         content_type_id=content.pk,object_id=obj.pk,action_flag=CHANGE,
         object_repr = "Order Canceled",change_message="")
-
-

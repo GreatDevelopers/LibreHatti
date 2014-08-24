@@ -65,6 +65,7 @@ class PurchasedItem(models.Model):
     price = models.IntegerField()
     qty = models.IntegerField()
     item = models.ForeignKey(Product)
+   
     def save(self, *args, **kwargs):
         if not self.id:
             self.price = self.item.price_per_unit * self.qty	    
@@ -105,7 +106,6 @@ class taxesapplied(models.Model):
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
 
-
 class Transport(models.Model):
     vehicle_id = models.CharField(max_length=20)
     job_id = models.IntegerField()
@@ -115,13 +115,20 @@ class Transport(models.Model):
     total = models.IntegerField()
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
+
 """
 This class defines the grand total of the purchase order
 """
-
+ 
 class bill(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
+
+class LevelOne(models.Model):
+    first = models.ForeignKey(Category)
+    class Meta:
+        abstract = True
+
 

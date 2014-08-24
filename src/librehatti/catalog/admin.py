@@ -7,9 +7,9 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
+from librehatti.catalog.forms import MaterialSelectForm
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
-
 from django.contrib.admin.models import LogEntry
 
 admin.autodiscover()
@@ -20,8 +20,8 @@ admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
 
 """
-This class is used to see logs in a detailed format. It is far much better than
-django recent actions widget.
+This class is used to see logs in a detailed format. It is far much better
+than django recent actions widget.
 """
 class LogEntryAdmin(admin.ModelAdmin):
     model = LogEntry
@@ -29,6 +29,7 @@ class LogEntryAdmin(admin.ModelAdmin):
     list_filter = ['action_time']
     search_fields = ['object_repr']
     list_per_page = 20
+
 
 """
 This class is used to add, edit or delete the attribute and value of 
@@ -47,17 +48,18 @@ purchasing or testing
 """
 class ProductAdmin(admin.ModelAdmin):
     fields = ['name', 'category', 'price_per_unit', 'organisation']
-    inlines = [CatalogInline]
-    
+    inlines = [CatalogInline] 
 
 """
 This class is used to add, edit or delete the details of item purchased 
 """
-class PurchasedItemInline(admin.StackedInline):
-    model = PurchasedItem
-    fields = ['item', 'qty', ]
-    extra = 10
 
+class PurchasedItemInline(admin.StackedInline):
+    form = MaterialSelectForm
+    model = PurchasedItem
+    fields = ['lab','material','item', 'qty' ]
+    extra = 10
+ 
 """
 This class is used to add, edit or delete the details of items 
 purchased but buyer has not confirmed the items purchased, this class
@@ -69,7 +71,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
-    actions = [mark_active, mark_inactive] 
+    actions = [mark_active, mark_inactive]
     list_filter = ['date_time']
     search_fields = ['id']
     list_per_page = 20 
