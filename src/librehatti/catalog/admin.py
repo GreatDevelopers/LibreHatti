@@ -20,7 +20,8 @@ admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
 
 """
-This class is used to see logs in a detailed format. It is far much better than django recent actions widget.
+This class is used to see logs in a detailed format. It is far much better
+than django recent actions widget.
 """
 class LogEntryAdmin(admin.ModelAdmin):
     model = LogEntry
