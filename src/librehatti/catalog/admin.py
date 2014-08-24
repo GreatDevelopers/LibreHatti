@@ -9,7 +9,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import *
 from librehatti.catalog.forms import MaterialSelectForm
 
-from librehatti.catalog.actions import mark_cancel
+from librehatti.catalog.actions import mark_inactive, mark_active 
+from django.contrib.admin.models import LogEntry
 
 admin.autodiscover()
 admin.site.register(Category)
@@ -17,6 +18,17 @@ admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
+
+"""
+This class is used to see logs in a detailed format. It is far much better than django recent actions widget.
+"""
+class LogEntryAdmin(admin.ModelAdmin):
+    model = LogEntry
+    list_display = ['id','user','object_repr','content_type','action_time']
+    list_filter = ['action_time']
+    search_fields = ['object_repr']
+    list_per_page = 20
+
 
 """
 This class is used to add, edit or delete the attribute and value of 
@@ -54,11 +66,11 @@ inherits the fields of PurchaseOrder derscribing the delivery address of
 buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(admin.ModelAdmin):
-    exclude=('is_canceled',)
-    list_display = ['id','buyer','delivery_address','date_time','is_canceled']
+    exclude=('is_active',)
+    list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
-    actions = [mark_cancel]
+    actions = [mark_active, mark_inactive]
     list_filter = ['date_time']
     search_fields = ['id']
     list_per_page = 20 
@@ -70,3 +82,4 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
+admin.site.register(LogEntry, LogEntryAdmin)

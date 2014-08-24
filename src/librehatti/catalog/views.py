@@ -26,7 +26,7 @@ def index(request):
                'categorylist': categorylist})
 
     pass"""
-    return render(request,'index.html')
+    return render(request,'index.html',{})
 
 
 def add_categories(request):
