@@ -55,7 +55,7 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField()
     tds = models.IntegerField()
     mode_of_payment = models.ForeignKey(ModeOfPayment)
-    is_canceled = models.BooleanField(default = False)
+    is_active = models.BooleanField(default = True)
     def __unicode__(self):
         return '%s' % (self.id)
                
@@ -82,7 +82,7 @@ class Catalog(models.Model):
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product)
     def __unicode__(self):
-        return self.attribute.name;
+        return self.attribute.name
 """
 This class defines the type of taxes, value, validation of taxes 
 mentioning the startdate and end date 
@@ -96,6 +96,14 @@ class Surcharge(models.Model):
     Remark = models.CharField(max_length=1000)
     def __unicode__(self):
          return self.tax_name
+
+"""
+This class defines the taxes applied on the purchase order
+"""
+class taxesapplied(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    surcharge = models.ForeignKey(Surcharge)
+    tax = models.IntegerField()
 
 
 class Vehicle(models.Model):
@@ -116,3 +124,12 @@ class Transport(models.Model):
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
 
+"""
+This class defines the grand total of the purchase order
+"""
+
+class bill(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    total_cost = models.IntegerField()
+    total_tax = models.IntegerField()
+    grand_total = models.IntegerField()
