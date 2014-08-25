@@ -39,20 +39,19 @@ class ItemSelectForm(forms.ModelForm):
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/ajax.js', 
         )
-    parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-     	filter(parent__parent__isnull=True).filter(parent__isnull=False))
+
+    try:
+        parent_category = forms.ModelChoiceField(queryset=Category.objects.\
+     	    filter(parent__parent__isnull=True).filter(parent__isnull=False))
      
-    sub_category_id = Category.objects.values_list('id',flat=True)
-    sub_category_name = Category.objects.values_list('name',flat=True)
-    sub_category_choices = [('', '--------')] + [(id, name) for id, name in itertools.\
-    izip(sub_category_id, sub_category_name)]
-    sub_category = forms.ChoiceField(sub_category_choices)
-     
-    item_id = Product.objects.values_list('id',flat=True)
-    item_name = Product.objects.values_list('name',flat=True)
-    item_choices = [('', '--------')] + [(id, name) for id, name in itertools.\
-    izip(item_id, item_name)]
-    item = forms.ChoiceField(item_choices)
+        sub_category_id = Category.objects.values_list('id',flat=True)
+        sub_category_name = Category.objects.values_list('name',flat=True)
+        sub_category_choices = [('', '--------')] + [(id, name) for id, name in itertools.\
+        izip(sub_category_id, sub_category_name)]
+        sub_category = forms.ChoiceField(sub_category_choices)
+    except:
+        pass
+    
     item = forms.ModelChoiceField(queryset = Product.objects.all())
      
     def __init__(self, *args, **kwargs):
