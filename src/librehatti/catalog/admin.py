@@ -18,6 +18,7 @@ admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
+admin.site.register(Transport)
 
 """
 This class is used to see logs in a detailed format. It is far much better than
