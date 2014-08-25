@@ -5,6 +5,7 @@ from django.db import models
 from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 """
 This class defines the name of category and parent category of product 

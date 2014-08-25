@@ -6,6 +6,8 @@ from librehatti.catalog.forms import AddCategory,TransportForm1,TransportForm2
 from librehatti.catalog.models import Transport
 from django.db.models import Sum
 from librehatti.prints.helper import num2eng
+from librehatti.catalog.forms import ItemSelectForm
+import simplejson
 
 def index(request):
     """
@@ -90,5 +92,28 @@ def transport_bill(request):
                          
     else:
         form = TransportForm1()
-    return render(request, 'bills/form.html', {'TransportForm':form})         
+    return render(request, 'bills/form.html', {'TransportForm':form}) 
+
+"""
+This view allows filtering of sub category according to parent category of 
+item.
+"""
+def select_sub_category(request):
+    parent_category = request.GET['cat_id']
+    sub_categories = Category.objects.filter(parent=parent_category)
+    sub_category_dict = {}
+    for sub_category in sub_categories:
+        sub_category_dict[sub_category.id] = sub_category.name
+    return HttpResponse(simplejson.dumps(sub_category_dict))
+
+"""
+This view allows filtering of item according to sub category of item.
+"""
+def select_item(request):
+    cat_id = request.GET['cat_id']
+    products = Product.objects.filter(category = cat_id)
+    product_dict = {}
+    for product in products:
+        product_dict[product.id] = product.name
+    return HttpResponse(simplejson.dumps(product_dict))     
   
