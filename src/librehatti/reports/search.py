@@ -32,9 +32,8 @@ class SearchResult(View):
             'phone':'purchase_order__buyer__customer__telephone',
             'joining date':'purchase_order__buyer__customer__date_joined',
             'company':'purchase_order__buyer__customer__company',
-            'discount':'purchase_order__total_discount',
-            'debit':'purchase_order__is_debit', 
-            'mode of payment':'purchase_order__mode_of_payment__method',
+            'discount':'total_discount','debit':'is_debit', 
+            'mode of payment':'mode_of_payment__method'
         }
 
 
@@ -51,7 +50,7 @@ class SearchResult(View):
             for field in self.fields_list:
                 temporary.append(data[field])
             generated_data_list.append(temporary)
-
+        
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,'records':self.results,
@@ -90,11 +89,11 @@ class SearchResult(View):
                                 self.temp.append(temp_result)
                         self.results.append(self.temp)
             except:
-                self.found_entries = PurchasedItem.objects.filter(self.entry_query)
+                self.found_entries = PurchaseOrder.objects.filter(self.entry_query)
                 for entries in self.found_entries:
                     self.temp = []
                     for value in self.fields_list:
-                        self.obj = PurchasedItem.objects.filter(id=entries.id).values(value).filter(purchase_order__id=self.title)
+                        self.obj = PurchaseOrder.objects.filter(id=entries.id).values(value).filter(id=self.title)
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
                     self.results.append(self.temp)
@@ -116,6 +115,11 @@ class SearchResult(View):
             self.selected_fields_client.append('city')
             self.selected_fields_order.append('debit')
             self.selected_fields_order.append('mode of payment')
+            self.list_dict = {'name':'buyer__username', 
+                'city':'buyer__customer__address__city',
+                'discount':'total_discount','debit':'is_debit', 
+                'mode of payment':'mode_of_payment__method'
+            }
 
         return self.convert_values(request)
 
@@ -124,10 +128,12 @@ class SearchResult(View):
         """
         Fetching values from database.
         """
-
-        self.details = PurchasedItem.objects.values(*self.fields_list).\
-            filter(purchase_order__is_active = 1)
-
+        if 'Client' in request.GET:
+            self.details = PurchasedItem.objects.values(*self.fields_list).\
+                filter(purchase_order__is_active = 1)
+        else:
+            self.details = PurchaseOrder.objects.values(*self.fields_list).\
+                filter(is_active = 1)
         return self.apply_filter(request)
 
 
@@ -147,8 +153,7 @@ class SearchResult(View):
         if 'Client' in request.GET:
             self.fields_list.append('purchase_order__buyer__id')	
         else: 
-            self.fields_list.append('purchase_order__id')
-	
+            self.fields_list.append('id')           
         return self.fetch_values(request)
 
 
@@ -160,7 +165,7 @@ class SearchResult(View):
         
         self.title = request.GET['search']
         self.selected_fields_client = request.GET.getlist('client_fields')
-        self.selected_fields_order = request.GET.getlist('order')
+        self.selected_fields_order = request.GET.getlist('order')        
         self.result_fields.append(self.selected_fields_client)
         self.result_fields.append(self.selected_fields_order)
 
