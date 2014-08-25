@@ -53,6 +53,12 @@ Run following commands in terminal
 Run following commands in terminal
 
     $ sudo pip install docutils
+    
+8) simplejson
+
+Run following commands in terminal
+
+    $ sudo pip install simplejson
 
 Steps for Installation of LibreHatti.
 
