@@ -1,10 +1,13 @@
 //Filtering choices for selecting items to be purchased
 
 $(document).ready(function(){
-
+    $('.sub_category').attr('disabled', 'disabled');
+    $('.item').attr('disabled', 'disabled');
+    
     $('.parent_category').change(function(){
         sub_category_id = this.id.split("-")[1]
-        $('#id_purchaseditem_set-' + sub_category_id +'-sub_category').empty();
+             $('#id_purchaseditem_set-' + sub_category_id +'-sub_category').empty();
+        $('#id_purchaseditem_set-' + sub_category_id +'-sub_category').removeAttr('disabled');
         parent_category_id = $(this).val();
         request_url = '/catalog/select_sub_category/?cat_id=' + parent_category_id ;
         $.ajax({
@@ -21,6 +24,7 @@ $(document).ready(function(){
     $('.sub_category').change(function(){
         item_id = this.id.split("-")[1]
             $('#id_purchaseditem_set-'+ item_id + '-item').empty();
+        $('#id_purchaseditem_set-'+ item_id + '-item').removeAttr('disabled');
         sub_category_id = $(this).val();
         request_url = '/catalog/select_item/?cat_id=' + sub_category_id ;
         $.ajax({
