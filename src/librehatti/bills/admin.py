@@ -13,7 +13,7 @@ class QuotedItemInline(admin.StackedInline):
 
 class QuotedOrderAdmin(admin.ModelAdmin):
     exclude=('is_active',)
-    list_display = ['id','quote_buyer','quote_delivery_address',
+    list_display = ['id','quote_buyer_id','quote_delivery_address',
                     'quote_date_time','is_active']
     inlines = [QuotedItemInline]
     model = QuotedOrder
