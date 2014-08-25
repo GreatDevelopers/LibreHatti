@@ -24,7 +24,10 @@ def add_distance(request):
     prefix = "&Order=Order+Search"
     url = suffix + str(purchase_order_id) + prefix
     for id in range(0,10):
-        items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
+        try:
+            items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
+        except:
+            pass
   
     for item in items:
         if item:
