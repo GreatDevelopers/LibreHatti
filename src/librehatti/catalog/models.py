@@ -13,6 +13,10 @@ This class defines the name of category and parent category of product
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __unicode__(self):
         return unicode(self.name)
 
@@ -35,6 +39,10 @@ class Attributes(models.Model):
     name = models.CharField(max_length=200)
     is_number = models.BooleanField(default = True)
     is_string = models.BooleanField(default = False)
+
+    class Meta:
+        verbose_name_plural = "Attributes"
+
     def __unicode__(self):
         return self.name
 
@@ -44,6 +52,10 @@ total discount and payment of job, and mode of payment
 """
 class ModeOfPayment(models.Model):
     method = models.CharField(max_length=25)
+
+    class Meta:
+        verbose_name_plural = "Modes of payment"
+
     def __unicode__(self):
         return self.method
 
@@ -122,6 +134,10 @@ class Transport(models.Model):
     rate = models.FloatField(default=10.0)  
     Date = models.DateField(blank=True)
     total = models.IntegerField()
+
+    class Meta:
+        verbose_name_plural = "Transport"
+
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
 

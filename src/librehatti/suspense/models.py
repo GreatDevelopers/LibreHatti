@@ -39,6 +39,10 @@ class Staff(models.Model):
     position = models.CharField(max_length=100)
     #lab = models.ForeignKey(Lab)
     email =models.EmailField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Staff"
+
     def __unicode__(self):
         return self.name
 
