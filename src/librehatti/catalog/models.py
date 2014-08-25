@@ -5,6 +5,7 @@ from django.db import models
 from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 """
 This class defines the name of category and parent category of product 
@@ -106,8 +107,16 @@ class taxesapplied(models.Model):
     tax = models.IntegerField()
 
 
-class Transport(models.Model):
+class Vehicle(models.Model):
     vehicle_id = models.CharField(max_length=20)
+    vehicle_no = models.CharField(max_length=20)
+    vehicle_name = models.CharField(max_length=20)
+    def __unicode__(self):
+        return '%s' % (self.vehicle_name)
+
+
+class Transport(models.Model):
+    vehicle_id = models.ForeignKey(Vehicle)
     job_id = models.IntegerField()
     kilometer = models.FloatField()
     rate = models.FloatField(default=10.0)  
@@ -115,6 +124,7 @@ class Transport(models.Model):
     total = models.IntegerField()
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
+
 """
 This class defines the grand total of the purchase order
 """
@@ -124,4 +134,3 @@ class bill(models.Model):
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
-

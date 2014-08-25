@@ -7,6 +7,7 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
+from librehatti.catalog.forms import ItemSelectForm
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
@@ -18,6 +19,7 @@ admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
+admin.site.register(Transport)
 
 """
 This class is used to see logs in a detailed format. It is far much better than
@@ -54,8 +56,9 @@ class ProductAdmin(admin.ModelAdmin):
 This class is used to add, edit or delete the details of item purchased 
 """
 class PurchasedItemInline(admin.StackedInline):
+    form = ItemSelectForm
     model = PurchasedItem
-    fields = ['item', 'qty', ]
+    fields = ['parent_category', 'sub_category', 'item', 'qty', ]
     extra = 10
 
 """
