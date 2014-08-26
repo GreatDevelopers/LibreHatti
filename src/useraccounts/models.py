@@ -21,6 +21,10 @@ class Address(models.Model):
     pin = models.CharField(max_length=10)
     province = models.CharField(max_length=100)
     nationality = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Addresses"
+
     def __unicode__(self):
         return self.street_address + ',' + self.city
 
@@ -45,6 +49,10 @@ organisation and its type
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
     organisation_type = models.ForeignKey(OrganisationType)
+
+    class Meta:
+        verbose_name_plural = "Admin Organisations"
+
     def __unicode__(self):
         return self.title
 
