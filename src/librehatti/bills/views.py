@@ -26,18 +26,26 @@ def final(request,name):
             cd = form.cleaned_data
             qty1 = request.POST ['quote_qty']
             item1 = request.POST ['quote_item']
-            total_cost = PurchasedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('price')).get('price__sum', 0.00)
-            return render(request, 'bills/confirm.html', {'total_cost' : total_cost, 'form':form })
+            total_cost = PurchasedItem.objects.filter(quote_order_id=  
+                         int(client_id)).aggregate(Sum('quote_price')).get('price__sum',
+                         0.00)
+            return render(request,'bills/confirm_bill.html',
+                         {'total_cost':total_cost, 'form':form })
         else:
     
              client_id = 1
              quoted_order = QuotedOrder.objects.get(pk=int(client_id))
-             quoted_item = QuotedItem.objects.filter().values('quote_item__name', 'quote_qty', 'quote_price')
+             quoted_item = QuotedItem.objects.filter().values('quote_item__name',
+                           'quote_qty', 'quote_price')
              
-             total_cost = QuotedItem.objects.filter(quote_order_id=int(client_id)).aggregate(Sum('quote_price')).get('price__sum', 0.00)
+             total_cost = QuotedItem.objects.filter(quote_order_id=
+                          int(client_id)).aggregate(Sum('quote_price')).get('price__sum', 
+                          0.00)
              i_d = quoted_order.quote_buyer_id_id
-             return render(request, 'bills/confirm.html', {'quoted_order' : quoted_order, 
-                 'quoted_item' : quoted_item, 'total_cost' : total_cost, 'id' : i_d,'form':form})
+             return render(request, 'bills/confirm_bill.html', 
+                          {'quoted_order' : quoted_order, 
+                          'quoted_item' : quoted_item, 'total_cost' : total_cost, 
+                          'id' : i_d,'form':form})
       
 def proforma(request):
     """
@@ -64,7 +72,7 @@ def gen_proforma(request, client_id):
                 	
     total = QuotedItem.objects.filter(quote_order_id=client_id).aggregate(Sum(
             'quote_price')).get('quote_price__sum', 0.00)
-    return render(request, 'bills/p_bill.html',{ 'quoted_order':quoted_order,
+    return render(request, 'bills/proforma_bill.html',{ 'quoted_order':quoted_order,
                  'quoted_item' : quoted_item, 'total_cost': total })	 
   
 
