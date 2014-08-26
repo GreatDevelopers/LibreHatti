@@ -12,28 +12,37 @@
         </style>
     </head>
     <body>
-        {% for a in order_id %}
-        {{a}}
-        {% endfor %}
+	
+       
         <h1>{{ title }}</h1>
-        <table>
-            <tr>
-            {% for field in result_fields %}
-                {% for value in field %}
-                    <th>{{value}}</th>
+         <table>
+            
+            <tr> 
+		<th>S.No.</th>
+                {% for field in client %}
+                <th>{{field}}</th>
                 {% endfor %}
-                    {% if order_id %}
+
+                {% for field in order %}
+                <th>{{field}}</th>
+                {% endfor %}
+		{% if order_id %}
                         <th>Options</th>
                     {% endif %}
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for result in results %}
+             <tr>
+		
+                {% for result in records %}
+                {% if result %}		
+		<td>{{forloop.counter}}</td>{% endif %}
                     {% for value in result %}
+		    
                     <td>
                         {% for item in value.items %}
-                            {% if item.0 == 'purchase_order__id' %}
-                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>  
+                            {% if order and item.0 == 'id' %}
+                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a>
+  			    {% elif client and item.0 == 'purchase_order__buyer__id' %}
+                                <a href = '/history/?user_id={{item.1}}'>View History</a>
+	
                             {% else %}
                                 {{item.1}}
                             {% endif %}
@@ -43,7 +52,6 @@
              </tr>
              {%endfor%}
         </table>    
-
         {% if error %}
             <h3 class="else"> Please select atleast one field </h3>
         {% endif %}

@@ -35,9 +35,10 @@
     <div align='left'>Recieved a sum of Rs {{total}}/- </div> <br>
     <div align='left'>Vide Cash,from :Swami Ganga Nand Ji Bhuriwala Memorial 
         Trust,(Regd),Dham Talwandi,,Dist Ludhiana </div> 
-    <div align='left'>Vide bill no :{{bill_no}} Dated:{{dated}} </div> 
-    <div align='left'>On account of:{{}} Vide Receipt No:{{}} </div> <br>
-    <div align='left'>Nature of Consultancy:{{}} </div> <br>
+    <div align='left'>Vide bill no :{{bill_no}} Dated:{{test_date}} </div> 
+    <div align='left'>On account of:{{acc_no}} Vide Receipt No:{{reciept_no}} 
+    </div> <br>
+    <div align='left'>Nature of Consultancy:{{nature}} </div> <br>
     <br>
     <style>
             <style>
@@ -80,13 +81,13 @@
     
                 <tr>
                     <td rowspan=9><br><br><br>CREDITS<br><br></td>  
-                    <td>COLLEGE INCOME 15%</td>
-                    <td rowspan=9><br><br>2014-07-10<br><br><br></td>
+                    <td>COLLEGE INCOME (15%)</td>
+                    <td rowspan=9><br><br>{{test_date}}<br><br><br></td>
                     <td>{{20}}</td>
                 </tr>
     
                 <tr>
-                    <td>ADMN. CHARGES 5%</td> 
+                    <td>ADMN. CHARGES (5%)</td> 
                     <td>{{34}}</td>
                 </tr>
     
@@ -102,27 +103,27 @@
     
                 <tr>
                     <td>WORK CHARGES</td>
-                    <td>{{45}}</td>
+                    <td>{{work_charge}}</td>
                 </tr>
     
                 <tr>
                     <td>T.A./D.A. OF STAFF</td>
-                    <td>{{78}}</td>
+                    <td>{{amnt}}</td>
                 </tr>
     
                 <tr>
                     <td>OTHER CHARGES</td>
-                    <td>{{76}}</td>
+                    <td>{{testing}}</td>
                 </tr>
     
                 <tr>
                     <td>BORING CHARGES(internal)</td>
-                    <td>{{00}}</td>
+                    <td>{{boring_int}}</td>
                 </tr>
 
                 <tr>
                     <td>TOTAL</td>
-                    <td>{{34}}</td>
+                    <td>{{ total }}</td>
                 </tr>
 
             </table>
@@ -149,8 +150,8 @@
                     <th>Lab Testing Staff </th>
                 </tr>
                 <tr>
-                    <td>{{1,2}}</td>
-                    <td>{{3,4}}</td>
+                    <td>{{1}}</td>
+                    <td>{{3}}</td>
                 </tr>
             </table> 
         </div>
@@ -163,8 +164,7 @@
         <br>
         <br>
         <div align='right'>    DEAN TESTING AND CONSULTANCY </div> <br>
-        <div align='left'> Account Clerk (Consultancy) &nbsp &nbsp &nbsp &nbsp 
-            &nbsp &nbsp &nbsp &nbsp Supt.Accounts </div> <br>
+        <div align='left'> Account Clerk (Consultancy)  Supt.Accounts </div> <br>
         <br>
         <div class ="t3">
             <table border="1">
