@@ -15,14 +15,11 @@ class AddCategory(forms.Form):
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
 
 
-class TransportForm1(forms.Form):
-    vehicle_id = forms.CharField(max_length=20)
-    job_id = forms.IntegerField()
-    kilometer = forms.IntegerField()
-    rate = forms.IntegerField(initial=10)  
-    date = forms.DateField()
+class TransportFormA(forms.ModelForm):
+    class Meta:
+        model = Transport
+        exclude = ['total']
 
-
-class TransportForm2(forms.Form):    
+class TransportFormB(forms.Form):    
     kilometer = forms.IntegerField()
     date = forms.DateField()  
