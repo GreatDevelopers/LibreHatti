@@ -12,7 +12,7 @@ from librehatti.catalog.actions import mark_cancel
 
 admin.autodiscover()
 admin.site.register(Category)
-admin.site.register(Attributes)
+admin.site.register(Attribute)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)

@@ -12,6 +12,9 @@ This class defines the name of category and parent category of product
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
+class Meta:
+    verbose_name = "Category"
+    verbose_name_plural = "Categories"
     def __unicode__(self):
         return unicode(self.name)
 
@@ -30,7 +33,7 @@ class Product(models.Model):
 """
 This class defines the features of product
 """
-class Attributes(models.Model):
+class Attribute(models.Model):
     name = models.CharField(max_length=200)
     is_number = models.BooleanField(default = True)
     is_string = models.BooleanField(default = False)
@@ -78,7 +81,7 @@ class PurchasedItem(models.Model):
 This class defines the features, value of product
 """
 class Catalog(models.Model):
-    attribute = models.ForeignKey(Attributes)
+    attribute = models.ForeignKey(Attribute)
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product)
     def __unicode__(self):
