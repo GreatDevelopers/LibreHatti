@@ -15,7 +15,7 @@ from django.contrib.admin.models import LogEntry
 
 admin.autodiscover()
 admin.site.register(Category)
-admin.site.register(Attributes)
+admin.site.register(Attribute)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
