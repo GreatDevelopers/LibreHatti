@@ -1,0 +1,26 @@
+<html>
+
+    <head>
+        <style type="text/css">
+            span.s1{margin-left: 9%;}
+            span.s2{margin-left: 8%;}
+    	    span.s3{margin-left: 10%;}
+    	    span.sm{margin-left: 4%;}
+        </style>
+        <title>Transport</title>
+        <script src="addAnother.js" language="Javascript" type="text/javascript"></script>
+    </head>
+    
+    <body>
+        <form method="POST">{% csrf_token %}
+            {{TransportFormA.as_p}}
+            <!-- <a href="javascript:void(0)"><input type="submit" value="Add Another" name='button2' /></a>-->
+            <div id="dynamicInput">
+                {{TransportFormB.as_p}}
+            </div>
+            <input type="submit" value="Generate Bill" name="button1" />
+            <a href="javascript:void(0)"><input type="submit" value="Add Another" name="button2" onClick="addInput('dynamicInput');"></a>
+        </form>      
+    </body>
+
+</html>

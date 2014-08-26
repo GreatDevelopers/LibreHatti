@@ -111,7 +111,7 @@ class Vehicle(models.Model):
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
     def __unicode__(self):
-        return '%s' % (self.vehicle_name)
+        return '%s' % (self.vehicle_id)
 
 
 class Transport(models.Model):
@@ -133,3 +133,4 @@ class bill(models.Model):
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
+

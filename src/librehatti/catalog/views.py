@@ -48,47 +48,39 @@ def add_categories(request):
 
 
 def transport(request):
-    form = TransportForm1()
-    temp = {'TransportForm':form}
-    return render (request, 'bills/form.html',temp)
+    form = TransportFormA()
+    form1 = TransportFormB()
+    temp = {'TransportFormA':form, 'TransportFormB':form1}
+    return render (request, 'catalog/form.html',temp)
 
 
 def transport_bill(request):
     if request.method == 'POST':
-        form = TransportForm1(request.POST)
+        form = TransportFormA(request.POST)
         if form.is_valid():
-           
-            if 'button1' in request.POST:
-                    vehicle_id = request.POST['vehicle_id']
-                    job_id = request.POST['job_id']
-                    kilometer = float(request.POST['kilometer'])          
-                    date = request.POST['date']
-                    rate = float(request.POST['rate'])
-                    total = rate*kilometer
-                    obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
+            cd = form.cleaned_data
+            vehicle_id = cd['vehicle_id']
+            job_id = cd['job_id']
+            kilometer = float(cd['kilometer'])
+            date = request.POST['Date']
+            rate = float(cd['rate'])
+            total = rate * kilometer
+            obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
-                    obj.save()
-                    temp = Transport.objects.filter(job_id=obj.job_id)
-                    total_amount = Transport.objects.filter(job_id=obj.job_id
+            obj.save()
+            if 'button1' in request.POST:
+                temp = Transport.objects.filter(job_id=obj.job_id)
+                total_amount = Transport.objects.filter(job_id=obj.job_id
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
-                    return render(request,'bills/transport_bill.html', 
+                return render(request,'catalog/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
                             'total_amount' : total_amount}) 
 
             else:
-                    vehicle_id = request.POST['vehicle_id']
-                    job_id = request.POST['job_id']
-                    kilometer = float(request.POST['kilometer'])
-                    date = request.POST['date']
-                    rate = float(request.POST['rate'])
-                    total = rate * kilometer
-                    obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
-                                    kilometer=kilometer, Date=date, rate=rate, 
-                                    total=total) 
-                    obj.save()
+                form = TransportFormB(request.POST)
                          
     else:
-        form = TransportForm1()
-    return render(request, 'bills/form.html', {'TransportForm':form})         
+        form = TransportFormA()
+    return render(request, 'catalog/form.html', {'TransportForm':form})         
   
