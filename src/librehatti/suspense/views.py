@@ -4,6 +4,8 @@ from models import SuspenseClearance
 from models import TaDa
 from django.http import  HttpResponseRedirect, HttpResponse
 from librehatti.catalog.models import Product
+from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import PurchasedItem
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.forms import Clearance_form
@@ -20,8 +22,14 @@ def add_distance(request):
     purchase_order_id = request.session.get('purchase_order_id')
     items = []
     suspense = 0
+    suffix = "/search_result/?search="
+    prefix = "&Order=Order+Search"
+    url = suffix + str(purchase_order_id) + prefix
     for id in range(0,10):
-        items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
+        try:
+            items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
+        except:
+            pass
   
     for item in items:
         if item:
@@ -39,13 +47,13 @@ def add_distance(request):
             form = SuspenseForm(request.POST)
             if form.is_valid:
                 form.save()
-                return HttpResponseRedirect('/admin/catalog/purchaseorder/')
+                return HttpResponseRedirect(url)
         else:
             form = SuspenseForm(initial = {'purchase_order':purchase_order_id,
               'distance':0}) 
             return render(request,'suspense/form.html',{'form':form,'test':'test'})
     else:
-        return HttpResponseRedirect('/admin/catalog/purchaseorder/')
+        return HttpResponseRedirect(url)
 
 def clearance_search(request):
     form = TaDaSearch
@@ -166,11 +174,12 @@ def tada_result(request):
        for person in staff:
          total_cost= total_cost + int(tada_amount)
        rupees_in_words = num2eng(total_cost)
+       purchase_order = PurchaseOrder.objects.all()
        obj1 = TaDa.objects.filter(id=j).values('departure_time_from_tcc' ,
               'arrival_time_at_site','departure_time_from_site',
               'arrival_time_at_tcc', 'tada_amount','start_test_date',
               'end_test_date','source_site', 'testing_site','testing_staff')
        return render(request, 'suspense/tada_result.html', { 'obj':obj1, 
        'total_cost':total_cost, 'staff':staff, 'rupees_in_words':
-       rupees_in_words })
+       rupees_in_words,'purchase_order':purchase_order})
 

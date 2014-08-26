@@ -29,14 +29,14 @@
                 </style>
 </head>
 <body>
-    <h1>{{purchased_order.organisation.organisation_type}}</h1>
-    <h1 class='a'>{{purchased_order.organisation.tagline}}</h1>       
-    <h1 class='b'>{{purchased_order.organisation.title}}</h1>  
+    <h1>{{purchase_order.organisation.organisation_type}}</h1>
+    <h1 class='a'>{{purchase_order.organisation.tagline}}</h1>       
+    <h1 class='b'>{{purchase_order.organisation.title}}</h1>  
     <p class ='c'>{{purchased_order.organisation.address}}</p> 
-    <p class='d'><i>Website :</i> {{purchased_order.organisation.url}}
-    <i>Email:</i>{{purchased_order.organisation.email1}}
-    <i>Ph :</i>{{purchased_order.organisation.telephone}} 
-    <i>Fax :</i> {{purchased_order.organisation.fax}}</p>
+    <p class='d'><i>Website :</i> {{purchase_order.organisation.url}}
+    <i>Email:</i>{{purchase_order.organisation.email1}}
+    <i>Ph :</i>{{purchase_order.organisation.telephone}} 
+    <i>Fax :</i> {{purchase_order.organisation.fax}}</p>
 
     <h2 class='e'>Bill</h2></br>
     <p class='f'>STC No. {{ STC_NO }}</P>
@@ -45,7 +45,7 @@
     <p> To, </p>
     <p>{{purchase_order.delivery_address}} </p>
     <p>Organisation:{{purchase_order.organisation.title}}</p>
-    <p>Buyer Id: {{purchase_order.buyer_id}}</p>
+    <p>Buyer Id: {{purchase_order.buyer}}</p>
     <p>Ref: Your Letter No. {{ L_No}},  
     <p class='h'>dated : {{ purchase_order.date_time|date:"F, j, Y"}} , respectively.</p>
     <p>Site: </p>

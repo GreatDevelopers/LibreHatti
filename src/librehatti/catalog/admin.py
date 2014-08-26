@@ -7,8 +7,9 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
+from librehatti.catalog.forms import ItemSelectForm
 
-from librehatti.catalog.actions import mark_cancel
+from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.contrib.admin.models import LogEntry
 
@@ -18,6 +19,7 @@ admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
+admin.site.register(Transport)
 
 """
 This class is used to see logs in a detailed format. It is far much better than
@@ -54,8 +56,9 @@ class ProductAdmin(admin.ModelAdmin):
 This class is used to add, edit or delete the details of item purchased 
 """
 class PurchasedItemInline(admin.StackedInline):
+    form = ItemSelectForm
     model = PurchasedItem
-    fields = ['item', 'qty', ]
+    fields = ['parent_category', 'sub_category', 'item', 'qty', ]
     extra = 10
 
 """
@@ -65,11 +68,11 @@ inherits the fields of PurchaseOrder derscribing the delivery address of
 buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(admin.ModelAdmin):
-    exclude=('is_canceled',)
-    list_display = ['id','buyer','delivery_address','date_time','is_canceled']
+    exclude=('is_active',)
+    list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
-    actions = [mark_cancel]
+    actions = [mark_active, mark_inactive] 
     list_filter = ['date_time']
     search_fields = ['id']
     list_per_page = 20 
