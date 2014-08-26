@@ -58,7 +58,7 @@ class PurchaseOrder(models.Model):
     mode_of_payment = models.ForeignKey(ModeOfPayment)
     is_active = models.BooleanField(default = True)
     def __unicode__(self):
-        return '%s' % (self.id)
+    	return '%s' % (self.id)
                
 
 class PurchasedItem(models.Model):
@@ -96,7 +96,7 @@ class Surcharge(models.Model):
     tax_valid_till = models.DateField()
     Remark = models.CharField(max_length=1000)
     def __unicode__(self):
-         return self.tax_name
+        return self.tax_name
 
 """
 This class defines the taxes applied on the purchase order
