@@ -9,25 +9,17 @@
                      h1.a{text-align:center;font-size: 14px;}
                      h1.b{text-align:center;font-size: 24px;}
                      p.c{text-align: center;}
-                     p.d{text-align: center;}
-                     h2.e{text-align: center;font-size:175%;padding-top:18px;}
-                     p.f{padding-top:15px;font-size:100%;}
-                     p.g{position:absolute;top:350px;left:0px;}
-                     p.h{position:absolute;top:350px;right:0px;}
-                     p.i{position:absolute;right:30px;top:1050px;}
-                     p.j{position:absolute;top:1050px;}
-                     p.k{position:absolute;right:30px;top:1100px;}
-                    table, th, td{
-                        padding-top:0px;
-                        border: 1px solid black;
-                        width : 100%;
-                    }
-                    th,td{
-                        padding:3px;border-style:inset;
-                    }
-                    table{
-                        table-layout:fixed;
-                    }
+                     h2.d{text-align: center;font-size:175%;padding-top:18px;}
+                     p.e{padding-top:15px;font-size:100%;}
+                     p.f{position:absolute;top:350px;left:0px;}
+                     p.g{position:absolute;top:350px;right:0px;}
+                     p.h{position:absolute;right:30px;top:1050px;}
+                     p.i{position:absolute;top:1050px;}
+                     p.j{position:absolute;right:30px;top:1150px;}
+                     table, th, td{margin-top:80px;
+                                   border: 1px solid black;width : 80%;}
+                     th,td{padding:3px;border-style:inset;}
+                     table{table-layout:fixed;margin-left:10%}
                 </style>
 
 </head>  
@@ -36,24 +28,26 @@
     <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
     <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
     <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
-    <p class='d'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
+    <p class='c'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
     <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
     <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
     <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
 
-    <h2 class='e'>Confirmation Bill</h2>
-    <p class='f'>STC No. {{ STC_NO }}</br>
-    PAN No. {{ PAN_No. }</p>
-    <p class='g'>No. : GNDEC/TCC/B/{{ job_no }}</p>
-    <p class='h'>Dated : {{quoted_order.date_time}}</p>
+
+    <h2 class='d'>Confirmation Bill</h2>
+    <p class='e'>STC No. AAATN1978LSD001</br>
+    PAN No.  AAATN1978L</p>
+    <p class='f'>No. : GNDEC/TCC/B/{{ quoted_order.quote_buyer_id}}</p>
+    <p class='g'>Dated : {{quoted_order.quote_date_time}}</p>
     <br><br>
 
+
     <p> To,</p>
-    <p>{{quote_delivery_address}}</p>
-    <p>Organisation:{{quote_organisation}}</p>
-    <p>Buyer Id : {{ purchased_order.buyer_id.username }}</p>
-    <p>Ref: Your Letter No.{{L_No.}},</p> 
-    <p>dated:{{quoted_order.date_time}} , respectively.
+    <p>{{quoted_order.quote_delivery_address.address}}</p>
+    <p>Organisation:{{quoted_order.quote_organisation.organisation_type}}</p>
+    <p>Buyer Id : {{ quoted_order.quote_buyer_id.username }}</p>
+    <p>Ref: Your Letter No.1,</p> 
+    <p>dated:{{quoted_order.quote_date_time}} , respectively.
     </p>
 
 <table>
@@ -66,16 +60,17 @@
       <th>Total</th>
     </tr>
     {% if quoted_item %}
-    {% for p in quoted_item %}
+    {% for final_item in quoted_item %}
     <tr> 
       <td>{{ forloop.counter }}</td>
-      <td>{{ p.quote_item__name}}</td>
-      <td>{{ p.quote_qty }}</td>
-      <td>{{ p.quote_price  }}</td> 
-      <td>{{ p.total }}</td>
+      <td>{{ final_item.quote_item__name}}</td>
+      <td>{{ final_item.quote_qty }}</td>
+      <td>{{ final_item.quote_item__price_per_unit  }}</td> 
+      <td>{{ final_item.quote_price }}</td>
     </tr>
     {% endfor %}
     {% endif %}
+
     <tr>
       <td><b>Total</b></td>
       <td colspan="3"></td>
@@ -88,17 +83,21 @@
       <td colspan="3"></td>
       <td align="right">{{bill.trans_total}}</td>
     </tr>
+
     <tr>
       <td>Total Amount</td>
       <td colspan="3"></td>
       <td align="right">{{bill.trans_net_total}}</td>
     </tr>
     {% endif %}
+    
+    {% for tax, tax_list in tax_data %}
     <tr>
-      <td>Service Tax  @ {{ servicetaxprint }}%</td>
+      <td>{{tax.taxes}}@{{tax.value}}%%</td>
       <td colspan="3"></td>
-      <td align="right">{{ bill.service_tax }}</td>
+      <td align="right">{{ tax_list }}</td>
     </tr>
+    {% endfor %}
     <tr>
       <td>Education Cess  @ {{ educationtaxprint }}%</td>
       <td colspan="3"></td>
@@ -107,13 +106,13 @@
     <tr>
       <td><b>G.Total (Rupees {{ net_total_eng }} only)</b></td>
       <td colspan="3"></td>
-      <td  align="right"><b>{{ cdftotal }} {{ bill.net_total}}</b></td>
+      <td  align="right"><b>{{ grand_total}}</b></td>
     </tr>   
 </table>
 
     <!--Dean is liable to change-->
-    <p class='i'> Dean Training And Consultancy Cell</p>
-    <p class='j'>I/We here by agree to the terms & conditions as mentioned above</p>
-    <p class='k'>(Signature of Client/Deptt. Representative)</p>
+    <p class='h'> Dean Training And Consultancy Cell</p>
+    <p class='i'>I/We here by agree to the terms & conditions as mentioned above</p>
+    <p class='j'>(Signature of Client/Deptt. Representative)</p>
 </body>
 </html>
