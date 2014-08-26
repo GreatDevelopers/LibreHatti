@@ -1,0 +1,49 @@
+{% block content %}
+<head>
+{% block js %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js">
+</script>
+{% endblock js %}
+<link rel="stylesheet" type="text/css" 
+href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/base/jquery-ui.css">
+</link>
+</head>
+    <form method="GET" action="/print/lab_report">
+        <b> Select Lab: </b>
+        {{form.as_p}}
+        <p><input type="submit" name="Submit" value="Submit"></p>
+    </form>  
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#id_parent_category').change(function(){
+        $('#id_sub_category').empty();
+        parent_id = $(this).val();
+        request_url = '/print/filter_sub_category/?parent_id=' + parent_id;
+        $.ajax({
+            url: request_url,
+            datatype: 'json',
+            success: function(data){
+                $.each(JSON.parse(data), function(key,value) {
+                    $('#id_sub_category').append('<option value="' + key + '">' + value + '</option>');
+                    });
+            }
+       })             
+    })
+
+    $('#id_start_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    });
+    $('#id_start_date').datepicker( "option", "showAnim", "clip" );
+    $('#id_end_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    });
+    $('#id_end_date').datepicker( "option", "showAnim", "clip" );
+});       
+</script>
+
+{% endblock %}
