@@ -115,7 +115,7 @@ This class defines the taxes applied on the purchase order
 """
 class TaxesApplied(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
-    surcharge = models.IntegerField()
+    surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
 
 
