@@ -8,5 +8,5 @@ class LabReportForm(forms.Form):
     start_date = forms.DateField()
     end_date = forms.DateField()
     parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-    filter(parent_id=2))
+    filter(parent__parent__isnull=True).filter(parent__isnull=False))
     sub_category = forms.ChoiceField()
