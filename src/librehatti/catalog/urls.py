@@ -15,4 +15,5 @@ urlpatterns = patterns('librehatti.catalog.views',
     url(r'^transp/', 'transport_bill'),
     url(r'^select_sub_category/', 'select_sub_category'),
     url(r'^select_item/', 'select_item'), 
+    url(r'^bill_cal/','bill_cal'),
 )

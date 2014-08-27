@@ -37,6 +37,7 @@ class HattiUser(models.Model):
     telephone = models.CharField(max_length=500)
     date_joined  = models.DateTimeField(auto_now_add=True)
     fax = models.CharField(max_length=100)
+    pan_no = models.CharField(max_length=100)
     avatar = models.CharField(max_length=100, null=True, blank=True)
     tagline = models.CharField(max_length=140)
     class Meta:
