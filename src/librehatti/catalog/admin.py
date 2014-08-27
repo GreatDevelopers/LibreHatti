@@ -79,8 +79,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
-        return HttpResponseRedirect('/suspense/add_distance/')
-
+        return HttpResponseRedirect('/catalog/bill_cal/')
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
