@@ -132,7 +132,7 @@ def bill_cal(request):
     for a in S:
         id1 = a['id']
         value = a['value']
-        taxes = (price_total * value)/100   
+        taxes = (price_total * value)/100
         S2 = Surcharge.objects.get(id=id1)
         obj = TaxesApplied(purchase_order = PO, surcharge = S2, tax = taxes)
         obj.save()
