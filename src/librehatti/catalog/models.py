@@ -113,7 +113,7 @@ class Surcharge(models.Model):
 """
 This class defines the taxes applied on the purchase order
 """
-class taxesapplied(models.Model):
+class TaxesApplied(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
@@ -145,7 +145,7 @@ class Transport(models.Model):
 This class defines the grand total of the purchase order
 """
 
-class bill(models.Model):
+class Bill(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
