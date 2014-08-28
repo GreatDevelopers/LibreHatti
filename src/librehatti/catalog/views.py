@@ -119,9 +119,11 @@ def select_item(request):
     return HttpResponse(simplejson.dumps(product_dict))     
 
 
-
+"""
+This view calculate taxes on purchased order, bill data
+and save those values in database.
+"""
 def bill_cal(request):
-
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
