@@ -12,14 +12,13 @@
     </head>
     
     <body>
-        <form method="POST">{% csrf_token %}
+        <form action="/catalog/transp/" method="POST">{% csrf_token %}
             {{TransportFormA.as_p}}
-            <!-- <a href="javascript:void(0)"><input type="submit" value="Add Another" name='button2' /></a>-->
-            <div id="dynamicInput">
+            <!-- <div id="dynamicInput" style="display: none;">
                 {{TransportFormB.as_p}}
-            </div>
+            </div> -->
             <input type="submit" value="Generate Bill" name="button1" />
-            <a href="javascript:void(0)"><input type="submit" value="Add Another" name="button2" onClick="addInput('dynamicInput');"></a>
+            <a href="javascript:;" onclick="document.getElementById('TransportFormA').submit();"><input type="submit" value="Add Another" name="button2" onClick="addInput('dynamicInput');"> </a>
         </form>      
     </body>
 
