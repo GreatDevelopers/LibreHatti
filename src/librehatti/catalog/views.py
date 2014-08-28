@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
+from librehatti.catalog.models import *
 from librehatti.catalog.forms import AddCategory,TransportForm1,TransportForm2
 from librehatti.catalog.models import Transport
 from django.db.models import Sum
@@ -116,4 +117,33 @@ def select_item(request):
     for product in products:
         product_dict[product.id] = product.name
     return HttpResponse(simplejson.dumps(product_dict))     
-  
+
+
+
+def bill_cal(request):
+
+    old_post = request.session.get('old_post')
+    purchase_order_id = request.session.get('purchase_order_id')
+    purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
+    purchase_item = PurchasedItem.objects.\
+    filter(purchase_order=purchase_order_id).aggregate(Sum('price'))
+    price_total = purchase_item['price__sum']
+    surcharge = Surcharge.objects.values('id','value')
+    for value in surcharge:
+        surcharge_id = value['id']
+        surcharge_value = value['value']
+        taxes = (price_total * surcharge_value)/100
+        surcharge_obj = Surcharge.objects.get(id=surcharge_id)
+        taxes_applied = TaxesApplied(purchase_order = purchase_order,
+        surcharge = surcharge_obj, tax = taxes)
+        taxes_applied.save()
+    taxes_applied_obj = TaxesApplied.objects.\
+    filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
+    tax_total = taxes_applied_obj['tax__sum']
+    grand_total = price_total + tax_total
+    bill = Bill(purchase_order = purchase_order, total_cost = price_total,
+    total_tax = tax_total, grand_total = grand_total)
+    bill.save()
+    request.session['old_post'] = old_post
+    request.session['purchase_order_id'] = purchase_order_id
+    return HttpResponseRedirect('/suspense/add_distance/')       
