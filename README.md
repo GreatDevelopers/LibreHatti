@@ -42,17 +42,12 @@ Run following commands in terminal
     
     $ sudo apt-get install python-mysqldb
 
-6) Django 1.7
+6) Python modules
 
 Run following commands in terminal
     
-    $ sudo pip install https://www.djangoproject.com/download/1.7.b4/tarball/
+    $ sudo pip install -r requirements.txt
 
-7) docutils
-
-Run following commands in terminal
-
-    $ sudo pip install docutils
 
 Steps for Installation of LibreHatti.
 

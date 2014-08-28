@@ -7,6 +7,7 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
+from librehatti.catalog.forms import ItemSelectForm
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
@@ -56,8 +57,9 @@ class ProductAdmin(admin.ModelAdmin):
 This class is used to add, edit or delete the details of item purchased 
 """
 class PurchasedItemInline(admin.StackedInline):
+    form = ItemSelectForm
     model = PurchasedItem
-    fields = ['item', 'qty', ]
+    fields = ['parent_category', 'sub_category', 'item', 'qty', ]
     extra = 10
 
 """
@@ -78,7 +80,7 @@ class PurchaseOrderAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
-        return HttpResponseRedirect('/suspense/add_distance/')
+        return HttpResponseRedirect('/catalog/bill_cal/')
 
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)

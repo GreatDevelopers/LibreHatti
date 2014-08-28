@@ -5,6 +5,7 @@ from django.db import models
 from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 """
 This class defines the name of category and parent category of product 
@@ -12,6 +13,10 @@ This class defines the name of category and parent category of product
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __unicode__(self):
         return unicode(self.name)
 
@@ -34,6 +39,10 @@ class Attributes(models.Model):
     name = models.CharField(max_length=200)
     is_number = models.BooleanField(default = True)
     is_string = models.BooleanField(default = False)
+
+    class Meta:
+        verbose_name_plural = "Attributes"
+
     def __unicode__(self):
         return self.name
 
@@ -43,6 +52,10 @@ total discount and payment of job, and mode of payment
 """
 class ModeOfPayment(models.Model):
     method = models.CharField(max_length=25)
+
+    class Meta:
+        verbose_name_plural = "Modes of payment"
+
     def __unicode__(self):
         return self.method
 
@@ -100,7 +113,7 @@ class Surcharge(models.Model):
 """
 This class defines the taxes applied on the purchase order
 """
-class taxesapplied(models.Model):
+class TaxesApplied(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
@@ -121,6 +134,10 @@ class Transport(models.Model):
     rate = models.FloatField(default=10.0)  
     Date = models.DateField(blank=True)
     total = models.IntegerField()
+
+    class Meta:
+        verbose_name_plural = "Transport"
+
     def __unicode__(self):
         return '%s' % (self.vehicle_id)
 
@@ -128,7 +145,7 @@ class Transport(models.Model):
 This class defines the grand total of the purchase order
 """
 
-class bill(models.Model):
+class Bill(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
