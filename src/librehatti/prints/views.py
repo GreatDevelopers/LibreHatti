@@ -7,7 +7,9 @@ from librehatti.catalog.models import *
 from django.db.models import Sum
 import simplejson
 from forms import LabReportForm
-from useraccounts.models import *
+from useraccounts.models import AdminOrganisations
+from useraccounts.models import Customer
+from useraccounts.models import Address
 
 def lab_report(request):
     """
