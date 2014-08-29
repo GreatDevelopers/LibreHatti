@@ -6,7 +6,7 @@ function addInput(divName){
      }
      else {
           var newdiv = document.createElement('div');
-          newdiv.innerHTML = "Add Another " + (counter + 1) + " <br><input type='text' name='kilometer'> <br> <br> <input type='text' name='Date'>";
+          newdiv.innerHTML = "Add Another " + (counter + 1) + " <br><{{TransportFormB.as_p}}>";
           document.getElementById(divName).appendChild(newdiv);
           counter++;
      }
