@@ -7,6 +7,9 @@ from librehatti.catalog.models import *
 from django.db.models import Sum
 import simplejson
 from forms import LabReportForm
+from useraccounts.models import AdminOrganisations
+from useraccounts.models import Customer
+from useraccounts.models import Address
 
 def lab_report(request):
     """
@@ -66,13 +69,33 @@ def bill(request):
     """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.filter(id = id)
-    purchased_item = PurchasedItem.objects.filter(purchase_order_id = id).values(
-    'item__name', 'qty','item__price_per_unit','price') 
-    total = PurchasedItem.objects.filter(purchase_order_id=id).aggregate(Sum(
-    'price')).get('price__sum', 0.00)
+    purchased_item = PurchasedItem.objects.filter(purchase_order_id = id).\
+    values('item__name', 'qty','item__price_per_unit','price')
+    taxes_applied = TaxesApplied.objects.\
+    filter(purchase_order=purchase_order).values('surcharge','tax')
+    surcharge = Surcharge.objects.values('id','tax_name','value')
+    bill = Bill.objects.values('total_cost','grand_total').\
+    get(purchase_order=id)
+    total_cost = bill['total_cost']
+    grand_total = bill['grand_total']
+    purchase_order_obj = PurchaseOrder.\
+    objects.values('buyer','reference','delivery_address','organisation',\
+    'date_time').get(id = id)
+    d_address_id = purchase_order_obj['delivery_address']
+    buyer = purchase_order_obj['buyer']
+    organisation_id = purchase_order_obj['organisation']
+    date = purchase_order_obj['date_time']
+    address = Address.objects.\
+    values('street_address','city','pin','province').get(id = d_address_id)
+    customer_obj = Customer.objects.values('company').get(user = buyer)
+    admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
+    get(id = organisation_id)
     # TODO:
     # Surcharges and Grand Total are not yet there. Data will come
     # from Bills table. Amrit and Aseem are working on it.
-    return render(request, 'prints/bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
-                 '123', 'purchase_order':purchase_order, 'purchased_item' : 
-                 purchased_item, 'total_cost': total})
+    return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
+        'pan_no' : admin_organisations,'ref':purchase_order_obj , 'date':date,\
+        'purchase_order':purchase_order, 'purchased_item': purchased_item,\
+        'total_cost': total_cost ,'grand_cost': grand_total ,\
+        'taxes_applied': taxes_applied ,'surcharge': surcharge,\
+        'buyer': buyer, 'buyer_name': customer_obj, 'site': address})

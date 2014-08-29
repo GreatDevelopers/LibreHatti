@@ -62,6 +62,7 @@ class ModeOfPayment(models.Model):
 class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User)
     is_debit = models.BooleanField(default = False)
+    reference = models.CharField(max_length=200)
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
