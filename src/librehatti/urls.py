@@ -5,8 +5,10 @@ from django.contrib import admin
 
 from reports.register_generator import GenerateRegister
 from reports.search import SearchResult
-admin.autodiscover()
 
+from ajax_select import urls as ajax_select_urls
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'librehatti.catalog.views.index'),
@@ -23,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^history/','librehatti.reports.previous_history.history'),
     url(r'^details/','librehatti.reports.previous_history.details'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/lookups/', include(ajax_select_urls)),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

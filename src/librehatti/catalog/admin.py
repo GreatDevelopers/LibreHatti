@@ -7,11 +7,13 @@ easy as one need to do it through MySQL server.
 from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
-from librehatti.catalog.forms import ItemSelectForm
+from librehatti.catalog.forms import ItemSelectForm, BuyerForm
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.contrib.admin.models import LogEntry
+
+from ajax_select.admin import AjaxSelectAdmin
 
 admin.autodiscover()
 admin.site.register(Category)
@@ -67,7 +69,8 @@ purchased but buyer has not confirmed the items purchased, this class
 inherits the fields of PurchaseOrder derscribing the delivery address of
 buyer , is_debit , total discount , tds and mode of payment
 """
-class PurchaseOrderAdmin(admin.ModelAdmin):
+class PurchaseOrderAdmin(AjaxSelectAdmin):
+    form = BuyerForm
     exclude=('is_active',)
     list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
