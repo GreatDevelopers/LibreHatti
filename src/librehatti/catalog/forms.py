@@ -6,6 +6,7 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 import itertools
+from librehatti.catalog.models import Transport
 
 """
 This form allows user to fill the category name of product

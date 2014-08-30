@@ -3,7 +3,7 @@ from django.shortcuts import render
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import *
-from librehatti.catalog.forms import AddCategory,TransportForm1,TransportForm2
+from librehatti.catalog.forms import AddCategory,TransportFormA,TransportFormB
 from librehatti.catalog.models import Transport
 from django.db.models import Sum
 from librehatti.prints.helper import num2eng
