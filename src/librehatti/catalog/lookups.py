@@ -12,11 +12,11 @@ class BuyerLookup(LookupChannel):
             select_related('customer')
 
     def get_result(self, obj):
-    	self.response_query = str(obj.first_name + ' ' + obj.last_name)
-        return unicode(self.response_query)
+        return unicode(obj.username)
 
     def format_match(self, obj):
         return self.format_item_display(obj)
 
     def format_item_display(self, obj):
+        self.response_query = str(obj.first_name + ' ' + obj.last_name)
         return "%s" % (escape(self.response_query))
