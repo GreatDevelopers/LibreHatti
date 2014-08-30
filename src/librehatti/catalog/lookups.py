@@ -9,7 +9,7 @@ class BuyerLookup(LookupChannel):
     def get_query(self, q, request):
         return User.objects.filter(Q(username__icontains=q)| \
         	Q(first_name__icontains=q) | Q(last_name__icontains=q)).\
-            select_related('customer')
+               filter(~Q(id = 1)).select_related('customer')
 
     def get_result(self, obj):
         return unicode(obj.username)
