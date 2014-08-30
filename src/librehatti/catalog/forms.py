@@ -2,10 +2,15 @@
 Forms of catalog are ..
 """
 from django import forms
+
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
+from librehatti.catalog.models import PurchaseOrder
+
 import itertools
+
+from ajax_select import make_ajax_field
 
 """
 This form allows user to fill the category name of product
@@ -59,3 +64,13 @@ class ItemSelectForm(forms.ModelForm):
          self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
+
+class BuyerForm(forms.ModelForm):
+    buyer = make_ajax_field(PurchaseOrder, 'buyer', 'buyer')
+
+    class Meta:
+        model = PurchaseOrder
+
+    class Media:
+        js = ('js/hide_add_buyer.js',)
+
