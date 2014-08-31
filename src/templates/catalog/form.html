@@ -8,18 +8,35 @@
     	    span.sm{margin-left: 4%;}
         </style>
         <title>Transport</title>
-        <script src="addAnother.js" language="Javascript" type="text/javascript"></script>
+   
     </head>
     
-    <body>
-        <form action="/catalog/transp/" method="POST">{% csrf_token %}
-            {{TransportFormA.as_p}}
-            <!-- <div id="dynamicInput" style="display: none;">
-                {{TransportFormB.as_p}}
-            </div> -->
-            <input type="submit" value="Generate Bill" name="button1" />
-            <a href="javascript:;" onclick="document.getElementById('TransportFormA').submit();"><input type="submit" value="Add Another" name="button2" onClick="addInput('dynamicInput');"> </a>
-        </form>      
+
+    <body class= "transport">
+
+        <form  action="/catalog/transp/" method="POST">{% csrf_token %}
+            <div id="frm">
+                {{TransportFormA.as_p}}
+          
+                <div id="item" class="itm">
+                    {{TransportFormB.as_p}}
+                </div>        
+            </div>
+            <input type="submit" value="Generate Bill" name="button1" > 
+            <a id= "add" ><input type="button" value="Add Another" name="button2"></a>
+         </form>
+            
     </body>
+
+
+    <script type="text/javascript">
+        document.getElementById("add").onclick=function(){ 
+            var i = document.getElementsByClassName("itm");
+            var counter = i.length
+            var j = document.getElementById("item").cloneNode(true);
+            j.id = "item"+counter
+            document.getElementById("frm").appendChild(j);
+        }
+    </script>
 
 </html>
