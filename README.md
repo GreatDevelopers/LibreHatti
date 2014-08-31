@@ -46,7 +46,7 @@ Run following commands in terminal
 
 Run following commands in terminal
     
-    $ sudo pip install requirements.txt
+    $ sudo pip install -r requirements.txt
 
 
 Steps for Installation of LibreHatti.
