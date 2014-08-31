@@ -124,7 +124,7 @@ def transport_bill(request):
         else:
             form = TransportFormA()
             form1 = TransportFormB()
-            temp = {'TransportFormA':form, 'TransportFormB':form1}
+        temp = {'TransportFormA':form}
         return render(request, 'catalog/form.html', temp)
 
 
