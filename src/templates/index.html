@@ -1,6 +1,26 @@
-<h2>URL List</h2>
-
-<a href = '{% url 'librehatti.reports.views.search_form' %}?type=search'>Search</a><br>
-<a href = '{% url 'librehatti.reports.views.search_form' %}?type=register'>Registers</a><br>
-<a href = '{% url 'librehatti.bills.views.proforma' %}'>Proforma</a><br>
-<a href = '{% url 'librehatti.prints.views.show_form' %}'>Lab Report</a><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<div class = "wrapper">
+		<div class="white-board">
+			<div class ="main-box" id="c-panel"> 
+				<header class="primary-branding">
+					<span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span>
+				</header>
+				<ul class="panel-items">
+					<li class="panel-item" id="new-customer"></li>
+					<li class="panel-item" id="new-order"></li>
+					<li class="panel-item" id="search"></li>
+					<li class="panel-item" id="registers"></li>
+					<li class="panel-item" id="lab-report"></li>
+					<li class="panel-item" id="porforma"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
