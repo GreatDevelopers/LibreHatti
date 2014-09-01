@@ -81,7 +81,7 @@ def transport_bill(request):
                     temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
                               ).aggregate(Sum('total')).get('total__sum', 0.00)
-                    return render(request,'bills/transport_bill.html', 
+                    return render(request,'catalog/transport_bill.html', 
                                {'temp' : temp, 'words' : num2eng(total_amount), 
                                 'total_amount' : total_amount, 
                                 'date':datetime.datetime.now()}) 
@@ -112,7 +112,7 @@ def transport_bill(request):
                         total_amount = Transport.objects.filter(
                                        job_id=vehicle.job_id).aggregate(
                                        Sum('total')).get('total__sum', 0.00)
-                        return render(request,'bills/transport_bill.html', 
+                        return render(request,'catalog/transport_bill.html', 
                                {'temp' : temp, 'words' : num2eng(total_amount), 
                                 'total_amount' : total_amount, 
                                 'date':datetime.datetime.now()})
@@ -125,7 +125,7 @@ def transport_bill(request):
 
                 else:
                     form = TransportFormB()
-                    return render(request, 'bills/form.html', {
+                    return render(request, 'catalog/transport.html', {
                            'TransportFormB':form})
 
 
@@ -140,7 +140,7 @@ def transport_bill(request):
         }
     c.update(csrf(request))
     
-    return render_to_response('bills/form.html', c)
+    return render_to_response('catalog/transport.html', c)
 
 
 

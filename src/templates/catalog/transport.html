@@ -74,7 +74,7 @@
         <form  action="/catalog/transport/" method="POST">{% csrf_token %}
             <div id="frm">
                 {{TransportFormA.as_p}}
-                {{ transport_formset.management_form }}
+                
                 {% for form in todo_item_formset.forms %}
                 <div class="item">
                     {{TransportFormB.as_p}}
