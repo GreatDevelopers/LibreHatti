@@ -24,6 +24,15 @@ admin.site.register(ModeOfPayment)
 admin.site.register(Transport)
 
 """
+This action is to create a duplicate record
+"""
+def duplicate_event(modeladmin, request, queryset):
+    for object in queryset:
+        object.id = None
+        object.save()
+duplicate_event.short_description = "Duplicate selected record"
+
+"""
 This class is used to see logs in a detailed format. It is far much better than
 django recent actions widget.
 """
@@ -52,6 +61,7 @@ purchasing or testing
 class ProductAdmin(admin.ModelAdmin):
     fields = ['name', 'category', 'price_per_unit', 'organisation']
     inlines = [CatalogInline]
+    actions = [duplicate_event]
     
 
 """

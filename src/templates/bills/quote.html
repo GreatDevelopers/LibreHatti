@@ -18,14 +18,14 @@
 
 <body>
      {% for quoted_order in QuotedOrder_list %}
-     <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
-     <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
-     <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
-     <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
-     <p class='c'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
-     <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
-     <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
-     <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
+     <h1>{{quoted_order.organisation.organisation_type}}</h1>
+     <h1 class='a'>{{quoted_order.organisation.tagline}}</h1>       
+     <h1 class='b'>{{quoted_order.organisation.title}}</h1>  
+     <p class ='c'>{{quoted_order.organisation.address}}</p> 
+     <p class='c'><i>Website :</i> {{quoted_order.organisation.quote_url}}
+     <i>Email:</i>{{quoted_order.organisation.quote_email1}}
+     <i>Ph :</i>{{quoted_order.organisation.telephone}} 
+     <i>Fax :</i> {{quoted_order.organisation.fax}}</p>
  
      {% endfor %}
 
@@ -38,9 +38,9 @@
         </tr>
         {% for m in QuotedOrder_list %}
         <tr>
-            <td> {{m.quote_buyer_id.username}}</td>
-            <td> {{m.quote_delivery_address}}</td>
-            <td> {{m.quote_buyer_id.customer.telephone}}</td>   
+            <td> {{m.buyer_id.username}}</td>
+            <td> {{m.delivery_address}}</td>
+            <td> {{m.buyer_id.customer.telephone}}</td>   
             <td>
                 <a href="/bills/generateproforma/{{m.id}}" 
                  style="text-decoration:none">

@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 from librehatti import catalog
+from librehatti import bills
 
 class SuspenseOrder(models.Model):
     purchase_order = models.ForeignKey('catalog.PurchaseOrder')
@@ -60,3 +61,11 @@ class TaDa(models.Model):
     testing_staff = models.CharField(max_length=100)
     def __unicode__(self):
        return self.suspense
+
+class QuotedSuspenseOrder(models.Model):
+    quote_order = models.ForeignKey('bills.QuotedOrder')
+    distance = models.IntegerField(default=0)
+    is_cleared = models.BooleanField(default=False)
+    def __unicode__(self):
+        return '%s' % (self.id)
+

@@ -148,4 +148,19 @@ def bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
-    return HttpResponseRedirect('/suspense/add_distance/')       
+    return HttpResponseRedirect('/suspense/add_distance/')
+
+def list_products(request):
+    all_products = Product.objects.all()
+    all_categories=Category.objects.all()
+    products_dict = { }
+    for one_category in all_categories:
+        if one_category.is_leaf_node():
+	    products_list = Product.objects.filter(category=one_category)
+	    attributes_dict = { }
+	    for one_product in products_list:
+	    	attributes_list = Catalog.objects.filter(product = one_product)
+		attributes_dict[one_product] = attributes_list
+            products_dict[one_category.name] = attributes_dict
+    return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
+

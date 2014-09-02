@@ -6,11 +6,12 @@ from django.forms import ModelForm
 import useraccounts
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-
+from mptt.models import MPTTModel, TreeForeignKey
+import mptt.fields
 """
 This class defines the name of category and parent category of product 
 """
-class Category(models.Model):
+class mCategory(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
 
@@ -20,13 +21,23 @@ class Category(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
+class Category(MPTTModel):
+    name = models.CharField(max_length=100)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name="children")
+    
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    def __unicode__(self):
+        return '%s' % self.name
+
 """
 This class defines the name of product, category, price of eact item of 
 that product and the organisation with which user deals
 """
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category)
+    category = mptt.fields.TreeForeignKey(Category, related_name="products")
     price_per_unit = models.IntegerField()
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     def __unicode__(self):

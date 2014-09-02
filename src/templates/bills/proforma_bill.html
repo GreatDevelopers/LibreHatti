@@ -28,27 +28,27 @@
 <body>
 
    <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
-    <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
-    <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
-    <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
-    <p class='c'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
-    <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
-    <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
-    <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
+    <h1 class='a'>{{quoted_order.organisation.tagline}}</h1>       
+    <h1 class='b'>{{quoted_order.organisation.title}}</h1>  
+    <p class ='c'>{{quoted_order.organisation.address}}</p> 
+    <p class='c'><i>Website :</i> {{quoted_order.organisation.quote_url}}
+    <i>Email:</i>{{quoted_order.organisation.quote_email1}}
+    <i>Ph :</i>{{quoted_order.organisation.telephone}} 
+    <i>Fax :</i> {{quoted_order.organisation.fax}}</p>
 
     <h2 class='d'>Proforma Bill</h2>
     <p class='e'>STC No. AAATN1978LSD001</br>
     PAN No.  AAATN1978L</p>
-    <p class='f'>No. : GNDEC/TCC/B/{{ quoted_order.quote_buyer_id}}</p>
-    <p class='g'>Dated : {{quoted_order.quote_date_time}}</p>
+    <p class='f'>No. : GNDEC/TCC/B/{{ quoted_order.buyer_id}}</p>
+    <p class='g'>Dated : {{quoted_order.date_time}}</p>
     <br><br>
 
     <p> To,</p>
-    <p>{{quoted_order.quote_delivery_address.address}}</p>
-    <p>Organisation:{{quoted_order.quote_organisation.organisation_type}}</p>
-    <p>Buyer Id : {{ quoted_order.quote_buyer_id.username }}</p>
+    <p>{{quoted_order.delivery_address.address}}</p>
+    <p>Organisation:{{quoted_order.organisation.organisation_type}}</p>
+    <p>Buyer Id : {{ quoted_order.buyer_id.username }}</p>
     <p>Ref: Your Letter No.1,</p> 
-    <p>dated:{{quoted_order.quote_date_time}} , respectively.
+    <p>dated:{{quoted_order.date_time}} , respectively.
     </p>
 
     <table border="1" >
