@@ -27,13 +27,12 @@ h2 {
 }
 
 .product-container{
-	border:1px solid #ccc;
-	background:#fff;
+	background:#eaeaea;
 	padding: 0px 10px 0px 10px; 
 	overflow:hidden;
 	display:block;
 	page-break-inside: avoid;
-	border-collapse:collapse;
+	margin-bottom:10px;
 }
 
 .product-head {
