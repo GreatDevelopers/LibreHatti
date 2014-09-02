@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^details/','librehatti.reports.previous_history.details'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/lookups/', include(ajax_select_urls)),
+    url(r'^voucher/', include('librehatti.voucher.urls'))
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

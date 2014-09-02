@@ -14,7 +14,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'librehatti',
         'USER': 'root',
-        'PASSWORD': 'grewal',
+        'PASSWORD': 'mittal',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -38,12 +38,12 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/jass/testing/LibreHatti/static-collect'
+STATIC_ROOT = '/home/aseem/virtualenv/env1/LibreHatti/static-collect'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/jass/testing/LibreHatti/static',
+    '/home/aseem/virtualenv/env1/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'librehatti.suspense',
     'librehatti.bills',
     'librehatti.reports',
+    'librehatti.voucher',
 )
 
 SUIT_CONFIG = {
