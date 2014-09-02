@@ -1,9 +1,12 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Bitter:400,700,400italic);
+* {
+	margin:0px;
+	padding:0px;
+}
 body{
-	background-color:#fafafa;
 	color:#333;
-	font-family: 'Open Sans', sans-serif;
-	line-height:1.5;
+	line-height:2;
+	font-family:'Bitter', serif;
 }
 .wrapper{
 	max-width:700px;
@@ -13,36 +16,41 @@ body{
 h2 {
 	text-align:center;
 	font-weight:400;
-	font-size:36px;
+	font-size:24px;
 }
 
 .leaf-category{
+	font-size:18px;
 	Text-align:center;
 	display:block;
-	border-radius:5px;
-	padding-left:10px;
+	padding-left:5px;
 }
 
 .product-container{
 	border:1px solid #ccc;
 	background:#fff;
-	border-radius:5px;
-	margin-top:10px;
 	padding: 0px 10px 0px 10px; 
 	overflow:hidden;
 	display:block;
+	page-break-inside: avoid;
+	border-collapse:collapse;
 }
 
 .product-head {
 	display:block;
 	width:100%;
 	overflow:hidden;
-	border-bottom: 1px dashed #666;
+	border-bottom: 1px solid #ccc;
+	font-size:16px;
+	font-weight:400;
 }
 
 .product-name, .product-price , .att-name, .att-value{
 	float:left;
 	width:50%;
+}
+.att-name, .att-value {
+	font-size:12px;
 }
 
 .product-price,.att-value {
