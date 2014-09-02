@@ -10,6 +10,7 @@ from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.forms import Clearance_form
 from librehatti.suspense.forms import SuspenseForm
+from librehatti.suspense.forms import QuotedSuspenseForm
 from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
 from librehatti.prints.helper import num2eng
@@ -183,4 +184,42 @@ def tada_result(request):
        return render(request, 'suspense/tada_result.html', { 'obj':obj1, 
        'total_cost':total_cost, 'staff':staff, 'rupees_in_words':
        rupees_in_words,'purchase_order':purchase_order})
+
+def quoted_add_distance(request):
+    old_post = request.session.get('old_post')
+    quote_order_id = request.session.get('quote_order_id')
+    items = []
+    suspense = 0
+    url = "/bills/quotation/bill/" + str(quote_order_id)
+    for id in range(0,10):
+        try:
+            items.append(old_post['quoteditem_set-' + str(id) + '-item'])
+        except:
+            pass
+  
+    for item in items:
+        if item:
+            parents = Product.objects.values(
+              'category__parent__name').filter(id = item)
+    
+    for parent in parents:
+        for key, value in parent.iteritems():
+            if value == 'Field Work':
+                suspense = 1
+                break
+
+    if old_post['mode_of_payment'] != '1' or suspense == 1:
+        if request.method == 'POST':
+            form = QuotedSuspenseForm(request.POST)
+            if form.is_valid:
+                form.save()
+                return HttpResponseRedirect(url)
+        else:
+            form = QuotedSuspenseForm(initial = {'quote_order':quote_order_id,
+              'distance':0}) 
+            return render(request,'suspense/form.html',{'form':form,'test':'test'})
+    else:
+        return HttpResponseRedirect(url)
+
+
 
