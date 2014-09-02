@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+{% load staticfiles %} 
+    <link href="{% static 'css/product_list.css' %}" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body>
+{% load mptt_tags %}
+<div class = "wrapper">
+    {% recursetree nodes %}
+       <div class="products-list">
+            {% if not node.is_leaf_node %}
+	     <h2 class="parent-category"> {{ node.name }} </h2>
+                <div class = "child-categories">
+                    {{ children }}
+                </div>
+	     {% else %}	
+		{% for category,products in products_dict.items %}
+		    {% if category == node.name %}
+			<h3 class="leaf-category"> {{ category }} </h3>
+			{% for product, attributes in products.items %}
+			<div class="product-container">
+			    <h4 class="product-head"> <span class="product-name"> {{ product }} </span> <span class="product-price">  
+			    Rs. {{ product.price_per_unit }} </span> </h4>
+			    {% for att in attributes %}
+				<p class="attribute-row"> <span class="att-name"> {{att.attribute}} </span> <span class="att-value">  {{att.value}}  </span></p>
+			</div>
+			    {% endfor %}
+			{% endfor %}
+		    {% endif %}
+		{% endfor %}
+            {% endif %}
+        </div>
+    {% endrecursetree %}
+</ul>
+</body>
+</html>
