@@ -25,7 +25,7 @@ class GenerateRegister(View):
         """
 
     	self.result_fields = []
-        self.list_dict = {'name':'purchase_order__buyer__username', 
+        self.list_dict = {'name':'purchase_order__buyer__username',
             'city':'purchase_order__buyer__customer__address__city',
             'phone':'purchase_order__buyer__customer__telephone',
             'joining date':'purchase_order__buyer__customer__date_joined',
@@ -75,7 +75,7 @@ class GenerateRegister(View):
         """
 
     	self.details = PurchasedItem.objects.values(*self.fields_list).\
-    	    filter(purchase_order__is_canceled = 0)
+    	    filter(purchase_order__is_active = 1)
 
         return self.apply_filters(request)
 
@@ -106,15 +106,15 @@ class GenerateRegister(View):
 
     	start_date_temp = datetime.strptime(request.GET['start_date'],
     		'%Y-%m-%d')
-    	self.start_date = datetime(start_date_temp.year, start_date_temp.month, 
-    		start_date_temp.day) + timedelta(hours=0) 
+    	self.start_date = datetime(start_date_temp.year, start_date_temp.month,
+    		start_date_temp.day) + timedelta(hours=0)
 
     	end_date_temp = datetime.strptime(request.GET['end_date'], '%Y-%m-%d')
 
         #adding 24 hours in date will convert '2014-8-10' to '2014-8-10 00:00:00'
-    	
-        self.end_date = datetime(end_date_temp.year, end_date_temp.month, 
-    		end_date_temp.day) + timedelta(hours=24) 
+
+        self.end_date = datetime(end_date_temp.year, end_date_temp.month,
+    		end_date_temp.day) + timedelta(hours=24)
 
         self.selected_fields_client = request.GET.getlist('client_fields')
         self.selected_fields_order = request.GET.getlist('order')
