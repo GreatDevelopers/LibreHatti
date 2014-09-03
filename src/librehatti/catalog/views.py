@@ -130,15 +130,17 @@ def bill_cal(request):
     purchase_item = PurchasedItem.objects.\
     filter(purchase_order=purchase_order_id).aggregate(Sum('price'))
     price_total = purchase_item['price__sum']
-    surcharge = Surcharge.objects.values('id','value')
+    surcharge = Surcharge.objects.values('id','value','taxes_included')
     for value in surcharge:
         surcharge_id = value['id']
         surcharge_value = value['value']
-        taxes = (price_total * surcharge_value)/100
-        surcharge_obj = Surcharge.objects.get(id=surcharge_id)
-        taxes_applied = TaxesApplied(purchase_order = purchase_order,
-        surcharge = surcharge_obj, tax = taxes)
-        taxes_applied.save()
+        surcharge_tax = value['taxes_included']
+        if surcharge_tax == 1:
+            taxes = (price_total * surcharge_value)/100
+            surcharge_obj = Surcharge.objects.get(id=surcharge_id)
+            taxes_applied = TaxesApplied(purchase_order = purchase_order,
+            surcharge = surcharge_obj, tax = taxes)
+            taxes_applied.save()
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
     tax_total = taxes_applied_obj['tax__sum']

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
+from django.core.exceptions import ValidationError
 """
 This class defines the name of category and parent category of product 
 """
@@ -70,6 +71,22 @@ class ModeOfPayment(models.Model):
     def __unicode__(self):
         return self.method
 
+
+"""
+This class defines the type of taxes, value, validation of taxes 
+mentioning the startdate and end date 
+"""
+class Surcharge(models.Model):
+    tax_name = models.CharField(max_length=200)
+    value = models.IntegerField()
+    taxes_included = models.BooleanField(default = False)
+    tax_effected_from = models.DateField()
+    tax_valid_till = models.DateField()
+    Remark = models.CharField(max_length=1000)
+    def __unicode__(self):
+         return self.tax_name
+
+
 class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User)
     is_debit = models.BooleanField(default = False)
@@ -81,6 +98,12 @@ class PurchaseOrder(models.Model):
     tds = models.IntegerField()
     mode_of_payment = models.ForeignKey(ModeOfPayment)
     is_active = models.BooleanField(default = True)
+    def save(self, *args, **kwargs):
+        try:
+            surchages = Surcharge.objects.get(taxes_included=True)        
+            super(PurchaseOrder, self).save(*args, **kwargs)
+        except:
+            raise ValidationError('No Active Taxes in')
     def __unicode__(self):
         return '%s' % (self.id)
                
@@ -91,9 +114,13 @@ class PurchasedItem(models.Model):
     qty = models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.price = self.item.price_per_unit * self.qty	    
-        super(PurchasedItem, self).save(*args, **kwargs) 
+        try:
+            if self.purchase_order:
+                if not self.id:
+                    self.price = self.item.price_per_unit * self.qty	    
+                super(PurchasedItem, self).save(*args, **kwargs)
+        except:
+            raise ValidationError('No Active Taxes')
 
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
@@ -108,19 +135,6 @@ class Catalog(models.Model):
     product = models.ForeignKey(Product)
     def __unicode__(self):
         return self.attribute.name
-"""
-This class defines the type of taxes, value, validation of taxes 
-mentioning the startdate and end date 
-"""
-class Surcharge(models.Model):
-    tax_name = models.CharField(max_length=200)
-    value = models.IntegerField()
-    taxes_included = models.BooleanField(default = False)
-    tax_effected_from = models.DateField()
-    tax_valid_till = models.DateField()
-    Remark = models.CharField(max_length=1000)
-    def __unicode__(self):
-         return self.tax_name
 
 """
 This class defines the taxes applied on the purchase order

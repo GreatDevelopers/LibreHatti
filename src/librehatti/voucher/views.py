@@ -3,6 +3,10 @@ from django.http import  HttpResponseRedirect, HttpResponse
 from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
 
+"""
+This function calculates the session id and then initialise or increment 
+voucher number according to the previous purchase order's session id
+"""
 def voucher_generate(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -34,16 +38,11 @@ def voucher_generate(request):
             return HttpResponseRedirect(url)
         else:
             try:
-                voucherid_obj = VoucherId.objects.values('purchase_order').\
-                get(purchase_order = pre_purchase_order_id)
-                pre_purchase_order_id = voucherid_obj['purchase_order']
-                purchase_order_obj = PurchaseOrder.objects.values('date_time').\
-                get(id = pre_purchase_order_id)
-                pre_date = purchase_order_obj['date_time'].date()
-                if purchase_order_date == pre_date:
-                    voucherid = VoucherId.objects.values('voucher_no',\
-                    'purchase_order_of_session', 'purchased_item_of_session').\
-                    get(purchase_order = pre_purchase_order_id)
+                voucherid = VoucherId.objects.values('voucher_no',\
+                'purchase_order_of_session', 'purchased_item_of_session',\
+                'session').get(purchase_order = pre_purchase_order_id)
+                pre_purchase_order_session = voucherid['session']
+                if session_id == pre_purchase_order_session:
                     voucher_no = voucherid['voucher_no'] + 1
                     purchase_order_of_session = voucherid[\
                     'purchase_order_of_session'] + 1
