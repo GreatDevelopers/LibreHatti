@@ -8,83 +8,33 @@
     	    span.sm{margin-left: 4%;}
         </style>
         <title>Transport</title>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                function updateElementIndex(el, prefix, ndx) {
-	                var id_regex = new RegExp('(' + prefix + '-\\d+-)');
-    	            var replacement = prefix + '-' + ndx + '-';
-    	            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
-    	            if (el.id) el.id = el.id.replace(id_regex, replacement);
-    	            if (el.name) el.name = el.name.replace(id_regex, replacement);
-    	        }
-             
-
-    	        function addForm(btn, prefix) {
-    	            var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-	
-    	            // You can only submit a maximum of 30 todo items 
-    	            if (formCount < 30) {
-    		  		    // Clone a form (without event handlers) from the first form
-    		  		    var row = $(".item:first").clone(false).get(0);
-    		 		    // Insert it after the last form
-    		            $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
-      
-				        // Remove the bits we don't want in the new row/form
-    		 		    // e.g. error messages
-    		  		    $(".errorlist", row).remove();
-    		  		    $(row).children().removeClass('error');
-    		  
-				        // Relabel/rename all the relevant bits
-    		  			$(row).children().children().each(function() {
-    		    		    updateElementIndex(this, prefix, formCount);
-    		    			if ( $(this).attr('type') == 'text' )
-    			   		    	$(this).val('');
-    		  			});
-      
-			        	// Add an event handler for the delete item/form link 
-    		 	    	$(row).find('.delete').click(function() {
-    		   		    	return deleteForm(this, prefix);
-    		  			});
-		
-    		        	// Update the total form count
-    		  			$('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1); 
-		
-			    	} // End if
-
-    				else 
-					{
-      					alert("Sorry, you can only enter a maximum of 30 items.");
-    				}
-    				return false;
-      			}
-
-  				// Register the click event handlers
-  				$("#add").click(function() {
-    				return addForm(this, 'form');
-  				});
-            });
-        </script>
-   
     </head>
-    
-
     <body class= "transport">
-
+ 
         <form  action="/catalog/transport/" method="POST">{% csrf_token %}
             <div id="frm">
                 {{TransportFormA.as_p}}
-                
-                {% for form in todo_item_formset.forms %}
-                <div class="item">
+ 
+                <div class="item" id="itm" style="display:none;">
                     {{TransportFormB.as_p}}
                 </div>  
-                {% endfor %}      
+               
             </div>
             <input type="submit" value="Generate Bill" name="button1" > 
-            <a id= "add" href="#"><input type="button" value="Add Another" name="button2"></a>
+            <a id= "add" ><input type="button" value="Add Another" name="button2"></a>
          </form>
             
     </body>
+
+<script type="text/javascript">
+    document.getElementById("add").onclick=function(){ 
+        var i = document.getElementsByClassName("item");
+        var counter = i.length
+        var j = document.getElementById("itm").cloneNode(true);
+        j.id = "item"+counter
+        document.getElementById("frm").appendChild(j);
+        document.getElementById("itm").style.display='';
+    }
+</script>
 
 </html>
