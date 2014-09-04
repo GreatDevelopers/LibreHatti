@@ -70,7 +70,7 @@ class BuyerForm(forms.ModelForm):
 
     class Meta:
         model = PurchaseOrder
-        fields = ['buyer',]
+        exclude = ('is_active',)
 
     class Media:
         js = ('js/hide_add_buyer.js',)
