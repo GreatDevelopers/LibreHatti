@@ -70,7 +70,7 @@ This class is used to add, edit or delete the details of item purchased
 class PurchasedItemInline(admin.StackedInline):
     form = ItemSelectForm
     model = PurchasedItem
-    fields = ['parent_category', 'sub_category', 'item', 'qty', ]
+    fields = ['category', 'product', 'qty', ]
     extra = 10
 
 """
@@ -88,7 +88,7 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
     actions = [mark_active, mark_inactive] 
     list_filter = ['date_time']
     search_fields = ['id']
-    list_per_page = 20 
+    list_per_page = 20
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id

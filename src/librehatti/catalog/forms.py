@@ -41,29 +41,21 @@ This form lets user to select item after categories are filtered in dropdown.
 class ItemSelectForm(forms.ModelForm):
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
-            'js/ajax.js', 
+            'js/CategoryDropDown.js',
         )
 
     try:
-        parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-     	    filter(parent__parent__isnull=True).filter(parent__isnull=False))
-     
-        sub_category_id = Category.objects.values_list('id',flat=True)
-        sub_category_name = Category.objects.values_list('name',flat=True)
-        sub_category_choices = [('', '--------')] + [(id, name) for id, name in itertools.\
-        izip(sub_category_id, sub_category_name)]
-        sub_category = forms.ChoiceField(sub_category_choices)
+        category = forms.ModelChoiceField(queryset=Category.objects.\
+     	    filter(parent__isnull=True))
     except:
         pass
     
-    item = forms.ModelChoiceField(queryset = Product.objects.all())
+    product = forms.ModelChoiceField(queryset = Product.objects.all())
      
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
-         self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
-         self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
-         self.fields['item'].widget.attrs={'class': 'item'}
+         self.fields['category'].widget.attrs={'data-extratype': 'categorydropdown'}
+         self.fields['product'].widget.attrs={'data-extratype': 'productdropdown'}
 
 class BuyerForm(forms.ModelForm):
     buyer = make_ajax_field(PurchaseOrder, 'buyer', 'buyer')
