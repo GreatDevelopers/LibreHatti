@@ -47,7 +47,7 @@ def add_distance(request):
                 form.save()
                 request.session['old_post'] = old_post
                 request.session['purchase_order_id'] = purchase_order_id
-                return HttpResponseRedirect('/voucher/voucher_generate/')
+                return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
         else:
             form = SuspenseForm(initial = {'purchase_order':purchase_order_id,
               'distance':0}) 
@@ -55,7 +55,7 @@ def add_distance(request):
     else:
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
-        return HttpResponseRedirect('/voucher/voucher_generate/')
+        return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
 
 def clearance_search(request):
     form = TaDaSearch
@@ -190,7 +190,7 @@ def quoted_add_distance(request):
     quote_order_id = request.session.get('quote_order_id')
     items = []
     suspense = 0
-    url = "/bills/quotation/bill/" + str(quote_order_id)
+    url = reverse("librehatti.bills.views.quote_table") + str(quote_order_id)
     for id in range(0,10):
         try:
             items.append(old_post['quoteditem_set-' + str(id) + '-item'])

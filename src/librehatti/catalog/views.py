@@ -9,6 +9,8 @@ from django.db.models import Sum
 from librehatti.prints.helper import num2eng
 from librehatti.catalog.forms import ItemSelectForm
 import simplejson
+from django.core.urlresolvers import reverse
+
 
 def index(request):
     """
@@ -99,13 +101,22 @@ def transport_bill(request):
 This view allows filtering of sub category according to parent category of 
 item.
 """
-def select_sub_category(request):
-    parent_category = request.GET['cat_id']
-    sub_categories = Category.objects.filter(parent=parent_category)
+def getsubcat(request):
+    parent_id = request.GET['id']
+    sub_categories = Category.objects.filter(parent=parent_id)
     sub_category_dict = {}
     for sub_category in sub_categories:
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
+
+'''
+This function reverse looks up the urls for the AJAX Requests
+'''
+def jsreverse(request):
+    string_to_reverse = request.GET['string'];
+    return HttpResponse(reverse(string_to_reverse))
+
+
 
 """
 This view allows filtering of item according to sub category of item.
