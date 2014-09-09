@@ -1,11 +1,19 @@
 from django.db import models
 import datetime
-from librehatti import catalog
-from librehatti import bills
+
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import FinancialSession
+
+from librehatti.bills.models import QuotedOrder
+
+from librehatti.catalog.models import PurchaseOrder
+
 
 class SuspenseOrder(models.Model):
-    purchase_order = models.ForeignKey('catalog.PurchaseOrder')
-    distance = models.IntegerField(default=0)
+    voucher = models.IntegerField()
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    session_id = models.ForeignKey(FinancialSession)
+    distance_estimated = models.IntegerField()
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)

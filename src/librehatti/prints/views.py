@@ -74,10 +74,11 @@ def bill(request):
     taxes_applied = TaxesApplied.objects.\
     filter(purchase_order=purchase_order).values('surcharge','tax')
     surcharge = Surcharge.objects.values('id','tax_name','value')
-    bill = Bill.objects.values('total_cost','grand_total').\
+    bill = Bill.objects.values('total_cost','grand_total','delivery_charges').\
     get(purchase_order=id)
     total_cost = bill['total_cost']
     grand_total = bill['grand_total']
+    delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.\
     objects.values('buyer','reference','delivery_address','organisation',\
     'date_time').get(id = id)
@@ -98,4 +99,5 @@ def bill(request):
         'purchase_order':purchase_order, 'purchased_item': purchased_item,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
-        'buyer': buyer, 'buyer_name': customer_obj, 'site': address})
+        'buyer': buyer, 'buyer_name': customer_obj, 'site': address,
+        'delivery_charges':delivery_charges})

@@ -175,6 +175,7 @@ This class defines the grand total of the purchase order
 
 class Bill(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
+    delivery_charges = models.IntegerField()
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()

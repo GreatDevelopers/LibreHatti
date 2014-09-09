@@ -14,9 +14,7 @@ voucher number according to the previous purchase order's session id
 def voucher_generate(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
-    suffix = "/search_result/?search="
-    prefix = "&Order=Order+Search"
-    url = suffix + str(purchase_order_id) + prefix
+    
     purchase_order = PurchaseOrder.objects.values('id','date_time').\
     get(id = purchase_order_id)
     purchase_order_id = purchase_order['id']
@@ -240,7 +238,9 @@ def voucher_generate(request):
                 development_fund = cost_development_fund, total = price,\
                 session = session)
                 calculate_distribution.save()
-    return HttpResponseRedirect(url)
+    request.session['old_post'] = old_post
+    request.session['purchase_order_id'] = purchase_order_id
+    return HttpResponseRedirect('/suspense/add_distance/')
 
 
 def voucher_show(request):
