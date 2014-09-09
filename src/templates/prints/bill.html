@@ -90,7 +90,12 @@
   
             {% endif %}
             
-
+{% if delivery_charges %}
+<tr>
+    <td>Transportation</td>
+    <td>{{delivery_charges}}</td>
+</tr>
+{% endif %}
             <tr>
                 <td><b>Total </b></td>
                 <td><b>{{grand_cost}}</b></td>
@@ -107,6 +112,5 @@
 </body>
 
 </html>
-
 
 

@@ -3,9 +3,12 @@ from django.db.models import Sum, Max
 from models import SuspenseClearance
 from models import TaDa
 from django.http import  HttpResponseRedirect, HttpResponse
+
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
+from librehatti.catalog.models import Surcharge
+
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.forms import Clearance_form
@@ -13,7 +16,11 @@ from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import QuotedSuspenseForm
 from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
+
 from librehatti.prints.helper import num2eng
+
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import FinancialSession
 
 import datetime
 
@@ -22,6 +29,8 @@ def add_distance(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     items = []
+    parents = []
+    field_work = []
     suspense = 0
     for id in range(0,10):
         try:
@@ -31,31 +40,75 @@ def add_distance(request):
   
     for item in items:
         if item:
-            parents = Product.objects.values(
-              'category__parent__name').filter(id = item)
+            parents.append(PurchasedItem.objects.values(
+              'item__category__parent__name','id').filter(item = item).\
+              filter(purchase_order = purchase_order_id))
     
     for parent in parents:
-        for key, value in parent.iteritems():
-            if value == 'Field Work':
-                suspense = 1
-                break
-
-    if old_post['mode_of_payment'] != '1' or suspense == 1:
+        for category in parent:
+            value = category['item__category__parent__name']
+            key = category['id']
+            if value.split(':')[1].upper() == 'FIELD WORK' or \
+                value.split(':')[1].upper() == ' FIELD WORK':
+                field_work.append(key)
+   
+    if field_work:
         if request.method == 'POST':
-            form = SuspenseForm(request.POST)
-            if form.is_valid:
-                form.save()
-                request.session['old_post'] = old_post
-                request.session['purchase_order_id'] = purchase_order_id
-                return HttpResponseRedirect('/voucher/voucher_generate/')
+            request.session['old_post'] = old_post
+            request.session['purchase_order_id'] = purchase_order_id
+            return HttpResponseRedirect('/catalog/bill_cal/')
         else:
-            form = SuspenseForm(initial = {'purchase_order':purchase_order_id,
-              'distance':0}) 
-            return render(request,'suspense/form.html',{'form':form,'test':'test'})
+            purchase_order = PurchaseOrder.objects.values('date_time').\
+                get(id = purchase_order_id)
+            purchase_order_date = purchase_order['date_time'].date()
+            financialsession = FinancialSession.objects.\
+                values('id','session_start_date','session_end_date')
+            
+            for value in financialsession:
+                start_date = value['session_start_date']
+                end_date = value['session_end_date']
+                if start_date <= purchase_order_date <= end_date:
+                    session_id = value['id']
+
+            voucher = VoucherId.objects.values('voucher_no',
+                'purchased_item__item__category__name').\
+                filter(purchased_item__in = field_work).\
+                filter(session = session_id)
+            
+            return render(request,'suspense/add_distance.html',{'voucher':voucher,
+                'purchase_order_id': purchase_order_id})
+    elif old_post['mode_of_payment'] != '1':
+
+        purchase_order = PurchaseOrder.objects.values('date_time').\
+            get(id = purchase_order_id)
+        purchase_order_date = purchase_order['date_time'].date()
+        financialsession = FinancialSession.objects.\
+            values('id','session_start_date','session_end_date')
+        
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= purchase_order_date <= end_date:
+                session_id = value['id']
+
+        session = FinancialSession.objects.get(pk = session_id)
+        
+        voucher = VoucherId.objects.values('voucher_no').\
+            filter(purchase_order = purchase_order_id)
+        order = PurchaseOrder.objects.get(pk = purchase_order_id)
+        for voucher_no in voucher:
+            suspense = SuspenseOrder(voucher = voucher_no['voucher_no'], 
+            purchase_order = order, session_id = session, 
+            distance_estimated = 0)
+            suspense.save()
+        request.session['old_post'] = old_post
+        request.session['purchase_order_id'] = purchase_order_id
+        return HttpResponseRedirect('/catalog/bill_cal/')
+
     else:
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
-        return HttpResponseRedirect('/voucher/voucher_generate/')
+        return HttpResponseRedirect('/catalog/bill_cal/')
 
 def clearance_search(request):
     form = TaDaSearch
@@ -221,5 +274,35 @@ def quoted_add_distance(request):
     else:
         return HttpResponseRedirect(url)
 
+def save_distance(request):
+    voucher_no = request.GET['voucher']
+    distance = request.GET['distance']
+    purchase_order_id = request.GET['order']
+    
+    purchase_order = PurchaseOrder.objects.get(pk=purchase_order_id)
+    financialsession = FinancialSession.objects.values('id','session_start_date',
+        'session_end_date')
+    today = datetime.date.today()
+    
+    for value in financialsession:
+        start_date = value['session_start_date']
+        end_date = value['session_end_date']
+        if start_date <= today <= end_date:
+            session_id = value['id']
 
+    session = FinancialSession.objects.get(pk = session_id)
+
+    try:
+        suspense = SuspenseOrder.objects.filter(voucher = voucher_no).\
+            get(purchase_order = purchase_order_id)
+        suspense.distance_estimated = distance
+        suspense.save()
+
+    except:
+        suspense = SuspenseOrder(voucher = voucher_no, 
+            purchase_order = purchase_order, session_id = session, 
+            distance_estimated = distance)
+        suspense.save()
+
+    return HttpResponse('')
 
