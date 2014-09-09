@@ -8,8 +8,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
+from django.core.exceptions import ValidationError
 """
-This class defines the name of category and parent category of product 
+This class defines the name of category and parent category of product
 """
 class mCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -24,7 +25,7 @@ class mCategory(models.Model):
 class Category(MPTTModel):
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', null=True, blank=True, related_name="children")
-    
+
     class MPTTMeta:
         order_insertion_by = ['name']
 
@@ -32,7 +33,7 @@ class Category(MPTTModel):
         return '%s' % self.name
 
 """
-This class defines the name of product, category, price of eact item of 
+This class defines the name of product, category, price of eact item of
 that product and the organisation with which user deals
 """
 class Product(models.Model):
@@ -58,7 +59,7 @@ class Attributes(models.Model):
         return self.name
 
 """
-This class defines the details about user, its organisation, along with 
+This class defines the details about user, its organisation, along with
 total discount and payment of job, and mode of payment
 """
 class ModeOfPayment(models.Model):
@@ -70,6 +71,22 @@ class ModeOfPayment(models.Model):
     def __unicode__(self):
         return self.method
 
+
+"""
+This class defines the type of taxes, value, validation of taxes
+mentioning the startdate and end date
+"""
+class Surcharge(models.Model):
+    tax_name = models.CharField(max_length=200)
+    value = models.FloatField()
+    taxes_included = models.BooleanField(default = False)
+    tax_effected_from = models.DateField(null = True)
+    tax_valid_till = models.DateField(null = True)
+    Remark = models.CharField(max_length=1000, null = True)
+    def __unicode__(self):
+         return self.tax_name
+
+
 class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User)
     is_debit = models.BooleanField(default = False)
@@ -77,13 +94,21 @@ class PurchaseOrder(models.Model):
     delivery_address = models.ForeignKey('useraccounts.Address')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
-    total_discount = models.IntegerField()
-    tds = models.IntegerField()
+    total_discount = models.IntegerField(default = 0)
+    tds = models.IntegerField(default = 0)
     mode_of_payment = models.ForeignKey(ModeOfPayment)
     is_active = models.BooleanField(default = True)
+    def save(self, *args, **kwargs):
+
+        surchages = Surcharge.objects.filter(taxes_included=1)
+
+        if surchages:
+            super(PurchaseOrder, self).save(*args, **kwargs)
+        else:
+            raise ValidationError('No Active Taxes. Unable to add Order')
     def __unicode__(self):
         return '%s' % (self.id)
-               
+
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
@@ -91,9 +116,13 @@ class PurchasedItem(models.Model):
     qty = models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.price = self.item.price_per_unit * self.qty	    
-        super(PurchasedItem, self).save(*args, **kwargs) 
+        try:
+            if self.purchase_order:
+                if not self.id:
+                    self.price = self.item.price_per_unit * self.qty
+                super(PurchasedItem, self).save(*args, **kwargs)
+        except:
+            raise ValidationError('No Active Taxes. Unable to add Items')
 
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
@@ -108,19 +137,6 @@ class Catalog(models.Model):
     product = models.ForeignKey(Product)
     def __unicode__(self):
         return self.attribute.name
-"""
-This class defines the type of taxes, value, validation of taxes 
-mentioning the startdate and end date 
-"""
-class Surcharge(models.Model):
-    tax_name = models.CharField(max_length=200)
-    value = models.IntegerField()
-    taxes_included = models.BooleanField(default = False)
-    tax_effected_from = models.DateField()
-    tax_valid_till = models.DateField()
-    Remark = models.CharField(max_length=1000)
-    def __unicode__(self):
-         return self.tax_name
 
 """
 This class defines the taxes applied on the purchase order
@@ -143,7 +159,7 @@ class Transport(models.Model):
     vehicle_id = models.ForeignKey(Vehicle)
     job_id = models.IntegerField()
     kilometer = models.FloatField()
-    rate = models.FloatField(default=10.0)  
+    rate = models.FloatField(default=10.0)
     Date = models.DateField(blank=True)
     total = models.IntegerField()
 

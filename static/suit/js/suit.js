@@ -708,4 +708,4 @@ var QuickSelect;
   };
 })(jQuery);
 
-$("select").quickselect();
+//$("select").quickselect();

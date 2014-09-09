@@ -3,3 +3,4 @@ docutils
 simplejson
 django-ajax-selects
 django-suit
+django-mptt
