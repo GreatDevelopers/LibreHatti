@@ -1,45 +1,40 @@
-<html>
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>
-            Index
-        </title>
-        <style>
-            form { margin-left : 45% }
-            .head { text-align : center; margin-top : 5% ;}
-            .button { width : 100px; height: 25px;}
-        </style>
+        <title>Index</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
     </head>
     <body> 
-        <h2 class="head"> Select one or more fields
-        </h2>
-	
-        <table>
+        <div class="main-box">
+        <h2 class="form-heading"> Select one or more fields</h2>
             <form action={{url}} method="get">
+		<div class="form-elements">
                 {% ifequal '1' code  %}
-                <tr>   
-                    <td>Display search as <input type="text" name="search"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit"  name="Client" value="Client Search"></td>
-                    <td><input type="submit"  name="Order" value="Order Search"></td>
-                </tr>
+		   <label for="search_textbox">Display Search as</label>
+                   <input type="text" name="search" id="search_textbox" placeholder="Display Search as">
+                   <input type="submit"  name="Client" value="Client Search">
+                   <input type="submit"  name="Order" value="Order Search">
                 {% else %}
-                    <tr>   
-                    <td>Title of Register <input type="text" name="title"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit"  name="" value="Generate Register"></td>
-                </tr>
+		   <label for="title_textbox">Title of Register</label>
+                   <input type="text" name="title" id="title_textbox" placeholder="Title of Register">
+                   <input type="submit"  name="" value="Generate Register">
                 {% endifequal %}
-                <tr>
-                    <td>{{ client_form.as_p }}</td>
-                    <td>{{ order_form.as_p }}
-			<ui><li><input type='checkbox' value='suspense' name='suspense'>Is suspense</input></li></ui></td>
-                </tr>
-                <tr> 
-                    <td> {{ add_constraints.as_p }} </td>
-                </tr>
+		    <div class="client-form">
+                    {{ client_form.as_p }}
+		    </div>
+		    <div class="order-form">
+                    {{ order_form.as_p }}
+		    </div>
+			<ul><li>
+				<input type='checkbox' value='suspense' name='suspense' id="suspense-checkbox">
+				<label for="suspense-checkbox">Is Suspense</label>
+			</li></ul>
+                     {{ add_constraints.as_p }}
+		</div>
             </form>
-        </table>
+        </div>
     </body>
 </html>

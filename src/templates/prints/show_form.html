@@ -1,3 +1,6 @@
+
+{% load i18n %} {% load staticfiles %}
+
 {% block content %}
 <head>
 {% block js %}
@@ -9,12 +12,18 @@
 <link rel="stylesheet" type="text/css" 
 href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/base/jquery-ui.css">
 </link>
+<link rel="stylesheet" type="text/css" href= "{% static 'css/form.css' %}">
+<link rel="stylesheet" type="text/css" href= "{% static 'css/main.css' %}">
 </head>
-    <form method="GET" action="/print/lab_report">
-        <b> Select Lab: </b>
+    <div class="main-box">
+    <form method="GET" action="/print/lab_report" class="form lab-form">
+        <h2 class="form-heading"> Select Lab: </h2>
+	<div class="form-elements">
         {{form.as_p}}
+	</div>
         <p><input type="submit" name="Submit" value="Submit"></p>
-    </form>  
+    </form>
+    </div>
 
 <script type="text/javascript">
 $('#id_sub_category').attr('disabled', 'disabled');

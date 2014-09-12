@@ -12,9 +12,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'librehatti_db',
+        'NAME': 'libre',
         'USER': 'root',
-        'PASSWORD': 'grewal',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -38,12 +38,12 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/ishwerdas/LibreHatti/static-collect'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/jass/testing/LibreHatti/static',
+    '/home/ishwerdas/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'suit',
+    'mptt',
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',
@@ -94,7 +95,6 @@ INSTALLED_APPS = (
     'librehatti.suspense',
     'librehatti.bills',
     'librehatti.reports',
-    'librehatti.voucher',
 )
 
 SUIT_CONFIG = {

@@ -1,8 +1,11 @@
+{% load i18n %} {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 </head>
 <body>
 	<div class = "wrapper">
@@ -12,12 +15,24 @@
 					<span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span>
 				</header>
 				<ul class="panel-items">
-					<li class="panel-item" id="new-customer"></li>
-					<li class="panel-item" id="new-order"></li>
-					<li class="panel-item" id="search"></li>
-					<li class="panel-item" id="registers"></li>
-					<li class="panel-item" id="lab-report"></li>
-					<li class="panel-item" id="porforma"></li>
+					<li class="panel-item" id="new-customer">
+						<a href="/admin/catalog/purchaseorder/add/"><img src="{% static 'icons/User-Add-128.png' %}"><span class="panel-text">New Customer</span></a>
+					</li>
+					<li class="panel-item" id="new-order">
+						<a href="/admin/catalog/purchaseorder/add/"><img src="{% static 'icons/Shopping-Cart-02-128.png' %}"><span class="panel-text">New Order</span></a>
+					</li>
+					<li class="panel-item" id="search"> 
+						<a href= '{% url 'librehatti.reports.views.search_form' %}?type=search'><img src="{% static 'icons/Search-Find.png' %}"><span class="panel-text">Search</span></a>
+					</li>
+					<li class="panel-item" id="registers">
+						<a href='{% url 'librehatti.reports.views.search_form' %}?type=register'><img src="{% static 'icons/Document-01-128.png' %}"><span class="panel-text">Registers</span></a>
+					</li>
+					<li class="panel-item" id="lab-report">
+						<a href= '{% url 'librehatti.prints.views.show_form' %}'><img src="{% static 'icons/User-Add-128.png' %}"><span class="panel-text">Lab Report</span></a>
+					</li>
+					<li class="panel-item" id="porforma">
+						<a href= '{% url 'librehatti.bills.views.proforma' %}'><img src="{% static 'icons/User-Add-128.png' %}"><span class="panel-text">Performa</span></a>
+					</li>
 				</ul>
 			</div>
 		</div>
