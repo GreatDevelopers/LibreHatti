@@ -137,9 +137,11 @@ def bill_cal(request):
     url = suffix + str(purchase_order_id) + prefix
 
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
+    purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').get(id=purchase_order_id)
     purchase_item = PurchasedItem.objects.\
     filter(purchase_order=purchase_order_id).aggregate(Sum('price'))
-    price_total = purchase_item['price__sum']
+    total = purchase_item['price__sum']
+    price_total = total - purchase_order_obj['total_discount']
     surcharge = Surcharge.objects.values('id','value','taxes_included')
     delivery_rate = Surcharge.objects.values('value').filter(tax_name = 'Transportation')
     distance = SuspenseOrder.objects.filter(purchase_order = purchase_order_id).\
@@ -165,9 +167,10 @@ def bill_cal(request):
     filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
     tax_total = taxes_applied_obj['tax__sum']
     grand_total = price_total + tax_total + delivery_charges
+    amount_received = grand_total - purchase_order_obj['tds']
     bill = Bill(purchase_order = purchase_order, total_cost = price_total,
     total_tax = tax_total, grand_total = grand_total,
-    delivery_charges = delivery_charges)
+    delivery_charges = delivery_charges, amount_received = amount_received)
     bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id

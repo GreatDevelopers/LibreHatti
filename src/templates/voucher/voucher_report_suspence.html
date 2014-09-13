@@ -1,0 +1,55 @@
+<html>
+<head><title>Report</title></head>
+<div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
+<div style="font-size:24px" align='center'>Testing & Consultancy Cell</div><br>
+<body>
+<br>
+
+<div style="position:absolute;right:0px;top:75px;">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
+<div style="position:absolute;right:0px;top:95px;">Dated : {{date}} </div>
+<div style="position:absolute;left:7px;top:105px;">Director,</div>
+<br></br><br/>
+A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
+{{address.street_address}}, {{address.city}}, {{address.pin}}, {{address.province}} on account of 
+  
+ This amount is kept in suspence till clearance. <br/><br/>
+<div style="position:absolute;left:7px;">Receipt No. : {{job}}   </div><br/>
+<div style="position:absolute;left:7px;">Dated: {{date}}</div>
+<div align= "left">
+<br/><br/><br/></br>
+<table border="1" width="100%">
+
+		<tr>
+			<td>Bill Amount</td>
+			<td align="right">{{cost.total_cost}}.00</td>
+		</tr>
+		{% for value in tax %}
+		<tr>
+			<td>{{ value.surcharge__tax_name }}  @ {{ value.value }}% </td>
+			<td  align="right">{{ value.tax }}.00</td>
+		</tr>
+		{% endfor %}
+		{% if cost.delivery_charges %}
+        <tr>
+            <td>Transportation</td>
+            <td  align="right">{{cost.delivery_charges}}</td>
+        </tr>
+{% endif %}
+		<tr>
+				<td>Total Amount </td>
+			<td  align="right"> {{ cost.grand_total}}.00</td>
+		</tr>	
+		<tr>
+			<td>TDS</td>
+			<td align="right">{{tds.tds}}.00</td>
+		</tr>
+		<tr>
+			<td>Balance</td>
+			<td align="right">{{cost.amount_received}}.00</td>
+		</tr>
+</table>
+</div>
+
+<div style="position:absolute;right:50px;top:600px;">DEAN TESTING AND CONSULTANCY</div>
+</body>
+</html>
