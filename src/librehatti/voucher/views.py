@@ -3,9 +3,11 @@ from django.http import  HttpResponseRedirect, HttpResponse
 from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem, Bill
+from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
+from librehatti.suspense.models import SuspenseOrder
 
 """
 This function calculates the session id and then initialise or increment 
@@ -245,8 +247,8 @@ def voucher_generate(request):
 
 def voucher_show(request):
     id = request.GET['order_id']
-    purchase_order = PurchaseOrder.objects.filter(id = id)
-    voucherid = VoucherId.objects.values('purchased_item', 'voucher_no', 'session').\
+    purchase_order = PurchaseOrder.objects.get(id = id)
+    voucherid = VoucherId.objects.values('purchase_order','purchased_item', 'voucher_no', 'session').\
     filter(purchase_order = purchase_order)
     return render(request, 'voucher/voucher_show.html', {'voucherid' : voucherid})
 
@@ -254,6 +256,15 @@ def voucher_show(request):
 def voucher_print(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
+    purchase_order_id = request.GET['purchase_order']
+    flag = 0
+    voucherid = VoucherId.objects.values('voucher_no').filter(purchase_order = purchase_order_id)
+    for value in voucherid:
+        try:
+            suspense_order = SuspenseOrder.objects.get(voucher = value['voucher_no'], purchase_order = purchase_order_id)
+            flag = 1
+        except:
+            continue
     calculatedistribution = CalculateDistribution.objects.\
     values('college_income_calculated', 'admin_charges_calculated',\
     'consultancy_asset', 'development_fund', 'total').\
@@ -272,14 +283,25 @@ def voucher_print(request):
         category_name = value['purchased_item__item__category__name']
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time','buyer__first_name','buyer__last_name',\
-    'delivery_address',).get(id = purchase_order)
+    'delivery_address','tds').get(id = purchase_order)
     date = purchase_order_obj['date_time'].date()
     delivery_address = Address.objects.values('street_address','city','pin',\
     'province').get(id = purchase_order_obj['delivery_address'])
-    return render(request, 'voucher/voucher_report.html', {\
-        'calculate_distribution' : calculatedistribution,\
-        'admin_charges': admin_charges, 'college_income': college_income, \
-        'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
-        'voucher':number, 'date': date,'address': delivery_address,\
-        'buyer': purchase_order_obj, 'categoryname': category_name,\
-        'total_in_words': total_in_words})
+    bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
+    amount_received_inwords = num2eng(bill['amount_received'])
+    taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
+    if flag == 0:
+        return render(request, 'voucher/voucher_report.html', {\
+            'calculate_distribution' : calculatedistribution,\
+            'admin_charges': admin_charges, 'college_income': college_income, \
+            'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
+            'voucher':number, 'date': date,'address': delivery_address,\
+            'buyer': purchase_order_obj, 'categoryname': category_name,\
+            'total_in_words': total_in_words})
+        voucherid_obj = VoucherId.objects.values
+    else:
+        return render(request, 'voucher/voucher_report_suspence.html',{
+            'address':delivery_address, 'cost':bill, 'inwords':amount_received_inwords,\
+            'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
+            'tds':purchase_order_obj, 'tax':taxes_applied
+            })

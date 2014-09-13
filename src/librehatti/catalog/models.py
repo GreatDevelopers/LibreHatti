@@ -179,3 +179,4 @@ class Bill(models.Model):
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
+    amount_received = models.IntegerField()
