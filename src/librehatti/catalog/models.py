@@ -9,6 +9,9 @@ from django.http import HttpResponse
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
 from django.core.exceptions import ValidationError
+
+from tinymce.models import HTMLField
+
 """
 This class defines the name of category and parent category of product
 """
@@ -180,3 +183,11 @@ class Bill(models.Model):
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
     amount_received = models.IntegerField()
+
+class HeaderOfBills(models.Model):
+    header = HTMLField()
+    def __unicode__(self):
+        return '%s' % (self.id)
+
+    class Meta:
+        verbose_name_plural = "Header of bills"

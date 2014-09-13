@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',
+    'tinymce',
     'librehatti.prints',
     'librehatti.suspense',
     'librehatti.bills',

@@ -12,8 +12,11 @@ from librehatti.catalog.forms import ItemSelectForm, BuyerForm
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.contrib.admin.models import LogEntry
+from django.core.urlresolvers import reverse
 
 from ajax_select.admin import AjaxSelectAdmin
+
+from tinymce.widgets import TinyMCE
 
 admin.autodiscover()
 admin.site.register(Category)
@@ -94,6 +97,17 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
         request.session['purchase_order_id'] = obj.id
         return HttpResponseRedirect('/voucher/voucher_generate/')
 
+class HeaderAdmin(admin.ModelAdmin):
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name in ('header'):
+            return db_field.formfield(widget=TinyMCE(
+                attrs={'cols': 120, 'rows': 10},
+                mce_attrs={'external_link_list_url': reverse('tinymce.views.flatpages_link_list')},
+            ))
+        return super(HeaderAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+
+admin.site.register(HeaderOfBills, HeaderAdmin)
 
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
