@@ -16,6 +16,7 @@
         <table>
             
             <tr>
+                <th>S.No</th>
                 {% for field in client %}
                 <th>{{field}}</th>
                 {% endfor %}
@@ -26,11 +27,22 @@
             </tr>
             {% for value in result %}
                 <tr>    
+                <td>{{forloop.counter}}</td>
                 {% for data in value %}
                     <td>{{data}}</td>
                 {% endfor %}       
                 </tr>
             {% endfor %}
+            
+            {% if grand_total %}
+                <tr>
+                    <td colspan ={{number_of_fields}}><b>Grand Total</b></td>
+                    {% for value in grand_total %}
+                    <td >{{value}}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+            {{total_taxes}}
         </table>
 
         {% if error %}

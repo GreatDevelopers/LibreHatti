@@ -12,10 +12,12 @@ from django.shortcuts import render
 
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
-
-from useraccounts.models import Customer
+from librehatti.catalog.models import Surcharge
+from librehatti.catalog.models import TaxesApplied
+from django.contrib.auth.models import User
 
 from datetime import datetime, timedelta
+from calendar import monthrange
 
 class GenerateRegister(View):
 
@@ -23,16 +25,19 @@ class GenerateRegister(View):
         """
         Initializing required lists.
         """
-
+        self.grand_total_list = []
     	self.result_fields = []
-        self.list_dict = {'name':'purchase_order__buyer__username',
-            'city':'purchase_order__buyer__customer__address__city',
-            'phone':'purchase_order__buyer__customer__telephone',
-            'joining date':'purchase_order__buyer__customer__date_joined',
-            'company':'purchase_order__buyer__customer__company',
+        self.list_dict = {'Name':'buyer__username',
+            'City':'buyer__customer__address__city',
+            'Phone':'buyer__customer__telephone',
+            'joining date':'buyer__customer__date_joined',
+            'Company':'buyer__customer__company',
             'quantity':'qty','unit price':'item__price_per_unit',
-            'item':'item__name','discount':'purchase_order__total_discount',
-            'debit':'purchase_order__is_debit', 'total price':'price'
+            'item':'item__name','Discount':'total_discount',
+            'Debit':'is_debit', 'total price':'price',
+            'TDS': 'tds', 'Total With Taxes': 'bill__grand_total', 
+            'Order Id':'id', 'Total Without Taxes': 'bill__total_cost',
+            'Order Date': 'date_time'
         }
 
 
@@ -44,18 +49,77 @@ class GenerateRegister(View):
 
     	generated_data_list = []
 
-        for data in self.details:
-        	temporary = []
-        	for field in self.fields_list:
-        		temporary.append(data[field])
-        	generated_data_list.append(temporary)
+        try:
+            details = self.details
+        except:
+            details = self.client_details
+        
+        for data in details:
+            temporary = []
+            if self.surcharge:
+                try:
+                    data['bill__grand_total']
+                except:
+                    return HttpResponse('Total must be included in field list')
+            for field in self.fields_list:
+                temporary.append(data[field])
+            tax_pos = 0
+            for val in request.GET.getlist('surcharges'):
+                
+                tax = TaxesApplied.objects.values_list('tax', flat = True).\
+                filter(purchase_order = data['id']).filter(surcharge = val)
+                try:
+                    self.total_taxes[tax_pos] = self.total_taxes[tax_pos] + tax[0]
+                except:
+                    pass
+
+                if tax:
+                    temporary[-1:-1] = tax
+                else:
+                    temporary[-1:-1] = ['None']
+                tax_pos = tax_pos + 1
+
+            generated_data_list.append(temporary)
+        
+        number_of_fields = len(self.selected_fields_order) + len(self.\
+            selected_fields_client)
+
 
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
-            'title':self.title
-        }
+            'title':self.title, 'number_of_fields':number_of_fields
+            }
+
+        try:
+            temp['grand_total'] = self.grand_total_list
+        except:
+            pass 
+
+        try:
+            self.selected_fields_order[-1:-1] = self.surcharge
+            temp['surcharge'] = self.surcharge
+            self.grand_total_list[-1:-1]  = self.total_taxes
+        except:
+            pass        
 
         return render(request,'reports/generated_register.html',temp)
+
+    def cal_grand_total(self,request):
+        """
+        Calculate grand total
+        """
+        grand_total = 0
+
+        try:
+            values = self.details
+        except:
+            values = self.client_details
+        for total in values:
+            if total['bill__grand_total'] is not None:
+                grand_total = grand_total +total['bill__grand_total']
+        self.grand_total_list = [grand_total]
+
+        return self.view_register(request)
 
     def apply_filters(self,request):
         """
@@ -64,20 +128,48 @@ class GenerateRegister(View):
 
         if 'date' in self.selected_fields_constraints:
             self.details = self.client_details.filter(
-            	purchase_order__date_time__range = (
-            		self.start_date,self.end_date))
+                date_time__range = (self.start_date,self.end_date))
 
-        return self.view_register(request)
+        try:
+            self.details = self.client_details.filter(
+                mode_of_payment = self.mode_of_payment)
+        except:
+            pass
+
+        try:
+            month_start = str(self.year) + '-' +  str(self.month)+ '-1'
+            month_end = str(self.year) + '-' +  str(self.month)+ '-' + \
+                str(monthrange(int(self.year),int(self.month))[1])
+            self.details = self.client_details.filter(
+                date_time__range = (month_start, month_end))
+        except:
+            pass
+
+        try:
+            if request.GET['grand_total']:
+                return self.cal_grand_total(request)
+
+        except:
+            return self.view_register(request)
 
     def fetch_values(self,request):
         """
         Fetching values from database.
         """
+ 
+        try:
+            try:
+                if request.GET['all_registered_user']:
+                    self.client_details = User.objects.values(*self.fields_list).\
+                    filter(is_superuser = 0)
+                    return self.view_register(request)
+            except:
+                self.client_details = PurchaseOrder.objects.values(*self.fields_list).\
+                    filter(is_active = 1)
+                return self.apply_filters(request)
+        except:
+            return HttpResponse('nothing to display')
 
-    	self.details = PurchasedItem.objects.values(*self.fields_list).\
-    	    filter(purchase_order__is_active = 1)
-
-        return self.apply_filters(request)
 
 
     def convert_values(self,request):
@@ -93,7 +185,15 @@ class GenerateRegister(View):
         for value in self.selected_fields_order:
         	self.fields_list.append(self.list_dict[value])
 
-        return self.fetch_values(request)
+        if self.fields_list:
+            return self.fetch_values(request)
+
+        else:
+            self.fields_list = ['first_name','last_name',
+                'customer__address__city','customer__address__province']
+            self.selected_fields_client = ['First Name','Last Name','City',
+                'Province']
+            return self.fetch_values(request)
 
 
     def get(self,request):
@@ -103,6 +203,9 @@ class GenerateRegister(View):
         """
 
     	self.title = request.GET['title']
+
+        if not self.title:
+            self.title = 'General Register'
 
     	start_date_temp = datetime.strptime(request.GET['start_date'],
     		'%Y-%m-%d')
@@ -116,12 +219,38 @@ class GenerateRegister(View):
         self.end_date = datetime(end_date_temp.year, end_date_temp.month,
     		end_date_temp.day) + timedelta(hours=24)
 
-        self.selected_fields_client = request.GET.getlist('client_fields')
-        self.selected_fields_order = request.GET.getlist('order')
-        self.selected_fields_constraints = request.GET.getlist(
-        	'additional_constraints')
+        if request.GET.getlist('order'):
+            self.selected_fields_order = request.GET.getlist('order')
+            self.selected_fields_client = ['Order Id']
+            self.selected_fields_client = self.selected_fields_client + request.\
+                GET.getlist('client_fields')
+        else:
+            self.selected_fields_order = request.GET.getlist('order')
+            self.selected_fields_client = request.GET.getlist('client_fields')
+
         self.result_fields.append(self.selected_fields_client)
         self.result_fields.append(self.selected_fields_order)
+        self.selected_fields_constraints = request.GET.getlist(
+        	'additional_constraints')
 
+        try:
+            self.mode_of_payment = request.GET['mode_of_payment']
+        except:
+            pass
+
+        try:
+            self.month = request.GET['month']
+        except:
+            pass
+        try:
+            self.year = request.GET['year']
+        except:
+            self.year = datetime.datetime.now().strftime("%Y")
+        try:
+            self.surcharge = Surcharge.objects.values_list('tax_name', flat = True).\
+                filter(id__in = request.GET.getlist('surcharges'))
+            self.total_taxes = [0]*(len(request.GET.getlist('surcharges')))
+        except:
+            pass
         return self.convert_values(request)
 

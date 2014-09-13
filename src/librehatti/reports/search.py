@@ -27,13 +27,13 @@ class SearchResult(View):
         
         self.purchase_order_id='enable'
         self.result_fields = []
-        self.list_dict = {'name':'purchase_order__buyer__username', 
-            'city':'purchase_order__buyer__customer__address__city',
-            'phone':'purchase_order__buyer__customer__telephone',
-            'joining date':'purchase_order__buyer__customer__date_joined',
-            'company':'purchase_order__buyer__customer__company',
-            'discount':'total_discount','debit':'is_debit', 
-            'mode of payment':'mode_of_payment__method'
+        self.list_dict = {'Name':'purchase_order__buyer__username', 
+            'City':'purchase_order__buyer__customer__address__city',
+            'Phone':'purchase_order__buyer__customer__telephone',
+            'Joining Date':'purchase_order__buyer__customer__date_joined',
+            'Company':'purchase_order__buyer__customer__company',
+            'Discount':'total_discount','Debit':'is_debit', 
+            'Mode Of Payment':'mode_of_payment__method'
         }
 
 
