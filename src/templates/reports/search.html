@@ -21,6 +21,7 @@
 		   <label for="title_textbox">Title of Register</label>
                    <input type="text" name="title" id="title_textbox" placeholder="Title of Register">
                    <input type="submit"  name="" value="Generate Register">
+                   <a href = {% url 'reports.views.list_saved_registers' %}><input type="button" name="" value="View Generate Registers"></a>
                 {% endifequal %}
 		    <div class="client-form">
                     {{ client_form.as_p }}

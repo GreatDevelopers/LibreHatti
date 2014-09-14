@@ -4,7 +4,11 @@ from django.http import HttpResponse
 from forms import ClientForm
 from forms import OrderForm
 from forms import AddConstraints
+from datetime import datetime
 
+import librehatti.settings as settings
+
+from librehatti.reports.models import SavedRegisters
 
 def search_form(request):
     """
@@ -44,3 +48,32 @@ def search_form(request):
         return HttpResponse('<h1>Invalid URL</h1>')
 
     return render(request, 'reports/search.html',temp)
+
+def save_fields(request):
+    """
+    Save generated register.
+    """
+
+    title = request.GET['title']
+
+    if title:
+        pass
+    else:
+        return HttpResponse('Title is Required')
+
+    selected_fields = request.META['QUERY_STRING']
+
+    save_fields = SavedRegisters(title = title, selected_fields = selected_fields)
+    save_fields.save()
+    return HttpResponse("Register Saved Successfully")
+
+def list_saved_registers(request):
+    """
+    List saved registers
+    """
+
+    local_url = settings.LOCAL_URL
+
+    list_of_registers = SavedRegisters.objects.values('title','selected_fields')
+    return render(request,'reports/list_of_registers.html', {'list_of_registers':
+        list_of_registers,'local_url': local_url})

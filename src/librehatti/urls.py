@@ -5,7 +5,6 @@ from django.contrib import admin
 
 from reports.register_generator import GenerateRegister
 from reports.search import SearchResult
-
 from ajax_select import urls as ajax_select_urls
 
 admin.autodiscover()
@@ -18,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search/','librehatti.reports.views.search_form'),
     url(r'^search_result/', SearchResult.as_view()),
+    url(r'^save_fields', 'librehatti.reports.views.save_fields'),
+    url(r'^list_saved_registers', 'librehatti.reports.views.list_saved_registers'),
     url(r'^bill/', 'librehatti.prints.views.bill'),
     url(r'^bills/', include('librehatti.bills.urls')),
     url(r'^suspense/', include('librehatti.suspense.urls')),
@@ -30,3 +31,4 @@ urlpatterns = patterns('',
     url(r'^receipt/', 'librehatti.prints.views.receipt'),
     url(r'^tinymce/', include('tinymce.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

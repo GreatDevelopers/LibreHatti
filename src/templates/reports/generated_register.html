@@ -13,6 +13,11 @@
     </head>
     <body>
         <h1>{{title}}</h1>
+        {% ifequal '0' save_option %}
+            <p></p>
+        {% else %}
+            <a href = {% url 'reports.views.save_fields' %}?{{get_data}}>Save Used Fields</a>
+        {% endifequal %}
         <table>
             
             <tr>
