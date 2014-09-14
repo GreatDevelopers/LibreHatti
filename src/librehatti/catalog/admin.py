@@ -63,8 +63,11 @@ purchasing or testing
 """
 class ProductAdmin(admin.ModelAdmin):
     fields = ['name', 'category', 'price_per_unit', 'organisation']
+    list_display = ['id', 'name', 'category', 'price_per_unit']
     inlines = [CatalogInline]
     actions = [duplicate_event]
+    search_fields = ['name']
+    list_filter = ['category']
     
 
 """
@@ -106,9 +109,14 @@ class HeaderAdmin(admin.ModelAdmin):
             ))
         return super(HeaderAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'parent']
+    search_fields = ['name']
+    actions = [duplicate_event]
+    list_filter = ['parent']
 
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderOfBills, HeaderAdmin)
-
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
 admin.site.register(LogEntry, LogEntryAdmin)
