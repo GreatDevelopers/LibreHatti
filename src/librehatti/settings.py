@@ -34,6 +34,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCAL_URL = ''
+
 MEDIA_ROOT = ''
 
 MEDIA_URL = ''

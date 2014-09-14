@@ -14,6 +14,9 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Surcharge
 from librehatti.catalog.models import TaxesApplied
+
+from librehatti.reports.models import SavedRegisters
+
 from django.contrib.auth.models import User
 
 from datetime import datetime, timedelta
@@ -87,7 +90,8 @@ class GenerateRegister(View):
 
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
-            'title':self.title, 'number_of_fields':number_of_fields
+            'title':self.title, 'number_of_fields':number_of_fields,'get_data':
+            self.get_data, 'save_option': self.save_option
             }
 
         try:
@@ -202,7 +206,14 @@ class GenerateRegister(View):
         Convert date into datetime format.
         """
 
-    	self.title = request.GET['title']
+        self.get_data = request.META['QUERY_STRING']
+        self.title = request.GET['title']
+        self.save_option = '1'
+
+        saved_registers = SavedRegisters.objects.values_list('title', flat = True)
+
+        if self.title in saved_registers:
+            self.save_option = '0'
 
         if not self.title:
             self.title = 'General Register'
@@ -253,4 +264,3 @@ class GenerateRegister(View):
         except:
             pass
         return self.convert_values(request)
-
