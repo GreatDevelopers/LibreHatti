@@ -19,7 +19,6 @@ from ajax_select.admin import AjaxSelectAdmin
 from tinymce.widgets import TinyMCE
 
 admin.autodiscover()
-admin.site.register(Category)
 admin.site.register(Attributes)
 admin.site.register(Catalog)
 admin.site.register(Surcharge)
