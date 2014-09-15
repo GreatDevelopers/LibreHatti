@@ -24,7 +24,7 @@
 			{% for category,products in value.items %}
 		    	{% if key == node.id %}
 					
-						<h3 class="leaf-category"> {{ category }} {{key}}</h3>
+						<h3 class="leaf-category"> {{ category }} </h3>
 						{% for product, attributes in products.items %}
 						<div class="product-container">
 			    			<h4 class="product-head"> <span class="product-name"> {{ product | safe}} </span> <span class="product-price">  
