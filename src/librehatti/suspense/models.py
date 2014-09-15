@@ -6,7 +6,7 @@ from librehatti.voucher.models import FinancialSession
 
 from librehatti.bills.models import QuotedOrder
 
-from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import PurchaseOrder, Category
 
 
 class SuspenseOrder(models.Model):
@@ -46,7 +46,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=50)
     daily_income = models.IntegerField(blank=True)
     position = models.CharField(max_length=100)
-    #lab = models.ForeignKey(Lab)
+    lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
 
     class Meta:

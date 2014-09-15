@@ -1,8 +1,10 @@
 from django.forms import ModelForm, TextInput
 from models import SuspenseClearance
 from models import TaDa
+from models import Staff
 from models import SuspenseOrder
 from models import QuotedSuspenseOrder
+from librehatti.catalog.models import Category
 from django import forms
 
 
@@ -31,3 +33,13 @@ class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
         exclude = ('',)
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+
+    try:
+        lab = forms.ModelChoiceField(queryset=Category.objects.\
+        filter(parent__isnull=True))
+    except:
+        pass

@@ -17,7 +17,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
 <div align= "left">
 <br/><br/>
-<table border="1" width="100%">
+<table border="1" width="100%" style="border-collapse: collapse;">
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
 </tr>
@@ -49,37 +49,22 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <br>
 <br>
 <div>
-<table border="1" width="100%">
-<tr>
-	<td colspan="3"></TD>
-</TR>
+<table border="1" width="100%" style="border-collapse: collapse;">
+
 <tr>
 	<TD>NAME OF EMPLOYEES</TD>
 	<TD>DESIGNATION</TD>
 </tr>
-<tr>
-	<TD>Dr. Jagbir Singh</TD>
-	<td>Assoc.Prof</TD>
 </tr>
+{% for emp in employee %}
 <tr>
-	<TD>Sh. Amarjit Singh</TD>
-	<td>Mechanic</TD>
+	<TD>{{emp.name}}</TD>
+	<td>{{emp.position}}</TD>
 </tr>
-<tr>
-	<TD>S. Sukhchain Singh</TD>
-	<td>Attendent</TD>
-</tr>
-<tr>
-	<TD>S. Jasvir Singh</TD>
-	<td>L.A.</TD>
-</tr>
-<tr>
-	<TD>Sh. Surjeet Kumar</TD>
-	<td>Attendent</TD>
-</tr>
+{% endfor %}
 </TABLE>
 </div>
-<div align="left">THE WORK HAS BEEN EXECUTED BY ABOVE PERSONS AS MENTIONED ABOVE. </div>
+<div align="left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
 <br><br>
 <div style="right: 50px;top: 800px;float: right;margin-top: 10px;">DEAN TESTING AND CONSULTANCY</div>
 <div align="left">

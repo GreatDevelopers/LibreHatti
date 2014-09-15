@@ -7,7 +7,7 @@ from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
-from librehatti.suspense.models import SuspenseOrder
+from librehatti.suspense.models import SuspenseOrder, Staff
 
 """
 This function calculates the session id and then initialise or increment 
@@ -272,7 +272,8 @@ def voucher_print(request):
     total_in_words = num2eng(calculatedistribution['total'])
     voucherid = VoucherId.objects.values('purchase_order', 'ratio',\
     'college_income', 'admin_charges', 'distribution__name',\
-    'purchased_item__item__category__name').\
+    'purchased_item__item__category__name',\
+    'purchased_item__item__category__parent__parent').\
     filter(voucher_no = number, session = session)
     for value in voucherid:
         purchase_order = value['purchase_order']
@@ -281,6 +282,8 @@ def voucher_print(request):
         college_income = value['college_income']
         admin_charges = value['admin_charges']
         category_name = value['purchased_item__item__category__name']
+        lab_id = value['purchased_item__item__category__parent__parent']
+    emp = Staff.objects.values('name','position').filter(lab=lab_id)
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time','buyer__first_name','buyer__last_name',\
     'delivery_address','tds').get(id = purchase_order)
@@ -297,7 +300,7 @@ def voucher_print(request):
             'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
             'voucher':number, 'date': date,'address': delivery_address,\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
-            'total_in_words': total_in_words})
+            'total_in_words': total_in_words, 'employee' : emp})
         voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
