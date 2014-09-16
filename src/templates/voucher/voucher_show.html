@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>
+            Results of your Search 
+        </title> 
+        <style>
+            .else { color : red ; }
+            h1{text-align: center;}
+            h2, .else { text-align :center; margin-top:5%; }
+            table{display: inline-block;text-align: center;}
+            table,th,td{border: 1px solid black; border-collapse: collapse;}
+        </style>
+    </head>
+    <body>
+        <h1>Voucher</h1>
+         <table>
+            
+            <tr>
+            <th>Purchase Order</th> 
+            <th>Purchased Item</th>
+            <th>Voucher No</th>
+            <th>Options</th>
+            </tr>
+            <tr>
+                {% if voucherid %}
+                {% for value in voucherid %}
+                <td>{{ value.purchase_order }}</td>
+                <td>{{ value.purchased_item }}</td>
+                <td>{{ value.voucher_no }}</td>
+                <td><a href = '/voucher/voucher_print/?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a>
+                </td>
+
+            </tr>
+
+            {% endfor %}
+            {% endif %}
+        </table>
+    </body>
+</html>

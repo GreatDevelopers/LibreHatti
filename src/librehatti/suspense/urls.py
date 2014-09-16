@@ -13,5 +13,7 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^withouttransport/','withouttransport'),
                    url(r'^with_transport/','with_transport'),
                    url(r'^wtransport/','wtransport'),
+                   url(r'quoted_add_distance', 'quoted_add_distance'),
+                   url(r'^save_distance', 'save_distance'),
               )                    
         

@@ -1,10 +1,19 @@
 from django.db import models
 import datetime
-from librehatti import catalog
+
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import FinancialSession
+
+from librehatti.bills.models import QuotedOrder
+
+from librehatti.catalog.models import PurchaseOrder, Category
+
 
 class SuspenseOrder(models.Model):
-    purchase_order = models.ForeignKey('catalog.PurchaseOrder')
-    distance = models.IntegerField(default=0)
+    voucher = models.IntegerField()
+    purchase_order = models.ForeignKey(PurchaseOrder)
+    session_id = models.ForeignKey(FinancialSession)
+    distance_estimated = models.IntegerField()
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)
@@ -37,7 +46,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=50)
     daily_income = models.IntegerField(blank=True)
     position = models.CharField(max_length=100)
-    #lab = models.ForeignKey(Lab)
+    lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
 
     class Meta:
@@ -60,3 +69,11 @@ class TaDa(models.Model):
     testing_staff = models.CharField(max_length=100)
     def __unicode__(self):
        return self.suspense
+
+class QuotedSuspenseOrder(models.Model):
+    quote_order = models.ForeignKey('bills.QuotedOrder')
+    distance = models.IntegerField(default=0)
+    is_cleared = models.BooleanField(default=False)
+    def __unicode__(self):
+        return '%s' % (self.id)
+

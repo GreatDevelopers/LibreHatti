@@ -1,0 +1,11 @@
+<table border = '0px'>
+	<tr>
+		<th>Title</th>
+		<th>Options</th>
+{% for value in list_of_registers %}
+    <tr>
+    	<td>{{value.title}}</td>
+    	<td><a href = '{{local_url}}generate_register/?{{value.selected_fields}}'>View Register</a></td>
+    </tr>
+{% endfor %}
+</table>

@@ -1,0 +1,28 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="a.css" /><title>Receipt</title></head>
+<div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
+<div style="font-size:14px" align='center'>Punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</div>
+<div style="font-size:24px" align='center'>Testing & Consultancy Cell</div>
+<div style="font-size:14px" align='center'>Gill Park, Gill Road, Ludhiana - 141006 </div>
+<div style="font-size:14px" align='center'><i>Website :</i> http//tcc.gndec.ac.in  <i>Email 
+:</i> tcc@gndec.ac.in  <i>Ph :</i> 0161-2491193,5064509  <i>Fax :</i> 0161-5064742</div><br><br>
+<center><h3><b>RECEIPT</h3>  </b></center>
+<br/>
+
+
+<div align="left" style="position:absolute;top:220px;left:0px;"> Receipt No. : {{receiptno}}</div>
+<div align="right" style="position:absolute;top:220px;right:0px;">Dated : {{date}} </div>
+<br/><br/><br/>
+
+<div align="left">Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> {{buyer.company}}, {{address.street_address}}, {{address.city}}-{{address.pin}}, {{address.province}} by {{method.mode_of_payment__method}} on account of Testing of
+{% for value in material %}
+{{value.item__category__name}},
+{% endfor %}.</div>
+
+
+<div style="position:absolute;right:300px;top:450px;"><b> Cashier</b></div>
+
+</body>
+</html>
+

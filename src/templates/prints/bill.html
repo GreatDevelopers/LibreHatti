@@ -54,23 +54,60 @@
                 <th>Total</th>
             </tr>
         
+            
             <tr>
-                {% if purchased_item %}
-                {% for purchaseditem in purchased_item %}
-                <td> {{ purchaseditem.item__name }} </td>
-                <td> {{ purchaseditem.qty }} sample./s  </td>
-                <td> {{ purchaseditem.item__price_per_unit }} </td>
-                <td> {{purchaseditem.price }} </td>
-            </tr>
-   
-            {% endfor %}
-  
+                {% for purchased_item in purchased_item %}
+            <td>
+                {{purchased_item.purchased_item__item__category__name}}: 
+                {% for values in values %}
+                {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
+                {{ values.purchased_item__item__name }},
             {% endif %}
+            {% endfor %}
+            </td>
+            <td>
+                {% for values in values %}
+                {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
+                {{ values.purchased_item__qty }},
+                {% endif %}
+                {% endfor %}
+                sample./s
+            </td>
+            
+            <td>
+                {% for values in values %}
+                {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
+                {{ values.purchased_item__item__price_per_unit }},
+                {% endif %}
+                {% endfor %}
+            </td>
 
+            <td>
+            {% for cost in cost %}
+            {% if purchased_item.voucher_no == cost.voucher_no and purchased_item.session == cost.session %}
+            {{ cost.total }}
+            {% endif %}
+            {% endfor %}
+            </td>
+            </tr>
+            {% endfor %}
+
+
+
+{% if total_discount %}
+<tr>
+    <td>Discount</td>
+    <td  colspan="2" rowspan="{{tax_count}}"></td>
+    <td>{{total_discount}}</td>
+</tr>
+{% endif %}
 
             <tr>
                 <td><b>Total </b></td>
-                <td  colspan="2" rowspan="4"></td>
+                {% if total_discount %}
+                {% else %}
+                <td  colspan="2" rowspan="{{tax_count}}"></td>
+                {% endif %}
                 <td><b>{{total_cost}}</b></td>
             </tr>
 
@@ -90,7 +127,12 @@
   
             {% endif %}
             
-
+{% if delivery_charges %}
+<tr>
+    <td>Transportation</td>
+    <td>{{delivery_charges}}</td>
+</tr>
+{% endif %}
             <tr>
                 <td><b>Total </b></td>
                 <td><b>{{grand_cost}}</b></td>
@@ -107,6 +149,5 @@
 </body>
 
 </html>
-
 
 

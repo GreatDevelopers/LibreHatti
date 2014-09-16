@@ -1,0 +1,44 @@
+<head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+$('.voucher').attr('disabled', 'disabled');
+$('.material').attr('disabled', 'disabled');
+            $('.add_distance').change(function(event){
+            voucher_no = event.target.id.split("_")[1];
+            distance = $('#distance_' + voucher_no).val();
+            order = $('#order').val();
+       request_url = "/suspense/save_distance/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
+        $.ajax({
+          url: request_url,
+          success: function(data){
+          }
+        });
+    });
+})
+
+</script>
+</head>
+<body>
+<form method = 'POST' action = ''>
+	 {% csrf_token %}
+<table class='add_distance'>
+<tr>
+<td style="display:none;">Order:<input type="text" name = "order" class = "order" size="7" 
+	id="order" value="{{purchase_order_id}}"></td>
+</tr>
+{% for value in voucher %}
+<tr>
+<td>Vocher Number:<input type="text" name = "voucher" class = "voucher" size="7" 
+	id="voucher_{{value.voucher_no}}" value="{{value.voucher_no}}"></td>
+<td>Material:<input type="text" name = "material" class = "material" size="35" 
+	id="material_{{value.voucher_no}}" 
+	value="{{value.purchased_item__item__category__name}}"></td>  
+<td>Distance:<input type="text" name="distance" class = "distance" size = "7" 
+	id="distance_{{value.voucher_no}}" value="0"></td>
+</tr>
+{% endfor %}
+</table>
+<input type='submit' value = 'Next'>
+</form>
+</body>

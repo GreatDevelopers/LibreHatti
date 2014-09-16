@@ -1,0 +1,75 @@
+<html>
+<head><title>Report</title></head>
+<div style="font-size:24px" align='center'><b>GURU NANAK DEV ENGINEERING COLLEGE</b></div>
+<div style="font-size:24px" align='center'>Testing & consultancy cell</div><br>
+<body>
+<br>
+
+<div style="position:absolute;right:0px;top:75px;">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
+<div style="position:absolute;right:0px;top:95px;">Dated : {{date}} </div>
+<div style="position:absolute;left:7px;top:105px;">Director,</div>
+<br></br><br/>
+Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
+Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{address.street_address}},
+{{address.city}} {{address.province}} {{address.pin}} <br> on account of {{ categoryname}}
+<br/><br/><br/>
+<div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
+<div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
+<div align= "left">
+<br/><br/>
+<table border="1" width="100%" style="border-collapse: collapse;">
+<tr>
+	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
+</tr>
+
+
+<tr>
+	<td rowspan="9">CREDITS</td>
+	<td>COLLEGE INCOME {{ college_income }}% </td>
+	<td  align="right">{{ calculate_distribution.college_income_calculated }}</td>
+</tr>
+<tr>
+	<td>ADMN. CHARGES {{ admin_charges }}% </td>
+	<td  align="right">{{ calculate_distribution.admin_charges_calculated}}</td>
+</tr>
+<tr>
+	<td>CONSULTANCY ASST. </td>
+	<td  align="right">{{ calculate_distribution.consultancy_asset }}</td>
+</tr>
+<tr>
+	<td>DEV. FUND (CONSULTANCY) </td>
+	<td  align="right">{{ calculate_distribution.development_fund }}</td>
+</tr>
+<tr>
+	<td>TOTAL (Rs.) </td>
+	<td  align="right">{{ calculate_distribution.total }}</td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<div>
+<table border="1" width="100%" style="border-collapse: collapse;">
+
+<tr>
+	<TD>NAME OF EMPLOYEES</TD>
+	<TD>DESIGNATION</TD>
+</tr>
+</tr>
+{% for emp in employee %}
+<tr>
+	<TD>{{emp.name}}</TD>
+	<td>{{emp.position}}</TD>
+</tr>
+{% endfor %}
+</TABLE>
+</div>
+<div align="left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
+<br><br>
+<div style="right: 50px;top: 800px;float: right;margin-top: 10px;">DEAN TESTING AND CONSULTANCY</div>
+<div align="left">
+Account Clerk (Consultancy)</div>
+<br><br><br>
+
+</body>
+</html>
