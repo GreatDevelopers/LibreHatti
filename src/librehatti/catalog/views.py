@@ -5,7 +5,7 @@ from django.db.models import Sum
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import *
-from librehatti.catalog.forms import AddCategory,TransportForm1,TransportForm2
+from librehatti.catalog.forms import AddCategory,TransportForm1
 from librehatti.catalog.models import Transport
 from librehatti.catalog.forms import ItemSelectForm
 
@@ -69,10 +69,12 @@ def transport_bill(request):
             if 'button1' in request.POST:
                     vehicle_id = request.POST['vehicle_id']
                     job_id = request.POST['job_id']
-                    kilometer = float(request.POST['kilometer'])          
-                    date = request.POST['date']
+                    kilometers = float(request.POST.getlist("kilometer")) # return array of kilometers          
+                    date = request.POST.getlist("date") # return date in the same order as kilometer
                     rate = float(request.POST['rate'])
                     total = rate*kilometer
+
+                    # run this corresponding query again and again for all kilometers
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
@@ -82,19 +84,7 @@ def transport_bill(request):
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
                     return render(request,'bills/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
-                            'total_amount' : total_amount}) 
-
-            else:
-                    vehicle_id = request.POST['vehicle_id']
-                    job_id = request.POST['job_id']
-                    kilometer = float(request.POST['kilometer'])
-                    date = request.POST['date']
-                    rate = float(request.POST['rate'])
-                    total = rate * kilometer
-                    obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
-                                    kilometer=kilometer, Date=date, rate=rate, 
-                                    total=total) 
-                    obj.save()
+                            'total_amount' : total_amount})
                          
     else:
         form = TransportForm1()
