@@ -5,13 +5,19 @@ from django.db.models import Sum
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import *
+<<<<<<< HEAD
 from librehatti.catalog.forms import AddCategory,TransportFormA,TransportFormB
+=======
+from librehatti.catalog.forms import AddCategory,TransportForm1
+>>>>>>> upstream/dirty
 from librehatti.catalog.models import Transport
 from librehatti.catalog.forms import ItemSelectForm
 
 from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
+from librehatti.voucher.models import VoucherId, CalculateDistribution
+from django.core.urlresolvers import reverse
 
 import simplejson
 
@@ -57,6 +63,7 @@ def add_categories(request):
 
 def transport_bill(request):
     if request.method == 'POST':
+<<<<<<< HEAD
         form = TransportFormA(request.POST)
         form1 = TransportFormB(request.POST)
        
@@ -83,6 +90,20 @@ def transport_bill(request):
                     kilometer = float(cd['kilometer'])
                     date = request.POST['Date']
                     total = rate * kilometer
+=======
+        form = TransportForm1(request.POST)
+        if form.is_valid():
+           
+            if 'button1' in request.POST:
+                    vehicle_id = request.POST['vehicle_id']
+                    job_id = request.POST['job_id']
+                    kilometers = float(request.POST.getlist("kilometer")) # return array of kilometers          
+                    date = request.POST.getlist("date") # return date in the same order as kilometer
+                    rate = float(request.POST['rate'])
+                    total = rate*kilometer
+
+                    # run this corresponding query again and again for all kilometers
+>>>>>>> upstream/dirty
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
@@ -96,6 +117,7 @@ def transport_bill(request):
                              ).aggregate(Sum('total')).get('total__sum', 0.00)
                      return render(request,'catalog/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
+<<<<<<< HEAD
                             'total_amount' : total_amount, 
                             'date':datetime.datetime.now()})
  
@@ -139,6 +161,13 @@ def transport_bill(request):
 
 
 
+=======
+                            'total_amount' : total_amount})
+                         
+    else:
+        form = TransportForm1()
+    return render(request, 'bills/form.html', {'TransportForm':form}) 
+>>>>>>> upstream/dirty
 
 """
 This view allows filtering of sub category according to parent category of 
@@ -231,3 +260,20 @@ def list_products(request):
             one_category_dict[one_category.name] = attributes_dict
             products_dict[one_category.id] = one_category_dict
     return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
+
+
+
+def previous_value(request):
+    old_post = request.session.get('old_post')
+    purchase_order_id = request.session.get('purchase_order_id')
+    Bill.objects.filter(purchase_order=purchase_order_id).delete()
+    if SuspenseOrder.objects.filter(purchase_order=purchase_order_id):
+        SuspenseOrder.objects.filter(purchase_order=purchase_order_id).delete()
+    else:
+        pass
+    TaxesApplied.objects.filter(purchase_order=purchase_order_id).delete()
+    voucher_no = VoucherId.objects.values('voucher_no', 'session').filter(purchase_order=purchase_order_id)
+    for value in voucher_no:
+        CalculateDistribution.objects.get(voucher_no=value['voucher_no'], session=value['session']).delete()
+    VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
+    return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))

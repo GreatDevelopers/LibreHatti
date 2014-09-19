@@ -25,7 +25,7 @@ A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been d
 		</tr>
 		{% for value in tax %}
 		<tr>
-			<td>{{ value.surcharge__tax_name }}  @ {{ value.value }}% </td>
+			<td>{{ value.surcharge__tax_name }}  @ {{ value.surcharge__value }}% </td>
 			<td  align="right">{{ value.tax }}.00</td>
 		</tr>
 		{% endfor %}

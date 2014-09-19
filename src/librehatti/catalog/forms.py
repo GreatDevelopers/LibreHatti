@@ -7,6 +7,7 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import Vehicle
 
 import itertools
 from librehatti.catalog.models import Transport
@@ -24,12 +25,10 @@ class AddCategory(forms.Form):
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
 
 
-class TransportFormA(forms.ModelForm):
-    class Meta:
-        model = Transport
-        exclude = ['total']
-
-class TransportFormB(forms.Form):
+class TransportForm1(forms.Form):
+    Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
+    job_id = forms.IntegerField()
+    rate = forms.IntegerField(initial=10)
     kilometer = forms.IntegerField()
     date = forms.DateField()
 

@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block extrastyle %}
+<style type="text/css">
+span.s1 {
+    margin-left: 9%;
+}
+span.s2 {
+    margin-left: 8%;
+}
+span.s3 {
+    margin-left: 10%;
+}
+span.sm {
+    margin-left: 4%;
+}
+</style>
+{% endblock %} {% block extrascript %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#button2").click(function() {
+        $("#id_kilometer").parent("p").clone().insertAfter($("#id_date").parent("p"));
+        $("#id_date").parent("p").clone().insertAfter($("#id_date").parent("p"));
+    });
+});
+</script>
+{% endblock %} {% block content %}
+<table>
+    <tr>
+        <td>
+            <form action='{% url 'librehatti.catalog.views.transport_bill' %}' method='POST'>{% csrf_token %} {{TransportForm.as_p}}
+                <input type="submit" value="Generate Bill" name='button1' id='button1' />
+                <input type="button" value="Add Another" name='button2' id='button2' />
+            </form>
+        </td>
+    </tr>
+</table>
+{% endblock %}
