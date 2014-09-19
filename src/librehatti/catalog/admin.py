@@ -24,7 +24,7 @@ admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
 admin.site.register(Transport)
-
+admin.site.register(Vehicle)
 """
 This action is to create a duplicate record
 """
