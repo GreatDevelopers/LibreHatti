@@ -12,7 +12,7 @@ from librehatti.catalog.forms import ItemSelectForm
 from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
-
+from librehatti.catalog.models import HeaderOfBills
 import simplejson
 
 def index(request):
@@ -80,9 +80,10 @@ def transport_bill(request):
                     temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
+                    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
                     return render(request,'bills/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
-                            'total_amount' : total_amount}) 
+                            'total_amount' : total_amount , 'header':header}) 
 
             else:
                     vehicle_id = request.POST['vehicle_id']

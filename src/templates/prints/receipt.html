@@ -1,12 +1,11 @@
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="a.css" /><title>Receipt</title></head>
-<div style="font-size:24px" align='center'><b>Guru Nanak Dev Engineering College</b></div>
-<div style="font-size:14px" align='center'>Punjab Govt. Aided Status, NBA Accredited ISO-9001-2008 Certified</div>
-<div style="font-size:24px" align='center'>Testing & Consultancy Cell</div>
-<div style="font-size:14px" align='center'>Gill Park, Gill Road, Ludhiana - 141006 </div>
-<div style="font-size:14px" align='center'><i>Website :</i> http//tcc.gndec.ac.in  <i>Email 
-:</i> tcc@gndec.ac.in  <i>Ph :</i> 0161-2491193,5064509  <i>Fax :</i> 0161-5064742</div><br><br>
+
+<title>Receipt</title>
+{% load staticfiles %} 
+    <link href="{% static 'css/prints_bill.css' %}" media="all" rel="stylesheet" type="text/css">
+</head>
+ {{header.header | safe}}
 <center><h3><b>RECEIPT</h3>  </b></center>
 <br/>
 

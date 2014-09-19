@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from librehatti.catalog.models import PurchaseOrder, PurchasedItem, ModeOfPayment, Product
+from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import PurchasedItem
+from librehatti.catalog.models import ModeOfPayment
+from librehatti.catalog.models import Product
 from librehatti.bills.models import *
 from django.contrib.auth.models import User
 import useraccounts
@@ -23,6 +26,7 @@ def confirm(request, client_id):
 def final(request,name):
     if request.method == 'POST':
         form = ConfirmForm(request.POST)
+        header = HeaderOfBills.objects.values('header').order_by('-id')[0]
         if form.is_valid():
             cd = form.cleaned_data
             qty1 = request.POST ['quote_qty']
@@ -30,8 +34,9 @@ def final(request,name):
             total_cost = PurchasedItem.objects.filter(quote_order_id=  
                          int(client_id)).aggregate(Sum('quote_price')).get('price__sum',
                          0.00)
+            header = HeaderOfBills.objects.values('header').order_by('-id')[0]
             return render(request,'bills/confirm_bill.html',
-                         {'total_cost':total_cost, 'form':form })
+                         {'total_cost':total_cost, 'form':form , 'header':header})
         else:
     
              client_id = 1
@@ -46,7 +51,7 @@ def final(request,name):
              return render(request, 'bills/confirm_bill.html', 
                           {'quoted_order' : quoted_order, 
                           'quoted_item' : quoted_item, 'total_cost' : total_cost, 
-                          'id' : i_d,'form':form})
+                          'id' : i_d,'form':form, 'header':header})
 	     
       
 def proforma(request):
@@ -74,8 +79,9 @@ def gen_proforma(request, client_id):
                 	
     total = QuotedItem.objects.filter(quote_order_id=client_id).aggregate(Sum(
             'price')).get('price__sum', 0.00)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'bills/proforma_bill.html',{ 'quoted_order':quoted_order,
-                 'quoted_item' : quoted_item, 'total_cost': total })
+                 'quoted_item' : quoted_item, 'total_cost': total, 'header':header })
 
 def quote_table(request,order_id):
     """
@@ -94,9 +100,10 @@ def generate_bill(request):
     'item__name', 'qty','item__price_per_unit','price') 
     total = QuotedItem.objects.filter(quote_order_id=order).aggregate(Sum(
     'price')).get('price__sum', 0.00)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'bills/quote_bill.html', { 'STC_No' :'1','PAN_No' :'12', 'L_No':
     '123', 'purchase_order':quote_order, 'purchased_item' : 
-     quote_item, 'total_cost': total})
+     quote_item, 'total_cost': total, 'header':header})
 
 
 def select_sub_category(request):

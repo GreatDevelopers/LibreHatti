@@ -27,14 +27,7 @@
 
 <body>
 
-   <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
-    <h1 class='a'>{{quoted_order.organisation.tagline}}</h1>       
-    <h1 class='b'>{{quoted_order.organisation.title}}</h1>  
-    <p class ='c'>{{quoted_order.organisation.address}}</p> 
-    <p class='c'><i>Website :</i> {{quoted_order.organisation.quote_url}}
-    <i>Email:</i>{{quoted_order.organisation.quote_email1}}
-    <i>Ph :</i>{{quoted_order.organisation.telephone}} 
-    <i>Fax :</i> {{quoted_order.organisation.fax}}</p>
+   {{header.header | safe}}
 
     <h2 class='d'>Proforma Bill</h2>
     <p class='e'>STC No. AAATN1978LSD001</br>

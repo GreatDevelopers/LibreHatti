@@ -1,7 +1,6 @@
 <html>
 <head><title>Report</title></head>
-<div style="font-size:24px" align='center'><b>GURU NANAK DEV ENGINEERING COLLEGE</b></div>
-<div style="font-size:24px" align='center'>Testing & consultancy cell</div><br>
+{{header.header | safe}}
 <body>
 <br>
 
@@ -17,7 +16,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
 <div align= "left">
 <br/><br/>
-<table border="1" width="100%" style="border-collapse: collapse;">
+<table border="1" width="100%">
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
 </tr>
@@ -50,18 +49,17 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <br>
 <div>
 <table border="1" width="100%" style="border-collapse: collapse;">
-
 <tr>
-	<TD>NAME OF EMPLOYEES</TD>
-	<TD>DESIGNATION</TD>
+        <td>NAME OF EMPLOYEES</td>
+        <td>DESIGNATION</td>
 </tr>
 </tr>
-{% for emp in employee %}
+    {% for emp in employee %}
 <tr>
-	<TD>{{emp.name}}</TD>
-	<td>{{emp.position}}</TD>
+        <td>{{emp.name}}</td>
+        <td>{{emp.position}}</td>
 </tr>
-{% endfor %}
+    {% endfor %}
 </TABLE>
 </div>
 <div align="left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
@@ -70,6 +68,5 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <div align="left">
 Account Clerk (Consultancy)</div>
 <br><br><br>
-
 </body>
 </html>
