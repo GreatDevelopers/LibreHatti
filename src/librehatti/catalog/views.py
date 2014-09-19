@@ -12,6 +12,8 @@ from librehatti.catalog.forms import ItemSelectForm
 from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
+from librehatti.voucher.models import VoucherId, CalculateDistribution
+from django.core.urlresolvers import reverse
 
 import simplejson
 
@@ -191,3 +193,20 @@ def list_products(request):
             one_category_dict[one_category.name] = attributes_dict
             products_dict[one_category.id] = one_category_dict
     return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
+
+
+
+def previous_value(request):
+    old_post = request.session.get('old_post')
+    purchase_order_id = request.session.get('purchase_order_id')
+    Bill.objects.filter(purchase_order=purchase_order_id).delete()
+    if SuspenseOrder.objects.filter(purchase_order=purchase_order_id):
+        SuspenseOrder.objects.filter(purchase_order=purchase_order_id).delete()
+    else:
+        pass
+    TaxesApplied.objects.filter(purchase_order=purchase_order_id).delete()
+    voucher_no = VoucherId.objects.values('voucher_no', 'session').filter(purchase_order=purchase_order_id)
+    for value in voucher_no:
+        CalculateDistribution.objects.get(voucher_no=value['voucher_no'], session=value['session']).delete()
+    VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
+    return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))

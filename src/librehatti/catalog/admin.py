@@ -18,6 +18,8 @@ from ajax_select.admin import AjaxSelectAdmin
 
 from tinymce.widgets import TinyMCE
 
+from django.http import HttpResponse
+
 admin.autodiscover()
 admin.site.register(Attributes)
 admin.site.register(Catalog)
@@ -98,6 +100,10 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
         return HttpResponseRedirect('/voucher/voucher_generate/')
+    def response_change(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['purchase_order_id'] = obj.id
+        return HttpResponseRedirect(reverse("librehatti.catalog.views.previous_value"))
 
 class HeaderAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
