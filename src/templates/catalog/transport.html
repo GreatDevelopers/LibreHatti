@@ -1,0 +1,40 @@
+<html>
+
+    <head>
+        <style type="text/css">
+            span.s1{margin-left: 9%;}
+            span.s2{margin-left: 8%;}
+    	    span.s3{margin-left: 10%;}
+    	    span.sm{margin-left: 4%;}
+        </style>
+        <title>Transport</title>
+    </head>
+    <body class= "transport">
+ 
+        <form  action="/catalog/transp/" method="POST">{% csrf_token %}
+            <div id="frm">
+                {{TransportFormA.as_p}}
+ 
+                <div class="item" id="itm" style="display:none;">
+                    {{TransportFormB.as_p}}
+                </div>  
+               
+            </div>
+            <input type="submit" value="Generate Bill" name="button1" > 
+            <a id= "add" ><input type="button" value="Add Another" name="button2"></a>
+         </form>
+            
+    </body>
+
+<script type="text/javascript">
+    document.getElementById("add").onclick=function(){ 
+        var i = document.getElementsByClassName("item");
+        var counter = i.length
+        var j = document.getElementById("itm").cloneNode(true);
+        j.id = "item"+counter
+        document.getElementById("frm").appendChild(j);
+        document.getElementById("itm").style.display='';
+    }
+</script>
+
+</html>

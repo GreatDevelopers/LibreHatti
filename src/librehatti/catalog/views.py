@@ -5,7 +5,11 @@ from django.db.models import Sum
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import *
+<<<<<<< HEAD
+from librehatti.catalog.forms import AddCategory,TransportFormA,TransportFormB
+=======
 from librehatti.catalog.forms import AddCategory,TransportForm1
+>>>>>>> upstream/dirty
 from librehatti.catalog.models import Transport
 from librehatti.catalog.forms import ItemSelectForm
 
@@ -57,14 +61,36 @@ def add_categories(request):
     })
 
 
-def transport(request):
-    form = TransportForm1()
-    temp = {'TransportForm':form}
-    return render (request, 'bills/form.html',temp)
-
-
 def transport_bill(request):
     if request.method == 'POST':
+<<<<<<< HEAD
+        form = TransportFormA(request.POST)
+        form1 = TransportFormB(request.POST)
+       
+        if form.is_valid() or form1.is_valid():
+ 
+          if form1.is_valid():
+                i = Transport.objects.all().aggregate(Max('id'))
+                j= i['id__max']
+                
+                #vehicle_id = Transport.objects.filter(id=j).values('vehicle_id')
+                #job_id = Transport.objects.filter(id=j).values('job_id')
+                #rate = Transport.objects.filter(id=j).values('rate')
+                #if 'button2' in request.POST:
+ 
+                if form.is_valid():  
+                    cd = form.cleaned_data
+                    vehicle = Transport.objects.get(id=j)
+                    #for i in vehicle:
+                    #ListDict = {'vehicle_id':i.vehicle_id, 'job_id':i.job_id, 'rate':i.rate }
+                    vehicle_id = vehicle.vehicle_id
+                    job_id = vehicle.job_id
+                    rate = vehicle.rate
+                    #vehicle_id = obj.vehicle_id               
+                    kilometer = float(cd['kilometer'])
+                    date = request.POST['Date']
+                    total = rate * kilometer
+=======
         form = TransportForm1(request.POST)
         if form.is_valid():
            
@@ -77,20 +103,71 @@ def transport_bill(request):
                     total = rate*kilometer
 
                     # run this corresponding query again and again for all kilometers
+>>>>>>> upstream/dirty
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
                            total=total) 
                     obj.save()
-                    temp = Transport.objects.filter(job_id=obj.job_id)
-                    total_amount = Transport.objects.filter(job_id=obj.job_id
-                           ).aggregate(Sum('total')).get('total__sum', 0.00)
-                    return render(request,'bills/transport_bill.html', 
+                    #return render(request,'catalog/transport_bill.html', 
+                    #          {'v':v}) 
+ 
+                    if 'button1' in request.POST:
+                     temp = Transport.objects.filter(job_id=vehicle.job_id)
+                     total_amount = Transport.objects.filter(job_id=vehicle.job_id
+                             ).aggregate(Sum('total')).get('total__sum', 0.00)
+                     return render(request,'catalog/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
+<<<<<<< HEAD
+                            'total_amount' : total_amount, 
+                            'date':datetime.datetime.now()})
+ 
+                else:
+                     form = TransportFormB()
+                     return render(request, 'catalog/transport.html', {'TransportFormB':form})
+ 
+ 
+          elif form.is_valid():
+            cd = form.cleaned_data
+            form = TransportFormA(request.POST)
+            vehicle_id = cd['vehicle_id']
+            
+            job_id = cd['job_id']
+            
+            kilometer = float(cd['kilometer'])
+            date = request.POST['Date']
+            rate = float(cd['rate'])
+            
+            total = rate * kilometer
+            obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
+                           kilometer=kilometer, Date=date, rate=rate, 
+                           total=total) 
+            obj.save()
+            
+            if 'button1' in request.POST:
+                temp = Transport.objects.filter(job_id=obj.job_id)
+                total_amount = Transport.objects.filter(job_id=obj.job_id
+                             ).aggregate(Sum('total')).get('total__sum', 0.00)
+                return render(request,'catalog/transport_bill.html', 
+                           {'temp' : temp, 'words' : num2eng(total_amount), 
+                            'total_amount' : total_amount, 
+                            'date':datetime.datetime.now()}) 
+                
+                                             
+        else:
+            form = TransportFormA()
+            form = TransportFormB()
+        temp = { 'TransportFormB':form1}
+        return render(request, 'catalog/transport.html', temp)  
+
+
+
+=======
                             'total_amount' : total_amount})
                          
     else:
         form = TransportForm1()
     return render(request, 'bills/form.html', {'TransportForm':form}) 
+>>>>>>> upstream/dirty
 
 """
 This view allows filtering of sub category according to parent category of 

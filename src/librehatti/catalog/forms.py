@@ -10,6 +10,7 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import Vehicle
 
 import itertools
+from librehatti.catalog.models import Transport
 
 from ajax_select import make_ajax_field
 
