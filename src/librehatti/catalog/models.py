@@ -121,8 +121,7 @@ class PurchasedItem(models.Model):
     def save(self, *args, **kwargs):
         try:
             if self.purchase_order:
-                if not self.id:
-                    self.price = self.item.price_per_unit * self.qty
+                self.price = self.item.price_per_unit * self.qty
                 super(PurchasedItem, self).save(*args, **kwargs)
         except:
             raise ValidationError('No Active Taxes. Unable to add Items')

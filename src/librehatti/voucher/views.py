@@ -8,6 +8,7 @@ from useraccounts.models import Address
 from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder, Staff
+from django.core.urlresolvers import reverse
 
 """
 This function calculates the session id and then initialise or increment 
@@ -242,15 +243,21 @@ def voucher_generate(request):
                 calculate_distribution.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
-    return HttpResponseRedirect('/suspense/add_distance/')
+    return HttpResponseRedirect(reverse("librehatti.suspense.views.add_distance"))
 
 
 def voucher_show(request):
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.get(id = id)
+    voucher_no_list = []
+    voucher_obj_distinct = []
     voucherid = VoucherId.objects.values('purchase_order','purchased_item', 'voucher_no', 'session').\
     filter(purchase_order = purchase_order)
-    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucherid})
+    for value in voucherid:
+        if value['voucher_no'] not in voucher_no_list:
+            voucher_no_list.append(value['voucher_no'])
+            voucher_obj_distinct.append(value)
+    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct})
 
 
 def voucher_print(request):
