@@ -32,14 +32,7 @@
 
 </head>  
 <body>
-    <h1>{{quoted_order.quote_organisation.organisation_type}}</h1>
-    <h1 class='a'>{{quoted_order.quote_organisation.tagline}}</h1>       
-    <h1 class='b'>{{quoted_order.quote_organisation.title}}</h1>  
-    <p class ='c'>{{quoted_order.quote_organisation.address}}</p> 
-    <p class='d'><i>Website :</i> {{quoted_order.quoted_organisation.quote_url}}
-    <i>Email:</i>{{quoted_order.quoted_organisation.quote_email1}}
-    <i>Ph :</i>{{quoted_order.quote_organisation.telephone}} 
-    <i>Fax :</i> {{quoted_order.quote_organisation.fax}}</p>
+  {{header.header | safe}}  
 
     <h2 class='e'>Confirmation Bill</h2>
     <p class='f'>STC No. {{ STC_NO }}</br>
