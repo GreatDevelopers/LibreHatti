@@ -1,0 +1,20 @@
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+</head>
+<body>
+    {{header.header | safe}}
+    <div class = "bill-wrapper">
+        {% block content %}{% endblock %}
+        <div class="signed">
+        <p> Dean Of Training And Consultancy Cell </p> 
+    </div> 
+    </div>
+
+</body>
+</html>
