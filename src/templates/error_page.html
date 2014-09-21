@@ -1,0 +1,10 @@
+{% extends "suit/error_base.html" %}
+{% load i18n %}
+
+{% block title %}{{type}}{% endblock %}
+
+{% block error %}{% trans 'error'|capfirst %} 404{% endblock %}
+
+{% block content %}
+  {{message}}
+{% endblock %}

@@ -104,22 +104,17 @@ class SearchResult(View):
     def default_fields(self,request):
         """
         Displays the default fields if no checkboxes are selected.
-        """	
+        """ 
 
         if 'Client' in request.GET and not self.selected_fields_client:
-            self.selected_fields_client.append('name')
-            self.selected_fields_client.append('city')
-		
+            self.selected_fields_client.append('Name')
+            self.selected_fields_client.append('City')
+        
         if 'Order' in request.GET and not self.selected_fields_order:
-            self.selected_fields_client.append('name')
-            self.selected_fields_client.append('city')
-            self.selected_fields_order.append('debit')
-            self.selected_fields_order.append('mode of payment')
-            self.list_dict = {'name':'buyer__username', 
-                'city':'buyer__customer__address__city',
-                'discount':'total_discount','debit':'is_debit', 
-                'mode of payment':'mode_of_payment__method'
-            }
+            self.selected_fields_client.append('Name')
+            self.selected_fields_client.append('City')
+            self.selected_fields_order.append('Debit')
+            self.selected_fields_order.append('Mode Of Payment')
 
         return self.convert_values(request)
 
@@ -144,14 +139,23 @@ class SearchResult(View):
         """
 
         self.fields_list = []
+        if 'Order' in request.GET:
+            self.list_dict = {'Name':'buyer__username', 
+                'City':'buyer__customer__address__city',
+                'Phone':'buyer__customer__telephone',
+                'Joining Date':'buyer__customer__date_joined',
+                'Company':'buyer__customer__company',
+                'Discount':'total_discount','Debit':'is_debit', 
+                'Mode Of Payment':'mode_of_payment__method'
+                }
         for value in self.selected_fields_client:
             self.fields_list.append(self.list_dict[value])
 
         for value in self.selected_fields_order:
             self.fields_list.append(self.list_dict[value])
-        	
+            
         if 'Client' in request.GET:
-            self.fields_list.append('purchase_order__buyer__id')	
+            self.fields_list.append('purchase_order__buyer__id')    
         else: 
             self.fields_list.append('id')           
         return self.fetch_values(request)
@@ -161,7 +165,7 @@ class SearchResult(View):
         """
         Retrieve values from URL.
         Convert date into datetime format.
-        """	
+        """ 
         
         self.title = request.GET['search']
         self.selected_fields_client = request.GET.getlist('client_fields')

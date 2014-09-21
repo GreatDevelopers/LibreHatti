@@ -1,19 +1,19 @@
-<html>
-    <head>
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">    
+<head>
         <title>
             Purchase History
         </title>
-        <style>
-            .else { color : red ; }
-            h1{text-align: center;}
-            h2, .else { text-align :center; margin-top:5%; }
-            table{display: inline-block;text-align: center;}
-            table,th,td{border: 1px solid black; border-collapse: collapse;}
-        </style>
     </head>
     <body>
-        <h1> Purchase Details </h1>
-        <table>
+        {% block content %}
+        <div class="list-results">
+        <h2> Purchase Details </h2>
+        <div class="search">
+        <table border="1px">
             <tr>
                 <th>S.No.</th>
                 <th>Item</th>
@@ -32,6 +32,11 @@
                 <td>{{i.price}}</td>
             </tr>
             {% endfor %}
+        </div>
+
+        </div>
+
+        {% endblock %}
 
     </body>
 </html>

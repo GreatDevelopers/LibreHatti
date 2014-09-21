@@ -1,0 +1,24 @@
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+</head>
+<body>
+    <div class = "wrapper">
+        <div class="white-board">
+            <div class ="main-box" id="c-panel"> 
+                <header class="primary-branding">
+                   <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
+                </header>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

@@ -8,6 +8,10 @@
 	margin-top: 25px;
 }
 
+a{
+	text-decoration: none;
+}
+
 .form-elements{
 	margin-top:50px;
 }
@@ -24,17 +28,23 @@ input[type=text], select{
 	height:35px;
 	text-indent: 5px;
 	font-family: 'Open Sans', 'sans-serif';
+	background-color : #d1d1d1; 
+  -moz-border-radius:10px; /* Firefox */
+-webkit-border-radius: 10px; /* Safari, Chrome */
+-khtml-border-radius: 10px; /* KHTML */
+border-radius: 10px; /* CSS3 */
+behavior:url("border-radius.htc");
 }
 
-input[type=submit]{
-	background-color:#135375;
+.button-class{
+	background-color:rgba(32, 120, 153, 1);
 	color:#fafafa;	
 	height: 40px;
 	width: 100%;
 	border: none;
 }
 
-input[type=submit]:hover{
+.button-class:hover{
 	border-bottom:3px solid #06b9fb;
 	cursor:pointer;
 }
@@ -53,4 +63,15 @@ ul{
 .client-form{
 	float:left;
 	padding-right: 60px;
+}
+
+input[type="text"], textarea {
+
+  background-color : #d1d1d1; 
+  -moz-border-radius:10px; /* Firefox */
+-webkit-border-radius: 10px; /* Safari, Chrome */
+-khtml-border-radius: 10px; /* KHTML */
+border-radius: 10px; /* CSS3 */
+behavior:url("border-radius.htc");
+
 }

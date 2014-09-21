@@ -1,24 +1,24 @@
-<html>
-    <head>
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">    <head>
         <title>
             {{title}}
         </title> 
-        <style>
-            .else { color : red ; }
-            h1{text-align: center;}
-            h2, .else { text-align :center; margin-top:5%; }
-            table{display: inline-block;text-align: center;}
-            table,th,td{border: 1px solid black; border-collapse: collapse;}
-        </style>
     </head>
     <body>
-        <h1>{{title}}</h1>
+        {% block content %}
+        <div class='list-results'>
+        <h2>{{title}}</h2>
+        <div id='save-regiter-option'>
         {% ifequal '0' save_option %}
             <p></p>
         {% else %}
-            <a href = {% url 'reports.views.save_fields' %}?{{get_data}}>Save Used Fields</a>
+            <a href = {% url 'reports.views.save_fields' %}?{{get_data}}><input type="button" class="button-class" name="" value="Save Used Fields"></a>
         {% endifequal %}
-        <table>
+    </div>
+        <table class='list-results' border='1px'>
             
             <tr>
                 <th>S.No</th>
@@ -38,20 +38,18 @@
                 {% endfor %}       
                 </tr>
             {% endfor %}
-            
             {% if grand_total %}
                 <tr>
                     <td colspan ={{number_of_fields}}><b>Grand Total</b></td>
                     {% for value in grand_total %}
-                    <td >{{value}}</td>
+                    <td ><b>{{value}}</b></td>
                     {% endfor %}
                 </tr>
             {% endif %}
             {{total_taxes}}
         </table>
+    </div>
+        {% endblock %}
 
-        {% if error %}
-            <h3 class="else"> Please select atleast one field </h3>
-        {% endif %}
     </body>
 </html>

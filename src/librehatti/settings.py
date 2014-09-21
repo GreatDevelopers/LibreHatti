@@ -12,9 +12,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lib2',
+        'NAME': 'librehatti_db',
         'USER': 'root',
-        'PASSWORD': 'a',
+        'PASSWORD': 'grewal',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -40,12 +40,12 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/amrit/virtual/app/LibreHatti/static-collect'
+STATIC_ROOT = ''
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/amrit/virtual/app/LibreHatti/static',
+    '/home/jass/testing/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (

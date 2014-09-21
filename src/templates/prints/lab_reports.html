@@ -1,24 +1,21 @@
-<html>
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">    
 <head>
-<style type="text/css">
-    table
-    {
-        width:60%; 
-        border-collapse:collapse;
-        text-align:center; 
-        vertical-align:middle;
-    }
-</style>
 <title>Lab Report</title>  
 </head>
 
 <body>
+  {% block content %}
+  <div class='list-results'>
 {% for name in category_name %}
-<h2 align="center">Lab Report for {{name.name}}</h2>
+<h2>Lab Report for {{name.name}}</h2>
 {% endfor %}
 <br><br>
-<p align="center"> From {{start_date}} to {{end_date}} </p>
-    <table border="1" align="center">
+<p id = "date-range"> From {{start_date}} to {{end_date}} </p>
+    <table class='list-results' border="1">
       <tr>
           <th>Receipt No.</th>
           <th> Date </th>
@@ -48,5 +45,7 @@
     <td>{{total_cost}}</td>
 </tr>      
 </table>
+</div>
+{% endblock %}
 </body>
 </html>

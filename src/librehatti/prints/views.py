@@ -23,6 +23,12 @@ def lab_report(request):
     category = request.GET['sub_category']
     start_date = request.GET['start_date']
     end_date = request.GET['end_date']
+    if start_date > end_date:
+        error_type = "Date range error"
+        error = "Start date cannot be greater than end date"
+        temp = {'type': error_type, 'message':error}
+        return render(request,'error_page.html',temp)
+
     purchase_item = PurchasedItem.objects.filter(purchase_order__date_time__range
         =(start_date,end_date),item__category=category).values(
         'purchase_order_id','purchase_order__date_time',
