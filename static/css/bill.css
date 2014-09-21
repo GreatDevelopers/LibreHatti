@@ -1,0 +1,39 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+
+body{
+	background-color:#fafafa;
+	font-family: 'Open Sans', 'sans-serif';
+}
+
+.bill-wrapper {
+	width:70%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container{
+	position: relative;
+	margin-top: -20px;
+	text-align: center;
+}
+
+#dated{
+	float: right;
+}
+
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.signed{
+	float: right;
+	margin-top: 20px;
+	margin-bottom: 50px;
+	position: relative;
+	font-weight: 600;
+}
+
+#highlight{
+	 font-weight: 600;
+}

@@ -1,48 +1,33 @@
+{% extends 'bill_base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset='UTF-8'>
+{% block title %}
         <title>bill</title>
+{% endblock %}
     
 </head>
 
 
 <body>
-    <div style="text-align:center">
-        {{header.header | safe}}
-        <h2 style="text-align:center;font-size:175%;"> Bill</h2>
+    {% block content %}
+
+    <div class="container">
+        
+        <h2> Bill</h2>
     </div>
-     
-    <p style="font-size:100%">STC No. {{ stc_no.stc_no }}</p>
-    <p style="font-size:100%;text-align:left;">PAN No. {{ pan_no.pan_no }} &nbsp; &nbsp;<span style="float:right;">Dated : {{ date.date}} </p>
+    <div class = "bill-left">
+    <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
+    <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
     <p> To, </p>
     <p> {{purchase_order.delivery_address}} </p>
     <p> {{buyer_name.company}}</p>
-    <p> Buyer Id: {{buyer}} </p>
-    <p> Ref: {{ref.reference}}</p>
-    <p> Site: {{site.street_address}}, {{site.city}}-{{site.pin}}, {{site.province}} </p>
-
-    <style>
-        table,th,td
-        {
-            border:1px solid black;
-            border-collapse: collapse;
-        }
-        th,td
-        {
-            padding-left: 10px;
-        }
-        th,td
-        {
-            border-style:inset>
-            table
-            {
-                table-layout:fixed;
-            }
-    </style>
-
-    <div style="table-align:center">
-        <table style="width:1200px;align:center;">
+    <p><span id ="highlight"> Buyer Id: </span>{{buyer}} </p>
+    <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
+    <p><span id ="highlight"> Site: </span>{{site.street_address}}, {{site.city}}-{{site.pin}}, {{site.province}} </p>
+    </div>
+        <table class="data" border="1px">
             <tr>
                 <th>Charges For Following</th>
                 <th>Description</th>
@@ -135,12 +120,10 @@
             </tr>
         
         </table>
-    </div>
 
-    <div style="float:right;text-align:bottom">
-        <!-- Dean is liable to change-->
-        <p> Dean Of Training And Consultancy Cell </p> 
-    </div>  
+    <div>
+        {% endblock %}
+        <!-- Dean is liable to change--> 
 
 </body>
 
