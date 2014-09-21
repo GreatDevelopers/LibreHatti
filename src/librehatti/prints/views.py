@@ -119,6 +119,7 @@ def bill(request):
     order_by('purchased_item__item__category')
     calculatedistribution = CalculateDistribution.objects.\
     values('voucher_no','total','session').all()
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'ref':purchase_order_obj , 'date':date,\
         'purchase_order':purchase_order, 'purchased_item': voucherid,\
@@ -127,7 +128,7 @@ def bill(request):
         'buyer': buyer, 'buyer_name': customer_obj, 'site': address,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count, 'values':voucherid_obj,\
-        'cost':calculatedistribution})
+        'cost':calculatedistribution,'header':header})
 
 
 def receipt(request):
@@ -145,6 +146,7 @@ def receipt(request):
     get(id = purchase_order['delivery_address_id'])
     customer_obj = Customer.objects.values('company').get(user = purchase_order['buyer'])
     purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'prints/receipt.html', {'receiptno': id,\
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
-        'method': purchase_order, 'buyer':customer_obj, 'material':purchased_item})
+        'method': purchase_order, 'buyer':customer_obj, 'material':purchased_item, 'header':header})

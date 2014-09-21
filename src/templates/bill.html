@@ -29,14 +29,7 @@
                 </style>
 </head>
 <body>
-    <h1>{{purchase_order.organisation.organisation_type}}</h1>
-    <h1 class='a'>{{purchase_order.organisation.tagline}}</h1>       
-    <h1 class='b'>{{purchase_order.organisation.title}}</h1>  
-    <p class ='c'>{{purchased_order.organisation.address}}</p> 
-    <p class='d'><i>Website :</i> {{purchase_order.organisation.url}}
-    <i>Email:</i>{{purchase_order.organisation.email1}}
-    <i>Ph :</i>{{purchase_order.organisation.telephone}} 
-    <i>Fax :</i> {{purchase_order.organisation.fax}}</p>
+    {{header.header | safe}}
 
     <h2 class='e'>Bill</h2></br>
     <p class='f'>STC No. {{ STC_NO }}</P>

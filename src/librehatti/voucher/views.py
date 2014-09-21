@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.http import  HttpResponseRedirect, HttpResponse
 from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem, Bill
+from librehatti.catalog.models import PurchasedItem
+from librehatti.catalog.models import Bill
+from librehatti.catalog.models import HeaderOfBills
 from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
@@ -257,7 +259,8 @@ def voucher_show(request):
         if value['voucher_no'] not in voucher_no_list:
             voucher_no_list.append(value['voucher_no'])
             voucher_obj_distinct.append(value)
-    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct})
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
 
 
 def voucher_print(request):
@@ -300,6 +303,7 @@ def voucher_print(request):
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     if flag == 0:
         return render(request, 'voucher/voucher_report.html', {\
             'calculate_distribution' : calculatedistribution,\
@@ -307,11 +311,11 @@ def voucher_print(request):
             'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
             'voucher':number, 'date': date,'address': delivery_address,\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
-            'total_in_words': total_in_words, 'employee' : emp})
+            'total_in_words': total_in_words, 'employee' : emp, 'header': header})
         voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
             'address':delivery_address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
-            'tds':purchase_order_obj, 'tax':taxes_applied
+            'tds':purchase_order_obj, 'tax':taxes_applied, 'header':header
             })
