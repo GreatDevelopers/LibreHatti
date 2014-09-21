@@ -63,7 +63,10 @@ class GenerateRegister(View):
                 try:
                     data['bill__grand_total']
                 except:
-                    return HttpResponse('Total must be included in field list')
+                    error_type = "Insufficient fields"
+                    error = "Total must be included in field list"
+                    temp = {'type': error_type, 'message':error}
+                    return render(request,'error_page.html',temp)
             for field in self.fields_list:
                 temporary.append(data[field])
             tax_pos = 0
@@ -172,7 +175,10 @@ class GenerateRegister(View):
                     filter(is_active = 1)
                 return self.apply_filters(request)
         except:
-            return HttpResponse('nothing to display')
+            error_type = "Nothing to display"
+            error = "Oops... Something went wrong."
+            temp = {'type': error_type, 'message':error}
+            return render(request,'error_page.html',temp)
 
 
 
@@ -229,6 +235,12 @@ class GenerateRegister(View):
 
         self.end_date = datetime(end_date_temp.year, end_date_temp.month,
     		end_date_temp.day) + timedelta(hours=24)
+
+        if self.start_date > self.end_date:
+            error_type = "Date range error"
+            error = "Start date cannot be greater than end date"
+            temp = {'type': error_type, 'message':error}
+            return render(request,'error_page.html',temp)
 
         if request.GET.getlist('order'):
             self.selected_fields_order = request.GET.getlist('order')

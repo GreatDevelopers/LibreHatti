@@ -20,7 +20,7 @@ body{
 	font-size: 36px;
 	font-weight:700;
 	text-align: center;
-	letter-spacing: 23px;
+	letter-spacing: 19px;
 }
 
 .pb-dark{
@@ -38,7 +38,7 @@ body{
 
 .panel-item{
 	display:inline;
-	padding-left: 32px;
+	padding-left: 29px;
 	padding-right: 32px;
 }
 
