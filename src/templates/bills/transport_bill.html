@@ -1,3 +1,4 @@
+{% extends 'bill_base.html' %}
 <!DOCTYPE html>
 <html>
 
@@ -18,11 +19,13 @@
             table{width: 60%; margin-left:15%; border-collapse:collapse;}
             <!--th{padding:10px;}td{padding-left:40px;}-->
         </style>
+        {% block title %}
         <title> Transport Bill</title>
+        {% endblock %}
     </head>
 
     <body>
-       {{header.header | safe}}}
+        {% block content %}
         <p class='c'> <span class='a'> Bill no.:{{bill_no}} </span> Dated : {{date_of_use}}</p>
         <p class='b'> To: {} </p>
 
@@ -52,6 +55,7 @@
             <br/>
         <p> <span class='s1'> Dean T&C</span> <span class='s2'> Supt. Actt 
             </span> <span class='s3'> Director </span>         </p>
+        {% endblock %}   
     </body>
 
 </html>

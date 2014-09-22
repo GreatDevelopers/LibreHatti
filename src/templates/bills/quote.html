@@ -1,35 +1,29 @@
+{% extends 'bill_base.html' %}
 <html>
 <head>
-    <style type="text/css">
-         h1{text-align:center;font-size: 24px;}
-         h1.a{text-align:center;font-size: 14px;}
-         h1.b{text-align:center;font-size: 24px;}
-         p.c{text-align: center;}
-        table{margin-top:150px;width: 60%; margin-left:18%;} 
-        th{padding:10px;}
-        td{padding-left:40px;
-           padding-top: 25px;
-           padding-bottom: 25px;}
-        p.bs{margin-left: 25%;}
-    </style>
- 
-    <title>Quotes</title>  
+    {% load staticfiles %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+    {% block title %}
+    <title>Quotes</title>
+    {% endblock %}  
 </head>
 
 <body>
+     {% block content %}
+     <div class = "container">
      {% for quoted_order in QuotedOrder_list %}
      <h1>{{quoted_order.organisation.organisation_type}}</h1>
-     <h1 class='a'>{{quoted_order.organisation.tagline}}</h1>       
-     <h1 class='b'>{{quoted_order.organisation.title}}</h1>  
-     <p class ='c'>{{quoted_order.organisation.address}}</p> 
-     <p class='c'><i>Website :</i> {{quoted_order.organisation.quote_url}}
-     <i>Email:</i>{{quoted_order.organisation.quote_email1}}
-     <i>Ph :</i>{{quoted_order.organisation.telephone}} 
-     <i>Fax :</i> {{quoted_order.organisation.fax}}</p>
- 
+     <h1 >{{quoted_order.organisation.tagline}}</h1>       
+     <h1 >{{quoted_order.organisation.title}}</h1>  
+     <p >{{quoted_order.organisation.address}}</p> 
+     <p ><i><span id='highlight'>Website :</span></i> {{quoted_order.organisation.quote_url}}
+     <i><span id='highlight'>Email:</span></i>{{quoted_order.organisation.quote_email1}}
+     <i><span id='highlight'>Ph :</i></span>{{quoted_order.organisation.telephone}} 
+     <i><span id='highlight'>Fax :</span ></i> {{quoted_order.organisation.fax}}</p>
+     </div> 
      {% endfor %}
 
-    <table border="1" >
+    <table  class = "data" border="1px" >
         <tr>
             <th> Client </th>
             <th> Address </th>
@@ -55,6 +49,6 @@
         </tr>
         {% endfor %}
     </table>
- 
+    {% endblock %}
 </body>
 </html>

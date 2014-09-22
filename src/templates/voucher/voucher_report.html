@@ -1,12 +1,21 @@
+{% extends 'bill_base.html' %}
 <html>
-<head><title>Report</title></head>
-{{header.header | safe}}
+<head>
+    {% load staticfiles %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
+
+    {% block title %}
+	<title>Report</title>
+	{% endblock %}
+</head>
+
 <body>
+	{% block content %}
 <br>
 
-<div style="position:absolute;right:0px;top:75px;">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
-<div style="position:absolute;right:0px;top:95px;">Dated : {{date}} </div>
-<div style="position:absolute;left:7px;top:105px;">Director,</div>
+<div class="voucher-no">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
+<div class="date">Dated : {{date}} </div>
+<div class="designation">Director,</div>
 <br></br><br/>
 Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
 Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{address.street_address}},
@@ -14,9 +23,9 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <br/><br/><br/>
 <div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
-<div align= "left">
+<div id = "pos-left">
 <br/><br/>
-<table border="1" width="100%" style="border-collapse: collapse;">
+<table >
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
 </tr>
@@ -25,30 +34,30 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <tr>
 	<td rowspan="5">CREDITS</td>
 	<td>COLLEGE INCOME {{ college_income }}% </td>
-	<td  align="right">{{ calculate_distribution.college_income_calculated }}</td>
+	<td  id = "pos-right">{{ calculate_distribution.college_income_calculated }}</td>
 </tr>
 <tr>
 	<td>ADMN. CHARGES {{ admin_charges }}% </td>
-	<td  align="right">{{ calculate_distribution.admin_charges_calculated}}</td>
+	<td  id = "pos-right">{{ calculate_distribution.admin_charges_calculated}}</td>
 </tr>
 <tr>
 	<td>CONSULTANCY ASST. </td>
-	<td  align="right">{{ calculate_distribution.consultancy_asset }}</td>
+	<td  id = "pos-right">{{ calculate_distribution.consultancy_asset }}</td>
 </tr>
 <tr>
 	<td>DEV. FUND (CONSULTANCY) </td>
-	<td  align="right">{{ calculate_distribution.development_fund }}</td>
+	<td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
 </tr>
 <tr>
 	<td>TOTAL (Rs.) </td>
-	<td  align="right">{{ calculate_distribution.total }}</td>
+	<td  id = "pos-right">{{ calculate_distribution.total }}</td>
 </tr>
-</table>
+</table border = "1">
 </div>
 <br>
 <br>
 <div>
-<table border="1" width="100%" style="border-collapse: collapse;">
+<table >
 
 <tr>
 	<TD>NAME OF EMPLOYEES</TD>
@@ -61,14 +70,14 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 	<td>{{emp.position}}</TD>
 </tr>
 {% endfor %}
-</TABLE>
+</table>
 </div>
-<div align="left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
+<div id = "pos-left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
 <br><br>
-<div style="right: 50px;top: 800px;float: right;margin-top: 10px;">DEAN TESTING AND CONSULTANCY</div>
-<div align="left">
+
+<div id = "pos-left">
 Account Clerk (Consultancy)</div>
 <br><br><br>
-
+{% endblock %}
 </body>
 </html>

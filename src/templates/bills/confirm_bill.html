@@ -1,49 +1,37 @@
+{% extends 'bill_base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset='UTF-8'>
-        <link rel="stylesheet" type="text/css" href="style.css" />
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+            {% block title %}
             <title>bill</title>
-                <style>
-                     h1{text-align:center;font-size: 24px;}
-                     h1.a{text-align:center;font-size: 14px;}
-                     h1.b{text-align:center;font-size: 24px;}
-                     p.c{text-align: center;}
-                     h2.d{text-align: center;font-size:175%;padding-top:18px;}
-                     p.e{padding-top:15px;font-size:100%;}
-                     p.f{position:absolute;top:350px;left:0px;}
-                     p.g{position:absolute;top:350px;right:0px;}
-                     p.h{position:absolute;right:30px;top:1050px;}
-                     p.i{position:absolute;top:1050px;}
-                     p.j{position:absolute;right:30px;top:1150px;}
-                     table, th, td{margin-top:80px;
-                                   border: 1px solid black;width : 80%;}
-                     th,td{padding:3px;border-style:inset;}
-                     table{table-layout:fixed;margin-left:10%}
-                </style>
-
+            {% endblock %}
 </head>  
 <body>
-    {{header.header | safe}}}
+    {% block content %}
 
-
-    <h2 class='d'>Confirmation Bill</h2>
-    <p class='e'>STC No. AAATN1978LSD001</br>
-    PAN No.  AAATN1978L</p>
-    <p class='f'>No. : GNDEC/TCC/B/{{ quoted_order.quote_buyer_id}}</p>
-    <p class='g'>Dated : {{quoted_order.quote_date_time}}</p>
+    <div class="container">
+    <h2>Confirmation Bill</h2>
+    </div >
+    <div class = "bill-left">
+    <p><span id='highlight'>STC No. AAATN1978LSD001</span></br>
+    <span id='highlight'>PAN No.  AAATN1978L</p></span>
+    <p><span id='highlight'>No. : GNDEC/TCC/B/</span>{{ quoted_order.quote_buyer_id}}</p>
+    <p ><span id='dated'><span id='highlight'>Dated : </span>{{quoted_order.quote_date_time}}</span></p>
     <br><br>
 
 
     <p> To,</p>
     <p>{{quoted_order.quote_delivery_address.address}}</p>
-    <p>Organisation:{{quoted_order.quote_organisation.organisation_type}}</p>
-    <p>Buyer Id : {{ quoted_order.quote_buyer_id.username }}</p>
-    <p>Ref: Your Letter No.1,</p> 
-    <p>dated:{{quoted_order.quote_date_time}} , respectively.
+    <p><span id='highlight'>Organisation:</span>{{quoted_order.quote_organisation.organisation_type}}</p>
+    <p><span id='highlight'>Buyer Id :</span> {{ quoted_order.quote_buyer_id.username }}</p>
+    <p><span id='highlight'>Ref: Your Letter No.1,</span></p> 
+    <p><span id='dated'><span id='highlight'>dated:</span>{{quoted_order.quote_date_time}} , respectively.</span>
     </p>
-
-<table>
+    </div>
+<table class = "data" border = "1px">
     <tr>
 
       <th>S.no.</th>
@@ -104,8 +92,10 @@
 </table>
 
     <!--Dean is liable to change-->
-    <p class='h'> Dean Training And Consultancy Cell</p>
-    <p class='i'>I/We here by agree to the terms & conditions as mentioned above</p>
-    <p class='j'>(Signature of Client/Deptt. Representative)</p>
+    <div id = "base">
+    <p> I/We here by agree to the terms & conditions as mentioned above</p>
+    <p> (Signature of Client/Deptt. Representative)</p>
+    </div>
+    {% endblock %}
 </body>
 </html>

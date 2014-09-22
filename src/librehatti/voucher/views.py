@@ -305,6 +305,7 @@ def voucher_print(request):
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
     header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     if flag == 0:
+        
         return render(request, 'voucher/voucher_report.html', {\
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \
@@ -317,5 +318,4 @@ def voucher_print(request):
         return render(request, 'voucher/voucher_report_suspence.html',{
             'address':delivery_address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
-            'tds':purchase_order_obj, 'tax':taxes_applied, 'header':header
-            })
+            'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})

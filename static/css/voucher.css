@@ -1,0 +1,38 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+
+body{
+	background-color:#fafafa;
+	font-family: 'Open Sans', 'sans-serif';
+}
+.voucher-no{
+	position:absolute;
+	right:0px;
+	top:27px;
+	text-align: left;
+
+}
+.date{
+	position:absolute;
+	right:0px;
+	top:295px;
+}
+.designation{
+	position:absolute;
+	right:0px;
+	top:275px;
+}
+.receipt-detail{
+	position:absolute;
+	left:197px;
+}
+#pos-left{
+	text-align: left;
+}
+#pos-right{
+	text-align: right;
+}
+table{
+	border:1px; 
+	width:100%; 
+	border-collapse: collapse;
+}
