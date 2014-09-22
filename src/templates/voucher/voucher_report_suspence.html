@@ -1,54 +1,64 @@
+{% extends 'bill_base.html' %}
 <html>
-<head><title>Report</title></head>
-{{header.header | safe}}
+<head>
+	{% load staticfiles %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
+	{% block title %}
+	<title>Report</title>
+	{% endblock %}
+</head>
+
+
 <body>
+	{% block content %}
 <br>
 
-<div style="position:absolute;right:0px;top:75px;">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
-<div style="position:absolute;right:0px;top:95px;">Dated : {{date}} </div>
-<div style="position:absolute;left:7px;top:105px;">Director,</div>
+<div class="voucher-no">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
+<div class="date">Dated : {{date}} </div>
+<div class="designation">Director,</div>
 <br></br><br/>
 A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
 {{address.street_address}}, {{address.city}}, {{address.pin}}, {{address.province}} on account of 
   
  This amount is kept in suspence till clearance. <br/><br/>
-<div style="position:absolute;left:7px;">Receipt No. : {{job}}   </div><br/>
-<div style="position:absolute;left:7px;">Dated: {{date}}</div>
-<div align= "left">
+<div class="receipt-detail">Receipt No. : {{job}}   </div>
+<div class="receipt-detail">Dated: {{date}}</div>
+<div id = "pos-left">
 <br/><br/><br/></br>
-<table border="1" width="100%">
+<table  border = "1px">
 
 		<tr>
 			<td>Bill Amount</td>
-			<td align="right">{{cost.total_cost}}.00</td>
+			<td id = "pos-right">{{cost.total_cost}}.00</td>
 		</tr>
 		{% for value in tax %}
 		<tr>
 			<td>{{ value.surcharge__tax_name }}  @ {{ value.surcharge__value }}% </td>
-			<td  align="right">{{ value.tax }}.00</td>
+			<td  id = "pos-right">{{ value.tax }}.00</td>
 		</tr>
 		{% endfor %}
 		{% if cost.delivery_charges %}
         <tr>
             <td>Transportation</td>
-            <td  align="right">{{cost.delivery_charges}}</td>
+            <td  id = "pos-right">{{cost.delivery_charges}}</td>
         </tr>
 {% endif %}
 		<tr>
 				<td>Total Amount </td>
-			<td  align="right"> {{ cost.grand_total}}.00</td>
+			<td  id = "pos-right"> {{ cost.grand_total}}.00</td>
 		</tr>	
 		<tr>
 			<td>TDS</td>
-			<td align="right">{{tds.tds}}.00</td>
+			<td id = "pos-right">{{tds.tds}}.00</td>
 		</tr>
 		<tr>
 			<td>Balance</td>
-			<td align="right">{{cost.amount_received}}.00</td>
+			<td id = "pos-right">{{cost.amount_received}}.00</td>
 		</tr>
 </table>
 </div>
 
-<div style="position:absolute;right:50px;top:600px;">DEAN TESTING AND CONSULTANCY</div>
+
+{% endblock %}
 </body>
 </html>

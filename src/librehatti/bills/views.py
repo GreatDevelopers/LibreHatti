@@ -5,6 +5,7 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Product
+from librehatti.catalog.models import HeaderOfBills
 from librehatti.bills.models import *
 from django.contrib.auth.models import User
 import useraccounts

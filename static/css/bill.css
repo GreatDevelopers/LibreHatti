@@ -37,3 +37,11 @@ table{
 #highlight{
 	 font-weight: 600;
 }
+#base{
+	position: relative;
+	float:right;
+	text-align:bottom;
+}
+#position{
+	text-align: center;
+}
