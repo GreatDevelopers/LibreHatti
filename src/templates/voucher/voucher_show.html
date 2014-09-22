@@ -1,7 +1,8 @@
+{% extends 'base_register.html' %}
 <html>
     <head>
         <title>
-            Results of your Search 
+            Results of your Vouchers
         </title> 
         <style>
             .else { color : red ; }
@@ -12,12 +13,14 @@
         </style>
     </head>
     <body>
-        <h1>Voucher</h1>
-         <table>
+        {% block content %}
+        <div class="list-results">
+        <h2>Voucher</h2>
+        <div class="shrinked-table">
+         <table border="1px">
             
             <tr>
             <th>Purchase Order</th> 
-            <th>Purchased Item</th>
             <th>Voucher No</th>
             <th>Options</th>
             </tr>
@@ -25,7 +28,6 @@
                 {% if voucherid %}
                 {% for value in voucherid %}
                 <td>{{ value.purchase_order }}</td>
-                <td>{{ value.purchased_item }}</td>
                 <td>{{ value.voucher_no }}</td>
                 <td><a href = '/voucher/voucher_print/?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a>
                 </td>
@@ -35,5 +37,8 @@
             {% endfor %}
             {% endif %}
         </table>
+    </div>
+    </div>
+        {% endblock %}
     </body>
 </html>
