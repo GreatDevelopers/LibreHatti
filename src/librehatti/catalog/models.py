@@ -183,10 +183,20 @@ class Bill(models.Model):
     grand_total = models.IntegerField()
     amount_received = models.IntegerField()
 
-class HeaderOfBills(models.Model):
+class HeaderFooter(models.Model):
     header = HTMLField()
+    footer = HTMLField()
+    is_active = models.BooleanField(default = False)
+    def save(self, *args, **kwargs):
+        if self.is_active == True:
+            if HeaderFooter.objects.filter(is_active=1):
+                raise ValidationError('Previous Active Header and Footer')
+            else:
+                super(HeaderFooter, self).save(*args, **kwargs)
+        else:
+            super(HeaderFooter, self).save(*args, **kwargs)
     def __unicode__(self):
         return '%s' % (self.id)
 
     class Meta:
-        verbose_name_plural = "Header of bills"
+        verbose_name_plural = "Header and Footer"
