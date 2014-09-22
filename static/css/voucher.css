@@ -7,9 +7,7 @@ body{
 .voucher-no{
 	position:absolute;
 	right:0px;
-	top:27px;
-	text-align: left;
-
+	top:275px;
 }
 .date{
 	position:absolute;
@@ -23,7 +21,7 @@ body{
 }
 .receipt-detail{
 	position:absolute;
-	left:197px;
+	left:197px;"
 }
 #pos-left{
 	text-align: left;
