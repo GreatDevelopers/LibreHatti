@@ -15,7 +15,7 @@ from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId, CalculateDistribution
 from django.core.urlresolvers import reverse
-from librehatti.catalog.models import HeaderOfBills
+from librehatti.catalog.models import HeaderFooter
 
 import simplejson
 
@@ -86,7 +86,7 @@ def transport_bill(request):
                     temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
                            ).aggregate(Sum('total')).get('total__sum', 0.00)
-                    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+                    header = HeaderFooter.objects.values('header').get(is_active=True)
                     return render(request,'bills/transport_bill.html', 
                            {'temp' : temp, 'words' : num2eng(total_amount), 
                             'total_amount' : total_amount , 'header':header}) 

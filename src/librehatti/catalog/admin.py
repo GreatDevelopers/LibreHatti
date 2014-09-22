@@ -106,8 +106,14 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
         return HttpResponseRedirect(reverse("librehatti.catalog.views.previous_value"))
 
 class HeaderAdmin(admin.ModelAdmin):
+    Model = HeaderFooter
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name in ('header'):
+            return db_field.formfield(widget=TinyMCE(
+                attrs={'cols': 120, 'rows': 10},
+                mce_attrs={'external_link_list_url': reverse('tinymce.views.flatpages_link_list')},
+            ))
+        if db_field.name in ('footer'):
             return db_field.formfield(widget=TinyMCE(
                 attrs={'cols': 120, 'rows': 10},
                 mce_attrs={'external_link_list_url': reverse('tinymce.views.flatpages_link_list')},
@@ -121,7 +127,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['parent']
 
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(HeaderOfBills, HeaderAdmin)
+admin.site.register(HeaderFooter, HeaderAdmin)
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
 admin.site.register(LogEntry, LogEntryAdmin)

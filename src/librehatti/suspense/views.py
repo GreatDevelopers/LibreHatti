@@ -157,23 +157,23 @@ def clearance_result(request):
 def other_charges(request):
         obj = SuspenseClearance.objects.filter(id=1).values(
               'boring_charge_external','labour_charge','car_taxi_charge')
-        header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+        header = HeaderFooter.objects.values('header').get(is_active=True)
         return render(request,'suspense/othercharge.html',{'obj':obj,'header':header})
 
 
 def withouttransport(request):
-    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/withouttransport.html', {'header':header})
 
 
 def with_transport(request):
-    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header})
 
 
 
 def wtransport(request):
-    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/wtransport.html', {'header':header})
 
 
