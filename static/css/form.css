@@ -28,12 +28,7 @@ input[type=text], select{
 	height:35px;
 	text-indent: 5px;
 	font-family: 'Open Sans', 'sans-serif';
-	background-color : #d1d1d1; 
-  -moz-border-radius:10px; /* Firefox */
--webkit-border-radius: 10px; /* Safari, Chrome */
--khtml-border-radius: 10px; /* KHTML */
-border-radius: 10px; /* CSS3 */
-behavior:url("border-radius.htc");
+	background-color : #EEEEEE; 
 }
 
 .button-class{
@@ -67,11 +62,5 @@ ul{
 
 input[type="text"], textarea {
 
-  background-color : #d1d1d1; 
-  -moz-border-radius:10px; /* Firefox */
--webkit-border-radius: 10px; /* Safari, Chrome */
--khtml-border-radius: 10px; /* KHTML */
-border-radius: 10px; /* CSS3 */
-behavior:url("border-radius.htc");
-
+  background-color : #EEEEEE; 
 }
