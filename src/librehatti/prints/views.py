@@ -151,7 +151,7 @@ def receipt(request):
     values('street_address','city','pin','province').\
     get(id = purchase_order['delivery_address_id'])
     customer_obj = Customer.objects.values('company').get(user = purchase_order['buyer'])
-    purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id)
+    purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id).distinct()
     header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'prints/receipt.html', {'receiptno': id,\
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
