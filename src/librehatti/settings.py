@@ -14,7 +14,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'librehatti',
         'USER': 'root',
-        'PASSWORD': 'mittal',
+        'PASSWORD': 'jaskaran',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -45,7 +45,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/aseem/virtualenv/env1/LibreHatti/static',
+    '/home/jaskaran/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
