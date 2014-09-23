@@ -4,7 +4,7 @@ from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
-from librehatti.catalog.models import HeaderFooter
+from librehatti.catalog.models import HeaderOfBills
 from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
@@ -259,7 +259,7 @@ def voucher_show(request):
         if value['voucher_no'] not in voucher_no_list:
             voucher_no_list.append(value['voucher_no'])
             voucher_obj_distinct.append(value)
-    header = HeaderFooter.objects.values('header').get(is_active=True)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
 
 
@@ -303,7 +303,7 @@ def voucher_print(request):
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
-    header = HeaderFooter.objects.values('header').get(is_active=True)
+    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
     if flag == 0:
         
         return render(request, 'voucher/voucher_report.html', {\
