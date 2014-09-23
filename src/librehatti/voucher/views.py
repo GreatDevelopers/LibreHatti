@@ -4,7 +4,7 @@ from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
-from librehatti.catalog.models import HeaderOfBills
+from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
@@ -41,15 +41,27 @@ def voucher_generate(request):
     voucherno = 0
     purchaseditemofsession = 0
     item = 0
-    session = FinancialSession.objects.get(id = session_id)
+    try:
+        session = FinancialSession.objects.get(id = session_id)
+    except:
+        error_type = "No Financial Session Present"
+        error = "Please Add Financial Year First"
+        temp = {'type': error_type, 'message':error}
+        return render(request,'error_page.html',temp)
     poi = PurchaseOrder.objects.get(id = purchase_order_id)
     max_id = VoucherId.objects.all().aggregate(Max('id'))
     if max_id['id__max'] == None:
         voucherno = 1
         purchaseditemofsession = 1
         for value in purchased_item:
-            distribution_type = CategoryDistributionType.objects.\
-            values('distribution').get(category = purchased_item[item])
+            try:
+                distribution_type = CategoryDistributionType.objects.\
+                values('distribution').get(category = purchased_item[item])
+            except:
+                error_type = "Distribution Type Not Present"
+                error = "Please Add Distribution Type First"
+                temp = {'type': error_type, 'message':error}
+                return render(request,'error_page.html',temp)
             distribution = Distribution.objects.\
             values('id','ratio','college_income','admin_charges').\
             get(id = distribution_type['distribution'])
@@ -89,8 +101,14 @@ def voucher_generate(request):
             voucherno = voucher_no + 1
             purchaseditemofsession = purchased_item_of_session + 1
             for value in purchased_item:
-                distribution_type = CategoryDistributionType.objects.\
-                values('distribution').get(category = purchased_item[item])
+                try:
+                    distribution_type = CategoryDistributionType.objects.\
+                    values('distribution').get(category = purchased_item[item])
+                except:
+                    error_type = "Distribution Type Not Present"
+                    error = "Please Add Distribution Type First"
+                    temp = {'type': error_type, 'message':error}
+                    return render(request,'error_page.html',temp)
                 distribution = Distribution.objects.\
                 values('id','ratio','college_income','admin_charges').\
                 get(id = distribution_type['distribution'])
@@ -121,8 +139,14 @@ def voucher_generate(request):
             voucherno = 1
             purchaseditemofsession = 1
             for value in purchased_item:
-                distribution_type = CategoryDistributionType.objects.\
-                values('distribution').get(category = purchased_item[item])
+                try:
+                    distribution_type = CategoryDistributionType.objects.\
+                    values('distribution').get(category = purchased_item[item])
+                except:
+                    error_type = "Distribution Type Not Present"
+                    error = "Please Add Distribution Type First"
+                    temp = {'type': error_type, 'message':error}
+                    return render(request,'error_page.html',temp)
                 distribution = Distribution.objects.\
                 values('id','ratio','college_income','admin_charges').\
                 get(id = distribution_type['distribution'])
@@ -259,7 +283,7 @@ def voucher_show(request):
         if value['voucher_no'] not in voucher_no_list:
             voucher_no_list.append(value['voucher_no'])
             voucher_obj_distinct.append(value)
-    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
 
 
@@ -303,7 +327,7 @@ def voucher_print(request):
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
-    header = HeaderOfBills.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
     if flag == 0:
         
         return render(request, 'voucher/voucher_report.html', {\
