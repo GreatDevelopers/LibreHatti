@@ -34,10 +34,11 @@ class VoucherId(models.Model):
 
 
 class CategoryDistributionType(models.Model):
-	category = models.ForeignKey(Category)
-	distribution = models.ForeignKey(Distribution)
-	def __unicode__(self):
-         return self.category.name
+    parent_category = models.ForeignKey(Category, related_name='parent_category')
+    category = models.ForeignKey(Category, related_name='category')
+    distribution = models.ForeignKey(Distribution)
+    def __unicode__(self):
+        return self.category.name
 
 
 class CalculateDistribution(models.Model):
