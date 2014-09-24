@@ -8,6 +8,8 @@ from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import Vehicle
+from librehatti.voucher.models import FinancialSession
+from librehatti.voucher.models import VoucherId
 
 import itertools
 
@@ -23,6 +25,9 @@ class AddCategory(forms.Form):
     category_name = forms.CharField(max_length=256)
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
 
+class SessionSelectForm(forms.Form):
+    session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
+    voucher = forms.ModelChoiceField(queryset=VoucherId.objects.all())
 
 class TransportForm1(forms.Form):
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())

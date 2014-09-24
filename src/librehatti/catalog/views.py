@@ -9,13 +9,15 @@ from librehatti.catalog.forms import AddCategory
 from librehatti.catalog.forms import TransportForm1
 from librehatti.catalog.models import Transport
 from librehatti.catalog.forms import ItemSelectForm
+from librehatti.catalog.forms import SessionSelectForm
+from librehatti.catalog.models import HeaderFooter
 
 from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId, CalculateDistribution
+
 from django.core.urlresolvers import reverse
-from librehatti.catalog.models import HeaderFooter
 
 import simplejson
 
@@ -61,8 +63,17 @@ def add_categories(request):
 
 def transport(request):
     form = TransportForm1()
-    temp = {'TransportForm':form}
-    return render (request, 'bills/form.html',temp)
+    temp = {'TransportForm' : form}
+    return render (request, 'bills/form.html', temp)
+
+def sessionselect(request):
+
+	if request.POST:
+		return HttpResponse("This is something")
+
+	form = SessionSelectForm()
+	temp = {"SelectForm" : form}
+	return render(request, 'voucher/sessionselect.html', temp)
 
 
 def transport_bill(request):
@@ -71,17 +82,19 @@ def transport_bill(request):
         if form.is_valid():
            
             if 'button1' in request.POST:
-                    vehicle_id = request.POST['vehicle_id']
+                    vehicle_id = request.POST['Vehicle']
                     job_id = request.POST['job_id']
                     kilometers = float(request.POST.getlist("kilometer")) # return array of kilometers          
                     date = request.POST.getlist("date") # return date in the same order as kilometer
                     rate = float(request.POST['rate'])
                     total = rate*kilometer
+                    print request.POST
+                    return
 
                     # run this corresponding query again and again for all kilometers
                     obj = Transport(vehicle_id=vehicle_id, job_id=job_id, 
                            kilometer=kilometer, Date=date, rate=rate, 
-                           total=total) 
+                           total=total)
                     obj.save()
                     temp = Transport.objects.filter(job_id=obj.job_id)
                     total_amount = Transport.objects.filter(job_id=obj.job_id
