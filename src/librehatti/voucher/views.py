@@ -4,7 +4,7 @@ from librehatti.voucher.models import *
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
-from librehatti.catalog.models import HeaderOfBills
+from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import TaxesApplied
 from useraccounts.models import Address
 from django.db.models import Max, Sum
