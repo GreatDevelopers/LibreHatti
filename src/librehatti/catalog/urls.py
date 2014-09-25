@@ -11,12 +11,9 @@ new categories of product
 urlpatterns = patterns('librehatti.catalog.views',
     url(r'^$', 'index'),
     url(r'^addCategory/','add_categories'),
-    url(r'^transport/', 'transport'),
-    url(r'^transp/', 'transport_bill'),
     url(r'^select_sub_category/', 'select_sub_category'),
     url(r'^select_item/', 'select_item'), 
     url(r'^bill_cal/','bill_cal'),
     url(r'^list_products/','list_products'),
     url(r'^previous_value/','previous_value'),
-    url(r'^sessionselect/', 'sessionselect')
 )

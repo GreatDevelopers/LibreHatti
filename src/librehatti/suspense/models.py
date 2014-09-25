@@ -8,6 +8,9 @@ from librehatti.bills.models import QuotedOrder
 
 from librehatti.catalog.models import PurchaseOrder, Category
 
+import simplejson
+
+
 
 class SuspenseOrder(models.Model):
     voucher = models.IntegerField()
@@ -77,3 +80,40 @@ class QuotedSuspenseOrder(models.Model):
     def __unicode__(self):
         return '%s' % (self.id)
 
+class Vehicle(models.Model):
+    vehicle_id = models.CharField(max_length=20)
+    vehicle_no = models.CharField(max_length=20)
+    vehicle_name = models.CharField(max_length=20)
+    def __unicode__(self):
+        return '%s' % (self.vehicle_name)
+
+
+class Transport(models.Model):
+    vehicle = models.ForeignKey(Vehicle)
+    job_id = models.IntegerField()
+    kilometer = models.CharField(max_length=500)
+    rate = models.FloatField(default=10.0)
+    Date = models.CharField(blank=True,max_length=500)
+    total = models.IntegerField()
+    voucherid = models.ForeignKey(VoucherId)
+    session = models.ForeignKey(FinancialSession)
+    def save(self, *args, **kwargs):
+
+        # Now decode the kilometers
+        jsonkilometer = simplejson.loads(self.kilometer)
+        total_km = 0;
+
+        #calculate the total kms
+        for km in jsonkilometer:
+            total_km += float(km)
+
+        # Now calculate the total and save it in model
+        self.total = total_km * self.rate
+        super(Transport, self).save(*args, **kwargs)
+
+
+    class Meta:
+        verbose_name_plural = "Transport"
+
+    def __unicode__(self):
+        return '%s' % (self.vehicle)
