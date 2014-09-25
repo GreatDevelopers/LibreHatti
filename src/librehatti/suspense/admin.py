@@ -4,11 +4,14 @@ from librehatti.suspense.models import SuspenseOrder, Staff, Department
 from librehatti.catalog.actions import mark_inactive, mark_active
 from librehatti.catalog.models import *
 from librehatti.suspense.forms import StaffForm
+from librehatti.suspense.models import Vehicle, Transport
 
 
 admin.autodiscover()
 
 admin.site.register(Department)
+admin.site.register(Transport)
+admin.site.register(Vehicle)
 
 class SuspenseOrderAdmin(admin.ModelAdmin):
     exclude=('is_active',)

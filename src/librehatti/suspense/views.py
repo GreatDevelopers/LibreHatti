@@ -11,18 +11,22 @@ from librehatti.catalog.models import Surcharge
 
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
+from librehatti.suspense.models import Transport
+from librehatti.suspense.models import Vehicle
 from librehatti.suspense.forms import Clearance_form
 from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import QuotedSuspenseForm
 from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
-
+from librehatti.suspense.forms import SessionSelectForm
+from librehatti.suspense.forms import TransportForm1
 from librehatti.prints.helper import num2eng
 
 from librehatti.voucher.models import VoucherId
 from librehatti.voucher.models import FinancialSession
 
 import datetime
+import simplejson
 
 
 def add_distance(request):
@@ -311,3 +315,56 @@ def save_distance(request):
 
     return HttpResponse('')
 
+def transport(request):
+    form = TransportForm1()
+    temp = {'TransportForm' : form}
+    return render (request, 'bills/form.html', temp)
+
+def sessionselect(request):
+    if request.POST:
+        form = SessionSelectForm(request.POST)
+        if form.is_valid():
+            session = request.POST['session']
+            voucher = request.POST['voucher']
+
+            # Now render transport form with these variables.
+            Transport = TransportForm1()
+            temp = {"Transport" : Transport, "session" : session, "voucher" : voucher}
+            render(request, "bills/form.html", temp)
+    else:
+        form = SessionSelectForm()
+        temp = {"SelectForm" : form}
+        return render(request, 'voucher/sessionselect.html', temp)
+
+
+def transport_bill(request):
+    if request.method == 'POST':
+        form = TransportForm1(request.POST)
+        if form.is_valid():
+            if 'button1' in request.POST:
+                # check if there is session present
+                if not 'session' in request.POST:
+                    # Make them select session first
+                    HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
+
+                vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
+                job_id = request.POST['job_id']
+                kilometers = simplejson.dumps(request.POST.getlist("kilometer")) # return array of kilometers          
+                date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
+                rate = float(request.POST['rate'])
+
+                # run this corresponding query again and again for all kilometers
+                obj = Transport(vehicle=vehicle, job_id=job_id, 
+                       kilometer=kilometers, Date=date, rate=rate)
+                obj.save()
+                temp = Transport.objects.filter(job_id=obj.job_id)
+                total_amount = Transport.objects.filter(job_id=obj.job_id
+                       ).aggregate(Sum('total')).get('total__sum', 0.00)
+                header = HeaderFooter.objects.values('header').get(is_active=True)
+                return render(request,'suspense/transport_bill.html', 
+                       {'temp' : temp, 'words' : num2eng(total_amount), 
+                        'total_amount' : total_amount , 'header':header}) 
+                         
+    else:
+        form = TransportForm1()
+    return render(request, 'suspense/transportform.html', {'TransportForm':form}) 

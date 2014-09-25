@@ -6,7 +6,9 @@ from models import SuspenseOrder
 from models import QuotedSuspenseOrder
 from librehatti.catalog.models import Category
 from django import forms
-
+from librehatti.suspense.models import FinancialSession
+from librehatti.suspense.models import VoucherId
+from librehatti.suspense.models import Vehicle
 
 class Clearance_form(ModelForm):
     class Meta:
@@ -43,3 +45,14 @@ class StaffForm(forms.ModelForm):
         filter(parent__isnull=True))
     except:
         pass
+
+class SessionSelectForm(forms.Form):
+    session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
+    voucher = forms.ModelChoiceField(queryset=VoucherId.objects.all())
+
+class TransportForm1(forms.Form):
+    Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
+    job_id = forms.IntegerField()
+    rate = forms.IntegerField(initial=10)
+    kilometer = forms.IntegerField()
+    date = forms.DateField()

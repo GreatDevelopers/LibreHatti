@@ -149,27 +149,6 @@ class TaxesApplied(models.Model):
     tax = models.IntegerField()
 
 
-class Vehicle(models.Model):
-    vehicle_id = models.CharField(max_length=20)
-    vehicle_no = models.CharField(max_length=20)
-    vehicle_name = models.CharField(max_length=20)
-    def __unicode__(self):
-        return '%s' % (self.vehicle_name)
-
-
-class Transport(models.Model):
-    vehicle_id = models.ForeignKey(Vehicle)
-    job_id = models.IntegerField()
-    kilometer = models.FloatField()
-    rate = models.FloatField(default=10.0)
-    Date = models.DateField(blank=True)
-    total = models.IntegerField()
-
-    class Meta:
-        verbose_name_plural = "Transport"
-
-    def __unicode__(self):
-        return '%s' % (self.vehicle_id)
 
 """
 This class defines the grand total of the purchase order

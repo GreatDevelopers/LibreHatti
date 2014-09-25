@@ -7,7 +7,6 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Vehicle
 
 import itertools
 
@@ -22,14 +21,6 @@ class AddCategory(forms.Form):
     """
     category_name = forms.CharField(max_length=256)
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
-
-
-class TransportForm1(forms.Form):
-    Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
-    job_id = forms.IntegerField()
-    rate = forms.IntegerField(initial=10)
-    kilometer = forms.IntegerField()
-    date = forms.DateField()
 
 """
 This form lets user to select item after categories are filtered in dropdown.

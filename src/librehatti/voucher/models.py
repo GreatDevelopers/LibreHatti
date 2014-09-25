@@ -31,6 +31,8 @@ class VoucherId(models.Model):
     ratio = models.CharField(max_length=10)
     college_income = models.IntegerField()
     admin_charges = models.IntegerField()
+    def __unicode__(self):
+        return "%s" % (self.voucher_no)
 
 
 class CategoryDistributionType(models.Model):
