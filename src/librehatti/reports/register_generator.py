@@ -29,7 +29,7 @@ class GenerateRegister(View):
         Initializing required lists.
         """
         self.grand_total_list = []
-    	self.result_fields = []
+        self.result_fields = []
         self.list_dict = {'Name':'buyer__username',
             'City':'buyer__customer__address__city',
             'Phone':'buyer__customer__telephone',
@@ -40,7 +40,8 @@ class GenerateRegister(View):
             'Debit':'is_debit', 'total price':'price',
             'TDS': 'tds', 'Total With Taxes': 'bill__grand_total', 
             'Order Id':'id', 'Total Without Taxes': 'bill__total_cost',
-            'Order Date': 'date_time'
+            'Order Date': 'date_time',
+            'Street Address': 'buyer__customer__address__street_address'
         }
 
 
@@ -50,7 +51,7 @@ class GenerateRegister(View):
         Calling template to be rendered.
         """
 
-    	generated_data_list = []
+        generated_data_list = []
 
         try:
             details = self.details
@@ -188,21 +189,22 @@ class GenerateRegister(View):
         file.
         """
 
-    	self.fields_list = []
-    	for value in self.selected_fields_client:
-    		self.fields_list.append(self.list_dict[value])
+        self.fields_list = []
+        for value in self.selected_fields_client:
+            self.fields_list.append(self.list_dict[value])
 
         for value in self.selected_fields_order:
-        	self.fields_list.append(self.list_dict[value])
+            self.fields_list.append(self.list_dict[value])
 
         if self.fields_list:
             return self.fetch_values(request)
 
         else:
-            self.fields_list = ['first_name','last_name',
-                'customer__address__city','customer__address__province']
-            self.selected_fields_client = ['First Name','Last Name','City',
-                'Province']
+            self.fields_list = ['first_name','last_name', 
+                'customer__address__street_address', 'customer__address__city',
+                'customer__address__province']
+            self.selected_fields_client = ['First Name','Last Name',
+                'Street Address','City','Province']
             return self.fetch_values(request)
 
 
@@ -224,17 +226,17 @@ class GenerateRegister(View):
         if not self.title:
             self.title = 'General Register'
 
-    	start_date_temp = datetime.strptime(request.GET['start_date'],
-    		'%Y-%m-%d')
-    	self.start_date = datetime(start_date_temp.year, start_date_temp.month,
-    		start_date_temp.day) + timedelta(hours=0)
+        start_date_temp = datetime.strptime(request.GET['start_date'],
+            '%Y-%m-%d')
+        self.start_date = datetime(start_date_temp.year, start_date_temp.month,
+            start_date_temp.day) + timedelta(hours=0)
 
-    	end_date_temp = datetime.strptime(request.GET['end_date'], '%Y-%m-%d')
+        end_date_temp = datetime.strptime(request.GET['end_date'], '%Y-%m-%d')
 
         #adding 24 hours in date will convert '2014-8-10' to '2014-8-10 00:00:00'
 
         self.end_date = datetime(end_date_temp.year, end_date_temp.month,
-    		end_date_temp.day) + timedelta(hours=24)
+            end_date_temp.day) + timedelta(hours=24)
 
         if self.start_date > self.end_date:
             error_type = "Date range error"
@@ -254,7 +256,7 @@ class GenerateRegister(View):
         self.result_fields.append(self.selected_fields_client)
         self.result_fields.append(self.selected_fields_order)
         self.selected_fields_constraints = request.GET.getlist(
-        	'additional_constraints')
+            'additional_constraints')
 
         try:
             self.mode_of_payment = request.GET['mode_of_payment']
