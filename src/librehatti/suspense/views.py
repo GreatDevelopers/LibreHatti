@@ -8,6 +8,7 @@ from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Surcharge
+from librehatti.catalog.models import HeaderFooter
 
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
@@ -318,10 +319,10 @@ def save_distance(request):
 def transport(request):
     form = TransportForm1()
     temp = {'TransportForm' : form}
-    return render (request, 'bills/form.html', temp)
+    return render (request, 'suspense/transportform.html', temp)
 
 def sessionselect(request):
-    if request.POST:
+    if 'button1' in request.POST:
         form = SessionSelectForm(request.POST)
         if form.is_valid():
             session = request.POST['session']
@@ -330,7 +331,12 @@ def sessionselect(request):
             # Now render transport form with these variables.
             Transport = TransportForm1()
             temp = {"Transport" : Transport, "session" : session, "voucher" : voucher}
-            render(request, "bills/form.html", temp)
+            return render(request, 'suspense/transportform.html', temp)
+        else:
+            form = SessionSelectForm()
+            temp = {"SelectForm" : form}
+            return render(request, 'voucher/sessionselect.html', temp)
+
     else:
         form = SessionSelectForm()
         temp = {"SelectForm" : form}
@@ -347,15 +353,15 @@ def transport_bill(request):
                     # Make them select session first
                     HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
 
+                session = FinancialSession.objects.get(id=request.POST['session'])
+                voucher = VoucherId.objects.get(id=request.POST['voucher'])
                 vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
                 job_id = request.POST['job_id']
                 kilometers = simplejson.dumps(request.POST.getlist("kilometer")) # return array of kilometers          
                 date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
                 rate = float(request.POST['rate'])
-
-                # run this corresponding query again and again for all kilometers
                 obj = Transport(vehicle=vehicle, job_id=job_id, 
-                       kilometer=kilometers, Date=date, rate=rate)
+                       kilometer=kilometers, Date=date, rate=rate, voucherid=voucher, session=session)
                 obj.save()
                 temp = Transport.objects.filter(job_id=obj.job_id)
                 total_amount = Transport.objects.filter(job_id=obj.job_id
@@ -363,7 +369,9 @@ def transport_bill(request):
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
                        {'temp' : temp, 'words' : num2eng(total_amount), 
-                        'total_amount' : total_amount , 'header':header}) 
+                        'total' : total_amount , 'header':header, 'totalkm' : kilometers,
+                        'rate': rate, 'datelist': date, "voucherid": voucher,
+                        'vehicle' : vehicle}) 
                          
     else:
         form = TransportForm1()
