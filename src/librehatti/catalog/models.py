@@ -100,6 +100,8 @@ class PurchaseOrder(models.Model):
     total_discount = models.IntegerField(default = 0)
     tds = models.IntegerField(default = 0)
     mode_of_payment = models.ForeignKey(ModeOfPayment)
+    check_dd_number = models.CharField(max_length=50, blank=True)
+    check_dd_date = models.DateField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default = True)
     def save(self, *args, **kwargs):
 
