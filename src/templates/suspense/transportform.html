@@ -21,7 +21,7 @@ $(document).ready(function() {
         <td>
             <form action='{% url 'librehatti.suspense.views.transport_bill' %}' method='POST'>
                 {% csrf_token %}
-                {{TransportForm.as_p}}
+                {{Transport.as_p}}
                 <input type="hidden" value="{{ session }}" name="session" />
                 <input type="hidden" value="{{ voucher }}" name="voucher" />
                 <input type="submit" value="Generate Bill" name='button1' id='button1' />

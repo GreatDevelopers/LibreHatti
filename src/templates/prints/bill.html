@@ -6,7 +6,7 @@
 {% block title %}
         <title>bill</title>
 {% endblock %}
-    
+{% load set_var %} 
 </head>
 
 
@@ -34,22 +34,34 @@
                 <th>Per</th>
                 <th>Total</th>
             </tr>
-        
             
             <tr>
                 {% for purchased_item in purchased_item %}
+                {% set flag1 = 1 %}
+                {% set flag2 = 1 %}
+                {% set flag3 = 1 %}
             <td>
-                {{purchased_item.purchased_item__item__category__name}}: 
+                {{purchased_item.purchased_item__item__category__name }}: 
                 {% for values in values %}
                 {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
-                {{ values.purchased_item__item__name }},
-            {% endif %}
-            {% endfor %}
+                {% if flag1 == 1 %}
+                {{ values.purchased_item__item__name }}
+                {% set flag1 = 0 %}
+                {% else %}
+                , {{ values.purchased_item__item__name }}  
+                {% endif %}
+                {% endif %}
+                {% endfor %}
             </td>
             <td>
                 {% for values in values %}
                 {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
-                {{ values.purchased_item__qty }},
+                {% if flag2 == 1 %}
+                {{ values.purchased_item__qty }}
+                {% set flag2 = 0 %}
+                {% else %}
+                , {{ values.purchased_item__qty }}  
+                {% endif %}
                 {% endif %}
                 {% endfor %}
                 sample./s
@@ -58,7 +70,12 @@
             <td>
                 {% for values in values %}
                 {% if purchased_item.purchased_item__item__category == values.purchased_item__item__category %}
-                {{ values.purchased_item__item__price_per_unit }},
+                {% if flag3 == 1 %}
+                {{ values.purchased_item__item__price_per_unit }}
+                {% set flag3 == 0 %}
+                {% else %}
+                , {{ values.purchased_item__item__price_per_unit }}
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             </td>

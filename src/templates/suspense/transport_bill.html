@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bill</title></head>
+        {{header.header | safe}}
+
+        <h3 style="text-align: center">Transport Bill</h3>
+
+        <div style="float: left">Bill No: {{ voucherid }}</div>
+        <!-- What is bill date here -->
+        <div style="float: right">Dated: {{ billdate }}</div>
+
+        <div style="clear: both"></div>
+
+        <div style="text-align: center">
+        <table border="1" align="center">
+        	<tr>
+        		<th>Date of Use</th>
+        		<th>No of Kms</th>
+        		<th>Rate</th>
+        		<th>Amount</th>
+        	</tr>
+        	<tr>
+        		<td>
+        			{{ vehicle }} {{ datelist }}
+        		</td>
+        		<td>
+        			{{ totalkm }}
+        		</td>
+        		<td>
+        			{{ rate }}
+        		</td>
+        		<td>
+        			{{ total }}
+        		</td>
+        	</tr>
+        </table>
+        <div>
+        <div style="text-align: right; font-weight: bold">
+        	Dean Testing and Consultancy Cell
+        </div>
+
+        <div style="text-align: center">
+        	TA.DA Bill have been entered on page______ of TA/DA & Other charges register<br>
+
+        	Dean T&C
+
+        	Passed for payment for Rs {{ rate }}/-<br>
+
+        	Dean T&C&nbsp;&nbsp;Supt Actt&nbsp;&nbsp;Directory
+        </div>
+
