@@ -1,5 +1,5 @@
-CLIENT_FIELD_CHOICES = ( ('Name', 'Name'), ('City', 'Address'),
-    ('Phone', 'Phone'),('Company', 'Company'),
+CLIENT_FIELD_CHOICES = ( ('Name', 'Name'), ('Street Address','Street Address'),
+	('City', 'City'), ('Phone', 'Phone'),('Company', 'Company'),
     )
 
 CLIENT_ORDER_CHOICES= ( ('Order Date', 'Order Date'),('Discount', 'Discount'), 

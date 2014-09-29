@@ -9,7 +9,6 @@
 	width: 40%;
 	margin-right: auto;
 	margin-left: auto;
-	text-align: center;
 }
 
 table{
@@ -42,9 +41,8 @@ a:hover{
 }
 
 #save-regiter-option{
-	position: absolute; 
-	bottom: -20px; 
-	right: 20px;
+	float: right; 
+	margin-bottom: 12px;
 	width: 120px;
 }
 
@@ -69,3 +67,7 @@ a:hover{
 	margin-right: auto;
 	text-align: center;
 }
+
+.primary-branding a:hover{
+	text-decoration: none;
+};

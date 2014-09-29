@@ -59,13 +59,13 @@ def save_fields(request):
     if title:
         pass
     else:
-        return HttpResponse('Title is Required')
+        return HttpResponse('0')
 
     selected_fields = request.META['QUERY_STRING']
 
     save_fields = SavedRegisters(title = title, selected_fields = selected_fields)
     save_fields.save()
-    return HttpResponse("Register Saved Successfully")
+    return HttpResponse('1')
 
 def list_saved_registers(request):
     """
