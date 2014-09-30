@@ -91,6 +91,11 @@ class GenerateRegister(View):
         number_of_fields = len(self.selected_fields_order) + len(self.\
             selected_fields_client)
 
+        if ('Total With Taxes' in self.selected_fields_order \
+            and 'Total Without Taxes' in self.selected_fields_order):
+            number_of_fields -= 1
+            number_of_fields = number_of_fields - self.decrement_field
+
 
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
@@ -108,7 +113,7 @@ class GenerateRegister(View):
             temp['surcharge'] = self.surcharge
             self.grand_total_list[-1:-1]  = self.total_taxes
         except:
-            pass        
+            pass      
 
         return render(request,'reports/generated_register.html',temp)
 
@@ -117,15 +122,40 @@ class GenerateRegister(View):
         Calculate grand total
         """
         grand_total = 0
+        self.bill_total = 0
+        self.tds = 0
+        self.decrement_field = 0
 
         try:
             values = self.details
         except:
             values = self.client_details
-        for total in values:
-            if total['bill__grand_total'] is not None:
-                grand_total = grand_total +total['bill__grand_total']
-        self.grand_total_list = [grand_total]
+
+        try:
+            for total in values:
+                if total['bill__total_cost'] is not None:
+                    self.bill_total = self.bill_total + total['bill__total_cost']
+            self.grand_total_list = [self.bill_total]
+        except:
+            pass
+
+        try:
+            for tds in values:
+                if tds['tds'] is not None:
+                    self.tds = self.tds + tds['tds']
+            self.grand_total_list.append(self.tds)
+            self.decrement_field = 1
+
+        except:
+            pass
+
+        try:
+            for total in values:
+                if total['bill__grand_total'] is not None:
+                    grand_total = grand_total +total['bill__grand_total']
+            self.grand_total_list.append(grand_total)
+        except:
+            pass
 
         return self.view_register(request)
 
