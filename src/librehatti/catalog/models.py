@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
 from django.core.exceptions import ValidationError
+import datetime
 
 from tinymce.models import HTMLField
 
@@ -108,9 +109,23 @@ class PurchaseOrder(models.Model):
         surchages = Surcharge.objects.filter(taxes_included=1)
 
         if surchages:
-            super(PurchaseOrder, self).save(*args, **kwargs)
+            pass
         else:
             raise ValidationError('No Active Taxes. Unable to add Order')
+        from librehatti.voucher.models import FinancialSession
+        now = datetime.datetime.now()
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= now.date() <= end_date:
+                session_id = value['id']
+        try:
+            session_id
+            super(PurchaseOrder, self).save(*args, **kwargs)
+        except:
+            raise ValidationError('No Current Financial Session')
     def __unicode__(self):
         return '%s' % (self.id)
 
