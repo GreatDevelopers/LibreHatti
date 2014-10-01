@@ -8,6 +8,7 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
+from librehatti.catalog.forms import ModeOfPaymentSelect
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
@@ -86,6 +87,7 @@ buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
+    form = ModeOfPaymentSelect
     exclude=('is_active',)
     list_display = ['id','buyer','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
@@ -93,7 +95,10 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
     actions = [mark_active, mark_inactive] 
     list_filter = ['date_time']
     search_fields = ['id']
-    list_per_page = 20 
+    list_per_page = 20
+    fields = ['buyer', 'is_debit', 'reference', 'delivery_address',\
+    'organisation', 'total_discount', 'tds',\
+    'mode_of_payment', 'check_dd_number', 'check_dd_date']
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
