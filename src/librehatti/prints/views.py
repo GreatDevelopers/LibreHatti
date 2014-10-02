@@ -17,7 +17,7 @@ from librehatti.suspense.models import SuspenseOrder
 
 def lab_report(request):
     """
-    It generates the report which lists all the orders for the test 
+    It generates the report which lists all the orders for the test
     selected and the in the entered Time Span.
     """
     category = request.GET['sub_category']
@@ -37,11 +37,11 @@ def lab_report(request):
         'purchase_order__buyer_id__customer__company','price',
         'purchase_order__buyer_id__customer__is_org')
     category_name = Category.objects.values('name').filter(id=category)
-    
-    total = PurchasedItem.objects.filter(purchase_order__date_time__range 
+
+    total = PurchasedItem.objects.filter(purchase_order__date_time__range
         = (start_date,end_date),item__category=category).\
         aggregate(Sum('price')).get('price__sum', 0.00)
-    
+
     return render(request, 'prints/lab_reports.html', { 'purchase_item':
                    purchase_item,'start_date':start_date,'end_date':end_date,
                   'total_cost':total,'category_name':category_name})
@@ -59,7 +59,7 @@ def show_form(request):
     return render(request, 'prints/show_form.html', {
               'form':form
     })
-    
+
 def filter_sub_category(request):
     """
     This view filters the sub_category according to the parent_category.
@@ -71,9 +71,9 @@ def filter_sub_category(request):
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
-def bill(request):   
+def bill(request):
     """
-    It generates a Bill for the user which lists all the items, 
+    It generates a Bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
     """
@@ -126,6 +126,7 @@ def bill(request):
     calculatedistribution = CalculateDistribution.objects.\
     values('voucher_no','total','session').all()
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'ref':purchase_order_obj , 'date':date,\
         'purchase_order':purchase_order, 'purchased_item': voucherid,\
@@ -134,7 +135,7 @@ def bill(request):
         'buyer': buyer, 'buyer_name': customer_obj, 'site': address,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count, 'values':voucherid_obj,\
-        'cost':calculatedistribution,'header':header})
+        'cost':calculatedistribution,'header':header,'footer': footer})
 
 
 def receipt(request):
