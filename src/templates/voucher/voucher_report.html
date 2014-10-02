@@ -25,7 +25,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
 <div id = "pos-left">
 <br/><br/>
-<table >
+<table border='1px'>
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
 </tr>
@@ -52,7 +52,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 	<td>TOTAL (Rs.) </td>
 	<td  id = "pos-right">{{ calculate_distribution.total }}</td>
 </tr>
-</table border = "1">
+</table>
 </div>
 <br>
 <br>
@@ -62,7 +62,6 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <tr>
 	<TD>NAME OF EMPLOYEES</TD>
 	<TD>DESIGNATION</TD>
-</tr>
 </tr>
 {% for emp in employee %}
 <tr>
@@ -76,7 +75,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <br><br>
 
 <div id = "pos-left">
-Account Clerk (Consultancy)</div>
+<b>Account Clerk (Consultancy)</b></div>
 <br><br><br>
 {% endblock %}
 </body>
