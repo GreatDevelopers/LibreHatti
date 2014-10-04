@@ -15,6 +15,7 @@ from django.db.models import Max
 import simplejson
 from django.contrib.auth.decorators import login_required
 
+@login_required
 def confirm(request, client_id):
     quoted_order = QuotedOrder.objects.get(pk=int(client_id))
     quoted_item = QuotedItem.objects.filter(quote_order_id=int(client_id))
@@ -24,6 +25,7 @@ def confirm(request, client_id):
     return render(request, 'bills/confform.html',{'quoted_order':quoted_order, 
                  'quoted_item' : quoted_item,'id':i_d,'payment':payment,'items':items})
 
+@login_required
 def final(request,name):
     if request.method == 'POST':
         form = ConfirmForm(request.POST)
@@ -67,6 +69,7 @@ def proforma(request):
                  {'QuotedOrder_list' : QuotedOrder_list})
 
 
+@login_required
 def gen_proforma(request, client_id):
     """
     It generates the Proforma Bill when the user clicks Generate 
@@ -85,6 +88,7 @@ def gen_proforma(request, client_id):
     return render(request, 'bills/proforma_bill.html',{ 'quoted_order':quoted_order,
                  'quoted_item' : quoted_item, 'total_cost': total, 'header':header })
 
+@login_required
 def quote_table(request,order_id):
     """
     Generates table with quoted order details.
@@ -92,6 +96,7 @@ def quote_table(request,order_id):
     order = QuotedOrder.objects.filter(id = order_id)
     return render(request, 'bills/table.html', {'order':order})
 
+@login_required
 def generate_bill(request):
     """
     Generates bill for the corresponding quoted order.
@@ -108,6 +113,7 @@ def generate_bill(request):
      quote_item, 'total_cost': total, 'header':header})
 
 
+@login_required
 def select_sub_category(request):
     """
     This view allows filtering of sub category according to parent category of 
@@ -120,6 +126,7 @@ def select_sub_category(request):
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
+@login_required
 def select_item(request):
     """
     This view allows filtering of item according to sub category of item.
@@ -131,6 +138,7 @@ def select_item(request):
         product_dict[product.id] = product.name
     return HttpResponse(simplejson.dumps(product_dict))  
 
+@login_required
 def bill_cal(request):
     """
     This view calculate taxes on quoted order, bill data
@@ -160,10 +168,4 @@ def bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['quote_order_id'] = quote_order_id
-    return HttpResponseRedirect('/suspense/quoted_add_distance/')          
-
-
-
-		 
-  
-
+    return HttpResponseRedirect('/suspense/quoted_add_distance/')

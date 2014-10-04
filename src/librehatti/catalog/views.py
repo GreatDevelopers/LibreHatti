@@ -44,6 +44,7 @@ def index(request):
     return render(request,'index.html',{})
 
 
+@login_required
 def add_categories(request):
     """
     It allows the user to add categories.
@@ -65,6 +66,7 @@ def add_categories(request):
 This view allows filtering of sub category according to parent category of 
 item.
 """
+@login_required
 def select_sub_category(request):
     parent_category = request.GET['cat_id']
     sub_categories = Category.objects.filter(parent=parent_category)
@@ -76,6 +78,7 @@ def select_sub_category(request):
 """
 This view allows filtering of item according to sub category of item.
 """
+@login_required
 def select_item(request):
     cat_id = request.GET['cat_id']
     products = Product.objects.filter(category = cat_id)
@@ -89,6 +92,7 @@ def select_item(request):
 This view calculate taxes on purchased order, bill data
 and save those values in database.
 """
+@login_required
 def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -155,7 +159,7 @@ def list_products(request):
     return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
 
 
-
+@login_required
 def previous_value(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')

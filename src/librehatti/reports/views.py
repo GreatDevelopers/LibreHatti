@@ -51,6 +51,7 @@ def search_form(request):
 
     return render(request, 'reports/search.html',temp)
 
+@login_required
 def save_fields(request):
     """
     Save generated register.

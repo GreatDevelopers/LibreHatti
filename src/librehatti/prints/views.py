@@ -16,6 +16,7 @@ from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import SuspenseOrder
 from django.contrib.auth.decorators import login_required
 
+@login_required
 def lab_report(request):
     """
     It generates the report which lists all the orders for the test
@@ -62,6 +63,7 @@ def show_form(request):
               'form':form
     })
 
+@login_required
 def filter_sub_category(request):
     """
     This view filters the sub_category according to the parent_category.
@@ -73,6 +75,7 @@ def filter_sub_category(request):
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
+@login_required
 def bill(request):
     """
     It generates a Bill for the user which lists all the items,
@@ -140,6 +143,7 @@ def bill(request):
         'cost':calculatedistribution,'header':header,'footer': footer})
 
 
+@login_required
 def receipt(request):
     """
     It generates a Receipt.

@@ -30,6 +30,7 @@ import datetime
 import simplejson
 
 
+@login_required
 def add_distance(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -115,12 +116,14 @@ def add_distance(request):
         request.session['purchase_order_id'] = purchase_order_id
         return HttpResponseRedirect('/catalog/bill_cal/')
 
+@login_required
 def clearance_search(request):
     form = TaDaSearch
     return render(request,'suspense/suspense_first.html',{
                   'search_form': form})
 
 
+@login_required
 def clearance(request):
     if 'Search' in request.GET:
         ref_no = request.GET['ref_no']
@@ -132,6 +135,7 @@ def clearance(request):
         return render(request, 'suspense/suspenseform.html',temp)
 
 
+@login_required
 def clearance_result(request):
     if 'Submit' in request.GET:
         ref_no = request.GET['job']       
@@ -159,6 +163,7 @@ def clearance_result(request):
         return render(request, 'suspense/clearance_result.html', temp) 
 
 
+@login_required
 def other_charges(request):
         obj = SuspenseClearance.objects.filter(id=1).values(
               'boring_charge_external','labour_charge','car_taxi_charge')
@@ -166,27 +171,32 @@ def other_charges(request):
         return render(request,'suspense/othercharge.html',{'obj':obj,'header':header})
 
 
+@login_required
 def withouttransport(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/withouttransport.html', {'header':header})
 
 
+@login_required
 def with_transport(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header})
 
 
 
+@login_required
 def wtransport(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/wtransport.html', {'header':header})
 
 
+@login_required
 def suspense(request):
         form = SuspenseForm()   
         return render(request,'suspense/form.html',{'form':form})
 
 
+@login_required
 def save_charges(request):
 	if request.method=='GET':		
 	    option=request.GET['Purchase_order']
@@ -196,13 +206,15 @@ def save_charges(request):
 	    obj.save()
 	    return HttpResponse('Thanks!')
 	    
-	    
+
+@login_required
 def tada_search(request):
     form = TaDaSearch
     return render( request, 'suspense/tada_search.html', {
                     'search_form': form })
 
 
+@login_required
 def tada_form(request):
     ref_no = request.GET['ref_no']
     form= TaDaForm( initial = {'suspense': ref_no } )
@@ -210,7 +222,7 @@ def tada_form(request):
                         'form' : form, 'ref_no':ref_no } ) 
     
 
-
+@login_required
 def tada_result(request):
     if 'Submit' in request.GET:
        suspense = request.GET['suspense']
@@ -248,6 +260,7 @@ def tada_result(request):
        'total_cost':total_cost, 'staff':staff, 'rupees_in_words':
        rupees_in_words,'purchase_order':purchase_order})
 
+@login_required
 def quoted_add_distance(request):
     old_post = request.session.get('old_post')
     quote_order_id = request.session.get('quote_order_id')
@@ -284,6 +297,7 @@ def quoted_add_distance(request):
     else:
         return HttpResponseRedirect(url)
 
+@login_required
 def save_distance(request):
     voucher_no = request.GET['voucher']
     distance = request.GET['distance']
@@ -316,6 +330,7 @@ def save_distance(request):
 
     return HttpResponse('')
 
+@login_required
 def transport(request):
     form = TransportForm1()
     temp = {'TransportForm' : form}
@@ -344,6 +359,7 @@ def sessionselect(request):
         return render(request, 'voucher/sessionselect.html', temp)
 
 
+@login_required
 def transport_bill(request):
     if request.method == 'POST':
         form = TransportForm1(request.POST)
