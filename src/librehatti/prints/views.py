@@ -111,12 +111,10 @@ def bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
-    d_address_id = purchase_order_obj['delivery_address']
+    address = purchase_order_obj['delivery_address']
     buyer = purchase_order_obj['buyer']
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
-    address = Address.objects.\
-    values('street_address','city','pin','province').get(id = d_address_id)
     customer_obj = Customer.objects.values('company').get(user = buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
     get(id = organisation_id)
@@ -151,15 +149,12 @@ def receipt(request):
     id = request.GET['order_id']
     bill = Bill.objects.values('amount_received').get(purchase_order = id)
     purchase_order = PurchaseOrder.objects.values('buyer','date_time',\
-    'delivery_address_id','mode_of_payment__method').get(id = id)
+    'delivery_address','mode_of_payment__method').get(id = id)
     date = purchase_order['date_time'].date()
     total_in_words = num2eng(bill['amount_received'])
-    address = Address.objects.\
-    values('street_address','city','pin','province').\
-    get(id = purchase_order['delivery_address_id'])
     customer_obj = Customer.objects.values('company').get(user = purchase_order['buyer'])
     purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'prints/receipt.html', {'receiptno': id,\
-        'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
+        'date': date, 'cost':bill, 'amount':total_in_words, 'address':purchase_order['delivery_address'],\
         'method': purchase_order, 'buyer':customer_obj, 'material':purchased_item, 'header':header})
