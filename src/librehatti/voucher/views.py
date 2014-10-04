@@ -11,11 +11,13 @@ from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder, Staff
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 """
 This function calculates the session id and then initialise or increment 
 voucher number according to the previous purchase order's session id
 """
+@login_required
 def voucher_generate(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -248,6 +250,7 @@ def voucher_generate(request):
     return HttpResponseRedirect(reverse("librehatti.suspense.views.add_distance"))
 
 
+@login_required
 def voucher_show(request):
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.get(id = id)
@@ -263,6 +266,7 @@ def voucher_show(request):
     return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
 
 
+@login_required
 def voucher_print(request):
     number = request.GET['voucher_no']
     session = request.GET['session']

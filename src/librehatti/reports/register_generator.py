@@ -21,8 +21,14 @@ from django.contrib.auth.models import User
 
 from datetime import datetime, timedelta
 from calendar import monthrange
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class GenerateRegister(View):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GenerateRegister, self).dispatch(*args, **kwargs)
 
     def __init__(self):
         """

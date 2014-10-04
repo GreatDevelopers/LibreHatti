@@ -2,9 +2,10 @@ from django.shortcuts import render
 
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
+from django.contrib.auth.decorators import login_required
 
 
-
+@login_required
 def history(request):
     """
     displays the purchase history of the client
@@ -14,6 +15,7 @@ def history(request):
     purchases = PurchaseOrder.objects.filter(buyer__id=user_id)
     return render(request,'reports/purchase_history.html',{'purchases':purchases})
 
+@login_required
 def details(request):
     """
     displays the details of the purchase of the client

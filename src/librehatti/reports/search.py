@@ -17,8 +17,14 @@ from librehatti.suspense.models import SuspenseOrder
 from useraccounts.models import Customer
 
 from datetime import datetime, timedelta
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class SearchResult(View):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchResult, self).dispatch(*args, **kwargs)
 
     def __init__(self):
         """

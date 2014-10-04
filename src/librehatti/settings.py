@@ -113,6 +113,7 @@ SUIT_CONFIG = {
 
 ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_REDIRECT_URL = '/catalog/'
+LOGIN_URL = '/admin/login/'
 
 LOGGING = {
     'version': 1,
