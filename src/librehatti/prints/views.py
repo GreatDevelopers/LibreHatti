@@ -14,6 +14,7 @@ from librehatti.prints.helper import num2eng
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import SuspenseOrder
+from django.contrib.auth.decorators import login_required
 
 def lab_report(request):
     """
@@ -46,6 +47,7 @@ def lab_report(request):
                    purchase_item,'start_date':start_date,'end_date':end_date,
                   'total_cost':total,'category_name':category_name})
 
+@login_required
 def show_form(request):
     """
     This view is to show the form for Lab Report.

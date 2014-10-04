@@ -13,7 +13,7 @@ from django.db.models import Sum
 from librehatti.bills.forms import *
 from django.db.models import Max
 import simplejson
-
+from django.contrib.auth.decorators import login_required
 
 def confirm(request, client_id):
     quoted_order = QuotedOrder.objects.get(pk=int(client_id))
@@ -55,6 +55,7 @@ def final(request,name):
                           'id' : i_d,'form':form, 'header':header})
 	     
       
+@login_required
 def proforma(request):
     """
     This function lists all those customers who have added Quote

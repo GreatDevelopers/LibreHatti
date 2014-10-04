@@ -25,7 +25,7 @@ from librehatti.prints.helper import num2eng
 
 from librehatti.voucher.models import VoucherId
 from librehatti.voucher.models import FinancialSession
-
+from django.contrib.auth.decorators import login_required
 import datetime
 import simplejson
 
@@ -321,6 +321,7 @@ def transport(request):
     temp = {'TransportForm' : form}
     return render (request, 'suspense/transportform.html', temp)
 
+@login_required
 def sessionselect(request):
     if 'button1' in request.POST:
         form = SessionSelectForm(request.POST)

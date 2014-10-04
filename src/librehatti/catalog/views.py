@@ -15,9 +15,11 @@ from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId, CalculateDistribution
 
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 import simplejson
 
+@login_required
 def index(request):
     """
     It lists all the products and the user can select any product
@@ -135,6 +137,7 @@ def bill_cal(request):
     request.session['purchase_order_id'] = purchase_order_id
     return HttpResponseRedirect(url)
 
+@login_required
 def list_products(request):
     all_products = Product.objects.all()
     all_categories=Category.objects.all().order_by('name')
