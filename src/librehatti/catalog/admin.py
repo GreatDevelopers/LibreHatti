@@ -87,7 +87,6 @@ buyer , is_debit , total discount , tds and mode of payment
 """
 class PurchaseOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
-    form = ModeOfPaymentSelect
     exclude=('is_active',)
     list_display = ['id','buyer_name','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
