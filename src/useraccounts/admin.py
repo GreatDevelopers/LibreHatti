@@ -40,6 +40,7 @@ customers specifying the username , email, first and last name and
 confirming the passwords
 """
 class CustomUserAdd(UserAdmin):
+    list_display = ['user','email','address','date_joined']
     add_fieldsets = (
         ('Add Customer', {
             'classes': ('wide',),
@@ -48,6 +49,14 @@ class CustomUserAdd(UserAdmin):
         ),
     )
     inlines = [CustomerInline]
+
+    def user(self, instance):
+        return "%s" % (instance.first_name + ' ' + instance.last_name + ' ' + \
+            instance.customer.title)
+    
+    def address(self,instance):
+        return "%s" % (instance.customer.address.street_address + ' ' + \
+            instance.customer.address.city)
 
 admin.site.register(User,CustomUserAdd)
 

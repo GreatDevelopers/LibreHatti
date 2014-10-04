@@ -62,3 +62,67 @@ body{
 	font-size: 14px;
 	color: #135375;
 }
+
+.account{
+	position: absolute;
+	top: 10px;
+	right: 30px;
+	float: right;
+}
+
+
+#primary_nav_wrap
+{
+	margin-right: 65px;
+}
+
+#primary_nav_wrap ul
+{
+	list-style:none;
+	float:right;
+	margin:0;
+	padding:0;
+	border-radius: 15px;
+
+}
+
+#primary_nav_wrap ul a
+{
+	display:block;
+	color:#333;
+	text-decoration:none;
+	font-weight:700;
+	font-size:12px;
+	line-height:32px;
+	padding:0 15px;
+}
+
+
+
+#primary_nav_wrap ul li:hover
+{
+	border-radius: 15px;
+}
+
+#primary_nav_wrap ul li a:hover
+{
+	color: #06b9fb;
+	border-radius: 15px;
+}
+
+#primary_nav_wrap ul ul
+{
+	display:none;
+	position:absolute;
+	top:100%;
+	left:0;
+	background:#fff;
+	padding:0;
+}
+
+
+
+#primary_nav_wrap ul li:hover > ul
+{
+	display:block;
+}

@@ -1,14 +1,21 @@
 
-.list-registers{
-	font-family:'Open Sans', 'sans-serif';
-	margin-top: 50px;
-	position: relative;
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+
+body{
+	background-color:#00000;
+}
+
+.main-box{
+	max-width: 360px;
+	margin: auto;
+	margin-top: 25px;
 }
 
 .view-list {
 	width: 40%;
 	margin-right: auto;
 	margin-left: auto;
+	margin-top: 60px;
 }
 
 table{
