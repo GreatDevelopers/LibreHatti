@@ -55,22 +55,15 @@ class BuyerForm(forms.ModelForm):
         exclude = ('is_active',)
 
     class Media:
-        js = ('js/hide_add_buyer.js',)
-
-
-class ModeOfPaymentSelect(forms.ModelForm):
-
-    class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+            'js/hide_add_buyer.js',
             'js/check_dd_date.js',
-        )
-
+            )
     mode_of_payment = forms.ModelChoiceField(queryset=ModeOfPayment.objects.all())
     check_dd_number = forms.CharField(required=False)
     check_dd_date = forms.DateField(required=False)
     def __init__(self, *args, **kwargs):
-         super(ModeOfPaymentSelect, self).__init__(*args, **kwargs)
+         super(BuyerForm, self).__init__(*args, **kwargs)
          self.fields['mode_of_payment'].widget.attrs={'class': 'mode_of_payment'}
          self.fields['check_dd_number'].widget.attrs={'class': 'check_dd_number'}
          self.fields['check_dd_date'].widget.attrs={'class': 'check_dd_date'}
