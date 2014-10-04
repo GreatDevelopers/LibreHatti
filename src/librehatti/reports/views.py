@@ -9,7 +9,9 @@ from datetime import datetime
 import librehatti.settings as settings
 
 from librehatti.reports.models import SavedRegisters
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def search_form(request):
     """
     View to display "search.html" i.e. the search interface or form.
@@ -49,6 +51,7 @@ def search_form(request):
 
     return render(request, 'reports/search.html',temp)
 
+@login_required
 def save_fields(request):
     """
     Save generated register.
@@ -67,6 +70,7 @@ def save_fields(request):
     save_fields.save()
     return HttpResponse('1')
 
+@login_required
 def list_saved_registers(request):
     """
     List saved registers
