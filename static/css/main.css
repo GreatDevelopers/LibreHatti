@@ -82,7 +82,7 @@ body{
 	float:right;
 	margin:0;
 	padding:0;
-	border-radius: 15px;
+	border-radius:5px;
 
 }
 
@@ -101,13 +101,13 @@ body{
 
 #primary_nav_wrap ul li:hover
 {
-	border-radius: 15px;
+	border-radius: 5px;
 }
 
 #primary_nav_wrap ul li a:hover
 {
 	color: #06b9fb;
-	border-radius: 15px;
+	border-radius: 5px;
 }
 
 #primary_nav_wrap ul ul
@@ -125,4 +125,45 @@ body{
 #primary_nav_wrap ul li:hover > ul
 {
 	display:block;
+}
+
+
+@media only screen 
+and (max-width : 800px) {
+
+.primary-branding{
+	font-size:24px;
+	margin-top:50px;
+}
+
+.account {
+	background:#fff;
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	border-bottom:#ddd;
+}
+#primary_nav_wrap {
+	margin-right:0px;
+}
+#primary_nav_wrap ul li a {
+	height:40px;
+	line-height:40px;
+}
+#primary_nav_wrap ul ul {
+	width:100%;	
+}
+
+#primary_nav_wrap ul ul li a {
+	line-height:40px;
+	font-size: 18px;
+	font-weight:400;
+	text-align:center;
+}
+
+#primary_nav_wrap ul ul li a:hover {
+	background:rgb(15,132,176);
+	color:#fff;
+}
 }
