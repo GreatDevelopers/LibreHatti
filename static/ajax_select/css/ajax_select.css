@@ -6,11 +6,12 @@
 	padding: 0.25em 0;
 }
 form .aligned .results_on_deck {
-    padding-left: 38px;
-    margin-left: 7em;
+    padding-left: 0;
+    margin-left: 20em;
+    margin-top: -31px;
 }
 .results_on_deck > div {
-	margin-bottom: 0.5em;
+	margin-bottom: -1.6em;
 }
 .ui-autocomplete-loading {
 	background:  url('../images/loading-indicator.gif') no-repeat;
@@ -29,7 +30,7 @@ ul.ui-autocomplete {
 
 	fixed width is harder see http://stackoverflow.com/questions/4607164/changing-width-of-jquery-ui-autocomplete-widgets-individually
 */
-    max-width: 60%;
+    max-width: 30%;
 
 	margin: 0;
 	padding: 0;
