@@ -8,7 +8,6 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.auth.admin import *
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
-from librehatti.catalog.forms import ModeOfPaymentSelect
 
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
