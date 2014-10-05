@@ -48,11 +48,9 @@ class StaffForm(forms.ModelForm):
 
 class SessionSelectForm(forms.Form):
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
-    voucher = forms.ModelChoiceField(queryset=VoucherId.objects.all())
+    voucher = forms.CharField()
 
 class TransportForm1(forms.Form):
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
-    job_id = forms.IntegerField()
-    rate = forms.IntegerField(initial=10)
-    kilometer = forms.IntegerField()
+    kilometer = forms.CharField()
     date = forms.DateField()
