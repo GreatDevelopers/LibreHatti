@@ -11,6 +11,9 @@
         </script>
         <script src="{% static 'js/jquery-ui.min.js' %}">
         </script>
+	
+        <script src="{% static 'js/accordion.js' %}">
+	</script>
         <script type="text/javascript">
 $('#id_sub_category').attr('disabled', 'disabled');
 $(document).ready(function(){
@@ -42,21 +45,7 @@ $(function() {
     })
     $('#id_end_date').datepicker( "option", "showAnim", "clip" )
     .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
-});   
-
-$(function() {
-    $('#id_start_test_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_start_test_date').datepicker( "option", "showAnim", "clip" )
-    $('#id_end_test_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_end_test_date').datepicker( "option", "showAnim", "clip" )
-    .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
-});           
+});       
 </script>
     {% endblock js %}
     {% block extrajs %}{% endblock %}
@@ -66,6 +55,7 @@ $(function() {
     <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accordion.css' %}">
 </head>
 <body>
     <div class = "wrapper">
@@ -92,5 +82,3 @@ $(function() {
 
         </div>
     </div>
-</body>
-</html>

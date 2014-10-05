@@ -1,37 +1,49 @@
 {% extends 'base.html' %}
 {% load i18n %} {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Index</title>
-    </head>
-    <body> 
       {% block content %}
+	
         <div class="main-box">
         <h2 class="form-heading"> Select one or more fields</h2>
             <form action={{url}} method="get">
 		<div class="form-elements">
                 {% ifequal '1' code  %}
-                   <input type="text" name="search" id="search_textbox" placeholder="Search">
+		   <label for="search_textbox">Display Search as</label>
+                   <input type="text" name="search" id="search_textbox" placeholder="Display Search as">
                    <input type="submit" class="btn btn-info btn-large" name="Client" value="Client Search">
                    <input type="submit" class="btn btn-info btn-large" name="Order" value="Order Search">
                 {% else %}
+		   <label for="title_textbox">Title of Register</label>
                    <input type="text" name="title" id="title_textbox" placeholder="Title of Register">
                    <input type="submit" class="btn btn-info btn-large" name="" value="Generate Register">
-                   <a href = {% url 'reports.views.list_saved_registers' %}><input type="button" class="btn btn-info btn-large" name="" value="View Generate Registers"></a>
+                   <a href = {% url 'reports.views.list_saved_registers' %}><input type="button" class="btn btn-info btn-large" name="" value="View Generated Registers"></a>
                 {% endifequal %}
-		    <div class="client-form">
+		<div class="accordion">
+		<ul class="accordion-elements">
+		  <li data-title="Client Fields" data-featured="true">
+		    <div class="client-form2">
                     {{ client_form.as_p }}
 		    </div>
+		  </li>
+
+		  <li data-title="Order Fields">
 		    <div class="order-form">
                     {{ order_form.as_p }}
 		    </div>
+		  </li>
+		
+		 <li data-title="Other Fields">
 			<ul><li>
 				<input type='checkbox' value='suspense' name='suspense' id="suspense-checkbox">
 				<label for="suspense-checkbox">Is Suspense</label>
 			</li></ul>
+		</li>
+		
+                {% ifequal '2' code  %}
+		<li data-title="Additional Constraints">
                      {{ add_constraints.as_p }}
+		</li>
+		{% endifequal %}</ul></div>
 		</div>
             </form>
         </div>
