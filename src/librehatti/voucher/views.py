@@ -302,8 +302,6 @@ def voucher_print(request):
     values('date_time','buyer__first_name','buyer__last_name',\
     'delivery_address','tds').get(id = purchase_order)
     date = purchase_order_obj['date_time'].date()
-    delivery_address = Address.objects.values('street_address','city','pin',\
-    'province').get(id = purchase_order_obj['delivery_address'])
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
@@ -314,12 +312,12 @@ def voucher_print(request):
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \
             'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
-            'voucher':number, 'date': date,'address': delivery_address,\
+            'voucher':number, 'date': date,'address': purchase_order_obj['delivery_address'],\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
             'total_in_words': total_in_words, 'employee' : emp, 'header': header})
         voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
-            'address':delivery_address, 'cost':bill, 'inwords':amount_received_inwords,\
+            'address':purchase_order_obj['delivery_address'], 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})
