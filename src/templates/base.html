@@ -42,7 +42,21 @@ $(function() {
     })
     $('#id_end_date').datepicker( "option", "showAnim", "clip" )
     .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
-});       
+});   
+
+$(function() {
+    $('#id_start_test_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
+    $('#id_start_test_date').datepicker( "option", "showAnim", "clip" )
+    $('#id_end_test_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
+    $('#id_end_test_date').datepicker( "option", "showAnim", "clip" )
+    .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
+});           
 </script>
     {% endblock js %}
     {% block extrajs %}{% endblock %}

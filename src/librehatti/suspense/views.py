@@ -3,6 +3,7 @@ from django.db.models import Sum, Max
 from models import SuspenseClearance
 from models import TaDa
 from django.http import  HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchaseOrder
@@ -205,60 +206,14 @@ def save_charges(request):
                                 transportation=charges)
 	    obj.save()
 	    return HttpResponse('Thanks!')
-	    
-
-@login_required
-def tada_search(request):
-    form = TaDaSearch
-    return render( request, 'suspense/tada_search.html', {
-                    'search_form': form })
-
-
-@login_required
-def tada_form(request):
-    ref_no = request.GET['ref_no']
-    form= TaDaForm( initial = {'suspense': ref_no } )
-    return render( request, 'suspense/tada_form.html', {
-                        'form' : form, 'ref_no':ref_no } ) 
     
 
 @login_required
 def tada_result(request):
-    if 'Submit' in request.GET:
-       suspense = request.GET['suspense']
-       departure_time_from_tcc = request.GET['departure_time_from_tcc']
-       arrival_time_at_site = request.GET['arrival_time_at_site']
-       departure_time_from_site= request.GET['departure_time_from_site']
-       arrival_time_at_tcc= request.GET['arrival_time_at_tcc']
-       tada_amount= request.GET['tada_amount']
-       start_test_date=request.GET['start_test_date']
-       end_test_date= request.GET['end_test_date']
-       source_site= request.GET['source_site']
-       testing_site= request.GET['testing_site']
-       testing_staff= request.GET['testing_staff']
-       obj= TaDa(suspense=suspense, departure_time_from_tcc =
-            departure_time_from_tcc,arrival_time_at_site=arrival_time_at_site,
-            departure_time_from_site=departure_time_from_site,
-            arrival_time_at_tcc=arrival_time_at_tcc,tada_amount=tada_amount,
-            start_test_date=start_test_date,end_test_date=end_test_date, 
-            source_site=source_site, testing_site=testing_site,
-            testing_staff=testing_staff )
-       obj.save()
-       i=TaDa.objects.all().aggregate(Max('id'))
-       j=i['id__max']
-       staff = testing_staff.split(",")
-       total_cost = 0
-       for person in staff:
-         total_cost= total_cost + int(tada_amount)
-       rupees_in_words = num2eng(total_cost)
-       purchase_order = PurchaseOrder.objects.all()
-       obj1 = TaDa.objects.filter(id=j).values('departure_time_from_tcc' ,
-              'arrival_time_at_site','departure_time_from_site',
-              'arrival_time_at_tcc', 'tada_amount','start_test_date',
-              'end_test_date','source_site', 'testing_site','testing_staff')
-       return render(request, 'suspense/tada_result.html', { 'obj':obj1, 
-       'total_cost':total_cost, 'staff':staff, 'rupees_in_words':
-       rupees_in_words,'purchase_order':purchase_order})
+    if request.method == 'POST':
+        return HttpResponse(request)
+    else:
+        return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
 
 @login_required
 def quoted_add_distance(request):
@@ -393,3 +348,16 @@ def transport_bill(request):
     else:
         form = TransportForm1()
     return render(request, 'suspense/transportform.html', {'TransportForm':form}) 
+
+
+@login_required
+def tada_order_session(request):
+    if request.method == 'POST':
+        form = TaDaForm()
+        tada = 'enable'
+        return render(request, 'suspense/form.html', \
+            {'form':form,'tada':tada}) 
+    else:
+        form = SessionSelectForm()
+        return render(request, 'suspense/form.html', \
+            {'form':form}) 

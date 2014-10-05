@@ -59,7 +59,7 @@ class Staff(models.Model):
         return self.name
 
 class TaDa(models.Model):
-    suspense = models.IntegerField()
+    suspense = models.ForeignKey(SuspenseOrder)
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()

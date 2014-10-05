@@ -29,6 +29,16 @@ input[type=text], select{
 	text-indent: 5px;
 	font-family: 'Open Sans', 'sans-serif';
 	background-color : #EEEEEE; 
+	color: #34495e;
+}
+
+input[type=number], select{
+	width: 100%;
+	height:35px;
+	text-indent: 5px;
+	font-family: 'Open Sans', 'sans-serif';
+	background-color : #EEEEEE; 
+	color: #34495e;
 }
 
 .button-class{
