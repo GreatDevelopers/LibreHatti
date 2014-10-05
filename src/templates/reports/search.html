@@ -13,12 +13,10 @@
             <form action={{url}} method="get">
 		<div class="form-elements">
                 {% ifequal '1' code  %}
-		   <label for="search_textbox">Display Search as</label>
-                   <input type="text" name="search" id="search_textbox" placeholder="Display Search as">
+                   <input type="text" name="search" id="search_textbox" placeholder="Search">
                    <input type="submit" class="btn btn-info btn-large" name="Client" value="Client Search">
                    <input type="submit" class="btn btn-info btn-large" name="Order" value="Order Search">
                 {% else %}
-		   <label for="title_textbox">Title of Register</label>
                    <input type="text" name="title" id="title_textbox" placeholder="Title of Register">
                    <input type="submit" class="btn btn-info btn-large" name="" value="Generate Register">
                    <a href = {% url 'reports.views.list_saved_registers' %}><input type="button" class="btn btn-info btn-large" name="" value="View Generate Registers"></a>

@@ -34,7 +34,7 @@ class TaDaSearch(forms.Form):
 class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
-        exclude = ('',)
+        exclude = ('suspense',)
 
 class StaffForm(forms.ModelForm):
     class Meta:
