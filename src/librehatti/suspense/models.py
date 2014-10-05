@@ -94,7 +94,7 @@ class Transport(models.Model):
     rate = models.FloatField(default=10.0)
     Date = models.CharField(blank=True,max_length=600)
     total = models.IntegerField()
-    voucherid = models.ForeignKey(VoucherId)
+    voucher_no = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
     '''def save(self, *args, **kwargs):
 

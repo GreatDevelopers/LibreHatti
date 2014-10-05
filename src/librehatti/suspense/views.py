@@ -29,6 +29,7 @@ from librehatti.voucher.models import FinancialSession
 from django.contrib.auth.decorators import login_required
 import datetime
 import simplejson
+import json
 
 
 @login_required
@@ -335,23 +336,31 @@ def transportbill(request):
                     # Make them select session first
                     HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
                 session = FinancialSession.objects.get(id=request.POST['session'])
-                voucher = VoucherId.objects.filter(voucher_no=request.POST['voucher'])[0]
+                voucher = request.POST['voucher']
+                
                 vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
-
-                kilometers = request.POST['kilometer']
+                kilometers_list = simplejson.dumps(request.POST.getlist("kilometer"))
+                kilometers = json.loads(kilometers_list)
+                
                 date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
                 rate_object = Surcharge.objects.filter(tax_name= 'transportation').values('value')[0]
-                rate = int(rate_object['value']) 
-                total = rate * int(kilometers) 
-                obj = Transport(vehicle=vehicle,kilometer=kilometers, total = total, Date=date, rate=rate, voucherid=voucher, session=session)
+                rate = int(rate_object['value'])
+                distance = 0
+                for i in kilometers:
+                    distance = distance + int(i)
+                total = rate * distance     
+                obj = Transport(vehicle=vehicle,kilometer=kilometers , total = total, Date=date, rate=rate, voucher_no=voucher, session=session)
                 obj.save()
-                temp = Transport.objects.filter(voucherid = voucher)
+                temp = Transport.objects.filter(voucher_no = voucher).values()
+                total_amount = Transport.objects.filter(voucher_no = voucher).aggregate(Sum('total')).get('total__sum',0.00)
+
+                #return HttpResponse(total_amount)
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
                        {'words' : num2eng(total), 
                         'total' : total , 'header':header, 'totalkm' : kilometers,
                         'rate': rate, 'datelist': date, "voucherid": voucher, "temp" : temp,
-                        'vehicle' : vehicle}) 
+                        'total_amount': total_amount, 'vehicle' : vehicle}) 
                          
     else:
         form = TransportForm1()

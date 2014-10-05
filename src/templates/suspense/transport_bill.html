@@ -34,14 +34,18 @@
                 <td>
                     {{ vehicle }} 
                 </td>
+                
                 <td>
-                    {{ totalkm }}
+                    {% for i in temp %}
+                    {{ i.kilometer }},
+                    {% endfor %}
                 </td>
+                
                 <td>
                     {{ rate }}
                 </td>
                 <td>
-                    {{ total }}
+                    {{ total_amount }}
                 </td>
             </tr>
         </table>
