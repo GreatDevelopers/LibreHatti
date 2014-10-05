@@ -95,14 +95,14 @@ class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User)
     is_debit = models.BooleanField(default = False)
     reference = models.CharField(max_length=200)
-    delivery_address = models.CharField(max_length=500)
+    delivery_address = models.CharField(max_length=500, blank=True, null=True)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)
     tds = models.IntegerField(default = 0)
     mode_of_payment = models.ForeignKey(ModeOfPayment)
-    check_dd_number = models.CharField(max_length=50, blank=True)
-    check_dd_date = models.DateField(max_length=50, blank=True, null=True)
+    cheque_dd_number = models.CharField(max_length=50, blank=True)
+    cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default = True)
     def save(self, *args, **kwargs):
 

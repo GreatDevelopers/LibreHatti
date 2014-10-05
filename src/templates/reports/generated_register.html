@@ -2,10 +2,13 @@
 {% load i18n %} {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">    <head>
+<html lang="en">
+<head>
+    {% block title %}
         <title>
             {{title}}
         </title> 
+    {% endblock %}
     </head>
     <body>
         {% block content %}
