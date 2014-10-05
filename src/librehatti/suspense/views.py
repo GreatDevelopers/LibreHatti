@@ -296,13 +296,23 @@ def sessionselect(request):
     if 'button1' in request.POST:
         form = SessionSelectForm(request.POST)
         if form.is_valid():
-            session = request.POST['session']
+            session = request.POST['session'][0]
+            #return HttpResponse(session)
             voucher = request.POST['voucher']
-
-            # Now render transport form with these variables.
-            Transport = TransportForm1()
-            temp = {"Transport" : Transport, "session" : session, "voucher" : voucher}
-            return render(request, 'suspense/transportform.html', temp)
+            #return HttpResponse(voucher)
+            object = SuspenseOrder.objects.filter(session_id = session).filter (voucher = voucher).values()
+            #return HttpResponse(object)
+            if object:
+                # Now render transport form with these variables.
+                Transport = TransportForm1()
+                messages = "Transport Bill for Voucher Number"+" "+ voucher +" and Session"+" "+session
+                temp = {"Transport" : Transport, "session" : session, "voucher" : voucher, "messages" : messages}
+                return render(request, 'suspense/transportform.html', temp)
+            else:
+                form = SessionSelectForm()
+                errors = "No such voucher number in selected session" 
+                temp = {"SelectForm" : form , "errors" : errors}
+                return render(request, 'voucher/sessionselect.html', temp)  
         else:
             form = SessionSelectForm()
             temp = {"SelectForm" : form}
@@ -315,8 +325,8 @@ def sessionselect(request):
 
 
 @login_required
-def transport_bill(request):
-    if request.method == 'POST':
+def transportbill(request):
+    if 'button1' in request.POST:
         form = TransportForm1(request.POST)
         if form.is_valid():
             if 'button1' in request.POST:
@@ -324,25 +334,23 @@ def transport_bill(request):
                 if not 'session' in request.POST:
                     # Make them select session first
                     HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
-
                 session = FinancialSession.objects.get(id=request.POST['session'])
-                voucher = VoucherId.objects.get(id=request.POST['voucher'])
+                voucher = VoucherId.objects.filter(voucher_no=request.POST['voucher'])[0]
                 vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
-                job_id = request.POST['job_id']
-                kilometers = simplejson.dumps(request.POST.getlist("kilometer")) # return array of kilometers          
+
+                kilometers = request.POST['kilometer']
                 date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
-                rate = float(request.POST['rate'])
-                obj = Transport(vehicle=vehicle, job_id=job_id, 
-                       kilometer=kilometers, Date=date, rate=rate, voucherid=voucher, session=session)
+                rate_object = Surcharge.objects.filter(tax_name= 'transportation').values('value')[0]
+                rate = int(rate_object['value']) 
+                total = rate * int(kilometers) 
+                obj = Transport(vehicle=vehicle,kilometer=kilometers, total = total, Date=date, rate=rate, voucherid=voucher, session=session)
                 obj.save()
-                temp = Transport.objects.filter(job_id=obj.job_id)
-                total_amount = Transport.objects.filter(job_id=obj.job_id
-                       ).aggregate(Sum('total')).get('total__sum', 0.00)
+                temp = Transport.objects.filter(voucherid = voucher)
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
-                       {'temp' : temp, 'words' : num2eng(total_amount), 
-                        'total' : total_amount , 'header':header, 'totalkm' : kilometers,
-                        'rate': rate, 'datelist': date, "voucherid": voucher,
+                       {'words' : num2eng(total), 
+                        'total' : total , 'header':header, 'totalkm' : kilometers,
+                        'rate': rate, 'datelist': date, "voucherid": voucher, "temp" : temp,
                         'vehicle' : vehicle}) 
                          
     else:

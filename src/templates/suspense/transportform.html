@@ -18,7 +18,12 @@ $(document).ready(function() {
 <table>
     <tr>
         <td>
-            <form action='{% url 'librehatti.suspense.views.transport_bill' %}' method='POST'>
+            <form action='{% url 'librehatti.suspense.views.transportbill' %}' method='POST'>
+                {% if messages %}
+                 <div class="text-success">
+                        {{ messages }} 
+                </div>
+                {% endif %}
                 {% csrf_token %}
                 {{Transport.as_p}}
                 <input type="hidden" value="{{ session }}" name="session" />

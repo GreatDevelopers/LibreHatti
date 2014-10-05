@@ -1,12 +1,19 @@
 {% extends "base.html" %}
+
 {% block content %}
 <table>
     <tr>
         <td>
             <form action='{% url 'librehatti.suspense.views.sessionselect' %}' method='POST'>
+                {% if errors %}
+                 <div class="alert alert-danger">
+                        {{ errors }} 
+                    </div>
+                {% endif %}
+
                 {% csrf_token %}
                 {{SelectForm.as_p}}
-                <input type="submit" class="btn btn-info btn-large" value="Generate Bill" name='button1' id='button1' />
+                <input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1' />
             </form>
         </td>
     </tr>

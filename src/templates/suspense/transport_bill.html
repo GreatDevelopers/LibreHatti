@@ -1,52 +1,63 @@
+{% extends 'bill_base.html' %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Bill</title></head>
-        {{header.header | safe}}
-
-        <h3 style="text-align: center">Transport Bill</h3>
-
-        <div style="float: left">Bill No: {{ voucherid }}</div>
+        {% block title %}
+        <title>Bill</title>
+        {% endblock %}
+    </head>
+        
+    <body>
+        {% block content %}
+            <div class="container">
+                <h2 >Transport Bill</h2>
+            </div>
+        
+            <p><span id ="highlight">Bill No:</span> {{ voucherid }}</p>
+            
         <!-- What is bill date here -->
-        <div style="float: right">Dated: {{ billdate }}</div>
+
+        <p><span id ="dated"><span id ="highlight">Dated:</span> {{ datelist }}</span>
 
         <div style="clear: both"></div>
 
-        <div style="text-align: center">
+        <div id = "transport_content">
         <table border="1" align="center">
-        	<tr>
-        		<th>Date of Use</th>
-        		<th>No of Kms</th>
-        		<th>Rate</th>
-        		<th>Amount</th>
-        	</tr>
-        	<tr>
-        		<td>
-        			{{ vehicle }} {{ datelist }}
-        		</td>
-        		<td>
-        			{{ totalkm }}
-        		</td>
-        		<td>
-        			{{ rate }}
-        		</td>
-        		<td>
-        			{{ total }}
-        		</td>
-        	</tr>
+        
+            <tr>
+                <th>Date of Use</th>
+                <th>No of Kms</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>
+                    {{ vehicle }} 
+                </td>
+                <td>
+                    {{ totalkm }}
+                </td>
+                <td>
+                    {{ rate }}
+                </td>
+                <td>
+                    {{ total }}
+                </td>
+            </tr>
         </table>
-        <div>
-        <div style="text-align: right; font-weight: bold">
-        	Dean Testing and Consultancy Cell
-        </div>
+        <br><br>
+       <div align="left"><b>  </b></div><br><br>
+       <div align="right"><b> Dean Testing and Consultancy Cell </b></div>
+        <br><br><table style="font-size:12pt; width:70%" ;="" align="center">
+<tbody><tr><td colspan="3">TA.DA Bill have been entered on page....... of TA/DA &amp; Other Charges register. Head other charges</td></tr>
 
-        <div style="text-align: center">
-        	TA.DA Bill have been entered on page______ of TA/DA & Other charges register<br>
+<tr> <td colspan="3" align="right"><br><br>Dean T&amp;C </td></tr>
 
-        	Dean T&C
+<tr><td colspan="3"><br><br>Passed for payment for Rs. 2000/-<br> (Rupees Two Thousand  only).</td></tr>
+<tr><td><br><br><br>Dean T&amp;C</td><td><br><br><br>&nbsp;&nbsp;Supt. Actt</td>
+<td><br><br><br>Director</td></tr></tbody></table><br><br>
 
-        	Passed for payment for Rs {{ rate }}/-<br>
-
-        	Dean T&C&nbsp;&nbsp;Supt Actt&nbsp;&nbsp;Directory
-        </div>
-
+{% endblock %}
+</body>
+</html>
+        

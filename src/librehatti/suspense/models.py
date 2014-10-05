@@ -85,19 +85,18 @@ class Vehicle(models.Model):
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
     def __unicode__(self):
-        return '%s' % (self.vehicle_name)
+        return '%s' % (self.vehicle_no)
 
 
 class Transport(models.Model):
     vehicle = models.ForeignKey(Vehicle)
-    job_id = models.IntegerField()
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
-    Date = models.CharField(blank=True,max_length=500)
+    Date = models.CharField(blank=True,max_length=600)
     total = models.IntegerField()
     voucherid = models.ForeignKey(VoucherId)
     session = models.ForeignKey(FinancialSession)
-    def save(self, *args, **kwargs):
+    '''def save(self, *args, **kwargs):
 
         # Now decode the kilometers
         jsonkilometer = simplejson.loads(self.kilometer)
@@ -110,7 +109,7 @@ class Transport(models.Model):
         # Now calculate the total and save it in model
         self.total = total_km * self.rate
         super(Transport, self).save(*args, **kwargs)
-
+    '''
 
     class Meta:
         verbose_name_plural = "Transport"
