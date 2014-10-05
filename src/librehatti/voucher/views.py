@@ -6,7 +6,7 @@ from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import TaxesApplied
-from useraccounts.models import Address
+from useraccounts.models import Address, Customer
 from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder, Staff
@@ -299,8 +299,10 @@ def voucher_print(request):
         lab_id = value['purchased_item__item__category__parent__parent']
     emp = Staff.objects.values('name','position').filter(lab=lab_id)
     purchase_order_obj = PurchaseOrder.objects.\
-    values('date_time','buyer__first_name','buyer__last_name',\
-    'delivery_address','tds').get(id = purchase_order)
+    values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
+    'tds').get(id = purchase_order)
+    address = Customer.objects.values('address__street_address',\
+    'address__city', 'address__pin', 'address__province').get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time'].date()
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
@@ -312,12 +314,12 @@ def voucher_print(request):
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \
             'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
-            'voucher':number, 'date': date,'address': purchase_order_obj['delivery_address'],\
+            'voucher':number, 'date': date,'address': address,\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
             'total_in_words': total_in_words, 'employee' : emp, 'header': header})
         voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
-            'address':purchase_order_obj['delivery_address'], 'cost':bill, 'inwords':amount_received_inwords,\
+            'address':address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})
