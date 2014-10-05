@@ -139,7 +139,7 @@ def bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect(reverse("librehatti.catalog.views.order_added_success"))
 
 @login_required
 def list_products(request):
@@ -174,3 +174,15 @@ def previous_value(request):
         CalculateDistribution.objects.get(voucher_no=value['voucher_no'], session=value['session']).delete()
     VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
     return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
+
+@login_required
+def order_added_success(request):
+    order_id = request.session.get('purchase_order_id')
+    details = PurchaseOrder.objects.values('buyer__first_name','buyer__last_name'
+        ,'buyer__customer__address__street_address','buyer__customer__title',
+        'buyer__customer__address__city','mode_of_payment__method',
+        'cheque_dd_number','cheque_dd_date').filter(id=order_id)[0]
+    return render(request,'catalog/order_added_success.html',{'details': details,
+        'order_id':order_id})
+
+

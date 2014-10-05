@@ -16,4 +16,5 @@ urlpatterns = patterns('librehatti.catalog.views',
     url(r'^bill_cal/','bill_cal'),
     url(r'^list_products/','list_products'),
     url(r'^previous_value/','previous_value'),
+    url(r'^order_added_success/','order_added_success'),
 )
