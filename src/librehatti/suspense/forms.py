@@ -52,5 +52,7 @@ class SessionSelectForm(forms.Form):
 
 class TransportForm1(forms.Form):
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
+    Date_of_generation = forms.DateField()
     kilometer = forms.CharField()
     date = forms.DateField()
+    

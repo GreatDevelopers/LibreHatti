@@ -92,6 +92,7 @@ class Transport(models.Model):
     vehicle = models.ForeignKey(Vehicle)
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
+    Date_of_generation = models.CharField(blank=True,max_length=600)
     Date = models.CharField(blank=True,max_length=600)
     total = models.IntegerField()
     voucher_no = models.IntegerField()

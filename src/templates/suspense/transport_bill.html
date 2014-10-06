@@ -17,10 +17,11 @@
             
         <!-- What is bill date here -->
 
-        <p><span id ="dated"><span id ="highlight">Dated:</span> {{ datelist }}</span>
+        <p><span id ="dated"><span id ="highlight">Dated:</span> {{ date_of_generation }}</span>
 
         <div style="clear: both"></div>
-
+        
+        <p><span id ="highlight"> Vehicle: </span >{{ vehicle}} </span>
         <div id = "transport_content">
         <table border="1" align="center">
         
@@ -30,23 +31,36 @@
                 <th>Rate</th>
                 <th>Amount</th>
             </tr>
+            {% for date,km,amount in zip_data %}
+            
             <tr>
+                  
                 <td>
-                    {{ vehicle }} 
+                        
+                    {{ date }} 
+                    
                 </td>
                 
                 <td>
-                    {% for i in temp %}
-                    {{ i.kilometer }},
-                    {% endfor %}
+                    
+                    {{ km }}
+                    
                 </td>
                 
                 <td>
                     {{ rate }}
                 </td>
                 <td>
-                    {{ total_amount }}
+                    {{ amount }}
                 </td>
+            </tr>
+            
+            {% endfor %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td></td>
+                <td></td>
+                <td> {{ total_amount }}</td>
             </tr>
         </table>
         <br><br>

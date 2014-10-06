@@ -337,30 +337,50 @@ def transportbill(request):
                     HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
                 session = FinancialSession.objects.get(id=request.POST['session'])
                 voucher = request.POST['voucher']
+                date_of_generation = request.POST['Date_of_generation']
                 
                 vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
                 kilometers_list = simplejson.dumps(request.POST.getlist("kilometer"))
                 kilometers = json.loads(kilometers_list)
                 
-                date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
+                dated = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
+                date = json.loads(dated)
                 rate_object = Surcharge.objects.filter(tax_name= 'transportation').values('value')[0]
                 rate = int(rate_object['value'])
                 distance = 0
                 for i in kilometers:
                     distance = distance + int(i)
-                total = rate * distance     
-                obj = Transport(vehicle=vehicle,kilometer=kilometers , total = total, Date=date, rate=rate, voucher_no=voucher, session=session)
-                obj.save()
+                total = rate * distance
+                
+                try:
+                    if Transport.objects.filter(voucher_no = voucher).exists():
+                        object1 = Transport.objects.filter(voucher_no = voucher).update()
+                         
+                    else:
+                        
+                        obj = Transport(vehicle=vehicle,kilometer=kilometers , Date_of_generation = date_of_generation, total = total, Date=date, rate=rate, voucher_no=voucher, session=session)
+                        obj.save()
+                except:
+                    pass        
                 temp = Transport.objects.filter(voucher_no = voucher).values()
+                
                 total_amount = Transport.objects.filter(voucher_no = voucher).aggregate(Sum('total')).get('total__sum',0.00)
-
-                #return HttpResponse(total_amount)
+                
+                zipped_data  = zip(date, kilometers) 
+                
+                a = [] 
+                for i,j in  zipped_data:
+                    c = rate * int(j)
+                    a.append(c)
+                zip_data = zip(date, kilometers, a)
+                    
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
                        {'words' : num2eng(total), 
-                        'total' : total , 'header':header, 'totalkm' : kilometers,
-                        'rate': rate, 'datelist': date, "voucherid": voucher, "temp" : temp,
-                        'total_amount': total_amount, 'vehicle' : vehicle}) 
+                        'total' : total , 'header':header, 'kilometers' : kilometers,
+                        'rate': rate, 'date': date, "voucherid": voucher, "temp" : temp,
+                        'zip_data': zip_data, 'total_amount': total_amount,
+                        'date_of_generation' : date_of_generation, 'vehicle' : vehicle}) 
                          
     else:
         form = TransportForm1()
@@ -372,6 +392,7 @@ def tada_order_session(request):
     if request.method == 'POST':
         form = TaDaForm()
         tada = 'enable'
+
         return render(request, 'suspense/form.html', \
             {'form':form,'tada':tada}) 
     else:
