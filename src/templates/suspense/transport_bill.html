@@ -8,7 +8,8 @@
     </head>
         
     <body>
-        {% block content %}
+            {% block content %}
+            
             <div class="container">
                 <h2 >Transport Bill</h2>
             </div>
@@ -63,19 +64,19 @@
                 <td> {{ total_amount }}</td>
             </tr>
         </table>
+        
         <br><br>
-       <div align="left"><b>  </b></div><br><br>
-       <div align="right"><b> Dean Testing and Consultancy Cell </b></div>
-        <br><br><table style="font-size:12pt; width:70%" ;="" align="center">
-<tbody><tr><td colspan="3">TA.DA Bill have been entered on page....... of TA/DA &amp; Other Charges register. Head other charges</td></tr>
+       <div align="left"><b>  </b></div>
+       <br><table style="font-size:12pt; width:70%" ;="" align="center">
 
-<tr> <td colspan="3" align="right"><br><br>Dean T&amp;C </td></tr>
 
-<tr><td colspan="3"><br><br>Passed for payment for Rs. 2000/-<br> (Rupees Two Thousand  only).</td></tr>
+
+<tr><td colspan="3"><br><br>Passed for payment for Rs. {{ total_amount }}/-<br> ({{ words }}).</td></tr>
 <tr><td><br><br><br>Dean T&amp;C</td><td><br><br><br>&nbsp;&nbsp;Supt. Actt</td>
 <td><br><br><br>Director</td></tr></tbody></table><br><br>
 
-{% endblock %}
+      {% endblock %}
+
 </body>
 </html>
         

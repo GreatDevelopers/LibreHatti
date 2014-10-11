@@ -9,6 +9,7 @@ from django import forms
 from librehatti.suspense.models import FinancialSession
 from librehatti.suspense.models import VoucherId
 from librehatti.suspense.models import Vehicle
+import datetime
 
 class Clearance_form(ModelForm):
     class Meta:
@@ -34,7 +35,7 @@ class TaDaSearch(forms.Form):
 class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
-        exclude = ('suspense',)
+        exclude = ('Date_of_generation',)
 
 class StaffForm(forms.ModelForm):
     class Meta:
@@ -51,8 +52,10 @@ class SessionSelectForm(forms.Form):
     voucher = forms.CharField()
 
 class TransportForm1(forms.Form):
+    
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
-    Date_of_generation = forms.DateField()
+    Date_of_generation = forms.DateField(initial = datetime.date.today)
     kilometer = forms.CharField()
     date = forms.DateField()
-    
+    class Meta:
+        exclude = ('Date_of_generation',)
