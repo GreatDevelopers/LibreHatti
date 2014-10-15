@@ -4,7 +4,7 @@
 <head>
 <meta charset='UTF-8'>
 {% block title %}
-        <title>bill</title>
+        <title>Bill</title>
 {% endblock %}
 {% load set_var %} 
 </head>
@@ -25,7 +25,7 @@
     <p> {{buyer_name.company}}</p>
     <p><span id ="highlight"> Buyer Id: </span>{{buyer}} </p>
     <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
-    <p><span id ="highlight"> Site: </span>{{site.street_address}}, {{site.city}}-{{site.pin}}, {{site.province}} </p>
+    <p><span id ="highlight"> Site: </span>{{site.address__street_address}}, {{site.address__city}}, {{site.address__pin}}, {{site.address__province}} </p>
     </div>
         <table class="data" border="1px">
             <tr>

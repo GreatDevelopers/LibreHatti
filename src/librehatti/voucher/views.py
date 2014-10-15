@@ -6,16 +6,18 @@ from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import TaxesApplied
-from useraccounts.models import Address
+from useraccounts.models import Address, Customer
 from django.db.models import Max, Sum
 from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder, Staff
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 """
 This function calculates the session id and then initialise or increment 
 voucher number according to the previous purchase order's session id
 """
+@login_required
 def voucher_generate(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -248,6 +250,7 @@ def voucher_generate(request):
     return HttpResponseRedirect(reverse("librehatti.suspense.views.add_distance"))
 
 
+@login_required
 def voucher_show(request):
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.get(id = id)
@@ -263,6 +266,7 @@ def voucher_show(request):
     return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
 
 
+@login_required
 def voucher_print(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
@@ -295,11 +299,11 @@ def voucher_print(request):
         lab_id = value['purchased_item__item__category__parent__parent']
     emp = Staff.objects.values('name','position').filter(lab=lab_id)
     purchase_order_obj = PurchaseOrder.objects.\
-    values('date_time','buyer__first_name','buyer__last_name',\
-    'delivery_address','tds').get(id = purchase_order)
+    values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
+    'tds').get(id = purchase_order)
+    address = Customer.objects.values('address__street_address',\
+    'address__city', 'address__pin', 'address__province').get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time'].date()
-    delivery_address = Address.objects.values('street_address','city','pin',\
-    'province').get(id = purchase_order_obj['delivery_address'])
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
@@ -310,12 +314,12 @@ def voucher_print(request):
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \
             'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
-            'voucher':number, 'date': date,'address': delivery_address,\
+            'voucher':number, 'date': date,'address': address,\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
             'total_in_words': total_in_words, 'employee' : emp, 'header': header})
         voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
-            'address':delivery_address, 'cost':bill, 'inwords':amount_received_inwords,\
+            'address':address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})

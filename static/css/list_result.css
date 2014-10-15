@@ -1,14 +1,21 @@
 
-.list-registers{
-	font-family:'Open Sans', 'sans-serif';
-	margin-top: 50px;
-	position: relative;
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+
+body{
+	background-color:#00000;
+}
+
+.main-box{
+	max-width: 400px;
+	margin: auto;
+	margin-top: 25px;
 }
 
 .view-list {
 	width: 40%;
 	margin-right: auto;
 	margin-left: auto;
+	margin-top: 60px;
 }
 
 table{
@@ -70,4 +77,77 @@ a:hover{
 
 .primary-branding a:hover{
 	text-decoration: none;
-};
+}
+
+.order-success table{
+	width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.order-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+.order-success-options input{
+	width: 40%;
+}
+
+.order-success-options h3{
+	width: 100%;
+	text-align: center;
+	position: relative;
+}
+
+.order-success-options table td{
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 33%;
+}
+
+.clearance-success table{
+	width: 100%;
+    margin-left: -100px;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.clearance-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+
+
+.clearance-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+.clearance-success-options h3{
+	width: 100%;
+	text-align: center;
+	position: relative;
+}
+
+.clearance-success-options table td{
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 100%;
+}
+
+.success-message {
+	margin-top: 3%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.green {
+	color: #2ecc71;
+}
+
+

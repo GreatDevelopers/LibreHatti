@@ -1,176 +1,103 @@
-<!DOCTYPE html>
+{% extends 'bill_base.html' %}
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="http://192.168.15.178/
-                      static/css2/css/report.css " /><title>Bill</title></head>
-        {{header.header | safe}}
-        <!-- Header left begin-->
-        <div style = "text-align:left; float:left;">
-            Voucher No:_______
+<head>
+    {% load staticfiles %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
+
+    {% block title %}
+    <title>Without Charges</title>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+<br>
+<div class="voucher-no">Voucher : ________
+<div style = "text-align:right; float:right">
+            Main/Mat.No: {{ purchase_order }}
         </div>
-        <!-- Header left end-->
-    
-
-        <!-- Header right begin-->
-        <div style = "text-align:right; float:right">
-            Main/Mat.No:_
         </div>
-        <!-- Header right end--><br>
-        <!-- Header left begin-->
-        <div style = "text-align:left; float:left;">
-            Dated:_______
+<div class="date">Dated : ________
+<div style = "text-align:right; float:right">
+            Dated:{{date}}
         </div>
-        <!-- Header left end-->
-
-
-        <!-- Header right begin-->
-        <div style = "text-align:right; float:right">
-            Dated:_______
         </div>
-        <!-- Header right end--> </head> <br>
-        <br>
-        <div align='left'>Director, </div>  
-        <div align='left'>Recieved a sum of Rs {{ total }}/- </div> <br>
-        <div align='left'>Vide Cash,from :Swami Ganga Nand Ji Bhuriwala 
-           Memorial Trust,(Regd),Dham Talwandi,,Dist Ludhiana </div> 
-        <div align='left'>Vide bill no :{{bill_no}} Dated:{{dated}} </div> 
-        <div align='left'>On account of:{{acc_no}} 
-            Vide Receipt No:{{receipt_no}} </div> <br>
-        <div align='left'>Nature of Consultancy:{{nature}} </div> <br>
-        <br>
-        <style>
+<div class="designation">Director,</div>
+Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
+<br><br>
+Vide Cash, Dated
+<div>From : {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
+{{address.purchase_order__buyer__customer__address__street_province}}</div>
+<div>Vide Bill No.: GNDEC/TCC/B/{{purchase_order}} Dated: {{order_date}}</div>
+on account of : Vide Receipt No.: {{purchase_order}} Dated: {{order_date}}
+<div>Nature of Consultancy : {{ distribution }},  Ratio {{ ratio }} </div>
+<div id = "pos-left">
+<table border='1px'>
+<tr>
+    <td colspan="2"><b>THE DISTRIBUTION MAY BE MADE AS</b></td>
+    <td><b>Date Of Testing</b></td>
+    <td></td>
+</tr>
 
-            <style>
-            *{
-                margin:0px;
-                padding:0px;
-            }
-            body{
-                background-color:white;
-            }
-            .t1
-            {
-                width: 100%;
-                color:black;
-                height: 50px;
-            }
-    
-            .t2
-            {
-                padding: 0px;
-                height: 100px;
-                margin-right: 200px;
-                width: 50%;
-            }
-            .t3
-            {
-                padding: 0px;
-                height: 100px;
-                margin-right: 200px;
-                width: 50%;
-            }
-        </style>
-        <div class ="t1">
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th colspan="2">THE DISTRIBUTION MAY BE MADE AS</th>
-                        <th>DATE OF TESTING</th>
-                        <th> </th>
-                    </tr>
 
-                    <tr>
-                        <td rowspan=9><br><br><br>CREDITS<br><br></td>
-                        <td>COLLEGE INCOME 15%</td>
-                        <td rowspan=9><br><br>{{test_date}}<br><br><br></td>
-                        <td>{{20}}</td>
-                    </tr>
-
-                    <tr>
-                        <td>ADMN. CHARGES 5%</td> 
-                        <td>{{34}}</td>
-                    </tr>
-                    <tr>
-                        <td>CONSULTANCY ASST.(CONSULTANCY)</td>
-                        <td>{{56}}</td>
-                    </tr>
-                    <tr>
-                        <td>DEV.FUND(CONSULTANCY)</td>
-                        <td>{{34}}</td>
-                    </tr>
-                    <tr>
-                        <td>WORK CHARGES</td>
-                        <td>{{work_charge}}</td>
-                    </tr>
-                    <tr>
-                        <td>T.A./D.A. OF STAFF</td>
-                        <td>{{amnt}}</td>
-                    </tr>
-                    <tr>
-                        <td>OTHER CHARGES</td>
-                        <td>{{testing}}</td>
-                    </tr>
-                    <tr>
-                        <td>BORING CHARGES(internal)</td>
-                        <td>{{boring_int}}</td>
-                    </tr>
-                    <tr>
-                        <td>TOTAL</td>
-                        <td>{{total}}</td>
-                    </tr>
-            </table>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class ="t2">
-            <table border="1">
-                <tr>
-                    <th>Field Testing Staff</th>
-                    <th>Lab Testing Staff </th>
-                </tr>
-                <tr>
-                    <td>{{1}}</td>
-                    <td>{{3}}</td>
-            </table> 
-        </div>
-
-        <br>
-        <br>
-        <div align='left'>THE WORK HAS BEEN EXECUTED BY ABOVE PERSONS AS
-            MENTIONED ABOVE</div> <br>
-        Voucher No:_______ <br>
-        Dated:___<br>
-        <br>
-        <br>
-        <div align='right'>    DEAN TESTING AND CONSULTANCY </div> <br>
-        <div align='left'> Account Clerk (Consultancy) &nbsp &nbsp &nbsp 
-            &nbsp &nbsp &nbsp &nbsp &nbsp Supt.Accounts </div> <br>
-        <br>
-        <div class ="t3">
-            <table border="1">
-                <tr>
-                    <th>Code </th>
-                    <th>NAME OF EMPLOYEES </th>
-                    <th>DESIGNATION</th>
-                </tr>
-                <tr>
-                    <td>{{code}}</td>
-                    <td>{{name}}</td>
-                    <td>{{designation}}</td>
-                </tr>
-            </table> 
-
-</html>
+<tr>
+    <td rowspan="5">CREDITS</td>
+    <td>COLLEGE INCOME {{ charges.college_income }}% </td>
+    <td rowspan="5">{{test_date}}</td>
+    <td  id = "pos-right">{{ calculate_distribution.college_income_calculated }}</td>
+</tr>
+<tr>
+    <td>ADMN. CHARGES {{ charges.admin_charges }}% </td>
+    <td  id = "pos-right">{{ calculate_distribution.admin_charges_calculated}}</td>
+</tr>
+<tr>
+    <td>CONSULTANCY ASST. </td>
+    <td  id = "pos-right">{{ calculate_distribution.consultancy_asset }}</td>
+</tr>
+<tr>
+    <td>DEV. FUND (CONSULTANCY) </td>
+    <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
+</tr>
+<tr>
+    <td><b>TOTAL</b></td>
+    <td  id = "pos-right">{{ calculate_distribution.total }}</td>
+</tr>
+</table>
+</div>
+<div class="testingfieldstaff">
+<table border='1px'>
+    <tr>
+    <td colspan="2"><b>Field Testing Staff</b></td>
+    </tr>
+    <tr>
+    <td><b>Name</b></td>
+    <td><b>Designation</b></td>
+    </tr>
+    {% for field_staff_name in field_staff%}
+    <tr>
+    <td>{{ field_staff_name.name }}</td>
+    <td>{{ field_staff_name.position }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<div class="testinglabstaff">
+<table border='1px'>
+    <tr>
+    <td colspan="2"><b>Lab Testing Staff</b></td>
+    </tr>
+    <tr>
+    <td><b>Name</b></td>
+    <td><b>Designation</b></td>
+    </tr>
+    {% for lab_staff_name in lab_staff%}
+    <tr>
+    <td>{{ lab_staff_name.name }}</td>
+    <td>{{ lab_staff_name.position }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<div class="position">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE.</div>{% endblock %}
+</body>
+</html>       

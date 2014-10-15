@@ -15,9 +15,11 @@ from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId, CalculateDistribution
 
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 import simplejson
 
+@login_required
 def index(request):
     """
     It lists all the products and the user can select any product
@@ -42,6 +44,7 @@ def index(request):
     return render(request,'index.html',{})
 
 
+@login_required
 def add_categories(request):
     """
     It allows the user to add categories.
@@ -63,6 +66,7 @@ def add_categories(request):
 This view allows filtering of sub category according to parent category of 
 item.
 """
+@login_required
 def select_sub_category(request):
     parent_category = request.GET['cat_id']
     sub_categories = Category.objects.filter(parent=parent_category)
@@ -74,6 +78,7 @@ def select_sub_category(request):
 """
 This view allows filtering of item according to sub category of item.
 """
+@login_required
 def select_item(request):
     cat_id = request.GET['cat_id']
     products = Product.objects.filter(category = cat_id)
@@ -87,6 +92,7 @@ def select_item(request):
 This view calculate taxes on purchased order, bill data
 and save those values in database.
 """
+@login_required
 def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -133,8 +139,9 @@ def bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect(reverse("librehatti.catalog.views.order_added_success"))
 
+@login_required
 def list_products(request):
     all_products = Product.objects.all()
     all_categories=Category.objects.all().order_by('name')
@@ -152,7 +159,7 @@ def list_products(request):
     return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
 
 
-
+@login_required
 def previous_value(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -167,3 +174,15 @@ def previous_value(request):
         CalculateDistribution.objects.get(voucher_no=value['voucher_no'], session=value['session']).delete()
     VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
     return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
+
+@login_required
+def order_added_success(request):
+    order_id = request.session.get('purchase_order_id')
+    details = PurchaseOrder.objects.values('buyer__first_name','buyer__last_name'
+        ,'buyer__customer__address__street_address','buyer__customer__title',
+        'buyer__customer__address__city','mode_of_payment__method',
+        'cheque_dd_number','cheque_dd_date').filter(id=order_id)[0]
+    return render(request,'catalog/order_added_success.html',{'details': details,
+        'order_id':order_id})
+
+

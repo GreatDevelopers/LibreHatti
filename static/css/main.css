@@ -34,6 +34,7 @@ body{
 .panel-items {
 	list-style-type: none;
 	margin-top: 100px;
+	margin-left: 15px;
 }
 
 .panel-item{
@@ -61,4 +62,109 @@ body{
 	font-weight: 300;
 	font-size: 14px;
 	color: #135375;
+}
+
+.account{
+	position: absolute;
+	top: 10px;
+	right: 30px;
+	float: right;
+}
+
+
+#primary_nav_wrap
+{
+	margin-right: 65px;
+}
+
+#primary_nav_wrap ul
+{
+	list-style:none;
+	float:right;
+	margin:0;
+	padding:0;
+	border-radius:5px;
+
+}
+
+#primary_nav_wrap ul a
+{
+	display:block;
+	color:#333;
+	text-decoration:none;
+	font-weight:700;
+	font-size:12px;
+	line-height:32px;
+	padding:0 15px;
+}
+
+
+
+#primary_nav_wrap ul li:hover
+{
+	border-radius: 5px;
+}
+
+#primary_nav_wrap ul li a:hover
+{
+	color: #06b9fb;
+	border-radius: 5px;
+}
+
+#primary_nav_wrap ul ul
+{
+	display:none;
+	position:absolute;
+	top:100%;
+	left:0;
+	background:#fff;
+	padding:0;
+}
+
+
+
+#primary_nav_wrap ul li:hover > ul
+{
+	display:block;
+}
+
+
+@media only screen 
+and (max-width : 800px) {
+
+.primary-branding{
+	font-size:24px;
+	margin-top:50px;
+}
+
+.account {
+	background:#fff;
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	border-bottom:#ddd;
+}
+#primary_nav_wrap {
+	margin-right:0px;
+}
+#primary_nav_wrap ul li a {
+	height:40px;
+	line-height:40px;
+}
+#primary_nav_wrap ul ul {
+	width:100%;	
+}
+
+#primary_nav_wrap ul ul li a {
+	line-height:40px;
+	font-size: 18px;
+	font-weight:400;
+	text-align:center;
+}
+
+#primary_nav_wrap ul ul li a:hover {
+	background:rgb(15,132,176);
+	color:#fff;
+}
 }

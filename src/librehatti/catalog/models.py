@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
 from django.core.exceptions import ValidationError
+import datetime
 
 from tinymce.models import HTMLField
 
@@ -94,21 +95,37 @@ class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User, verbose_name='_BUYER')
     is_debit = models.BooleanField(default = False)
     reference = models.CharField(max_length=200)
-    delivery_address = models.ForeignKey('useraccounts.Address', verbose_name='_DELIVERY_ADDRESS')
+    delivery_address = models.CharField(max_length=500, blank=True, null=True, verbose_name='_DELIVERY_ADDRESS')
     organisation = models.ForeignKey('useraccounts.AdminOrganisations', verbose_name='_ORGANISATION')
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)
     tds = models.IntegerField(default = 0)
     mode_of_payment = models.ForeignKey(ModeOfPayment, verbose_name='_MODE_OF_PAYMENT')
+    cheque_dd_number = models.CharField(max_length=50, blank=True)
+    cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default = True)
     def save(self, *args, **kwargs):
 
         surchages = Surcharge.objects.filter(taxes_included=1)
 
         if surchages:
-            super(PurchaseOrder, self).save(*args, **kwargs)
+            pass
         else:
             raise ValidationError('No Active Taxes. Unable to add Order')
+        from librehatti.voucher.models import FinancialSession
+        now = datetime.datetime.now()
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= now.date() <= end_date:
+                session_id = value['id']
+        try:
+            session_id
+            super(PurchaseOrder, self).save(*args, **kwargs)
+        except:
+            raise ValidationError('No Current Financial Session')
     def __unicode__(self):
         return '%s' % (self.id)
 

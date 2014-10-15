@@ -18,14 +18,13 @@
 <div class="designation">Director,</div>
 <br></br><br/>
 Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
-Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{address.street_address}},
-{{address.city}} {{address.province}} {{address.pin}} <br> on account of {{ categoryname}}
+Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}}
 <br/><br/><br/>
 <div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
 <div id = "pos-left">
 <br/><br/>
-<table >
+<table border='1px'>
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
 </tr>
@@ -52,7 +51,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 	<td>TOTAL (Rs.) </td>
 	<td  id = "pos-right">{{ calculate_distribution.total }}</td>
 </tr>
-</table border = "1">
+</table>
 </div>
 <br>
 <br>
@@ -62,7 +61,6 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <tr>
 	<TD>NAME OF EMPLOYEES</TD>
 	<TD>DESIGNATION</TD>
-</tr>
 </tr>
 {% for emp in employee %}
 <tr>
@@ -76,7 +74,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }} {{addre
 <br><br>
 
 <div id = "pos-left">
-Account Clerk (Consultancy)</div>
+<b>Account Clerk (Consultancy)</b></div>
 <br><br><br>
 {% endblock %}
 </body>

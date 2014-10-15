@@ -6,7 +6,7 @@ from django import forms
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import PurchaseOrder, ModeOfPayment
 
 import itertools
 
@@ -34,7 +34,7 @@ class ItemSelectForm(forms.ModelForm):
 
     try:
         parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-     	    filter(parent__parent__isnull=True).filter(parent__isnull=False))
+            filter(parent__parent__isnull=True).filter(parent__isnull=False))
         sub_category = forms.ModelChoiceField(queryset = Category.objects.all())
     except:
         pass
@@ -55,5 +55,8 @@ class BuyerForm(forms.ModelForm):
         exclude = ('is_active',)
 
     class Media:
-        js = ('js/hide_add_buyer.js',)
-
+        js = (
+            'js/hide_add_buyer.js',
+            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+            'js/cheque_dd_date.js',
+            )

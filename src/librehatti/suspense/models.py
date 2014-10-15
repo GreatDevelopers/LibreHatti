@@ -22,7 +22,8 @@ class SuspenseOrder(models.Model):
         return '%s' % (self.id)
 
 class SuspenseClearance(models.Model):
-    suspense_id = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+    voucher_no = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True, verbose_name='_WORK_CHARGE')
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True, verbose_name='_CAR_TAXI_CHARGE')
@@ -47,7 +48,7 @@ class Staff(models.Model):
     department = models.ForeignKey(Department)
     code = models.CharField(max_length=5, verbose_name='_CODE')
     name = models.CharField(max_length=50)
-    daily_income = models.IntegerField(blank=True)
+    daily_ta_da = models.IntegerField(blank=True)
     position = models.CharField(max_length=100, verbose_name='_POSITION')
     lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
@@ -59,7 +60,9 @@ class Staff(models.Model):
         return self.name
 
 class TaDa(models.Model):
-    suspense = models.IntegerField()
+    Date_of_generation = models.DateField(default = datetime.date.today)
+    voucher_no = models.IntegerField()
+    session = models.IntegerField()
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
@@ -85,19 +88,19 @@ class Vehicle(models.Model):
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
     def __unicode__(self):
-        return '%s' % (self.vehicle_name)
+        return '%s' % (self.vehicle_no)
 
 
 class Transport(models.Model):
     vehicle = models.ForeignKey(Vehicle)
-    job_id = models.IntegerField()
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
-    Date = models.CharField(blank=True,max_length=500)
+    Date_of_generation = models.DateField()
+    Date = models.CharField(blank=True,max_length=600)
     total = models.IntegerField()
-    voucherid = models.ForeignKey(VoucherId)
+    voucher_no = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
-    def save(self, *args, **kwargs):
+    '''def save(self, *args, **kwargs):
 
         # Now decode the kilometers
         jsonkilometer = simplejson.loads(self.kilometer)
@@ -110,7 +113,7 @@ class Transport(models.Model):
         # Now calculate the total and save it in model
         self.total = total_km * self.rate
         super(Transport, self).save(*args, **kwargs)
-
+    '''
 
     class Meta:
         verbose_name_plural = "Transport"

@@ -87,13 +87,16 @@ buyer , is_debit , total discount , tds and mode of payment
 class PurchaseOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
     exclude=('is_active',)
-    list_display = ['id','buyer','delivery_address','date_time','is_active']
+    list_display = ['id','buyer_name','delivery_address','date_time','is_active']
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
     actions = [mark_active, mark_inactive] 
     list_filter = ['date_time']
     search_fields = ['id']
     list_per_page = 20 
+    def buyer_name(self, instance):
+        return "%s" % (instance.buyer.first_name + ' ' + instance.buyer.\
+            last_name + ' ' + instance.buyer.customer.title)
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id

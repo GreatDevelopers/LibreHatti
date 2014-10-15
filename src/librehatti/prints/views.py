@@ -14,10 +14,12 @@ from librehatti.prints.helper import num2eng
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import SuspenseOrder
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def lab_report(request):
     """
-    It generates the report which lists all the orders for the test 
+    It generates the report which lists all the orders for the test
     selected and the in the entered Time Span.
     """
     category = request.GET['sub_category']
@@ -37,15 +39,16 @@ def lab_report(request):
         'purchase_order__buyer_id__customer__company','price',
         'purchase_order__buyer_id__customer__is_org')
     category_name = Category.objects.values('name').filter(id=category)
-    
-    total = PurchasedItem.objects.filter(purchase_order__date_time__range 
+
+    total = PurchasedItem.objects.filter(purchase_order__date_time__range
         = (start_date,end_date),item__category=category).\
         aggregate(Sum('price')).get('price__sum', 0.00)
-    
+
     return render(request, 'prints/lab_reports.html', { 'purchase_item':
                    purchase_item,'start_date':start_date,'end_date':end_date,
                   'total_cost':total,'category_name':category_name})
 
+@login_required
 def show_form(request):
     """
     This view is to show the form for Lab Report.
@@ -59,7 +62,8 @@ def show_form(request):
     return render(request, 'prints/show_form.html', {
               'form':form
     })
-    
+
+@login_required
 def filter_sub_category(request):
     """
     This view filters the sub_category according to the parent_category.
@@ -71,9 +75,10 @@ def filter_sub_category(request):
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
-def bill(request):   
+@login_required
+def bill(request):
     """
-    It generates a Bill for the user which lists all the items, 
+    It generates a Bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
     """
@@ -106,12 +111,11 @@ def bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
-    d_address_id = purchase_order_obj['delivery_address']
     buyer = purchase_order_obj['buyer']
+    address = Customer.objects.values('address__street_address',\
+    'address__city', 'address__pin', 'address__province').get(user = buyer)
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
-    address = Address.objects.\
-    values('street_address','city','pin','province').get(id = d_address_id)
     customer_obj = Customer.objects.values('company').get(user = buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
     get(id = organisation_id)
@@ -126,6 +130,7 @@ def bill(request):
     calculatedistribution = CalculateDistribution.objects.\
     values('voucher_no','total','session').all()
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'ref':purchase_order_obj , 'date':date,\
         'purchase_order':purchase_order, 'purchased_item': voucherid,\
@@ -134,9 +139,10 @@ def bill(request):
         'buyer': buyer, 'buyer_name': customer_obj, 'site': address,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count, 'values':voucherid_obj,\
-        'cost':calculatedistribution,'header':header})
+        'cost':calculatedistribution,'header':header,'footer': footer})
 
 
+@login_required
 def receipt(request):
     """
     It generates a Receipt.
@@ -144,13 +150,12 @@ def receipt(request):
     id = request.GET['order_id']
     bill = Bill.objects.values('amount_received').get(purchase_order = id)
     purchase_order = PurchaseOrder.objects.values('buyer','date_time',\
-    'delivery_address_id','mode_of_payment__method').get(id = id)
+    'delivery_address','mode_of_payment__method').get(id = id)
     date = purchase_order['date_time'].date()
     total_in_words = num2eng(bill['amount_received'])
-    address = Address.objects.\
-    values('street_address','city','pin','province').\
-    get(id = purchase_order['delivery_address_id'])
     customer_obj = Customer.objects.values('company').get(user = purchase_order['buyer'])
+    address = Customer.objects.values('address__street_address',\
+    'address__city', 'address__pin', 'address__province').get(user = purchase_order['buyer'])
     purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'prints/receipt.html', {'receiptno': id,\

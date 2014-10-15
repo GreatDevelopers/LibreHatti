@@ -4,7 +4,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    {% block title %}
+    {% endblock %}
     {% block js %}
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
     </script>
@@ -14,6 +15,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+
    
 </head>
 <body>
@@ -23,6 +26,19 @@
                 <header class="primary-branding">
                    <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
                 </header>
+            </div>
+            <div class ="account">
+                <nav id="primary_nav_wrap">
+<ul>
+  <li><a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
+    <ul>
+      <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+      <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
+      <li><a href="{% url 'admin:logout' %}">Log out</a></li>
+    </ul>
+  </li>
+</ul>
+</nav>
             </div>
             {% block content %}{% endblock %}
         </div>

@@ -18,5 +18,11 @@ class BuyerLookup(LookupChannel):
         return self.format_item_display(obj)
 
     def format_item_display(self, obj):
-        self.response_query = str(obj.first_name + ' ' + obj.last_name)
-        return "%s" % (escape(self.response_query))
+        result = User.objects.values('first_name','last_name',
+            'customer__title','customer__address__street_address',
+            'customer__address__city').filter(id = obj.id)[0]
+        return "<b>Name or Title:</b> %s <br> <b>Address:</b> %s <br> %s <hr>" % \
+            ((result['first_name'] + ' ' + result['last_name'] + ' ' + \
+            result['customer__title']), \
+            (result['customer__address__street_address']), \
+            (result['customer__address__city']))
