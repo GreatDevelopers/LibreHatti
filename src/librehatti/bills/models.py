@@ -4,10 +4,11 @@ from librehatti.catalog.models import Product
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 from django.contrib.auth.models import User
+from librehatti import config
 
 
 class QuotedOrder(models.Model):
-    buyer_id = models.ForeignKey(User, verbose_name='BUYER_ID')
+    buyer_id = models.ForeignKey(User, verbose_name=_BUYER_ID)
     is_debit = models.BooleanField(default = False)
     delivery_address = models.ForeignKey('useraccounts.Address', verbose_name=_DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations', verbose_name=_ORGANISATION)
