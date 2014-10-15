@@ -37,7 +37,7 @@ class SuspenseOrderAdmin(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
     form = StaffForm
     model = Staff
-    list_display = ['name', 'department','position', 'daily_income', 'lab']
+    list_display = ['name', 'department','position', 'daily_ta_da', 'lab']
     list_per_page = 20
 
 admin.site.register(Staff,StaffAdmin) 

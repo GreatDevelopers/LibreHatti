@@ -22,7 +22,8 @@ class SuspenseOrder(models.Model):
         return '%s' % (self.id)
 
 class SuspenseClearance(models.Model):
-    suspense_id = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+    voucher_no = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
@@ -47,7 +48,7 @@ class Staff(models.Model):
     department = models.ForeignKey(Department)
     code = models.CharField(max_length=5)
     name = models.CharField(max_length=50)
-    daily_income = models.IntegerField(blank=True)
+    daily_ta_da = models.IntegerField(blank=True)
     position = models.CharField(max_length=100)
     lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)

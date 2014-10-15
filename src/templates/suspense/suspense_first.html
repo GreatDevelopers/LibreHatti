@@ -1,12 +1,28 @@
+{% extends "base.html" %} {% load staticfiles %}
+
 <html>
     <head>
-        <title>
-            Suspense Job
-        </title>
+        {% block title %}
+        <title>Form</title>
+        {% endblock %}
+        {% block js %}
+        <script src="{% static 'js/clearance.js' %}">
+        </script>
+        {% endblock js %}
     </head>
-    <h2>Search a Job</h2>
-    <form action="/suspense/clreport/" method="GET">
-            <p> {{search_form.as_p}} </p>
-            <p> <input type="submit" value="Search" name="Search"> </p>
-        </form>
+    <body>
+        {% block content %}
+        {% if clearance %}
+            <form method="POST" action={% url 'librehatti.suspense.views.clearance_result' %} >
+        {% else %}
+            <form method="POST" action=''>
+        {% endif %}
+            {% csrf_token %}
+        <table> 
+            {{form.as_table}}
+        </table>
+            <input type="submit" class="btn btn-info btn-large" value="Submit">
+        </form> 
+        {% endblock %}
+    </body>
 </html>

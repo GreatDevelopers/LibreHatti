@@ -1,40 +1,78 @@
+{% extends "base.html" %} 
 <html>
     <head>
+    {% block title %}
         <title>
             Suspense Job
         </title>
-        <style>
-            .button { width : 100px; height: 25px;}
-        </style>
+    {% endblock %}
     </head>
-    <body> 
-        <p>Ref No. = {{ref_no}}</p>
-        <p>Work Charge = {{work_charge}}</p>
-        <p>Labour Charge = {{labour_charge}}</p>   
-        <p>Car Taxi Charge = {{car_taxi_charge}}</p>
-        <p>Boring Charge External = {{boring_charge_external}}</p>
-        <p>Boring Charge Internal = {{boring_charge_internal}}</p>
-        <p>Lab Testing Staff = {{lab_testing_staff}}</p>    
-        <p>Field Testing Staff = {{field_testing_staff}}</<p>
-        <p>Test Date = {{Test_date}}</p>
+    <body>
+    {% block content %}
+    <div class='clearance-success'>
+        <p class='success-message'>Clearance <span class='green'>
+                Successful</span></p>
+        <table>
+            <tr>
+                <th>Session:</th>
+                  <td>{{session}}</td>
+            </tr>
+            <tr>
+                <th>Voucher No.:</th>
+                <td>{{voucher_no}}</td>
+            </tr>
+            <tr>
+                <th>Work Charge:</th>
+                <td>{{work_charge}}</td>
+            </tr>
+            <tr>
+                <th>Labour Charge:</th>
+                  <td>{{labour_charge}}</td>
+            </tr>
+            <tr>
+                <th>Car Taxi Charge:</th>
+                <td>{{car_taxi_charge}}</td>
+            </tr>
+            <tr>
+                <th>Boring Charge External:</th>
+                <td>{{boring_charge_external}}</td>
+            </tr>
+            <tr>
+                <th>Boring Charge Internal:</th>
+                  <td>{{boring_charge_internal}}</td>
+            </tr>
+            <tr>
+                <th>Lab Testing Staff:</th>
+                <td>{{lab_testing_staff}}</td>
+            </tr>
+            <tr>
+                <th>field Testing Staff:</th>
+                <td>{{field_testing_staff}}</td>
+            </tr>
+            <tr>
+                <th>Test Date:</th>
+                  <td>{{test_date}}</td>
+            </tr>
+            <tr>
+                <th>Clear Date:</th>
+                <td>{{clear_date}}</td>
+            </tr>
+        </table>
 
-        <a href = "/suspense/with_transport/">
-            <button name = "clearance with transport bill">
-                Clearance With Transport Bill
-            </button>
-        </a>     
-        <a href = "/suspense/withouttransport/">
-            <button name = "clearance without transport bill">
-                Clearance Without Transport Bill
-            </button>
-        </a>
-        <a href = "/suspense/wtransport/">
-            <button name = "without charges">Without Charges
-            </button>
-        </a>
-        <a href = "/suspense/othercharges/">
-            <button name = "other charge report">Other Charge Report
-            </button>
-        </a>     
+        <div class='clearance-success-options'>
+        <table>
+        <tr>
+            <th colspan='4'><h3>Options</h3></th>
+        </tr>
+        <tr>
+            <td><a href = '/suspense/with_transport/?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="clearance with transport bill" value="Clearance With Transport Bill"></a></td>
+            <td><a href = '/suspense/withouttransport/?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="clearance without transport bill" value="clearance without transport bill"></a></td>
+            <td><a href = '/suspense/wtransport/?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="without charges" value="without charges"></a></td>
+            <td><a href = '/suspense/othercharges/?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="other charge report" value="other charge report"></a></td>
+        <tr>
+        </table>
+        </div>
+        </div>
+   {% endblock %}
    </body>
 </html>
