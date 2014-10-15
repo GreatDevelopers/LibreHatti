@@ -15,6 +15,7 @@ from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
 from librehatti.suspense.models import Vehicle
+from librehatti.suspense.models import Staff
 from librehatti.suspense.forms import Clearance_form
 from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import QuotedSuspenseForm
@@ -29,6 +30,7 @@ from librehatti.voucher.models import FinancialSession
 from django.contrib.auth.decorators import login_required
 import datetime
 import simplejson
+import json 
 
 
 @login_required
@@ -208,12 +210,6 @@ def save_charges(request):
 	    return HttpResponse('Thanks!')
     
 
-@login_required
-def tada_result(request):
-    if request.method == 'POST':
-        return HttpResponse(request)
-    else:
-        return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
 
 @login_required
 def quoted_add_distance(request):
@@ -297,11 +293,8 @@ def sessionselect(request):
         form = SessionSelectForm(request.POST)
         if form.is_valid():
             session = request.POST['session'][0]
-            #return HttpResponse(session)
             voucher = request.POST['voucher']
-            #return HttpResponse(voucher)
             object = SuspenseOrder.objects.filter(session_id = session).filter (voucher = voucher).values()
-            #return HttpResponse(object)
             if object:
                 # Now render transport form with these variables.
                 Transport = TransportForm1()
@@ -323,7 +316,6 @@ def sessionselect(request):
         temp = {"SelectForm" : form}
         return render(request, 'voucher/sessionselect.html', temp)
 
-
 @login_required
 def transportbill(request):
     if 'button1' in request.POST:
@@ -335,36 +327,179 @@ def transportbill(request):
                     # Make them select session first
                     HttpResponseRedirect(reverse("librehatti.suspense.views.sessionselect"))
                 session = FinancialSession.objects.get(id=request.POST['session'])
-                voucher = VoucherId.objects.filter(voucher_no=request.POST['voucher'])[0]
+                voucher = request.POST['voucher']
+                date_of_generation = request.POST['Date_of_generation']
+                
                 vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
-
-                kilometers = request.POST['kilometer']
-                date = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
+                kilometers_list = simplejson.dumps(request.POST.getlist("kilometer"))
+                kilometers = json.loads(kilometers_list)
+                
+                dated = simplejson.dumps(request.POST.getlist("date")) # return date in the same order as kilometer
+                date = json.loads(dated)
                 rate_object = Surcharge.objects.filter(tax_name= 'transportation').values('value')[0]
-                rate = int(rate_object['value']) 
-                total = rate * int(kilometers) 
-                obj = Transport(vehicle=vehicle,kilometer=kilometers, total = total, Date=date, rate=rate, voucherid=voucher, session=session)
-                obj.save()
-                temp = Transport.objects.filter(voucherid = voucher)
+                rate = int(rate_object['value'])
+                distance = 0
+                for i in kilometers:
+                    distance = distance + int(i)
+                total = rate * distance
+                
+                try:
+                    if Transport.objects.filter(voucher_no = voucher).exists():
+                        Transport.objects.filter(voucher_no = voucher).\
+                        update(vehicle=vehicle,kilometer=kilometers ,\
+                        Date_of_generation = date_of_generation, total = total,\
+                        Date=date, rate=rate, voucher_no=voucher, session=session)
+
+                    else:
+                        obj = Transport(vehicle=vehicle,kilometer=kilometers ,\
+                        Date_of_generation = date_of_generation, total = total,\
+                        Date=date, rate=rate, voucher_no=voucher, session=session)
+                        obj.save()
+                except:
+                    pass 
+
+                temp = Transport.objects.filter(voucher_no = voucher).values()
+                total_amount = Transport.objects.filter(voucher_no = voucher).\
+                aggregate(Sum('total')).get('total__sum',0.00)
+                zipped_data  = zip(date, kilometers) 
+                a = [] 
+                for i,j in  zipped_data:
+                    c = rate * int(j)
+                    a.append(c)
+                zip_data = zip(date, kilometers, a)
+                    
                 header = HeaderFooter.objects.values('header').get(is_active=True)
+                footer = HeaderFooter.objects.values('footer').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
-                       {'words' : num2eng(total), 
-                        'total' : total , 'header':header, 'totalkm' : kilometers,
-                        'rate': rate, 'datelist': date, "voucherid": voucher, "temp" : temp,
-                        'vehicle' : vehicle}) 
+                       {'words' : num2eng(total_amount), 
+                        'total' : total , 'header':header, 'footer':footer, 'kilometers' : kilometers,
+                        'rate': rate, 'date': date, "voucherid": voucher, "temp" : temp,
+                        'zip_data': zip_data, 'total_amount': total_amount,
+                        'date_of_generation' : date_of_generation, 'vehicle' : vehicle}) 
                          
     else:
         form = TransportForm1()
     return render(request, 'suspense/transportform.html', {'TransportForm':form}) 
 
+@login_required
+def tada_result(request):
+    if request.method == 'POST':
+        #return HttpResponse(request)
+        form = TaDaForm(request.POST)
+        #return HttpResponse(form)
+        if form.is_valid():
+            session = request.POST['session']
+            voucher = request.POST['voucher_no']
+            Date_of_generation = request.POST['Date_of_generation']
+            #return HttpResponse(Date_of_generation)
+            departure_time_from_tcc = request.POST['departure_time_from_tcc']
+            arrival_time_at_site = request.POST['arrival_time_at_site']
+            departure_time_from_site = request.POST['departure_time_from_site']
+            arrival_time_at_tcc = request.POST['arrival_time_at_tcc']
+            tada_amount = request.POST['tada_amount']
+            start_test_date = request.POST['start_test_date']
+            end_test_date = request.POST['end_test_date']
+            source_site = request.POST['source_site']
+            testing_site = request.POST['testing_site']
+            testing_staff = request.POST['testing_staff']
+            testing_staff_list = testing_staff.split(',')
+            #return HttpResponse(testing_staff1)
+            
+            list_staff = []
+            for a in testing_staff_list:
+                
+                d = Staff.objects.filter(code = a).values('name','daily_income')
+                g = d
+                list_staff.append(d)
+                
+            '''c = []
+            for a in testing_staff:
+                obj = Staff.objects.filter()'''
+            #return HttpResponse(list_staff)
+            header = HeaderFooter.objects.values('header').get(is_active=True)
+            footer = HeaderFooter.objects.values('footer').get(is_active=True)
+            voucher_obj = VoucherId.objects.filter(session = session).filter(voucher_no = voucher).values_list('purchase_order_id', flat = True)
+            
+            #return HttpResponse(voucher_obj)
+            c = 0
+            for a in voucher_obj:
+                c = a
+            #return HttpResponse(c)
+            purchase_order_object = PurchaseOrder.objects.filter(id = c).values('id','buyer_id__username','buyer_id__first_name','buyer_id__last_name')
+            
+            f = 0
+            for var in list_staff:
+                for cha in var:
+                    f = cha['daily_income'] + f
+                    
+            #try:
+                #return HttpResponse('hello123')
+            if TaDa.objects.filter(voucher_no = voucher).filter(session = session).exists():
+                #return HttpResponse('hello123')
+                TaDa.objects.filter(voucher_no = voucher).\
+                update(voucher_no = voucher, session = session,\
+                departure_time_from_tcc = departure_time_from_tcc, arrival_time_at_site = arrival_time_at_site,\
+                departure_time_from_site = departure_time_from_site, arrival_time_at_tcc = arrival_time_at_tcc,\
+                tada_amount = tada_amount, start_test_date = start_test_date , end_test_date = end_test_date,\
+                source_site = source_site, testing_site = testing_site , testing_staff = testing_staff,  )
+
+            else:
+                
+                obj = TaDa(voucher_no = voucher, session = session,\
+                departure_time_from_tcc = departure_time_from_tcc, arrival_time_at_site = arrival_time_at_site,\
+                departure_time_from_site = departure_time_from_site, arrival_time_at_tcc = arrival_time_at_tcc,\
+                tada_amount = tada_amount, start_test_date = start_test_date , end_test_date = end_test_date,\
+                source_site = source_site, testing_site = testing_site , testing_staff = testing_staff )
+                obj.save()
+            
+            #except:
+            #    return HttpResponse('hello')
+            #    pass
+            #first_name = purchase_order_object['buyer_id__firstname']
+            #return HttpResponse(purchase_order_object)
+            header = HeaderFooter.objects.values('header').get(is_active=True)
+            footer = HeaderFooter.objects.values('footer').get(is_active=True)
+            return render(request, 'suspense/tada_result.html',{ 'purchase_order_object':purchase_order_object,
+                'departure_time_from_tcc':departure_time_from_tcc,'arrival_time_at_site':arrival_time_at_site,
+                'departure_time_from_site':departure_time_from_site,'arrival_time_at_tcc':arrival_time_at_tcc,
+                'tada_amount':tada_amount,'start_test_date':start_test_date,'end_test_date':end_test_date,
+                'source_site':source_site,'testing_site':testing_site,'testing_staff':testing_staff,
+                'purchase_order_id': voucher,'list_staff':list_staff,'header':header,'footer':footer,
+                'words' : num2eng(int(tada_amount)),'total':f , 'Date_of_generation':Date_of_generation})
+        else:    
+            form = TaDaForm()
+            tada = 'enable'
+            return render(request, 'suspense/form.html',{'form':form})
+    else:
+        return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
 
 @login_required
 def tada_order_session(request):
     if request.method == 'POST':
-        form = TaDaForm()
-        tada = 'enable'
-        return render(request, 'suspense/form.html', \
-            {'form':form,'tada':tada}) 
+        #return HttpResponse(request)
+        form = SessionSelectForm(request.POST)
+        if form.is_valid():
+            #return HttpResponse(request)
+            session = request.POST['session']
+            voucher = request.POST['voucher']
+            
+            object = SuspenseOrder.objects.filter(session_id = session).filter(voucher = voucher).values()
+            if object:
+                    form = TaDaForm(initial = {'voucher_no':voucher, 'session': session})
+                    tada = 'enable'
+                    #return HttpResponse(request)
+                    return render(request, 'suspense/form.html', \
+                    {'form':form,'tada':tada})
+            else:
+                form = SessionSelectForm()
+                errors = "No such voucher number in selected session"
+                temp = {"form" : form , "errors" : errors}
+                return render(request, 'suspense/form.html',\
+                temp)
+        else:
+            form = SessionSelectForm()
+            return render(request, 'suspense/form.html', \
+            {'form':form})                 
     else:
         form = SessionSelectForm()
         return render(request, 'suspense/form.html', \

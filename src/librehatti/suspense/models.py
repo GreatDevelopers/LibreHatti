@@ -59,7 +59,9 @@ class Staff(models.Model):
         return self.name
 
 class TaDa(models.Model):
-    suspense = models.ForeignKey(SuspenseOrder)
+    Date_of_generation = models.DateField(default = datetime.date.today)
+    voucher_no = models.IntegerField()
+    session = models.IntegerField()
     departure_time_from_tcc= models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
@@ -92,9 +94,10 @@ class Transport(models.Model):
     vehicle = models.ForeignKey(Vehicle)
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
+    Date_of_generation = models.DateField()
     Date = models.CharField(blank=True,max_length=600)
     total = models.IntegerField()
-    voucherid = models.ForeignKey(VoucherId)
+    voucher_no = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
     '''def save(self, *args, **kwargs):
 

@@ -45,6 +45,22 @@ $(function() {
     })
     $('#id_end_date').datepicker( "option", "showAnim", "clip" )
     .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
+    $('#id_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
+    $('#id_start_test_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
+    $('#id_end_test_date').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
+    $('#id_Date_of_generation').datepicker({
+        changeMonth: true,
+        changeYear: true,dateFormat:"yy-mm-dd"
+    })
 });       
 </script>
     {% endblock js %}

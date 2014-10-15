@@ -25,9 +25,12 @@ $(document).ready(function() {
                 </div>
                 {% endif %}
                 {% csrf_token %}
+
                 {{Transport.as_p}}
+                
                 <input type="hidden" value="{{ session }}" name="session" />
                 <input type="hidden" value="{{ voucher }}" name="voucher" />
+
                 <input type="submit" class="btn btn-info btn-large" value="Generate Bill" name='button1' id='button1' />
                 <input type="button" class="btn btn-info btn-large" value="Add Another" name='button2' id='button2' />
             </form>
