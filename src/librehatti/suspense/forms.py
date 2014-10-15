@@ -14,9 +14,8 @@ import datetime
 class Clearance_form(ModelForm):
     class Meta:
         model = SuspenseClearance
-        fields = ['work_charge','labour_charge','car_taxi_charge',
-                  'boring_charge_external','boring_charge_internal',
-		  'lab_testing_staff','field_testing_staff','test_date']
+    voucher_no = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    car_taxi_charge = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
 
 class SuspenseForm(ModelForm):
@@ -57,5 +56,3 @@ class TransportForm1(forms.Form):
     Date_of_generation = forms.DateField(initial = datetime.date.today)
     kilometer = forms.CharField()
     date = forms.DateField()
-    class Meta:
-        exclude = ('Date_of_generation',)

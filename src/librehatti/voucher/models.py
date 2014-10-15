@@ -8,7 +8,7 @@ class FinancialSession(models.Model):
     session_start_date = models.DateField()
     session_end_date = models.DateField()
     def __unicode__(self):
-    	return "%d - %d" % (self.session_start_date.year, self.session_end_date.year)
+    	return "%s : %s" % (self.session_start_date, self.session_end_date)
 
 
 class Distribution(models.Model):
