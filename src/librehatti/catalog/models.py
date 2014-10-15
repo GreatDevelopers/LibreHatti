@@ -10,7 +10,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 import mptt.fields
 from django.core.exceptions import ValidationError
 import datetime
-
+from librehatti import config
 from tinymce.models import HTMLField
 
 """
@@ -43,7 +43,7 @@ that product and the organisation with which user deals
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = mptt.fields.TreeForeignKey(Category, related_name="products")
-    price_per_unit = models.IntegerField()
+    price_per_unit = models.IntegerField(verbose_name=_PRICE_PER_UNIT)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     def __unicode__(self):
         return self.name
@@ -81,26 +81,26 @@ This class defines the type of taxes, value, validation of taxes
 mentioning the startdate and end date
 """
 class Surcharge(models.Model):
-    tax_name = models.CharField(max_length=200)
+    tax_name = models.CharField(max_length=200, verbose_name=_TAX_NAME)
     value = models.FloatField()
     taxes_included = models.BooleanField(default = False)
-    tax_effected_from = models.DateField(null = True)
-    tax_valid_till = models.DateField(null = True)
+    tax_effected_from = models.DateField(null = True, verbose_name=_TAX_EFFECTED_FROM)
+    tax_valid_till = models.DateField(null = True, verbose_name=_TAX_VALID_TILL)
     Remark = models.CharField(max_length=1000, null = True)
     def __unicode__(self):
          return self.tax_name
 
 
 class PurchaseOrder(models.Model):
-    buyer = models.ForeignKey(User)
+    buyer = models.ForeignKey(User, verbose_name='_BUYER')
     is_debit = models.BooleanField(default = False)
     reference = models.CharField(max_length=200)
-    delivery_address = models.CharField(max_length=500, blank=True, null=True)
-    organisation = models.ForeignKey('useraccounts.AdminOrganisations')
+    delivery_address = models.CharField(max_length=500, blank=True, null=True, verbose_name=_DELIVERY_ADDRESS)
+    organisation = models.ForeignKey('useraccounts.AdminOrganisations', verbose_name=_ORGANISATION)
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)
     tds = models.IntegerField(default = 0)
-    mode_of_payment = models.ForeignKey(ModeOfPayment)
+    mode_of_payment = models.ForeignKey(ModeOfPayment, verbose_name=_MODE_OF_PAYMENT)
     cheque_dd_number = models.CharField(max_length=50, blank=True)
     cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default = True)
@@ -131,10 +131,10 @@ class PurchaseOrder(models.Model):
 
 
 class PurchasedItem(models.Model):
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    price = models.IntegerField()
+    purchase_order = models.ForeignKey(PurchaseOrder, verbose_name=_PURCHASE_ORDER)
+    price = models.IntegerField(verbose_name=_PRICE)
     qty = models.IntegerField()
-    item = models.ForeignKey(Product)
+    item = models.ForeignKey(Product, verbose_name=_ITEM)
     def save(self, *args, **kwargs):
         try:
             if self.purchase_order:
@@ -161,7 +161,7 @@ class Catalog(models.Model):
 This class defines the taxes applied on the purchase order
 """
 class TaxesApplied(models.Model):
-    purchase_order = models.ForeignKey(PurchaseOrder)
+    purchase_order = models.ForeignKey(PurchaseOrder, verbose_name=_PURCHASE_ORDER)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
 
@@ -172,8 +172,8 @@ This class defines the grand total of the purchase order
 """
 
 class Bill(models.Model):
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    delivery_charges = models.IntegerField()
+    purchase_order = models.ForeignKey(PurchaseOrder, verbose_name=_PURCHASE_ORDER)
+    delivery_charges = models.IntegerField(verbose_order=_DELIVERY_CHARGES)
     total_cost = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()

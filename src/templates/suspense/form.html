@@ -8,6 +8,11 @@
     {% endblock %}
     <body>
         {% block content %}
+        {% if errors %}
+                 <div class="text-success">
+                        {{ errors }} 
+                </div>
+        {% endif %}        
         {% if tada %}
             <form method="POST" action={% url 'librehatti.suspense.views.tada_result' %} >
         {% else %}

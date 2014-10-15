@@ -11,6 +11,19 @@ body{
 	margin-right: auto;
 }
 
+.testingfieldstaff{
+	width:40%;
+	float:left;
+	margin-top: 20px;
+}
+
+.testinglabstaff {
+	width:40%;
+	float:left;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+
 .container{
 	position: relative;
 	margin-top: -20px;
@@ -44,4 +57,14 @@ table{
 }
 #transport_content{
 	text-align: center;
+}
+
+
+.position{
+	float:left;
+	padding-top:20px;
+}
+
+#pos-right{
+	text-align:right;
 }
