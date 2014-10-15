@@ -16,10 +16,10 @@ class OrganisationType(models.Model):
 describes the address details of the admin organisation 
 """
 class Address(models.Model):
-    street_address = models.CharField(max_length=100)
+    street_address = models.CharField(max_length=100, verbose_name='_STREET_ADDRESS')
     city = models.CharField(max_length=100)
     pin = models.CharField(max_length=10)
-    province = models.CharField(max_length=100)
+    province = models.CharField(max_length=100, verbose_name='_PROVINCE')
     nationality = models.CharField(max_length=100)
 
     class Meta:
@@ -32,10 +32,10 @@ class Address(models.Model):
 describes the details of the user's organisation 
 """
 class HattiUser(models.Model):   
-    user = models.OneToOneField(User) 
+    user = models.OneToOneField(User, verbose_name='_USER') 
     address = models.ForeignKey(Address)
-    telephone = models.CharField(max_length=500)
-    date_joined  = models.DateTimeField(auto_now_add=True)
+    telephone = models.CharField(max_length=500, verbose_name='_TELEPHONE')
+    date_joined  = models.DateTimeField(auto_now_add=True, verbose_name='_DATE_JOINED')
     fax = models.CharField(max_length=100)
     pan_no = models.CharField(max_length=100)
     stc_no = models.CharField(max_length=100)
@@ -50,7 +50,7 @@ organisation and its type
 """
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
-    organisation_type = models.ForeignKey(OrganisationType)
+    organisation_type = models.ForeignKey(OrganisationType, verbose_name='_ORGANISATION_TYPE')
 
     class Meta:
         verbose_name_plural = "Admin Organisations"
@@ -65,9 +65,9 @@ checkbox and then specifying the type of oganisation and its company
 name 
 """
 class Customer(HattiUser):
-    title = models.CharField(max_length=200, blank=True, null=True)
+    title = models.CharField(max_length=200, blank=True, null=True, verbose_name='_TITLE')
     is_org = models.BooleanField(default = False);
     org_type = models.ForeignKey(OrganisationType)
-    company = models.CharField(max_length=200)
+    company = models.CharField(max_length=200, verbose_name='_COMPANY')
     def __unicode__(self):
 	return unicode(self.user)
