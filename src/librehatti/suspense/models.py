@@ -10,22 +10,12 @@ from librehatti.catalog.models import PurchaseOrder, Category
 
 import simplejson
 
-<<<<<<< HEAD
 
 class SuspenseOrder(models.Model):
     voucher = models.IntegerField()
     purchase_order = models.ForeignKey(PurchaseOrder)
     session_id = models.ForeignKey(FinancialSession)
     distance_estimated = models.IntegerField()
-=======
-
-
-class SuspenseOrder(models.Model):
-    voucher = models.IntegerField()
-    purchase_order = models.ForeignKey(PurchaseOrder, verbose_name='_PURCHASE_ORDER')
-    session_id = models.ForeignKey(FinancialSession)
-    distance_estimated = models.IntegerField(verbose_name='_DISTANCE_ESTIMATED')
->>>>>>> upstream/dirty
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)
@@ -33,20 +23,13 @@ class SuspenseOrder(models.Model):
 class SuspenseClearance(models.Model):
     session = models.ForeignKey(FinancialSession)
     voucher_no = models.IntegerField()
-<<<<<<< HEAD
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
-=======
-    work_charge =models.IntegerField(blank=True, null=True, verbose_name='_WORK_CHARGE')
-    labour_charge = models.IntegerField(blank=True, null=True)
-    car_taxi_charge = models.IntegerField(blank=True, null=True, verbose_name='_CAR_TAXI_CHARGE')
->>>>>>> upstream/dirty
     boring_charge_external = models.IntegerField(blank=True, null=True)
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200)
     field_testing_staff = models.CharField(max_length=200)
-<<<<<<< HEAD
     test_date = models.DateField(default=datetime.date.today)
     clear_date = models.DateField(default=datetime.date.today)
 
@@ -55,16 +38,6 @@ class Department(models.Model):
     title = models.CharField(max_length=50)
     address = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, blank=True)
-=======
-    test_date = models.DateField(default=datetime.date.today, verbose_name='_TEST_DATE')
-    clear_date = models.DateField(default=datetime.date.today, verbose_name='_CLEAR_DATE')
-
-
-class Department(models.Model):
-    title = models.CharField(max_length=50, verbose_name='_TITLE')
-    address = models.CharField(max_length=150)
-    phone = models.CharField(max_length=20, blank=True, verbose_name='_PHONE')
->>>>>>> upstream/dirty
     dean = models.CharField(max_length=50, blank=True)
     def __unicode__(self):
         return self.title
@@ -72,17 +45,10 @@ class Department(models.Model):
 
 class Staff(models.Model):
     department = models.ForeignKey(Department)
-<<<<<<< HEAD
     code = models.CharField(max_length=5)
     name = models.CharField(max_length=50)
     daily_ta_da = models.IntegerField(blank=True)
     position = models.CharField(max_length=100)
-=======
-    code = models.CharField(max_length=5, verbose_name='_CODE')
-    name = models.CharField(max_length=50)
-    daily_ta_da = models.IntegerField(blank=True)
-    position = models.CharField(max_length=100, verbose_name='_POSITION')
->>>>>>> upstream/dirty
     lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
 
@@ -100,11 +66,7 @@ class TaDa(models.Model):
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
     arrival_time_at_tcc = models.TimeField()
-<<<<<<< HEAD
     tada_amount = models.IntegerField()
-=======
-    tada_amount = models.IntegerField(verbose_name='_TADA_AMOUNT')
->>>>>>> upstream/dirty
     start_test_date = models.DateField()
     end_test_date = models.DateField()
     source_site = models.CharField(max_length=100)
