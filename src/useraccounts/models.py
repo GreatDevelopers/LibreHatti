@@ -3,7 +3,7 @@ Models for the useraccounts are..
 """
 from django.db import models
 from django.contrib.auth.models import User
-from librehatti import config
+import conf
 
 """
 describes the type of organisation where the user deals
