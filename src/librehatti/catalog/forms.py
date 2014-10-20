@@ -12,6 +12,10 @@ import itertools
 
 from ajax_select import make_ajax_field
 
+from librehatti.config import _PARENT_CATEGORY
+from librehatti.config import _SUB_CATEGORY
+from librehatti.config import _ITEM
+
 """
 This form allows user to fill the category name of product
 """
@@ -34,12 +38,14 @@ class ItemSelectForm(forms.ModelForm):
 
     try:
         parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-            filter(parent__parent__isnull=True).filter(parent__isnull=False))
-        sub_category = forms.ModelChoiceField(queryset = Category.objects.all())
+            filter(parent__parent__isnull=True).filter(parent__isnull=False), \
+            label= _PARENT_CATEGORY)
+        sub_category = forms.ModelChoiceField(queryset = Category.objects.all(),\
+            label = _SUB_CATEGORY)
     except:
         pass
 
-    item = forms.ModelChoiceField(queryset = Product.objects.all())
+    item = forms.ModelChoiceField(queryset = Product.objects.all(), label = _ITEM)
 
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
