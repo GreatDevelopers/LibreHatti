@@ -13,6 +13,12 @@ import datetime
 
 from tinymce.models import HTMLField
 
+from librehatti.config import _BUYER
+from librehatti.config import _DELIVERY_ADDRESS
+from librehatti.config import _IS_DEBIT
+from librehatti.config import _PURCHASED_ITEMS
+from librehatti.config import _QTY
+
 """
 This class defines the name of category and parent category of product
 """
@@ -92,10 +98,11 @@ class Surcharge(models.Model):
 
 
 class PurchaseOrder(models.Model):
-    buyer = models.ForeignKey(User)
-    is_debit = models.BooleanField(default = False)
+    buyer = models.ForeignKey(User,verbose_name= _BUYER)
+    is_debit = models.BooleanField(default = False, verbose_name = _IS_DEBIT)
     reference = models.CharField(max_length=200)
-    delivery_address = models.CharField(max_length=500, blank=True, null=True)      
+    delivery_address = models.CharField(max_length=500, blank=True, null=True,\
+        verbose_name = _DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)
@@ -133,7 +140,7 @@ class PurchaseOrder(models.Model):
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     price = models.IntegerField()
-    qty = models.IntegerField()
+    qty = models.IntegerField(verbose_name = _QTY)
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
         try:
@@ -145,6 +152,10 @@ class PurchasedItem(models.Model):
 
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
+
+    class Meta:
+        verbose_name = _PURCHASED_ITEMS
+        verbose_name_plural = _PURCHASED_ITEMS
 
 
 """
@@ -196,3 +207,10 @@ class HeaderFooter(models.Model):
 
     class Meta:
         verbose_name_plural = "Header and Footer"
+
+class SurchargePaid(models.Model):
+    surcharge = models.ForeignKey(Surcharge)
+    value = models.IntegerField()
+    date = models.DateField(auto_now_add = True)
+    def __unicode__(self):
+        return '%s paid on ' % (self.surcharge, self.date)
