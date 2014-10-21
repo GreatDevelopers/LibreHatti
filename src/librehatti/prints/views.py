@@ -95,7 +95,7 @@ def bill(request):
     grand_total = bill['grand_total']
     delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.\
-    objects.values('buyer','reference','delivery_address','organisation',\
+    objects.values('buyer','buyer__first_name','buyer__last_name','reference','delivery_address','organisation',\
     'date_time','total_discount').get(id = id)
     total_discount = purchase_order_obj['total_discount']
     taxes_applied_obj = TaxesApplied.objects.\
@@ -132,11 +132,11 @@ def bill(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
-        'pan_no' : admin_organisations,'ref':purchase_order_obj , 'date':date,\
-        'purchase_order':purchase_order, 'purchased_item': voucherid,\
+        'pan_no' : admin_organisations,'id':id,'ref':purchase_order_obj , 'date':date,\
+        'purchase_order':purchase_order, 'purchased_item': voucherid,'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
-        'buyer': buyer, 'buyer_name': customer_obj, 'site': address,
+        'buyer': purchase_order_obj, 'buyer_name': customer_obj, 'site': purchase_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count, 'values':voucherid_obj,\
         'cost':calculatedistribution,'header':header,'footer': footer})
