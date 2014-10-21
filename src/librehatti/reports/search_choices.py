@@ -1,4 +1,5 @@
-CLIENT_FIELD_CHOICES = ( ('Name', 'Name'), ('Street Address','Street Address'),
+CLIENT_FIELD_CHOICES = ( ('First Name', 'First Name'), ('Last Name', 'Last Name'),
+	('Street Address','Street Address'),
 	('City', 'City'), ('Phone', 'Phone'),('Company', 'Company'),
     )
 
