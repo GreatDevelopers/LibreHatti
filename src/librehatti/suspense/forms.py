@@ -34,7 +34,7 @@ class TaDaSearch(forms.Form):
 class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
-        exclude = ('Date_of_generation',)
+        exclude = ('date_of_generation',)
 
 class StaffForm(forms.ModelForm):
     class Meta:
