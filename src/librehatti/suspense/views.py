@@ -602,12 +602,12 @@ def transportbill(request):
                     if Transport.objects.filter(voucher_no = voucher).exists():
                         Transport.objects.filter(voucher_no = voucher).\
                         update(vehicle=vehicle,kilometer=kilometers ,\
-                        Date_of_generation = date_of_generation, total = total,\
+                        date_of_generation = date_of_generation, total = total,\
                         Date=date, rate=rate, voucher_no=voucher, session=session)
 
                     else:
                         obj = Transport(vehicle=vehicle,kilometer=kilometers ,\
-                        Date_of_generation = date_of_generation, total = total,\
+                        date_of_generation = date_of_generation, total = total,\
                         Date=date, rate=rate, voucher_no=voucher, session=session)
                         obj.save()
                 except:
@@ -645,8 +645,7 @@ def tada_result(request):
         if form.is_valid():
             session = request.POST['session']
             voucher = request.POST['voucher_no']
-            Date_of_generation = request.POST['Date_of_generation']
-            #return HttpResponse(Date_of_generation)
+            
             departure_time_from_tcc = request.POST['departure_time_from_tcc']
             arrival_time_at_site = request.POST['arrival_time_at_site']
             departure_time_from_site = request.POST['departure_time_from_site']
@@ -658,18 +657,16 @@ def tada_result(request):
             testing_site = request.POST['testing_site']
             testing_staff = request.POST['testing_staff']
             testing_staff_list = testing_staff.split(',')
-            #return HttpResponse(testing_staff1)
+            #return HttpResponse(testing_staff_list)
             
             list_staff = []
             for a in testing_staff_list:
                 
-                d = Staff.objects.filter(code = a).values('name','daily_income')
+                d = Staff.objects.filter(code = a).values('name','daily_ta_da')
                 g = d
                 list_staff.append(d)
                 
-            '''c = []
-            for a in testing_staff:
-                obj = Staff.objects.filter()'''
+            
             #return HttpResponse(list_staff)
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
@@ -685,7 +682,7 @@ def tada_result(request):
             f = 0
             for var in list_staff:
                 for cha in var:
-                    f = cha['daily_income'] + f
+                    f = cha['daily_ta_da'] + f
                     
             #try:
                 #return HttpResponse('hello123')
@@ -707,20 +704,18 @@ def tada_result(request):
                 source_site = source_site, testing_site = testing_site , testing_staff = testing_staff )
                 obj.save()
             
-            #except:
-            #    return HttpResponse('hello')
-            #    pass
-            #first_name = purchase_order_object['buyer_id__firstname']
-            #return HttpResponse(purchase_order_object)
+            tada_obj = TaDa.objects.values('departure_time_from_tcc','arrival_time_at_site','departure_time_from_site',\
+                'arrival_time_at_tcc','tada_amount','start_test_date','end_test_date','source_site','testing_site'\
+                ,'date_of_generation').get(voucher_no = voucher)  
+            #return HttpResponse(tada_obj)
+            tada_amount_in_words = tada_obj['tada_amount']
+            
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             return render(request, 'suspense/tada_result.html',{ 'purchase_order_object':purchase_order_object,
-                'departure_time_from_tcc':departure_time_from_tcc,'arrival_time_at_site':arrival_time_at_site,
-                'departure_time_from_site':departure_time_from_site,'arrival_time_at_tcc':arrival_time_at_tcc,
-                'tada_amount':tada_amount,'start_test_date':start_test_date,'end_test_date':end_test_date,
-                'source_site':source_site,'testing_site':testing_site,'testing_staff':testing_staff,
+                'tada':tada_obj,
                 'purchase_order_id': voucher,'list_staff':list_staff,'header':header,'footer':footer,
-                'words' : num2eng(int(tada_amount)),'total':f , 'Date_of_generation':Date_of_generation})
+                'words' : num2eng(int(tada_amount)),'total':f })
         else:    
             form = TaDaForm()
             tada = 'enable'
