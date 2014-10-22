@@ -20,12 +20,17 @@
     <div class = "bill-left">
     <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
     <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
+    <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} </p>
     <p> To, </p>
     <p> {{purchase_order.delivery_address}} </p>
     <p> {{buyer_name.company}}</p>
-    <p><span id ="highlight"> Buyer Id: </span>{{buyer}} </p>
+    <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
+    {% if address.address__pin != 'None' %}
+    -{{address.address__pin}}, 
+    {% endif %}
+    {{address.address__province}}</p>
     <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
-    <p><span id ="highlight"> Site: </span>{{site.address__street_address}}, {{site.address__city}}, {{site.address__pin}}, {{site.address__province}} </p>
+    <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
     </div>
         <table class="data" border="1px">
             <tr>

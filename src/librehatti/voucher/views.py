@@ -307,7 +307,8 @@ def voucher_print(request):
     bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
-    header = HeaderFooter.objects.values('header').order_by('-id')[0]
+    header = HeaderFooter.objects.values('header').get(is_active=True)
+    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     if flag == 0:
         
         return render(request, 'voucher/voucher_report.html', {\

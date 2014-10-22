@@ -13,17 +13,17 @@
 	{% block content %}
 <br>
 
-<div class="voucher-no">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
-<div class="date">Dated : {{date}} </div>
+<div id = "pos-right">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
+<div id = "pos-right">Dated : {{date}} </div>
 <div class="designation">Director,</div>
-<br></br><br/>
+<br>
 Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
 Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}}
-<br/><br/><br/>
+<br/><br/>
 <div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
 <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
 <div id = "pos-left">
-<br/><br/>
+<br/>
 <table border='1px'>
 <tr>
 	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
@@ -56,7 +56,7 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{addr
 <br>
 <br>
 <div>
-<table >
+<table border='1px'>
 
 <tr>
 	<TD>NAME OF EMPLOYEES</TD>
@@ -72,10 +72,11 @@ Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{addr
 </div>
 <div id = "pos-left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
 <br><br>
-
-<div id = "pos-left">
-<b>Account Clerk (Consultancy)</b></div>
-<br><br><br>
+<div class="voucher-no"><b>Account Clerk (Consultancy)</b>
+<div style = "text-align:right; float:right">
+            <b>Dean Testing & Consultancy Cell</b>
+        </div>
+        </div>
 {% endblock %}
 </body>
 </html>
