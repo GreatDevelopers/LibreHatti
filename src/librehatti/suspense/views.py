@@ -32,6 +32,7 @@ import datetime
 import simplejson
 import json 
 from datetime import date, datetime
+import datetime
 
 
 @login_required
@@ -128,14 +129,20 @@ def clearance_search(request):
         session = sessiondata.data['session']
         object = SuspenseOrder.objects.filter(session_id = session).\
         filter(voucher = voucher).values()
-        transport = Transport.objects.values('total').\
-        get(voucher_no = voucher, session = session)
         if object:
-            form = Clearance_form(initial={'voucher_no': voucher,\
-            'session': session, 'car_taxi_charge':transport['total']})
-            clearance = 'enable'
-            return render(request, 'suspense/suspense_first.html', \
-                {'form':form,'clearance':clearance})
+            try:
+                transport = Transport.objects.values('total').\
+                get(voucher_no = voucher, session = session)
+                form = Clearance_form(initial={'voucher_no': voucher,\
+                'session': session, 'car_taxi_charge':transport['total']})
+                clearance = 'enable'
+                return render(request, 'suspense/suspense_first.html', \
+                    {'form':form,'clearance':clearance})
+            except:
+                form = SessionSelectForm()
+                errors = "No such voucher number in Transport" 
+                temp = {"SelectForm" : form , "errors" : errors}
+                return render(request, 'voucher/clsessionselect.html', temp) 
         else:
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session" 
@@ -512,8 +519,8 @@ def save_distance(request):
     purchase_order = PurchaseOrder.objects.get(pk=purchase_order_id)
     financialsession = FinancialSession.objects.values('id','session_start_date',
         'session_end_date')
-    today = datetime.date.today()
-    
+    today = datetime.datetime.now().date()
+
     for value in financialsession:
         start_date = value['session_start_date']
         end_date = value['session_end_date']
@@ -601,11 +608,11 @@ def transportbill(request):
                         Transport.objects.filter(voucher_no = voucher).\
                         update(vehicle=vehicle,kilometer=kilometers ,\
                         date_of_generation = date_of_generation, total = total,\
-                        Date=date, rate=rate, voucher_no=voucher, session=session)
+                        date=date, rate=rate, voucher_no=voucher, session=session)
                     else:
                         obj = Transport(vehicle=vehicle,kilometer=kilometers ,\
                         date_of_generation = date_of_generation, total = total,\
-                        Date=date, rate=rate, voucher_no=voucher, session=session)
+                        date=date, rate=rate, voucher_no=voucher, session=session)
                         obj.save()
                 except:
                     pass 
