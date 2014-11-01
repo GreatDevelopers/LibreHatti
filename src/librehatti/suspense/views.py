@@ -32,7 +32,6 @@ import datetime
 import simplejson
 import json 
 from datetime import date, datetime
-import datetime
 
 
 @login_required
@@ -519,7 +518,7 @@ def save_distance(request):
     purchase_order = PurchaseOrder.objects.get(pk=purchase_order_id)
     financialsession = FinancialSession.objects.values('id','session_start_date',
         'session_end_date')
-    today = datetime.datetime.now().date()
+    today = datetime.now().date()
 
     for value in financialsession:
         start_date = value['session_start_date']
