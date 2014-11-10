@@ -36,7 +36,8 @@ class GenerateRegister(View):
         """
         self.grand_total_list = []
         self.result_fields = []
-        self.list_dict = {'Name':'buyer__username',
+        self.list_dict = {'First Name':'buyer__first_name',
+            'Last Name':'buyer__last_name',
             'City':'buyer__customer__address__city',
             'Phone':'buyer__customer__telephone',
             'joining date':'buyer__customer__date_joined',
