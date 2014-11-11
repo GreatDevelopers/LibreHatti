@@ -143,6 +143,26 @@ def bill(request):
 
 
 @login_required
+def tax(request):
+    """
+    It generates a tax details bill for the user which lists all the taxes,
+    their applied tax value , calculated tax and generates the total of the
+    applied taxes.
+    """
+    id = request.GET['order_id']
+    taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value',\
+        'tax','purchase_order__date_time').filter(purchase_order=id)
+    bill = Bill.objects.values('total_cost','total_tax',\
+        'purchase_order__date_time').get(purchase_order=id)
+    grand_total = bill['total_cost'] + bill['total_tax']
+    header = HeaderFooter.objects.values('header').get(is_active=True)
+    footer = HeaderFooter.objects.values('footer').get(is_active=True)
+    return render(request, 'prints/tax.html',{'id':id,'details':taxes_applied,\
+        'bill':bill,'grand_total':grand_total,\
+        'header':header,'footer':footer})
+
+
+@login_required
 def receipt(request):
     """
     It generates a Receipt.
