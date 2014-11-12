@@ -73,6 +73,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 ROOT_URLCONF = 'librehatti.urls'
 
 WSGI_APPLICATION = 'librehatti.wsgi.application'

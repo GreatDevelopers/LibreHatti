@@ -14,6 +14,7 @@ import datetime
 class Clearance_form(ModelForm):
     class Meta:
         model = SuspenseClearance
+        exclude = []
     voucher_no = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
     car_taxi_charge = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
@@ -39,6 +40,7 @@ class TaDaForm(ModelForm):
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
+        exclude = []
 
     try:
         lab = forms.ModelChoiceField(queryset=Category.objects.\
