@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 {% load i18n %} {% load staticfiles %}
-
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+    {% block title %}
+    {% ifequal '1' code  %}
+        <title>
+            Search 
+        </title>
+    {% else %}
+        <title>
+        	Register Generator
+        </title>
+    {% endifequal %}
+    {% endblock %}
+</head>
+<body>
       {% block content %}
 	
         <div class="main-box">
