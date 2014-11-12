@@ -272,9 +272,8 @@ def with_transport(request):
         total_in_words = num2eng(total)
         rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header,\
-                'footer':footer, 'voucher_no':number,\
+                'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
                 'calculate_distribution':calculate_distribution,\
                 'suspense_clearance':suspenseclearance,\
@@ -338,9 +337,8 @@ def withouttransport(request):
         total_in_words = num2eng(total)
         rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request,'suspense/withouttransport.html', {'header':header,\
-                'footer':footer, 'voucher_no':number,\
+                'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
                 'calculate_distribution':calculate_distribution,\
                 'suspense_clearance':suspenseclearance,\
@@ -388,9 +386,8 @@ def wtransport(request):
     get(voucher_no=number, session=financialsession['id'])
     total_in_words = num2eng(calculate_distribution['total'])
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request,'suspense/wtransport.html', {'header':header,\
-                'footer':footer, 'voucher_no':number,\
+                'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
                 'calculate_distribution':calculate_distribution,\
                 'suspense_clearance':suspenseclearance,\
@@ -442,9 +439,8 @@ def other_charges(request):
     suspenseclearance['labour_charge']
     total = other_charges + ta_da_total
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request,'suspense/othercharge.html', {'header':header,\
-                'footer':footer, 'voucher_no':number,\
+                'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
                 'suspense_clearance':suspenseclearance,\
                 'purchase_order':voucherid['purchase_order'],\
