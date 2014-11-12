@@ -63,8 +63,30 @@ table{
 .position{
 	float:left;
 	padding-top:20px;
+	position: relative;
 }
 
 #pos-right{
 	text-align:right;
+}
+
+.footertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 170px;
+    width: 105%;
+    position: relative;
+}
+
+.footertable table td{
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 25%;
+}
+
+.footer1{
+	padding-top: 60px;
+	float: right;
+	font-weight: bold;
 }
