@@ -75,7 +75,6 @@ class SearchResult(View):
         self.results= []
         i = 0
         buyer_id = []
-        session = []
         purchase_order = []
         self.entry_query= get_query(self.title,self.fields_list)
         if 'Client' in request.GET:
@@ -97,7 +96,7 @@ class SearchResult(View):
             try:
                 if request.GET['suspense']:
                     self.found_entries = VoucherId.objects.filter(purchase_order_of_session=self.title)
-                    suspenseorder = SuspenseOrder.objects.values_list('purchase_order_id', flat = True)
+                    suspenseorder = SuspenseOrder.objects.values('purchase_order_id')
                     for entries in self.found_entries:
                         self.temp = []
                         for value in self.fields_list:
@@ -105,10 +104,8 @@ class SearchResult(View):
                             filter(id=entries.id)
                             for temp_result in self.obj:
                                 self.temp.append(temp_result)
-                        if self.temp[-2] in suspenseorder or self.temp[-2] in purchase_order:
-                            pass
-                        else:
-                            purchase_order.append(self.temp[-2])
+                        if self.temp[-1] in suspenseorder and self.temp[-1] not in purchase_order:
+                            purchase_order.append(self.temp[-1])
                             self.results.append(self.temp)
             except:
                 self.found_entries = VoucherId.objects.filter(purchase_order_of_session=self.title)
@@ -119,10 +116,10 @@ class SearchResult(View):
                         filter(id=entries.id)
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
-                    if self.temp[-2] in purchase_order:
+                    if self.temp[-1] in purchase_order:
                         pass
                     else:
-                        purchase_order.append(self.temp[-2])
+                        purchase_order.append(self.temp[-1])
                         self.results.append(self.temp)
 
         return self.view_results(request)
