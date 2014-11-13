@@ -37,8 +37,7 @@
 		    
                     <td>
                         {% for item in value.items %}
-                        {% if flag == 0 %}
-                            {% if order and item.0 == 'id' %}
+                            {% if order and item.0 == 'purchase_order_id' %}
                                 <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a> |
                                 <a href = '/tax/?order_id={{item.1}}'>Generate Tax Details</a> |
                                 <a href = '/voucher/voucher_show/?order_id={{item.1}}'>View Voucher</a> |
@@ -48,17 +47,9 @@
 	
                             {% else %}
                                 {{item.1}}
-                            {% endif %}
-                        {% elif flag == 1 %}
-                            {% if order and item.0 == 'purchase_order__id' %}
-                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a> |
-                                <a href = '/voucher/voucher_show/?order_id={{item.1}}'>View Voucher</a> |
-                                <a href = '/receipt/?order_id={{item.1}}'>Generate Receipt</a>
-                            {% else %}
-                                {{item.1}}
                         
                             {% endif %}
-                        {% endif %}
+            
                         {% endfor %}
                      </td>
                     {%endfor%}

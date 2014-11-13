@@ -59,13 +59,9 @@ class SearchResult(View):
             for field in self.fields_list:
                 temporary.append(data[field])
             generated_data_list.append(temporary)
-        flag=0
-        if 'suspense' in request.GET:
-            flag=1
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,'records':self.results,
-            'flag':flag,
             }
 
         return render(request,'reports/search_result.html',temp)
@@ -78,6 +74,9 @@ class SearchResult(View):
         
         self.results= []
         i = 0
+        buyer_id = []
+        session = []
+        purchase_order = []
         self.entry_query= get_query(self.title,self.fields_list)
         if 'Client' in request.GET:
             self.found_entries = Bill.objects.filter(self.entry_query)
@@ -88,30 +87,43 @@ class SearchResult(View):
                             value)
                     for temp_result in obj:
                         self.temp.append(temp_result)
-                self.results.append(self.temp)
+                if self.temp[-1] in buyer_id:
+                    pass
+                else:
+                    buyer_id.append(self.temp[-1])
+                    self.results.append(self.temp)
                 
         if 'Order' in request.GET:
             try:
                 if request.GET['suspense']:
-                    self.found_entries = SuspenseOrder.objects.filter(purchase_order=self.title)
+                    self.found_entries = VoucherId.objects.filter(purchase_order_of_session=self.title)
+                    suspenseorder = SuspenseOrder.objects.values_list('purchase_order_id', flat = True)
                     for entries in self.found_entries:
                         self.temp = []
                         for value in self.fields_list:
-                            self.obj = SuspenseOrder.objects.values(value).\
-                            filter(purchase_order=self.title)
+                            self.obj = VoucherId.objects.values(value).\
+                            filter(id=entries.id)
                             for temp_result in self.obj:
                                 self.temp.append(temp_result)
-                        self.results.append(self.temp)
+                        if self.temp[-2] in suspenseorder or self.temp[-2] in purchase_order:
+                            pass
+                        else:
+                            purchase_order.append(self.temp[-2])
+                            self.results.append(self.temp)
             except:
-                self.found_entries = PurchaseOrder.objects.filter(id=self.title)
+                self.found_entries = VoucherId.objects.filter(purchase_order_of_session=self.title)
                 for entries in self.found_entries:
                     self.temp = []
                     for value in self.fields_list:
-                        self.obj = PurchaseOrder.objects.values(value).\
-                        filter(id=self.title)
+                        self.obj = VoucherId.objects.values(value).\
+                        filter(id=entries.id)
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
-                    self.results.append(self.temp)
+                    if self.temp[-2] in purchase_order:
+                        pass
+                    else:
+                        purchase_order.append(self.temp[-2])
+                        self.results.append(self.temp)
 
         return self.view_results(request)
 
@@ -132,6 +144,7 @@ class SearchResult(View):
             self.selected_fields_client.append('City')
             self.selected_fields_order.append('Debit')
             self.selected_fields_order.append('Mode Of Payment')
+            self.selected_fields_order.append('Session')
 
         return self.convert_values(request)
 
@@ -144,13 +157,8 @@ class SearchResult(View):
             self.details = Bill.objects.values(*self.fields_list).\
                 filter(purchase_order__is_active = 1)
         elif 'Order' in request.GET:
-            try:
-                if request.GET['suspense']:
-                    self.details = SuspenseOrder.objects.values(*self.fields_list).\
-                        filter(purchase_order__is_active = 1)
-            except:
-                self.details = PurchaseOrder.objects.values(*self.fields_list).\
-                    filter(is_active = 1)
+            self.details = VoucherId.objects.values(*self.fields_list).\
+                filter(purchase_order__is_active = 1)
         return self.apply_filter(request)
 
 
@@ -162,36 +170,20 @@ class SearchResult(View):
 
         self.fields_list = []
         if 'Order' in request.GET:
-            try:
-                if request.GET['suspense']:
-                    self.list_dict = {'First Name':'purchase_order__buyer__first_name',
-                    'Last Name':'purchase_order__buyer__last_name', 
-                    'City':'purchase_order__buyer__customer__address__city',
-                    'Phone':'purchase_order__buyer__customer__telephone',
-                    'Joining Date':'purchase_order__buyer__customer__date_joined',
-                    'Company':'purchase_order__buyer__customer__company',
-                    'Discount':'purchase_order__total_discount',
-                    'Debit':'purchase_order__is_debit', 
-                    'Mode Of Payment':'purchase_order__mode_of_payment__method',
-                    'Voucher':'voucher','Session':'session_id__id',
-                    'Order Date':'purchase_order__date_time','TDS':'purchase_order__tds',
-                    'Total Without Taxes':'purchase_order__bill__total_cost',
-                    'Total With Taxes':'purchase_order__bill__amount_received'
-                    }
-            except:
-                self.list_dict = {'First Name':'buyer__first_name',
-                'Last Name':'buyer__last_name', 
-                'City':'buyer__customer__address__city',
-                'Phone':'buyer__customer__telephone',
-                'Joining Date':'buyer__customer__date_joined',
-                'Company':'buyer__customer__company',
-                'Discount':'total_discount',
-                'Debit':'is_debit', 
-                'Mode Of Payment':'mode_of_payment__method',
-                'Order Date':'date_time','TDS':'tds',
-                'Total Without Taxes':'bill__total_cost',
-                'Total With Taxes':'bill__amount_received'
-                }
+            self.list_dict = {'First Name':'purchase_order__buyer__first_name',
+            'Last Name':'purchase_order__buyer__last_name', 
+            'City':'purchase_order__buyer__customer__address__city',
+            'Phone':'purchase_order__buyer__customer__telephone',
+            'Joining Date':'purchase_order__buyer__customer__date_joined',
+            'Company':'purchase_order__buyer__customer__company',
+            'Discount':'purchase_order__total_discount',
+            'Debit':'purchase_order__is_debit', 
+            'Mode Of Payment':'purchase_order__mode_of_payment__method',
+            'Order Date':'purchase_order__date_time','TDS':'purchase_order__tds',
+            'Total Without Taxes':'purchase_order__bill__total_cost',
+            'Total With Taxes':'purchase_order__bill__amount_received',
+            'Session':'session_id'
+            }
         for value in self.selected_fields_client:
             self.fields_list.append(self.list_dict[value])
 
@@ -201,9 +193,11 @@ class SearchResult(View):
         if 'Client' in request.GET:
             self.fields_list.append('purchase_order__buyer__id')
         elif 'suspense' in request.GET: 
-            self.fields_list.append('purchase_order__id')
-        else: 
-            self.fields_list.append('id')
+            #self.fields_list.append('session_id')
+            self.fields_list.append('purchase_order_id')
+        else:
+            #self.fields_list.append('session_id') 
+            self.fields_list.append('purchase_order_id')
         return self.fetch_values(request)
 
 

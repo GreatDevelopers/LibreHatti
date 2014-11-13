@@ -122,6 +122,7 @@ def voucher_generate(request):
         else:
             voucherno = 1
             purchaseditemofsession = 1
+            purchase_order_of_session = 1
             for value in purchased_item:
                 distribution_type = CategoryDistributionType.objects.\
                 values('distribution').get(category = purchased_item[item])

@@ -23,4 +23,5 @@ def details(request):
 	
     order_id = request.GET['order_id']
     purchases = PurchasedItem.objects.filter(purchase_order__id=order_id)
-    return render(request,'reports/history_details.html',{'purchases':purchases})
+    return render(request,'reports/history_details.html',{'purchases':purchases,\
+        'order_id':order_id})
