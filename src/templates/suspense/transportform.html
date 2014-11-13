@@ -10,9 +10,14 @@
 $(document).ready(function() {
     $("[name='date']").datepicker(); 
     $("#button2").click(function() {
+
+    	//Insert just after the kilo input in p element
         $("#id_kilometer").parent("p").clone().insertAfter($("#id_date").parent("p"));
         var dateelement = $("#id_date").parent("p").clone();
         var newdateelement = $("<input type='text' name='date' />");
+
+        //We have to replace the date field with new one everytime as browser
+        //will confuse it with the cloned element and events will not work
         dateelement.children("input[name='date']").replaceWith(newdateelement);
         dateelement.insertAfter($("#id_date").parent("p"));
         $("[name='date']").datepicker(); 
