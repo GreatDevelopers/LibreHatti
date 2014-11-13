@@ -75,6 +75,14 @@ def select_sub_category(request):
         sub_category_dict[sub_category.id] = sub_category.name
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
+
+'''
+This function reverse looks up the urls for the AJAX Requests
+'''
+def jsreverse(request):
+    string_to_reverse = request.GET['string'];
+    return HttpResponse(reverse(string_to_reverse))
+
 """
 This view allows filtering of item according to sub category of item.
 """
