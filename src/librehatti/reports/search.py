@@ -78,6 +78,7 @@ class SearchResult(View):
         
         self.results= []
         i = 0
+        buyer_id = []
         self.entry_query= get_query(self.title,self.fields_list)
         if 'Client' in request.GET:
             self.found_entries = Bill.objects.filter(self.entry_query)
@@ -88,7 +89,11 @@ class SearchResult(View):
                             value)
                     for temp_result in obj:
                         self.temp.append(temp_result)
-                self.results.append(self.temp)
+                if self.temp[-1] in buyer_id:
+                    pass
+                else:
+                    buyer_id.append(self.temp[-1])
+                    self.results.append(self.temp)
                 
         if 'Order' in request.GET:
             try:
