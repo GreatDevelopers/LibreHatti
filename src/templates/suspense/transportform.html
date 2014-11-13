@@ -5,10 +5,17 @@
 
 {% block extrajs %}
 <script type="text/javascript">
+
+
 $(document).ready(function() {
+    $("[name='date']").datepicker(); 
     $("#button2").click(function() {
         $("#id_kilometer").parent("p").clone().insertAfter($("#id_date").parent("p"));
-        $("#id_date").parent("p").clone().insertAfter($("#id_date").parent("p"));
+        var dateelement = $("#id_date").parent("p").clone();
+        var newdateelement = $("<input type='text' name='date' />");
+        dateelement.children("input[name='date']").replaceWith(newdateelement);
+        dateelement.insertAfter($("#id_date").parent("p"));
+        $("[name='date']").datepicker(); 
     });
 });
 </script>
@@ -20,7 +27,7 @@ $(document).ready(function() {
         <td>
             <form action='{% url 'librehatti.suspense.views.transportbill' %}' method='POST'>
                 {% if messages %}
-                 <div class="text-success">
+                 <div class="alert alert-success">
                         {{ messages }} 
                 </div>
                 {% endif %}
