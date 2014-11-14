@@ -7,12 +7,35 @@ $(document).ready(function(){
             url: request_url,
             success: function(data){
             if (data == 0){
-                alert('You should enter a Title for this register');
+                 BootstrapDialog.show({
+            title: '<b>Error</b>',
+            message: 'You should enter a Title for this register',
+            buttons: [{
+                icon: 'glyphicon glyphicon-remove',
+                cssClass: 'btn btn-danger',
+                label: ' Close',
+                action: function(dialogItself){
+                    dialogItself.close();
+                }
+            }]
+        });
+              
             }
 
             else if (data == 1){
-                alert('Register Save Successfully');
-                location.reload();
+                 BootstrapDialog.show({
+            title: '<b>Great</b>',
+            message: 'Register Saved Successfully',
+            buttons: [{
+                icon: 'glyphicon glyphicon-ok',
+                cssClass: 'btn btn-info btn-large',
+                label: ' Close',
+                action: function(dialogItself){
+                    dialogItself.close();
+                    location.reload();
+                }
+            }]
+        });
             }
             }
             
