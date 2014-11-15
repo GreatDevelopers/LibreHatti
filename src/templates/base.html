@@ -14,6 +14,23 @@
         </script>
         <script src="{% static 'js/accordion.js' %}">
 	</script>
+   <script type="text/javascript">
+    $(document).ready(function(){
+        $('.voucher').attr('disabled', 'disabled');
+        $('.material').attr('disabled', 'disabled');
+        $('.add_distance').change(function(event){
+            voucher_no = event.target.id.split("_")[1];
+            distance = $('#distance_' + voucher_no).val();
+            order = $('#order').val();
+            request_url = "/suspense/save_distance/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
+            $.ajax({
+                url: request_url,
+                success: function(data){
+                }
+            });
+        });
+    })
+    </script>
         <script type="text/javascript">
 $('#id_sub_category').attr('disabled', 'disabled');
 $(document).ready(function(){
