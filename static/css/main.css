@@ -34,7 +34,8 @@ body{
 .panel-items {
 	list-style-type: none;
 	margin-top: 100px;
-	margin-left: 15px;
+	margin-left: -44px;
+	width: 126%;
 }
 
 .panel-item{
