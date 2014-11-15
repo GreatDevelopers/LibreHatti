@@ -16,6 +16,9 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^transportbill/', 'transportbill'),
                    url(r'^quoted_add_distance', 'quoted_add_distance'),
                    url(r'^save_distance', 'save_distance'),
-                   url(r'^sessionselect/', 'sessionselect')
+                   url(r'^sessionselect/', 'sessionselect'),
+                   url(r'^mark_clear/', 'mark_clear'),
+                   url(r'^mark_status/', 'mark_status')
+
               )                    
         

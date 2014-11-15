@@ -12,6 +12,41 @@
     <script src="{% static 'js/registers.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $('.mark_clear').click(function(){
+        var addressValue = $(this).attr("href");
+        request_url = '/suspense/mark_status/?' + addressValue;
+        BootstrapDialog.show({
+            title: '<b>Suspense Clearance</b>',
+            message: 'Are you sure that you want to clear this order?',
+            buttons: [{
+                icon: 'glyphicon glyphicon-ok',
+                cssClass: 'btn btn-info btn-large',
+                label: ' Yes',
+                action: function(dialogItself){
+                    $.ajax({
+                        url: request_url,
+                        success: function(data){
+                            dialogItself.close();
+                            location.reload();
+                        }
+                    })
+                }
+            },
+            {
+                icon: 'glyphicon glyphicon-remove',
+                cssClass: 'btn btn-danger',
+                label: ' No',
+                action: function(dialogItself){
+                    dialogItself.close();
+                }
+            }]
+        })
+        return false;
+    })
+    });
+</script>
    
             {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">

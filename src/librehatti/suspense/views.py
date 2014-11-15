@@ -740,3 +740,34 @@ def tada_order_session(request):
         form = SessionSelectForm()
         return render(request, 'suspense/form.html', \
             {'form':form}) 
+
+@login_required
+def mark_clear(request):
+        suspense_obj = SuspenseOrder.objects.filter(is_cleared = 0).values('voucher','session_id')
+        list_clearance = []
+        list_user = []
+        list_details = []
+        
+        for suspense_var in suspense_obj:
+            SuspenseClearance_object = SuspenseClearance.objects.filter(voucher_no = suspense_var['voucher']).filter(session = suspense_var['session_id']).values('session','voucher_no','lab_testing_staff','field_testing_staff','test_date','clear_date')
+            list_clearance.append(SuspenseClearance_object)
+        for temp_var in list_clearance:
+            for voucher_var in temp_var:
+                voucher_object = VoucherId.objects.filter(voucher_no = voucher_var['voucher_no']).filter(session_id = voucher_var['session']).values('purchase_order__buyer__first_name','purchase_order__buyer__last_name','purchase_order__buyer__customer__address__street_address','purchase_order__buyer__customer__address__city','purchase_order__buyer__customer__address__province')
+                list_user.append(voucher_object)
+                
+        listed = zip (list_user,list_clearance)
+        for suspense_var,voucher_var in listed:
+            final_list = zip(suspense_var,voucher_var)
+            list_details.append(final_list)    
+    
+        return render(request,'suspense/mark_suspense_clear.html',{'listed':list_details})  
+
+@login_required
+def mark_status(request):
+        
+        voucher = request.GET.get('voucher_no')
+        session = request.GET.get('session')
+        suspense_order_obj = SuspenseOrder.objects.filter(voucher = voucher).filter(session_id = session).update(is_cleared = '1')
+        
+        return HttpResponseRedirect("../mark_clear") 
