@@ -41,7 +41,13 @@
 						<a href= '{% url 'librehatti.suspense.views.sessionselect' %}'><img src="{% static 'icons/Transport-Truck-256.png' %}"><span class="panel-text">Transport Bills</span></a>
 					</li>
 					<li class="panel-item" id="clearance">
-						<a href= '{% url 'librehatti.suspense.views.clearance_search' %}'><img src="{% static 'icons/Transport-Truck-256.png' %}"><span class="panel-text">Clearance Bills</span></a>
+						<a href= '{% url 'librehatti.suspense.views.clearance_search' %}'><img src="{% static 'icons/Bill-256.png' %}"><span class="panel-text">Clearance Bills</span></a>
+					</li>
+					<li class="panel-item" id="clearance">
+						<a href= '{% url 'librehatti.suspense.views.tada_order_session' %}'><img src="{% static 'icons/Man-Eating-256.png' %}"><span class="panel-text">Allowance</span></a>
+					</li>
+					<li class="panel-item" id="clearance">
+						<a href= '{% url 'librehatti.suspense.views.mark_clear' %}'><img src="{% static 'icons/Clean-256.png' %}"><span class="panel-text">Clear Suspense</span></a>
 					</li>
 				</ul>
 		{% endblock %}
