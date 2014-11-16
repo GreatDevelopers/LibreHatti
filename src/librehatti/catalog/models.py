@@ -175,6 +175,8 @@ class TaxesApplied(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
+    def __unicode__(self):
+        return "%s" % (self.surcharge)
 
 
 
@@ -214,3 +216,25 @@ class SurchargePaid(models.Model):
     date = models.DateField(auto_now_add = True)
     def __unicode__(self):
         return '%s paid on ' % (self.surcharge, self.date)
+
+
+class ChangeRequest(models.Model):
+    purchase_order_of_session = models.IntegerField()
+    from librehatti.voucher.models import FinancialSession
+    session = models.ForeignKey(FinancialSession)
+    previous_total = models.IntegerField()
+    new_total = models.IntegerField()
+    description = models.CharField(max_length=100)
+
+
+class RequestSurchargeChange(models.Model):
+    change_request = models.ForeignKey(ChangeRequest)
+    surcharge = models.ForeignKey(TaxesApplied)
+    previous_value = models.IntegerField()
+    new_value = models.IntegerField()
+
+
+class RequestStatus(models.Model):
+    change_request = models.ForeignKey(ChangeRequest)
+    confirmed = models.NullBooleanField()
+    cancelled = models.NullBooleanField()
