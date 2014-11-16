@@ -7,6 +7,8 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder, ModeOfPayment
+from librehatti.voucher.models import FinancialSession
+from librehatti.catalog.models import TaxesApplied
 
 import itertools
 
@@ -66,3 +68,7 @@ class BuyerForm(forms.ModelForm):
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/cheque_dd_date.js',
             )
+
+class ChangeRequestForm(forms.Form):
+    session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
+    purchase_order = forms.CharField(max_length=10)
