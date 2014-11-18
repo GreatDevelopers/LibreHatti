@@ -212,7 +212,7 @@ def change_request(request):
                 purchase_order = value['purchase_order_id']
             bill = Bill.objects.values('grand_total').get(purchase_order=purchase_order)
             surcharge = TaxesApplied.objects.values('surcharge__tax_name',\
-                'tax').filter(purchase_order_id = purchase_order)
+                'id','tax').filter(purchase_order_id = purchase_order)
             details = VoucherId.objects.values('purchase_order__buyer__first_name',\
                 'purchase_order__buyer__last_name',
                 'purchase_order__buyer__customer__address__street_address',\
@@ -233,10 +233,3 @@ def change_request(request):
         form = ChangeRequestForm()
         return render(request, 'catalog/change_request.html', \
             {'form':form})
-
-
-@login_required
-def surcharge_value(request):
-    surcharge_id = request.GET['surcharge_id']
-    surcharge_value = TaxesApplied.objects.values_list('tax', flat=True).filter(id=surcharge_id)
-    return HttpResponse(surcharge_value)
