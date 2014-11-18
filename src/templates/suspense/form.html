@@ -7,7 +7,7 @@
     <body>
         {% block content %}
         {% if errors %}
-                 <div class="text-success">
+                 <div class="alert alert-danger">
                         {{ errors }} 
                 </div>
         {% endif %}        
@@ -17,7 +17,13 @@
             <form method="POST" action=''>
         {% endif %}
             {% csrf_token %}
-        <table> 
+          <table> 
+       {% if message %}
+       <div class="alert alert-danger">
+       {{ message }}
+       </div>
+       {% endif %}
+
             {{form.as_table}}
         </table>
             <input type="submit" class="btn btn-info btn-large" value="Submit">

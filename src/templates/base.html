@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     {% block title %}
     {% endblock %}
+    {% block js %}
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'>
         </script>
         <script src="{% static 'js/jquery-ui.min.js' %}">
@@ -78,12 +79,14 @@ $(function() {
         changeMonth: true,
         changeYear: true,dateFormat:"yy-mm-dd"
     })
-    $('#id_departure_time_from_tcc').timepicker();
+    /*$('#id_departure_time_from_tcc').timepicker();
     $('#id_arrival_time_at_site').timepicker();
     $('#id_departure_time_from_site').timepicker();
-    $('#id_arrival_time_at_tcc').timepicker();   
+    $('#id_arrival_time_at_tcc').timepicker(); */   
 });       
 </script>
+{% endblock js %}
+{% block extrajs %} {% endblock extrajs %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-timepicker.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
