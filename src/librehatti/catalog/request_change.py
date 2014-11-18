@@ -102,8 +102,11 @@ def request_save(request):
             i=i+1
 
 
-        if RequestStatus.objects.get(change_request=change_request):
+        try:
+            RequestStatus.objects.get(change_request=change_request)
             RequestStatus.objects.filter(change_request=change_request).delete()
+        except:
+            pass
 
         obj = RequestStatus(change_request=change_request)
         obj.save()
