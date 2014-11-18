@@ -74,3 +74,12 @@ input[type="text"], textarea {
 
   background-color : #EEEEEE; 
 }
+
+p.error input, p.error select {
+    border: 2px #F87E7A solid;
+    background-color: #F5DDDD;
+}
+tr.error input, tr.error select {
+    border: 2px #F87E7A solid;
+    background-color: #F5DDDD;
+}

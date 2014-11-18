@@ -12,14 +12,19 @@ from librehatti.suspense.models import Vehicle
 import datetime
 
 class Clearance_form(ModelForm):
+    required_css_class = 'required'
+    error_css_class = 'error'
     class Meta:
         model = SuspenseClearance
         exclude = []
+    
     voucher_no = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
     car_taxi_charge = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 
 
 class SuspenseForm(ModelForm):
+    required_css_class = 'required'
+    error_css_class = 'error'
     class Meta:
         model = SuspenseOrder
         exclude = ('is_cleared',)
@@ -33,6 +38,8 @@ class TaDaSearch(forms.Form):
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
 
 class TaDaForm(ModelForm):
+    required_css_class = 'required'
+    error_css_class = 'error'
     class Meta:
         model = TaDa
         exclude = ('date_of_generation',)
@@ -53,7 +60,8 @@ class SessionSelectForm(forms.Form):
     voucher = forms.CharField()
 
 class TransportForm1(forms.Form):
-    
+    required_css_class = 'required'
+    error_css_class = 'error'
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
     Date_of_generation = forms.DateField(initial = datetime.date.today)
     kilometer = forms.CharField()

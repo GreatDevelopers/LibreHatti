@@ -218,7 +218,17 @@ def clearance_result(request):
                     'clear_date':clear_date}
             return render(request, 'suspense/clearance_result.html', temp)
         else:
-            return HttpResponse('Form is not valid. Please enter all field')
+            voucher = request.POST['voucher_no']
+            #return HttpResponse(voucher_no)
+            session = request.POST['session']
+            transport = Transport.objects.values('total').\
+            get(voucher_no = voucher, session = session)
+            form = Clearance_form(request.POST,initial={'voucher_no': voucher,\
+            'session': session, 'car_taxi_charge':transport['total']})
+            clearance = 'enable'
+            message = "Fields are mandatory"
+            return render(request, 'suspense/suspense_first.html', \
+                {'form':form,'clearance':clearance,'message':message})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.clearance_search'))
 
@@ -458,13 +468,12 @@ def suspense(request):
 
 @login_required
 def save_charges(request):
-	if request.method=='GET':		
-	    option=request.GET['Purchase_order']
-	    charges=request.GET['distance']
-	    obj = SuspenseOrder(purchase_order_id=option, 
-                                transportation=charges)
-	    obj.save()
-	    return HttpResponse('Thanks!')
+    if request.method=='GET':
+        option=request.GET['Purchase_order']
+        charges=request.GET['distance']
+        obj = SuspenseOrder(purchase_order_id=option,transportation=charges)
+        obj.save()
+        return HttpResponse('Thanks!')
     
 
 
@@ -557,7 +566,7 @@ def sessionselect(request):
                 Transport = TransportForm1()
                 messages = "Transport Bill for Voucher Number"+" "+ voucher +\
                 " and Session"+" "+session
-                temp = {"Transport" : Transport, "session" : session,\
+                temp = {"TransportForm" : Transport, "session" : session,\
                 "voucher" : voucher, "messages" : messages}
                 return render(request, 'suspense/transportform.html', temp)
             else:
@@ -595,8 +604,8 @@ def transportbill(request):
                 values('value')[0]
                 rate = int(rate_object['value'])
                 distance = 0
-                for i in kilometers:
-                    distance = distance + int(i)
+                for temp_var in kilometers:
+                    distance = distance + int(temp_var)
                 total = rate * distance
                 try:
                     if Transport.objects.filter(voucher_no = voucher).exists():
@@ -615,11 +624,12 @@ def transportbill(request):
                 total_amount = Transport.objects.filter(voucher_no = voucher).\
                 aggregate(Sum('total')).get('total__sum',0.00)
                 zipped_data  = zip(date, kilometers) 
-                a = [] 
-                for i,j in  zipped_data:
-                    c = rate * int(j)
-                    a.append(c)
-                zip_data = zip(date, kilometers, a)
+                transport_total = [] 
+                for date_var,kilometers_var in  zipped_data:
+                    cal_total = rate * int(kilometers_var)
+                    transport_total.append(cal_total)
+                
+                zip_data = zip(date, kilometers, transport_total)
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 footer = HeaderFooter.objects.values('footer').get(is_active=True)
                 return render(request,'suspense/transport_bill.html', 
@@ -630,7 +640,19 @@ def transportbill(request):
                         'zip_data': zip_data, 'total_amount': total_amount,
                         'date_of_generation' : date_of_generation,
                         'vehicle' : vehicle}) 
-                         
+        else:
+            message = " Fields are mandatory"
+            session = request.POST['session']
+            voucher = request.POST['voucher']
+            object = SuspenseOrder.objects.filter(session_id = session).\
+            filter(voucher = voucher).values()
+            if object:
+                TransportForm = TransportForm1(request.POST)
+                message = " Fields are mandatory"
+                temp = {"TransportForm" : TransportForm, "session" : session,\
+                "voucher" : voucher, "message" : message}
+                return render(request, 'suspense/transportform.html', temp)
+             
     else:
         form = TransportForm1()
     return render(request, 'suspense/transportform.html', {'TransportForm':form}) 
@@ -654,23 +676,22 @@ def tada_result(request):
             testing_staff = request.POST['testing_staff']
             testing_staff_list = testing_staff.split(',')
             list_staff = []
-            for a in testing_staff_list:
-                d = Staff.objects.filter(code = a).values('name','daily_ta_da')
-                g = d
-                list_staff.append(d)
+            for testing_staff_var in testing_staff_list:
+                testing_staff_details = Staff.objects.filter(code = testing_staff_var).values('name','daily_ta_da')
+                list_staff.append(testing_staff_details)
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             voucher_obj = VoucherId.objects.filter(session = session).\
             filter(voucher_no = voucher).values_list('purchase_order_id', flat = True)
-            c = 0
-            for a in voucher_obj:
-                c = a
-            purchase_order_object = PurchaseOrder.objects.filter(id = c).\
+            purchase_order_var = 0
+            for temp_var in voucher_obj:
+                purchase_order_var = temp_var
+            purchase_order_object = PurchaseOrder.objects.filter(id = purchase_order_var).\
             values('id','buyer_id__username','buyer_id__first_name','buyer_id__last_name')
-            f = 0
-            for var in list_staff:
-                for cha in var:
-                    f = cha['daily_ta_da'] + f
+            tada_total = 0
+            for temp_var in list_staff:
+                for tada_value in temp_var:
+                    tada_total = tada_value['daily_ta_da'] + tada_total
             if TaDa.objects.filter(voucher_no = voucher).filter(session = session).exists():
                 TaDa.objects.filter(voucher_no = voucher).\
                 update(voucher_no = voucher, session = session,\
@@ -704,11 +725,14 @@ def tada_result(request):
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj,'purchase_order_id': voucher,\
                 'list_staff':list_staff,'header':header,'footer':footer,
-                'words' : num2eng(int(tada_amount)),'total':f })
+                'words' : num2eng(int(tada_amount)),'total':tada_total })
         else:    
-            form = TaDaForm()
+            session = request.POST['session']
+            voucher = request.POST['voucher_no']
+            form = TaDaForm(request.POST,initial = {'voucher_no':voucher, 'session': session})
+            message = 'Fields are mandatory'
             tada = 'enable'
-            return render(request, 'suspense/form.html',{'form':form})
+            return render(request, 'suspense/form.html',{'form':form,'message':message})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
 
@@ -756,8 +780,8 @@ def mark_clear(request):
                 voucher_object = VoucherId.objects.filter(voucher_no = voucher_var['voucher_no']).filter(session_id = voucher_var['session']).values('purchase_order__buyer__first_name','purchase_order__buyer__last_name','purchase_order__buyer__customer__address__street_address','purchase_order__buyer__customer__address__city','purchase_order__buyer__customer__address__province')
                 list_user.append(voucher_object)
                 
-        listed = zip (list_user,list_clearance)
-        for suspense_var,voucher_var in listed:
+        list_user_clr = zip (list_user,list_clearance)
+        for suspense_var,voucher_var in list_user_clr:
             final_list = zip(suspense_var,voucher_var)
             list_details.append(final_list)    
     

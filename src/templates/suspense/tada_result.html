@@ -14,7 +14,7 @@
         <h1 >T.A./D.A  FORM FOR CONSULTANCY WORK</h1>
         </div>
         {% for a in purchase_order_object%}       
-        <p><span id = "highlight">Name of the Department/Client:</span> {{ a.buyer_id__username }},{{ a.buyer_id__first_name }}{{ a.buyer_id__last_name }}</br>
+        <p><span id = "highlight">Name of the Department/Client:</span> {{ a.buyer_id__first_name }}{{ a.buyer_id__last_name }}</br>
         {% endfor %}    
         <span id = "highlight">Amount claimed from Department/Client:</span> Rs.{{tada.tada_amount}} </p>
         {% for a in purchase_order_id %}
@@ -97,4 +97,3 @@
         {% endblock %}
     </body>
 </html>
-
