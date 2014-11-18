@@ -11,6 +11,8 @@ from librehatti.catalog.models import RequestSurchargeChange
 from librehatti.catalog.models import RequestStatus
 from librehatti.catalog.models import TaxesApplied
 
+from librehatti.catalog.forms import ChangeRequestForm
+
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
@@ -46,14 +48,16 @@ def request_save(request):
             i=i+1
 
         try:
-            ChangeRequest.objects.get(purchase_order_of_session=purchase_order_of_session, session=session_id)
+            ChangeRequest.objects.get(purchase_order_of_session=purchase_order_of_session,\
+                session=session_id)
             ChangeRequest.objects.\
             filter(purchase_order_of_session=purchase_order_of_session, session=session_id).\
             update(purchase_order_of_session=purchase_order_of_session,session = session,\
                 previous_total=previous_total,new_total=new_total,description=description)
         except:
-            obj= ChangeRequest(purchase_order_of_session=purchase_order_of_session,session = session,\
-                previous_total=previous_total,new_total=new_total,description=description)
+            obj= ChangeRequest(purchase_order_of_session=purchase_order_of_session,\
+                session = session, previous_total=previous_total,\
+                new_total=new_total,description=description)
             obj.save()
 
 
@@ -70,7 +74,8 @@ def request_save(request):
                 if RequestSurchargeChange.objects.filter(change_request=change_request):
 
                     try:
-                        RequestSurchargeChange.objects.get(change_request=change_request,surcharge=surcharge)
+                        RequestSurchargeChange.objects.get(change_request=change_request,\
+                            surcharge=surcharge)
                         RequestSurchargeChange.objects.\
                         filter(change_request=change_request,surcharge=surcharge).\
                         update(change_request=change_request,\
@@ -103,5 +108,9 @@ def request_save(request):
         obj = RequestStatus(change_request=change_request)
         obj.save()
 
+        return HttpResponse('Record Successfully saved and request has been sent for confirmation')
 
-        return HttpResponse('success')
+    else:
+        form = ChangeRequestForm()
+        return render(request, 'catalog/change_request.html', \
+            {'form':form})
