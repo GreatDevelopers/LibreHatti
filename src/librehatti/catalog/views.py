@@ -7,6 +7,7 @@ from librehatti.catalog.models import Product
 from librehatti.catalog.models import *
 from librehatti.catalog.forms import AddCategory
 from librehatti.catalog.forms import ItemSelectForm
+from librehatti.catalog.forms import ChangeRequestForm
 from librehatti.catalog.models import HeaderFooter
 
 from librehatti.prints.helper import num2eng
@@ -18,6 +19,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 import simplejson
+from django import forms
 
 @login_required
 def index(request):
@@ -194,3 +196,40 @@ def order_added_success(request):
         'order_id':order_id})
 
 
+@login_required
+def change_request(request):
+    if request.method == 'POST':
+        sessiondata = ChangeRequestForm(request.POST)
+        purchase_order_of_session = sessiondata.data['purchase_order']
+        session = sessiondata.data['session']
+        object = VoucherId.objects.filter(session_id = session).\
+        filter(purchase_order_of_session = purchase_order_of_session).values()
+        if object:
+            voucherid = VoucherId.objects.\
+            filter(purchase_order_of_session=purchase_order_of_session, session_id=session).\
+            values('purchase_order_id')
+            for value in voucherid:
+                purchase_order = value['purchase_order_id']
+            bill = Bill.objects.values('grand_total').get(purchase_order=purchase_order)
+            surcharge = TaxesApplied.objects.values('surcharge__tax_name',\
+                'id','tax').filter(purchase_order_id = purchase_order)
+            details = VoucherId.objects.values('purchase_order__buyer__first_name',\
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__address__street_address',\
+                'purchase_order__buyer__customer__title',
+                'purchase_order__buyer__customer__address__city',\
+                'purchase_order__mode_of_payment__method',
+                'purchase_order__cheque_dd_number','purchase_order__cheque_dd_date').\
+                filter(purchase_order_of_session=purchase_order_of_session)[0]
+            return render(request,'catalog/change_form.html',{'details': details,
+            'order_id':purchase_order_of_session,'session':session,\
+            'surcharge':surcharge,'bill':bill})
+        else:
+                form = ChangeRequestForm()
+                errors = "No such purchase order number in selected session" 
+                temp = {"form" : form , "errors" : errors}
+                return render(request, 'catalog/change_request.html', temp) 
+    else:
+        form = ChangeRequestForm()
+        return render(request, 'catalog/change_request.html', \
+            {'form':form})
