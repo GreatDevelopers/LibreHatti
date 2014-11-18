@@ -1,0 +1,19 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	{% block title %}
+            <title>Order added</title>
+        {% endblock %}
+    </head>
+    <body> 
+      {% block content %}
+        <div class='order-success'>
+        	<p class='success-message'>Request Sent <span class='green'>
+        		Successfully</span></p>
+</div>
+{% endblock %}
+</body>
+</html>

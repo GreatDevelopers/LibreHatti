@@ -108,7 +108,7 @@ def request_save(request):
         obj = RequestStatus(change_request=change_request)
         obj.save()
 
-        return HttpResponse('Record Successfully saved and request has been sent for confirmation')
+        return render(request, 'catalog/request_success.html')
 
     else:
         form = ChangeRequestForm()
