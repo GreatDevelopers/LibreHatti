@@ -11,7 +11,7 @@ $(document).ready(function() {
     $("[name='date']").datepicker(); 
     $("#button2").click(function() {
 
-    	//Insert just after the kilo input in p element
+        //Insert just after the kilo input in p element
         $("#id_kilometer").parent("p").clone().insertAfter($("#id_date").parent("p"));
         var dateelement = $("#id_date").parent("p").clone();
         var newdateelement = $("<input type='text' name='date' />");
@@ -36,9 +36,14 @@ $(document).ready(function() {
                         {{ messages }} 
                 </div>
                 {% endif %}
+                {% if message %}
+                 <div class="alert alert-danger">
+                        {{ message }} 
+                </div>
+                {% endif %}
                 {% csrf_token %}
 
-                {{Transport.as_p}}
+                {{TransportForm.as_p}}
                 
                 <input type="hidden" value="{{ session }}" name="session" />
                 <input type="hidden" value="{{ voucher }}" name="voucher" />
