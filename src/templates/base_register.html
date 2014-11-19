@@ -12,6 +12,7 @@
     <script src="{% static 'js/registers.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
+    <script src="{% static 'js/request_response.js' %}"></script>
     <script type="text/javascript">
     $(document).ready(function(){
     $('.mark_clear').click(function(){
@@ -22,7 +23,7 @@
             message: 'Are you sure that you want to clear this order?',
             buttons: [{
                 icon: 'glyphicon glyphicon-ok',
-                cssClass: 'btn btn-info btn-large',
+                cssClass: 'btn btn-success',
                 label: ' Yes',
                 action: function(dialogItself){
                     $.ajax({
