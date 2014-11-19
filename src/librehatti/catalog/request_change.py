@@ -22,6 +22,9 @@ from django.template import Context
 
 from django.contrib.auth.models import User
 
+from librehatti.config import _SENDER_EMAIL
+from librehatti.config import _RECEIVER_EMAIL
+
 @login_required
 def request_save(request):
     if request.method == 'POST':
@@ -175,7 +178,7 @@ def view_request(request):
 def accept_request(request):
     request_id = request.GET['id']
     user = User.objects.values('first_name','last_name').filter(id=request.user.id)[0]
-    RequestStatus.objects.filter(id = request_id).update(confirmed=True,cancelled=False)
+    RequestStatus.objects.filter(change_request = request_id).update(confirmed=True,cancelled=False)
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
     new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
     description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
@@ -200,7 +203,7 @@ def accept_request(request):
     text_content = plaintext.render(temp)
     html_content = content.render(temp)
 
-    subject, from_email, to = 'Change Request', 'librehatti@gmail.com', 'jassigrewal91@gmail.com'
+    subject, from_email, to = 'Change Request', _SENDER_EMAIL, _RECEIVER_EMAIL
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
@@ -212,7 +215,7 @@ def accept_request(request):
 def reject_request(request):
     request_id = request.GET['id']
     user = User.objects.values('first_name','last_name').filter(id=request.user.id)[0]
-    RequestStatus.objects.filter(id = request_id).update(cancelled=True,confirmed=False)
+    RequestStatus.objects.filter(change_request = request_id).update(cancelled=True,confirmed=False)
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
     new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
     description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
@@ -237,7 +240,7 @@ def reject_request(request):
     text_content = plaintext.render(temp)
     html_content = content.render(temp)
 
-    subject, from_email, to = 'Change Request', 'librehatti@gmail.com', 'jassigrewal91@gmail.com'
+    subject, from_email, to = 'Change Request', _SENDER_EMAIL, _RECEIVER_EMAIL
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
