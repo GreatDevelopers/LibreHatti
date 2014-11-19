@@ -48,6 +48,14 @@ Run following commands in terminal
     
     $ sudo pip install -r requirements.txt
 
+7) Exim4
+
+Run following commands in terminal
+
+    $ sudo apt-get install exim4
+
+and configure it using [this](http://www.jsgrewal.com/2013/06/23/configuring-exim4-on-ubuntu/)
+
 
 Steps for Installation of LibreHatti.
 
@@ -70,11 +78,13 @@ Line No 10 : DATABASES
     PASSWORD : Your MySQl password
     
 Line No 43 : STATICFILES_DIRS
+
+4) Edit config.py accordingly
     
-4) Goto the project directory and run the following commands.
+5) Goto the project directory and run the following commands.
     
     $ cd src
     $ python manage.py migrate
     $ python manage.py runserver 127.0.0.1:8090
     
-5) Open 'localhost:8090' in your browser.
+6) Open 'localhost:8090' in your browser.
