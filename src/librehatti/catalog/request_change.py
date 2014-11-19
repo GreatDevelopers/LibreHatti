@@ -145,3 +145,24 @@ def list_request(request):
         value['request_status'] = request_status
         final_request_list.append(value)
     return render(request, 'catalog/list_request.html',{'list':final_request_list})
+
+@login_required
+def view_request(request):
+    request_id = request.GET['id']
+    previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
+    new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
+    description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
+    surcharge_diff = RequestSurchargeChange.objects.values('surcharge__surcharge__tax_name',
+        'previous_value','new_value').filter(change_request=request_id)
+    if RequestStatus.objects.filter(change_request = request_id).\
+        filter(confirmed=False).filter(cancelled=False):
+        request_status = 'Waiting'
+    elif RequestStatus.objects.filter(change_request = request_id).\
+        filter(confirmed=True):
+        request_status = 'Confirmed'
+    elif RequestStatus.objects.filter(change_request = request_id).\
+        filter(cancelled=True):
+        request_status = 'Cancelled'
+    return render(request,'catalog/view_request.html',{'previous_total':previous_total,
+        'new_total':new_total,'description':description,'id':request_id,
+        'surcharge_diff':surcharge_diff,'request_status':request_status})
