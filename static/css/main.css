@@ -9,6 +9,11 @@ body{
 	background-color:#fafafa;
 }
 
+#request_notify li {
+	color: #E74C3C;
+	font-size: 3em;
+}
+
 .main-box{
 	max-width: 360px;
 	margin: auto;
@@ -168,4 +173,22 @@ and (max-width : 800px) {
 	background:rgb(15,132,176);
 	color:#fff;
 }
+}
+
+.diff {
+	position: relative;
+	margin-top: 10%;
+}
+
+#previous_value{
+	color: #e74c3c;
+}
+
+#new_value{
+	color:#2ecc71;
+}
+
+.options{
+	position: relative;
+	margin-top: 10%;
 }

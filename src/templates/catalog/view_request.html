@@ -1,0 +1,71 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	{% block title %}
+            <title>Request</title>
+        {% endblock %}
+    </head>
+    <body> 
+      {% block content %}
+      <div class = 'list-registers'>
+        	<div class='view-list'>
+      <table>
+      	<tr>
+      		<th>Initiator:</th>
+      		<td></td>
+      	</tr>
+      	<tr>
+      		<th>Date of Initiation:</th>
+      		<td></td>
+      	</tr>
+      	<tr>
+      		<th>Date of Confirmation:</th>
+      		<td></td>
+      	</tr>
+      	<tr>
+      		<th>Status:</th>
+      		<td>{{request_status}}</td>
+      	<tr>
+      		<th>Description:</th>
+      		<td>{{description.description}}</td>
+      	</tr>
+      </table>
+      <div class="diff">
+      	<h4>Detailed Diff</h4>
+      	<table border='1px'>
+      		<tr>
+      			<th>Entity</th>
+      			<th>Previous Value</th>
+      			<th>New Value</th>
+      		</tr>
+      		<tr>
+      			<td>Total</td>
+      			<td><font id="previous_value">{{previous_total.previous_total}}
+      			    </font></td>
+      			<td><font  id="new_value">{{new_total.new_total}}</font></td>
+      		</tr>
+      		    {% for value in surcharge_diff %}
+      		    <tr>
+      		        <td>{{value.surcharge__surcharge__tax_name}}</td>
+      		        <td><font id="previous_value">{{value.previous_value}}
+      			    </font></td>
+      			    <td><font id="new_value">{{value.new_value}}
+      			    </font></td>
+      			</tr>
+      			{% endfor %}
+
+      	</table>
+      	<div class = "options">
+      	<a class = 'accept_request' href = '{{id}}'>
+                <input type="button" class="btn btn-info btn-large" 
+                 name="" value="Request Response"></a>
+        </div>
+      </div>
+  </div>
+</div>
+      {% endblock %}
+    </body>
+</html>

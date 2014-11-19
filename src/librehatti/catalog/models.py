@@ -236,5 +236,5 @@ class RequestSurchargeChange(models.Model):
 
 class RequestStatus(models.Model):
     change_request = models.ForeignKey(ChangeRequest)
-    confirmed = models.NullBooleanField()
-    cancelled = models.NullBooleanField()
+    confirmed = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)

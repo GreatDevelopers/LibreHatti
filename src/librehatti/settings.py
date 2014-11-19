@@ -1,4 +1,6 @@
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+from librehatti.config import _EMAIL
+from librehatti.config import _PASSWORD
 
 DEBUG = True
 
@@ -12,15 +14,21 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'librehatti',
+        'NAME': 'panesar',
         'USER': 'root',
-        'PASSWORD': 'mittal',
+        'PASSWORD': 'grewal',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
 
 ALLOWED_HOSTS = []
+
+EMAIL_HOST = 'smtp.gmail.com'                                                                                                                                           
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = _EMAIL
+EMAIL_HOST_PASSWORD = _PASSWORD
 
 TIME_ZONE = 'America/Chicago'
 
@@ -45,7 +53,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/home/aseem/virtualenv/env1/LibreHatti/static',
+    '/home/jass/testing/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
