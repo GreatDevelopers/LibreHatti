@@ -9,6 +9,7 @@ from librehatti.catalog.forms import AddCategory
 from librehatti.catalog.forms import ItemSelectForm
 from librehatti.catalog.forms import ChangeRequestForm
 from librehatti.catalog.models import HeaderFooter
+from librehatti.catalog.request_change import request_notify
 
 from librehatti.prints.helper import num2eng
 
@@ -43,7 +44,8 @@ def index(request):
                'categorylist': categorylist})
 
     pass"""
-    return render(request,'index.html',{})
+    request_status = request_notify()
+    return render(request,'index.html',{'request':request_status})
 
 
 @login_required

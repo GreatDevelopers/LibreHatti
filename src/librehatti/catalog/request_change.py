@@ -117,3 +117,13 @@ def request_save(request):
         form = ChangeRequestForm()
         return render(request, 'catalog/change_request.html', \
             {'form':form})
+
+def request_notify():
+    notify = RequestStatus.objects.filter(confirmed=False).\
+        filter(cancelled=False)
+    if notify:
+        number_request = 1
+    else:
+        number_request = 0
+    
+    return number_request

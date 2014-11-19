@@ -111,8 +111,14 @@ $(function() {
             <div class ="account">
                 <nav id="primary_nav_wrap">
 <ul>
-  <li><a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
+  <li>
+    {% if request == 1 %}
+        <a href="#"><img width="40px" src="{% static 'icons/Settings-1.png' %}"></a>
+    {% else %}
+        <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
+    {% endif %}
     <ul>
+      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
       <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
       <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
       <li><a href="{% url 'admin:logout' %}">Log out</a></li>
