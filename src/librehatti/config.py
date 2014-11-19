@@ -9,6 +9,7 @@ _ITEM = 'Test'
 _QTY = 'Quantity'
 
 """User Configs"""
-_EMAIL = 'your email id'
-_PASSWORD = 'password of your email'
+_SENDER_EMAIL = 'your email'
+_PASSWORD = 'email password'
+_RECEIVER_EMAIL = 'receiver email id'
 

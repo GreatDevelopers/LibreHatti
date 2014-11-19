@@ -1,5 +1,5 @@
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
-from librehatti.config import _EMAIL
+from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _PASSWORD
 
 DEBUG = True
@@ -24,13 +24,13 @@ DATABASES = {
 
 ALLOWED_HOSTS = []
 
-EMAIL_HOST = 'smtp.gmail.com'                                                                                                                                           
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = _EMAIL
+EMAIL_HOST_USER = _SENDER_EMAIL
 EMAIL_HOST_PASSWORD = _PASSWORD
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Kolkata'
 
 LANGUAGE_CODE = 'en-us'
 
