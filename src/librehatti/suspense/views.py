@@ -365,7 +365,7 @@ def withouttransport(request):
 
 
 @login_required
-def wtransport(request):
+def without_other_charges(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
     split = session.split(' : ')
@@ -514,6 +514,9 @@ def quoted_add_distance(request):
     else:
         return HttpResponseRedirect(url)
 
+"""
+This view is used to 
+"""
 @login_required
 def save_distance(request):
     voucher_no = request.GET['voucher']
@@ -553,6 +556,9 @@ def transport(request):
     temp = {'TransportForm' : form}
     return render (request, 'suspense/transportform.html', temp)
 
+"""
+This view is used to render the Transport Bill 
+"""
 @login_required
 def sessionselect(request):
     if 'button1' in request.POST:
@@ -583,6 +589,10 @@ def sessionselect(request):
         form = SessionSelectForm()
         temp = {"SelectForm" : form}
         return render(request, 'voucher/sessionselect.html', temp)
+"""
+This view is used to generate the Transport Bill 
+"""
+
 
 @login_required
 def transportbill(request):
@@ -657,6 +667,9 @@ def transportbill(request):
         form = TransportForm1()
     return render(request, 'suspense/transportform.html', {'TransportForm':form}) 
 
+"""
+This view is used to generate TADA bill
+"""
 @login_required
 def tada_result(request):
     if request.method == 'POST':
@@ -735,6 +748,9 @@ def tada_result(request):
             return render(request, 'suspense/form.html',{'form':form,'message':message})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
+"""
+This view is used to render the Allowance 
+"""
 
 @login_required
 def tada_order_session(request):
@@ -765,6 +781,9 @@ def tada_order_session(request):
         return render(request, 'suspense/form.html', \
             {'form':form}) 
 
+"""
+This view is used to fetch and display the data required to mark the suspense order as cleared 
+"""
 @login_required
 def mark_clear(request):
         suspense_obj = SuspenseOrder.objects.filter(is_cleared = 0).values('voucher','session_id')
@@ -787,6 +806,9 @@ def mark_clear(request):
     
         return render(request,'suspense/mark_suspense_clear.html',{'listed':list_details})  
 
+"""
+This view updates the status of given order as cleared
+"""
 @login_required
 def mark_status(request):
         
