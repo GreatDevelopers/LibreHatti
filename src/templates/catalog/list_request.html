@@ -1,0 +1,38 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}
+        <title>
+            Requests
+        </title> 
+    {% endblock %}
+    </head>
+    <body>
+    	{% block content %}
+    	<div class = 'list-registers'>
+        	<div class='view-list'>
+    	    <table border='1px'>
+    	    	<tr>
+    	    		<th>Request Id</th>
+    	    		<th>Description</th>
+    	    		<th>Status</th>
+    	    		<th>Option</th>
+    	    	</tr>
+    	    	{% for values in list %}
+    	    	<tr>
+    	    		<td>{{values.id}}</td>
+    	    		<td>{{values.description}}</td>
+    	    		<td>{{values.request_status}}</td>
+    	    		<td><a href = '{% url 'catalog.request_change.view_request' %}?id={{values.id}}'>View</a></td>
+    	    	</tr>
+    	    	{% endfor %}
+    	    </table>
+    	</div>
+    </div>
+    	         
+    	 {% endblock %}
+    </body>
+</html>

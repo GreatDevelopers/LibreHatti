@@ -23,4 +23,5 @@ urlpatterns = patterns('librehatti.catalog.views',
 
 urlpatterns += patterns('librehatti.catalog.request_change',
    url(r'^request_save/','request_save'),
-       )
+   url(r'^list_requests/','list_request'),
+)

@@ -127,3 +127,21 @@ def request_notify():
         number_request = 0
     
     return number_request
+
+@login_required
+def list_request(request):
+    request_list = ChangeRequest.objects.values('id','description')
+    final_request_list = []
+    for value in request_list:
+        if RequestStatus.objects.filter(change_request = value['id']).\
+            filter(confirmed=False).filter(cancelled=False):
+            request_status = 'Waiting'
+        elif RequestStatus.objects.filter(change_request = value['id']).\
+            filter(confirmed=True):
+            request_status = 'Confirmed'
+        elif RequestStatus.objects.filter(change_request = value['id']).\
+            filter(cancelled=True):
+            request_status = 'Cancelled'
+        value['request_status'] = request_status
+        final_request_list.append(value)
+    return render(request, 'catalog/list_request.html',{'list':final_request_list})
