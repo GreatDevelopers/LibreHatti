@@ -15,16 +15,22 @@
       <table>
       	<tr>
       		<th>Initiator:</th>
-      		<td></td>
+      		<td>{{initiator.initiator}}</td>
       	</tr>
       	<tr>
       		<th>Date of Initiation:</th>
-      		<td></td>
+      		<td>{{initiation_date.initiation_date}}</td>
       	</tr>
-      	<tr>
+      	{% if request_status != 'Waiting' %}
+        <tr>
+        {% if request_status == 'Confirmed' %}
       		<th>Date of Confirmation:</th>
-      		<td></td>
+        {% else %}
+          <th>Date of Cancellation:</th>
+        {% endif %}
+      	<td>{{request_response.request_response}}</td>       
       	</tr>
+        {% endif %}
       	<tr>
       		<th>Status:</th>
       		<td>{{request_status}}</td>
