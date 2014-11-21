@@ -4,6 +4,7 @@ from librehatti.prints import views
 
 urlpatterns = patterns('',        
     url(r'^bill/', 'bill'),
+    url(r'^quoted_bill/','quoted_bill'),
     url(r'^lab_report', views.lab_report, name= 'lab_report'),
     url(r'^show_form/',views.show_form, name = 'show_form'),
     url(r'^filter_sub_category/', views.filter_sub_category,
