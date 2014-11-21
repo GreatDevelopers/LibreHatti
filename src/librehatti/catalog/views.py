@@ -108,11 +108,6 @@ and save those values in database.
 def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
-
-    suffix = "/search_result/?search="
-    prefix = "&Order=Order+Search"
-    url = suffix + str(purchase_order_id) + prefix
-
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
     purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').get(id=purchase_order_id)
     purchase_item = PurchasedItem.objects.\

@@ -15,6 +15,12 @@ from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import SuspenseOrder
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from librehatti.bills.models import QuotedOrder
+from librehatti.bills.models import QuotedBill
+from librehatti.bills.models import QuotedTaxesApplied
+from librehatti.bills.models import QuotedItem
+from librehatti.suspense.models import QuotedSuspenseOrder
 
 @login_required
 def lab_report(request):
@@ -181,3 +187,65 @@ def receipt(request):
     return render(request, 'prints/receipt.html', {'receiptno': id,\
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
         'method': purchase_order, 'buyer':customer_obj, 'material':purchased_item, 'header':header})
+
+
+@login_required
+def quoted_bill(request):
+    quoted_order_id = request.GET['quoted_order_id']
+    quoted_order = QuotedOrder.objects.filter(id = quoted_order_id)
+    quoted_item = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
+    values('item__category__name',\
+    'item__category').\
+    order_by('item__category').distinct()
+    quoted_item_odj = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
+    values('item__name',\
+    'item__category', 'qty',\
+    'item__price_per_unit').order_by('item__category')
+    cost = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
+    values('price','item__category','item__name').order_by('item__category')
+    taxes_applied = QuotedTaxesApplied.objects.\
+    filter(quoted_order=quoted_order).values('surcharge','tax')
+    taxes_applied_obj = QuotedTaxesApplied.objects.\
+    filter(quoted_order = quoted_order).aggregate(Count('id'))
+    surcharge = Surcharge.objects.values('id','tax_name','value')
+    bill = QuotedBill.objects.values('total_cost','grand_total','delivery_charges').\
+    get(quoted_order=quoted_order_id)
+    total_cost = bill['total_cost']
+    grand_total = bill['grand_total']
+    delivery_charges = bill['delivery_charges']
+    quoted_order_obj = QuotedOrder.\
+    objects.values('buyer','buyer__first_name','buyer__last_name','reference','delivery_address','organisation',\
+    'date_time','total_discount').get(id = quoted_order_id)
+    total_discount = quoted_order_obj['total_discount']
+    taxes_applied_obj = QuotedTaxesApplied.objects.\
+    filter(quoted_order = quoted_order).aggregate(Count('id'))
+    suspense_order = QuotedSuspenseOrder.objects.filter(quoted_order = quoted_order_id)
+    if suspense_order:
+        if total_discount == 0:
+            tax_count = taxes_applied_obj['id__count'] + 3
+        else:
+            tax_count = taxes_applied_obj['id__count'] + 4
+    else:
+        if total_discount == 0:
+            tax_count = taxes_applied_obj['id__count'] + 2
+        else:
+            tax_count = taxes_applied_obj['id__count'] + 3
+    buyer = quoted_order_obj['buyer']
+    address = Customer.objects.values('address__street_address',\
+    'address__city', 'address__pin', 'address__province').get(user = buyer)
+    organisation_id = quoted_order_obj['organisation']
+    date = quoted_order_obj['date_time']
+    customer_obj = Customer.objects.values('company').get(user = buyer)
+    admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
+    get(id = organisation_id)
+    header = HeaderFooter.objects.values('header').get(is_active=True)
+    footer = HeaderFooter.objects.values('footer').get(is_active=True)
+    return render(request, 'prints/quote_bill.html', {'stc_no' : admin_organisations,\
+        'pan_no' : admin_organisations,'id':id,'ref':quoted_order_obj , 'date':date,\
+        'quoted_order':quoted_order, 'address':address,\
+        'total_cost': total_cost ,'grand_cost': grand_total ,\
+        'taxes_applied': taxes_applied ,'surcharge': surcharge,\
+        'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
+        'delivery_charges':delivery_charges, 'total_discount':total_discount,\
+        'tax_count':tax_count,'quoted_item':quoted_item,'values':quoted_item_odj,\
+        'cost':cost,'header':header,'footer': footer})

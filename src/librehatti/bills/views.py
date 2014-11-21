@@ -2,11 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import Category
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import HeaderFooter
-from librehatti.bills.models import *
+from librehatti.bills.models import QuotedTaxesApplied
+from librehatti.bills.models import QuotedOrder
+from librehatti.bills.models import QuotedItem
+from librehatti.suspense.models import QuotedSuspenseOrder
 from django.contrib.auth.models import User
 import useraccounts
 from django.db.models import Sum
@@ -14,6 +18,8 @@ from librehatti.bills.forms import *
 from django.db.models import Max
 import simplejson
 from django.contrib.auth.decorators import login_required
+from librehatti.bills.forms import ItemSelectForm
+from django.core.urlresolvers import reverse
 
 @login_required
 def confirm(request, client_id):
@@ -113,59 +119,62 @@ def generate_bill(request):
      quote_item, 'total_cost': total, 'header':header})
 
 
+"""
+This view calculate taxes on quoted order, bill data
+and save those values in database.
+"""
 @login_required
-def select_sub_category(request):
-    """
-    This view allows filtering of sub category according to parent category of 
-    item.
-    """
-    parent_category = request.GET['cat_id']
-    sub_categories = Category.objects.filter(parent=parent_category)
-    sub_category_dict = {}
-    for sub_category in sub_categories:
-        sub_category_dict[sub_category.id] = sub_category.name
-    return HttpResponse(simplejson.dumps(sub_category_dict))
-
-@login_required
-def select_item(request):
-    """
-    This view allows filtering of item according to sub category of item.
-    """
-    cat_id = request.GET['cat_id']
-    products = Product.objects.filter(category = cat_id)
-    product_dict = {}
-    for product in products:
-        product_dict[product.id] = product.name
-    return HttpResponse(simplejson.dumps(product_dict))  
-
-@login_required
-def bill_cal(request):
-    """
-    This view calculate taxes on quoted order, bill data
-    and save those values in database.
-    """
+def quoted_bill_cal(request):
     old_post = request.session.get('old_post')
-    quote_order_id = request.session.get('quote_order_id')
-    quote_order = QuotedOrder.objects.get(id=quote_order_id)
-    quote_item = QuotedItem.objects.\
-    filter(quote_order=quote_order_id).aggregate(Sum('price'))
-    price_total = quote_item['price__sum']
-    surcharge = Surcharge.objects.values('id','value')
+    quoted_order_id = request.session.get('quoted_order_id')
+    quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
+    quoted_order_obj = QuotedOrder.objects.values('total_discount','tds').\
+    get(id=quoted_order_id)
+    quoted_item = QuotedItem.objects.\
+    filter(quoted_order=quoted_order_id).aggregate(Sum('price'))
+    total = quoted_item['price__sum']
+    price_total = total - quoted_order_obj['total_discount']
+    surcharge = Surcharge.objects.values('id','value','taxes_included')
+    delivery_rate = Surcharge.objects.values('value').filter(tax_name = 'Transportation')
+    distance = QuotedSuspenseOrder.objects.filter(quoted_order = quoted_order_id).\
+        aggregate(Sum('distance_estimated'))
+    if distance['distance_estimated__sum']:
+        delivery_charges = int(distance['distance_estimated__sum'])*\
+            delivery_rate[0]['value']
+
+    else:
+        delivery_charges = 0
+
     for value in surcharge:
         surcharge_id = value['id']
         surcharge_value = value['value']
-        taxes = (price_total * surcharge_value)/100
-        surcharge_obj = Surcharge.objects.get(id=surcharge_id)
-        taxes_applied = QuoteTaxesApplied(quote_order = quote_order,
-        surcharge = surcharge_obj, tax = taxes)
-        taxes_applied.save()
-    taxes_applied_obj = QuoteTaxesApplied.objects.\
-    filter(quote_order=quote_order_id).aggregate(Sum('tax'))
+        surcharge_tax = value['taxes_included']
+        if surcharge_tax == 1:
+            taxes = (price_total * surcharge_value)/100
+            surcharge_obj = Surcharge.objects.get(id=surcharge_id)
+            taxes_applied = QuotedTaxesApplied(quoted_order = quoted_order,
+            surcharge = surcharge_obj, tax = taxes)
+            taxes_applied.save()
+    taxes_applied_obj = QuotedTaxesApplied.objects.\
+    filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
     tax_total = taxes_applied_obj['tax__sum']
-    grand_total = price_total + tax_total
-    bill = QuotedBill(quote_order = quote_order, total_cost = price_total,
-    total_tax = tax_total, grand_total = grand_total)
+    grand_total = price_total + tax_total + delivery_charges
+    amount_received = grand_total - quoted_order_obj['tds']
+    bill = QuotedBill(quoted_order = quoted_order, total_cost = price_total,
+    total_tax = tax_total, grand_total = grand_total,
+    delivery_charges = delivery_charges, amount_received = amount_received)
     bill.save()
     request.session['old_post'] = old_post
-    request.session['quote_order_id'] = quote_order_id
-    return HttpResponseRedirect('/suspense/quoted_add_distance/')
+    request.session['quoted_order_id'] = quoted_order_id
+    return HttpResponseRedirect(reverse("librehatti.bills.views.quoted_order_added_success"))
+
+
+@login_required
+def quoted_order_added_success(request):
+    quoted_order_id = request.session.get('quoted_order_id')
+    details = QuotedOrder.objects.values('buyer__first_name','buyer__last_name'
+        ,'buyer__customer__address__street_address','buyer__customer__title',
+        'buyer__customer__address__city','mode_of_payment__method',
+        'cheque_dd_number','cheque_dd_date').filter(id=quoted_order_id)[0]
+    return render(request,'bills/quoted_success.html',{'details': details,
+        'quoted_order_id':quoted_order_id})
