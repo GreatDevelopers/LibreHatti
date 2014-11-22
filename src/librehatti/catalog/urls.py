@@ -27,4 +27,5 @@ urlpatterns += patterns('librehatti.catalog.request_change',
    url(r'^view_request/','view_request'),
    url(r'^accept_request/','accept_request'),
    url(r'^reject_request/','reject_request'),
+   url(r'^permission_denied/','permission_denied'),
 )

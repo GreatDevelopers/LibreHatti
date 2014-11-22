@@ -13,3 +13,5 @@ _SENDER_EMAIL = 'your email'
 _PASSWORD = 'email password'
 _RECEIVER_EMAIL = 'receiver email id'
 
+"""Group Configs"""
+_ADMIN_GROUP = 'group name'

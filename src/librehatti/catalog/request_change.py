@@ -13,7 +13,7 @@ from librehatti.catalog.models import TaxesApplied
 
 from librehatti.catalog.forms import ChangeRequestForm
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 
 from django.core.mail import EmailMultiAlternatives
@@ -24,10 +24,16 @@ from django.contrib.auth.models import User
 
 from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _RECEIVER_EMAIL
+from datetime import date, datetime
+
+from librehatti.config import _ADMIN_GROUP
 
 @login_required
 def request_save(request):
     if request.method == 'POST':
+        first_name = request.user.first_name
+        last_name = request.user.last_name
+        full_name = first_name + ' ' + last_name
         purchase_order_of_session = request.GET['order_id']
         session_id = request.GET['session']
         voucherid = VoucherId.objects.values('purchase_order_id').\
@@ -60,11 +66,12 @@ def request_save(request):
             ChangeRequest.objects.\
             filter(purchase_order_of_session=purchase_order_of_session, session=session_id).\
             update(purchase_order_of_session=purchase_order_of_session,session = session,\
-                previous_total=previous_total,new_total=new_total,description=description)
+                previous_total=previous_total,new_total=new_total,description=description,\
+                initiator=full_name)
         except:
             obj= ChangeRequest(purchase_order_of_session=purchase_order_of_session,\
                 session = session, previous_total=previous_total,\
-                new_total=new_total,description=description)
+                new_total=new_total,description=description,initiator=full_name)
             obj.save()
 
 
@@ -111,12 +118,12 @@ def request_save(request):
 
         try:
             RequestStatus.objects.get(change_request=change_request)
-            RequestStatus.objects.filter(change_request=change_request).delete()
+            RequestStatus.objects.filter(change_request=change_request).\
+            update(change_request=change_request,confirmed=0,cancelled=0,\
+                request_response=None)
         except:
-            pass
-
-        obj = RequestStatus(change_request=change_request)
-        obj.save()
+            obj = RequestStatus(change_request=change_request)
+            obj.save()
 
         return render(request, 'catalog/request_success.html')
 
@@ -136,6 +143,7 @@ def request_notify():
     return number_request
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def list_request(request):
     request_list = ChangeRequest.objects.values('id','description')
     final_request_list = []
@@ -154,11 +162,14 @@ def list_request(request):
     return render(request, 'catalog/list_request.html',{'list':final_request_list})
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def view_request(request):
     request_id = request.GET['id']
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
     new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
     description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
+    initiator = ChangeRequest.objects.values('initiator').filter(id = request_id)[0]
+    initiation_date = ChangeRequest.objects.values('initiation_date').filter(id = request_id)[0]
     surcharge_diff = RequestSurchargeChange.objects.values('surcharge__surcharge__tax_name',
         'previous_value','new_value').filter(change_request=request_id)
     if RequestStatus.objects.filter(change_request = request_id).\
@@ -170,15 +181,25 @@ def view_request(request):
     elif RequestStatus.objects.filter(change_request = request_id).\
         filter(cancelled=True):
         request_status = 'Cancelled'
+    try:
+        request_response = RequestStatus.objects.values('request_response').\
+        filter(change_request = request_id)[0]
+    except:
+        pass
     return render(request,'catalog/view_request.html',{'previous_total':previous_total,
         'new_total':new_total,'description':description,'id':request_id,
-        'surcharge_diff':surcharge_diff,'request_status':request_status})
+        'surcharge_diff':surcharge_diff,'request_status':request_status,\
+        'initiation_date':initiation_date,'initiator':initiator,\
+        'request_response':request_response})
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def accept_request(request):
     request_id = request.GET['id']
+    today = datetime.now().date()
     user = User.objects.values('first_name','last_name').filter(id=request.user.id)[0]
-    RequestStatus.objects.filter(change_request = request_id).update(confirmed=True,cancelled=False)
+    RequestStatus.objects.filter(change_request = request_id).update(confirmed=True,cancelled=False,\
+        request_response=today)
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
     new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
     description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
@@ -212,10 +233,13 @@ def accept_request(request):
     return HttpResponse('Success')
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def reject_request(request):
     request_id = request.GET['id']
+    today = datetime.now().date()
     user = User.objects.values('first_name','last_name').filter(id=request.user.id)[0]
-    RequestStatus.objects.filter(change_request = request_id).update(cancelled=True,confirmed=False)
+    RequestStatus.objects.filter(change_request = request_id).update(cancelled=True,confirmed=False,\
+        request_response=today)
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
     new_total = ChangeRequest.objects.values('new_total').filter(id = request_id)[0]
     description = ChangeRequest.objects.values('description').filter(id = request_id)[0]
@@ -247,3 +271,11 @@ def reject_request(request):
     msg.send()
 
     return HttpResponse('Success')
+
+
+@login_required
+def permission_denied(request):
+    error_type = "Permission Denied"
+    error = "You are not authorised to access it"
+    temp = {'type': error_type, 'message':error}
+    return render(request, 'error_page.html', temp)

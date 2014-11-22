@@ -1,0 +1,160 @@
+{% extends 'bill_base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset='UTF-8'>
+{% block title %}
+        <title>Bill</title>
+{% endblock %}
+{% load set_var %} 
+</head>
+
+
+<body>
+    {% block content %}
+
+    <div class="container">
+        
+        <h2> Bill</h2>
+    </div>
+    <div class = "bill-left">
+    <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
+    <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
+    <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} </p>
+    <p> To, </p>
+    <p> {{purchase_order.delivery_address}} </p>
+    <p> {{buyer_name.company}}</p>
+    <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
+    {% if address.address__pin != 'None' %}
+    -{{address.address__pin}}, 
+    {% endif %}
+    {{address.address__province}}</p>
+    <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
+    <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
+    </div>
+        <table class="data" border="1px">
+            <tr>
+                <th>Charges For Following</th>
+                <th>Description</th>
+                <th>Per</th>
+                <th>Total</th>
+            </tr>
+            
+            <tr>
+                {% for quoted_item in quoted_item %}
+                {% set flag1 = 1 %}
+                {% set flag2 = 1 %}
+                {% set flag3 = 1 %}
+                {% set flag4 = 1 %}
+            <td>
+                {{quoted_item.item__category__name }}: 
+                {% for values in values %}
+                {% if quoted_item.item__category == values.item__category %}
+                {% if flag1 == 1 %}
+                {{ values.item__name }}
+                {% set flag1 = 0 %}
+                {% else %}
+                , {{ values.item__name }}  
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for values in values %}
+                {% if quoted_item.item__category == values.item__category %}
+                {% if flag2 == 1 %}
+                {{ values.qty }}
+                {% set flag2 = 0 %}
+                {% else %}
+                , {{ values.qty }}  
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                sample./s
+            </td>
+            
+            <td>
+                {% for values in values %}
+                {% if quoted_item.item__category == values.item__category %}
+                {% if flag3 == 1 %}
+                {{ values.item__price_per_unit }}
+                {% set flag3 == 0 %}
+                {% else %}
+                , {{ values.item__price_per_unit }}
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </td>
+
+            <td>
+            {% for cost in cost %}
+            {% if quoted_item.item__category == cost.item__category %}
+            {% if flag4 == 1 %}
+            {{ cost.price }}
+            {% set flag4 == 0 %}
+            {% else %}
+            , {{ cost.price }}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            </td>
+            </tr>
+            {% endfor %}
+
+
+
+{% if total_discount %}
+<tr>
+    <td>Discount</td>
+    <td  colspan="2" rowspan="{{tax_count}}"></td>
+    <td>{{total_discount}}</td>
+</tr>
+{% endif %}
+
+            <tr>
+                <td><b>Total </b></td>
+                {% if total_discount %}
+                {% else %}
+                <td  colspan="2" rowspan="{{tax_count}}"></td>
+                {% endif %}
+                <td><b>{{total_cost}}</b></td>
+            </tr>
+
+
+            <tr>
+                {% if taxes_applied %}
+                {% for taxesapplied in taxes_applied %}
+                {% for surcharge in surcharge %}
+                {% if surcharge.id == taxesapplied.surcharge %}
+                <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
+                {% endif %}
+                {% endfor %}
+                <td>  {{taxesapplied.tax }} </td>
+            </tr>
+               
+            {% endfor %}
+  
+            {% endif %}
+            
+{% if delivery_charges %}
+<tr>
+    <td>Transportation</td>
+    <td>{{delivery_charges}}</td>
+</tr>
+{% endif %}
+            <tr>
+                <td><b>Total </b></td>
+                <td><b>{{grand_cost}}</b></td>
+            </tr>
+        
+        </table>
+
+    <div>
+        {% endblock %}
+        <!-- Dean is liable to change--> 
+
+</body>
+
+</html>
+
+

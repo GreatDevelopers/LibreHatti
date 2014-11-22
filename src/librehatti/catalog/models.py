@@ -225,6 +225,8 @@ class ChangeRequest(models.Model):
     previous_total = models.IntegerField()
     new_total = models.IntegerField()
     description = models.CharField(max_length=100)
+    initiator = models.CharField(max_length=50)
+    initiation_date = models.DateField(auto_now_add = True)
 
 
 class RequestSurchargeChange(models.Model):
@@ -238,3 +240,4 @@ class RequestStatus(models.Model):
     change_request = models.ForeignKey(ChangeRequest)
     confirmed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
+    request_response = models.DateField(null = True)

@@ -9,7 +9,7 @@ $(document).ready(function(){
              $('#id_quoteditem_set-' + sub_category_id +'-sub_category').empty();
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').removeAttr('disabled');
         parent_category_id = $(this).val();
-        request_url = '/bills/select_sub_category/?cat_id=' + parent_category_id ;
+        request_url = '/catalog/select_sub_category/?cat_id=' + parent_category_id ;
         $.ajax({
             url: request_url,
         datatype:'json',
@@ -26,7 +26,7 @@ $(document).ready(function(){
             $('#id_quoteditem_set-'+ item_id + '-item').empty();
         $('#id_quoteditem_set-'+ item_id + '-item').removeAttr('disabled');
         sub_category_id = $(this).val();
-        request_url = '/bills/select_item/?cat_id=' + sub_category_id ;
+        request_url = '/catalog/select_item/?cat_id=' + sub_category_id ;
         $.ajax({
             url: request_url,
         datatype:'json',

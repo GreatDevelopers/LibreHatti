@@ -76,8 +76,8 @@ class TaDa(models.Model):
        return self.suspense
 
 class QuotedSuspenseOrder(models.Model):
-    quote_order = models.ForeignKey('bills.QuotedOrder')
-    distance = models.IntegerField(default=0)
+    quoted_order = models.ForeignKey('bills.QuotedOrder')
+    distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)

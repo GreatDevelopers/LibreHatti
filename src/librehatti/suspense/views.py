@@ -14,6 +14,7 @@ from librehatti.catalog.models import HeaderFooter
 from librehatti.suspense.models import SuspenseClearance
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
+from librehatti.suspense.models import QuotedSuspenseOrder
 from librehatti.suspense.models import Vehicle
 from librehatti.suspense.models import Staff
 from librehatti.suspense.forms import Clearance_form
@@ -24,6 +25,9 @@ from librehatti.suspense.forms import TaDaSearch
 from librehatti.suspense.forms import SessionSelectForm
 from librehatti.suspense.forms import TransportForm1
 from librehatti.prints.helper import num2eng
+
+from librehatti.bills.models import QuotedOrder
+from librehatti.bills.models import QuotedItem
 
 from librehatti.voucher.models import VoucherId, Distribution
 from librehatti.voucher.models import FinancialSession, CalculateDistribution
@@ -480,10 +484,11 @@ def save_charges(request):
 @login_required
 def quoted_add_distance(request):
     old_post = request.session.get('old_post')
-    quote_order_id = request.session.get('quote_order_id')
+    quoted_order_id = request.session.get('quoted_order_id')
     items = []
+    parents = []
+    field_work = []
     suspense = 0
-    url = "/bills/quotation/bill/" + str(quote_order_id)
     for id in range(0,10):
         try:
             items.append(old_post['quoteditem_set-' + str(id) + '-item'])
@@ -492,27 +497,62 @@ def quoted_add_distance(request):
   
     for item in items:
         if item:
-            parents = Product.objects.values(
-              'category__parent__name').filter(id = item)
+            parents.append(QuotedItem.objects.values(
+              'item__category__parent__name','id').filter(item = item).\
+              filter(quoted_order = quoted_order_id))
     
     for parent in parents:
-        for key, value in parent.iteritems():
-            if value == 'Field Work':
-                suspense = 1
-                break
-
-    if old_post['mode_of_payment'] != '1' or suspense == 1:
+        for category in parent:
+            value = category['item__category__parent__name']
+            key = category['id']
+            if value.split(':')[1].upper() == 'FIELD WORK' or \
+                value.split(':')[1].upper() == ' FIELD WORK':
+                field_work.append(key)
+   
+    if field_work:
         if request.method == 'POST':
-            form = QuotedSuspenseForm(request.POST)
-            if form.is_valid:
-                form.save()
-                return HttpResponseRedirect(url)
+            request.session['old_post'] = old_post
+            request.session['quoted_order_id'] = quoted_order_id
+            return HttpResponseRedirect('/bills/quoted_bill_cal/')
         else:
-            form = QuotedSuspenseForm(initial = {'quote_order':quote_order_id,
-              'distance':0}) 
-            return render(request,'suspense/form.html',{'form':form,'test':'test'})
+            return render(request,'suspense/quoted_add_distance.html',{\
+                'quoted_order_id':quoted_order_id,})
+    
+    elif old_post['mode_of_payment'] != '1':
+        quoted_order=QuotedOrder.objects.get(id=quoted_order_id)
+        obj = QuotedSuspenseOrder(quoted_order=quoted_order,\
+            distance_estimated=0)
+        obj.save()
+        request.session['old_post'] = old_post
+        request.session['quoted_order_id'] = quoted_order_id
+        return HttpResponseRedirect('/bills/quoted_bill_cal/')
+
     else:
-        return HttpResponseRedirect(url)
+        request.session['old_post'] = old_post
+        request.session['quoted_order_id'] = quoted_order_id
+        return HttpResponseRedirect('/bills/quoted_bill_cal/')
+
+
+@login_required
+def quoted_save_distance(request):
+    quoted_order_id = request.GET['quoted_order_id']
+    distance = request.GET['distance']
+    
+    quoted_order = QuotedOrder.objects.get(pk=quoted_order_id)
+    
+    try:
+        suspense = QuotedSuspenseOrder.objects.get(quoted_order = quoted_order_id)
+        suspense.distance_estimated = distance
+        suspense.save()
+
+    except:
+        suspense = QuotedSuspenseOrder(quoted_order = quoted_order,\
+            distance_estimated = distance)
+        suspense.save()
+
+    return HttpResponse('')
+
+
 
 """
 This view is used to 
