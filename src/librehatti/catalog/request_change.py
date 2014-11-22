@@ -13,7 +13,7 @@ from librehatti.catalog.models import TaxesApplied
 
 from librehatti.catalog.forms import ChangeRequestForm
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 
 from django.core.mail import EmailMultiAlternatives
@@ -25,6 +25,8 @@ from django.contrib.auth.models import User
 from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _RECEIVER_EMAIL
 from datetime import date, datetime
+
+from librehatti.config import _ADMIN_GROUP
 
 @login_required
 def request_save(request):
@@ -141,6 +143,7 @@ def request_notify():
     return number_request
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def list_request(request):
     request_list = ChangeRequest.objects.values('id','description')
     final_request_list = []
@@ -159,6 +162,7 @@ def list_request(request):
     return render(request, 'catalog/list_request.html',{'list':final_request_list})
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def view_request(request):
     request_id = request.GET['id']
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
@@ -189,6 +193,7 @@ def view_request(request):
         'request_response':request_response})
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def accept_request(request):
     request_id = request.GET['id']
     today = datetime.now().date()
@@ -228,6 +233,7 @@ def accept_request(request):
     return HttpResponse('Success')
 
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
 def reject_request(request):
     request_id = request.GET['id']
     today = datetime.now().date()
@@ -265,3 +271,11 @@ def reject_request(request):
     msg.send()
 
     return HttpResponse('Success')
+
+
+@login_required
+def permission_denied(request):
+    error_type = "Permission Denied"
+    error = "You are not authorised to access it"
+    temp = {'type': error_type, 'message':error}
+    return render(request, 'error_page.html', temp)
