@@ -60,8 +60,9 @@ def add_categories(request):
             return HttpResponseRedirec('/')
     else:
         form = AddCategory()
+        request_status = request_notify()
     return render(request, 'addCategory.html', {
-            'form':form
+            'form':form,'request':request_status
     })
 
 
@@ -189,8 +190,9 @@ def order_added_success(request):
         ,'buyer__customer__address__street_address','buyer__customer__title',
         'buyer__customer__address__city','mode_of_payment__method',
         'cheque_dd_number','cheque_dd_date').filter(id=order_id)[0]
+    request_status = request_notify()
     return render(request,'catalog/order_added_success.html',{'details': details,
-        'order_id':order_id})
+        'order_id':order_id,'request':request_status})
 
 
 @login_required
@@ -218,15 +220,19 @@ def change_request(request):
                 'purchase_order__mode_of_payment__method',
                 'purchase_order__cheque_dd_number','purchase_order__cheque_dd_date').\
                 filter(purchase_order_of_session=purchase_order_of_session)[0]
+            request_status = request_notify()    
             return render(request,'catalog/change_form.html',{'details': details,
             'order_id':purchase_order_of_session,'session':session,\
-            'surcharge':surcharge,'bill':bill})
+            'surcharge':surcharge,'bill':bill,'request':request_status})
         else:
                 form = ChangeRequestForm()
                 errors = "No such purchase order number in selected session" 
-                temp = {"form" : form , "errors" : errors}
+                request_status = request_notify()
+                temp = {"form" : form , "errors" : errors,'request':request_status}
+                
                 return render(request, 'catalog/change_request.html', temp) 
     else:
         form = ChangeRequestForm()
+        request_status = request_notify()
         return render(request, 'catalog/change_request.html', \
-            {'form':form})
+            {'form':form,'request':request_status})

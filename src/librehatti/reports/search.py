@@ -5,18 +5,14 @@ This file contains the functions that will be used to generate results based on 
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
-
 from helper import get_query
-
 from django.shortcuts import render
-
+from librehatti.catalog.request_change import request_notify
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import Bill
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId
-
 from useraccounts.models import Customer
-
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -59,10 +55,11 @@ class SearchResult(View):
             for field in self.fields_list:
                 temporary.append(data[field])
             generated_data_list.append(temporary)
+        request_status = request_notify()    
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,'records':self.results,
-            }
+            'request':request_status}
 
         return render(request,'reports/search_result.html',temp)
 
