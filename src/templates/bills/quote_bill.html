@@ -1,76 +1,128 @@
-{% extends 'bill_base.html' %}  
+{% extends 'bill_base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load staticfiles %}
-            <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
 <meta charset='UTF-8'>
-        {% block title %}
-        <title>bill</title>
-        {% endblock %}
-    
+{% block title %}
+        <title>Performa Bill</title>
+{% endblock %}
+{% load set_var %} 
 </head>
 
 
 <body>
     {% block content %}
-        <div class="container">
-        <h2 > Bill</h2>
+
+    <div class="container">
+        
+        <h2>Performa Bill</h2>
     </div>
-     
-    <p ><span id='highlight'>STC No.</span> {{ STC_No }}</p>
-    <p ><span id='highlight'>PAN No.</span> {{ PAN_No }}</p>
-    <p><span id = "dated"><span id='highlight'>Dated : </span>
-    {{ purchase_order.date_time|date:"F j, Y"}} </span></p>
+    <div class = "bill-left">
+    <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
+    <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
+    <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} </p>
     <p> To, </p>
     <p> {{purchase_order.delivery_address}} </p>
-    <p> <span id='highlight'>Organisation:{{purchase_order.organisation.title}}</span></p>
-    <p> <span id='highlight'>Buyer Id: {{purchase_order.buyer_id}} </span></p>
-    <p> <span id='highlight'>Ref: Your Letter No. {{ L_No}}</span></p> 
-    <p> <span id='dated'><span id='highlight'>Dated : </span>{{ purchase_order.date_time|date:"F j, Y"}}
-    </span></p>
-    <p> <span id='highlight'>Site:</span> </p>
-
+    <p> {{buyer_name.company}}</p>
+    <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
+    {% if address.address__pin != 'None' %}
+    -{{address.address__pin}}, 
+    {% endif %}
+    {{address.address__province}}</p>
+    <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
+    <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
+    </div>
         <table class="data" border="1px">
             <tr>
-                <th> S.No. </th>
                 <th>Charges For Following</th>
                 <th>Description</th>
                 <th>Per</th>
                 <th>Total</th>
             </tr>
-
+            
             <tr>
-                {% if purchased_item %}
-                {% for purchaseditem in purchased_item %}
-                <td> {{ forloop.counter }} </td>
-                <td> {{ purchaseditem.item__name }} </td>
-                <td> {{ purchaseditem.qty }} sample./s  </td>
-                <td> {{ purchaseditem.item__price_per_unit }} </td>
-                <td>  {{purchaseditem.price }}</td>
+                {% for bill_values in bill_values %}
+                {% set flag1 = 1 %}
+                {% set flag2 = 1 %}
+                {% set flag3 = 1 %}
+                {% set flag4 = 1 %}
+            <td>
+                {{bill_values.0}}
+                {%for value in bill_values.1%}
+                {{value}}
+                {% endfor %}
+            </td>
+            <td>
+                {%for value in bill_values.2%}
+                {{value}}
+                {% endfor %}
+                sample./s
+            </td>
+            
+            <td>
+                {%for value in bill_values.3%}
+                {{value}}
+                {% endfor %}
+            </td>
+
+            <td>
+                {{bill_values.4}}
+            </td>
             </tr>
-   
             {% endfor %}
-  
-            {% endif %}
+
+
+
+{% if total_discount %}
+<tr>
+    <td>Discount</td>
+    <td  colspan="2" rowspan="{{tax_count}}"></td>
+    <td>{{total_discount}}</td>
+</tr>
+{% endif %}
 
             <tr>
                 <td><b>Total </b></td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
+                {% if total_discount %}
+                {% else %}
+                <td  colspan="2" rowspan="{{tax_count}}"></td>
+                {% endif %}
                 <td><b>{{total_cost}}</b></td>
+            </tr>
+
+
+            <tr>
+                {% if taxes_applied %}
+                {% for taxesapplied in taxes_applied %}
+                {% for surcharge in surcharge %}
+                {% if surcharge.id == taxesapplied.surcharge %}
+                <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
+                {% endif %}
+                {% endfor %}
+                <td>  {{taxesapplied.tax }} </td>
+            </tr>
+               
+            {% endfor %}
+  
+            {% endif %}
+            
+{% if delivery_charges %}
+<tr>
+    <td>Transportation</td>
+    <td>{{delivery_charges}}</td>
+</tr>
+{% endif %}
+            <tr>
+                <td><b>Total </b></td>
+                <td><b>{{grand_cost}}</b></td>
             </tr>
         
         </table>
-    </div>
 
-    <div id="base">
-        <!-- Dean is liable to change-->
-         
-    </div>
-    {% endblock %}          
+    <div>
+        {% endblock %}
+        <!-- Dean is liable to change--> 
+
 </body>
 
 </html>
-

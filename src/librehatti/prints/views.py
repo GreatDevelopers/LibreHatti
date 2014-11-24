@@ -203,6 +203,50 @@ def quoted_bill(request):
     'item__price_per_unit').order_by('item__category')
     cost = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
     values('price','item__category','item__name').order_by('item__category')
+    bill_values=[]
+    for category in quoted_item:
+        flag1=1
+        list=[]
+        list.append(category['item__category__name'])
+        item_names=[]
+        for item in quoted_item_odj:
+            if category['item__category'] == item['item__category']:
+                if flag1 == 1:
+                    item_names.append(':')
+                    item_names.append(item['item__name'])
+                    flag1=0
+                else:
+                    item_names.append(',')
+                    item_names.append(item['item__name'])
+        flag1=1
+        item_qty=[]
+        for qty in quoted_item_odj:
+            if category['item__category'] == qty['item__category']:
+                if flag1==1:
+                    item_qty.append(qty['qty'])
+                    flag1=0
+                else:
+                    item_qty.append(',')
+                    item_qty.append(qty['qty'])
+        flag1=1
+        price_unit=[]
+        for price_per in quoted_item_odj:
+            if category['item__category'] == price_per['item__category']:
+                if flag1==1:
+                    price_unit.append(price_per['item__price_per_unit'])
+                    flag1=0
+                else:
+                    price_unit.append(',')
+                    price_unit.append(price_per['item__price_per_unit'])
+        total=0
+        for itemcost in cost:
+            if category['item__category'] == itemcost['item__category']:
+                total=total+itemcost['price']
+        list.append(item_names)
+        list.append(item_qty)
+        list.append(price_unit)
+        list.append(total)
+        bill_values.append(list)
     taxes_applied = QuotedTaxesApplied.objects.\
     filter(quoted_order=quoted_order).values('surcharge','tax')
     taxes_applied_obj = QuotedTaxesApplied.objects.\
@@ -219,13 +263,19 @@ def quoted_bill(request):
     total_discount = quoted_order_obj['total_discount']
     taxes_applied_obj = QuotedTaxesApplied.objects.\
     filter(quoted_order = quoted_order).aggregate(Count('id'))
-    suspense_order = QuotedSuspenseOrder.objects.filter(quoted_order = quoted_order_id)
-    if suspense_order:
-        if total_discount == 0:
-            tax_count = taxes_applied_obj['id__count'] + 3
+    try:
+        suspense_order = QuotedSuspenseOrder.objects.values('distance_estimated').get(quoted_order = quoted_order_id)
+        if suspense_order['distance_estimated'] == 0:
+            if total_discount == 0:
+                tax_count = taxes_applied_obj['id__count'] + 2
+            else:
+                tax_count = taxes_applied_obj['id__count'] + 3
         else:
-            tax_count = taxes_applied_obj['id__count'] + 4
-    else:
+            if total_discount == 0:
+                tax_count = taxes_applied_obj['id__count'] + 3
+            else:
+                tax_count = taxes_applied_obj['id__count'] + 4
+    except:
         if total_discount == 0:
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
@@ -240,12 +290,12 @@ def quoted_bill(request):
     get(id = organisation_id)
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
-    return render(request, 'prints/quote_bill.html', {'stc_no' : admin_organisations,\
+    return render(request, 'bills/quote_bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'id':id,'ref':quoted_order_obj , 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
         'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
-        'tax_count':tax_count,'quoted_item':quoted_item,'values':quoted_item_odj,\
-        'cost':cost,'header':header,'footer': footer})
+        'tax_count':tax_count,'bill_values':bill_values,\
+        'header':header,'footer': footer})
