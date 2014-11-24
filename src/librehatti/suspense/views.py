@@ -25,10 +25,9 @@ from librehatti.suspense.forms import TaDaSearch
 from librehatti.suspense.forms import SessionSelectForm
 from librehatti.suspense.forms import TransportForm1
 from librehatti.prints.helper import num2eng
-
+from librehatti.catalog.request_change import request_notify
 from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedItem
-
 from librehatti.voucher.models import VoucherId, Distribution
 from librehatti.voucher.models import FinancialSession, CalculateDistribution
 from django.contrib.auth.decorators import login_required
@@ -139,22 +138,26 @@ def clearance_search(request):
                 form = Clearance_form(initial={'voucher_no': voucher,\
                 'session': session, 'car_taxi_charge':transport['total']})
                 clearance = 'enable'
+                request_status = request_notify()
                 return render(request, 'suspense/suspense_first.html', \
-                    {'form':form,'clearance':clearance})
+                    {'form':form,'clearance':clearance,'request':request_status})
             except:
                 form = SessionSelectForm()
                 errors = "No such voucher number in Transport" 
-                temp = {"SelectForm" : form , "errors" : errors}
+                request_status = request_notify()
+                temp = {"SelectForm" : form , "errors" : errors,'request':request_status}
                 return render(request, 'voucher/clsessionselect.html', temp) 
         else:
                 form = SessionSelectForm()
-                errors = "No such voucher number in selected session" 
-                temp = {"SelectForm" : form , "errors" : errors}
+                errors = "No such voucher number in selected session"
+                request_status = request_notify() 
+                temp = {"SelectForm" : form , "errors" : errors,'request':request_status}
                 return render(request, 'voucher/clsessionselect.html', temp) 
     else:
         form = SessionSelectForm()
+        request_status = request_notify()
         return render(request, 'suspense/suspense_first.html', \
-            {'form':form}) 
+            {'form':form,'request':request_status}) 
 
 
 @login_required
@@ -165,7 +168,8 @@ def clearance(request):
                     0, 'car_taxi_charge':0,'boring_charge_external':0,
                     'boring_charge_internal':0,'Test_date':datetime.date.today
                      })
-        temp = {'ref_no':ref_no,'cl_report':cl_report,}
+        request_status = request_notify()
+        temp = {'ref_no':ref_no,'cl_report':cl_report,'request':request_status}
         return render(request, 'suspense/suspenseform.html',temp)
 
 
@@ -212,6 +216,7 @@ def clearance_result(request):
                      lab_testing_staff,field_testing_staff=field_testing_staff,
                      test_date=test_date)
                 obj.save()
+            request_status = request_notify()    
             temp = {'session':session,'voucher_no': voucher_no,\
                     'work_charge':work_charge ,'labour_charge':
                     labour_charge, 'car_taxi_charge':car_taxi_charge,
@@ -219,7 +224,7 @@ def clearance_result(request):
                     'boring_charge_internal':boring_charge_internal,
                     'lab_testing_staff':lab_testing_staff, 'field_testing_staff':
                     field_testing_staff, 'test_date':test_date,\
-                    'clear_date':clear_date}
+                    'clear_date':clear_date,'request':request_status}
             return render(request, 'suspense/clearance_result.html', temp)
         else:
             voucher = request.POST['voucher_no']
@@ -231,8 +236,9 @@ def clearance_result(request):
             'session': session, 'car_taxi_charge':transport['total']})
             clearance = 'enable'
             message = "Fields are mandatory"
+            request_status = request_notify()
             return render(request, 'suspense/suspense_first.html', \
-                {'form':form,'clearance':clearance,'message':message})
+                {'form':form,'clearance':clearance,'message':message,'request':request_status})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.clearance_search'))
 
@@ -286,6 +292,7 @@ def with_transport(request):
         total_in_words = num2eng(total)
         rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    request_status = request_notify()
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
@@ -300,7 +307,7 @@ def with_transport(request):
                 'othercharge':othercharge, 'total':total,\
                 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid, 'rowspan':rowspan})
+                'charges':voucherid, 'rowspan':rowspan,'request':request_status})
 
 
 @login_required
@@ -351,6 +358,7 @@ def withouttransport(request):
         total_in_words = num2eng(total)
         rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    request_status = request_notify()
     return render(request,'suspense/withouttransport.html', {'header':header,\
                 'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
@@ -364,7 +372,7 @@ def withouttransport(request):
                 'address':voucherid,'othercharge':othercharge ,'ta_da':ta_da_total,\
                 'total':total,'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],'charges':voucherid,\
-                'rowspan':rowspan})
+                'rowspan':rowspan,'request':request_status})
 
 
 
@@ -400,6 +408,7 @@ def without_other_charges(request):
     get(voucher_no=number, session=financialsession['id'])
     total_in_words = num2eng(calculate_distribution['total'])
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    request_status = request_notify()
     return render(request,'suspense/wtransport.html', {'header':header,\
                 'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
@@ -411,7 +420,7 @@ def without_other_charges(request):
                 'purchase_order':voucherid['purchase_order'],\
                 'order_date':voucherid['purchase_order__date_time'].date(),\
                 'address':voucherid, 'total_in_words':total_in_words,\
-                'test_date':suspenseclearance['test_date'],'charges':voucherid})
+                'test_date':suspenseclearance['test_date'],'charges':voucherid,'request':request_status})
 
 
 @login_required
@@ -453,6 +462,7 @@ def other_charges(request):
     suspenseclearance['labour_charge']
     total = other_charges + ta_da_total
     header = HeaderFooter.objects.values('header').get(is_active=True)
+    request_status = request_notify()
     return render(request,'suspense/othercharge.html', {'header':header,\
                 'voucher_no':number,\
                 'date':suspenseclearance['clear_date'],\
@@ -461,7 +471,7 @@ def other_charges(request):
                 'order_date':voucherid['purchase_order__date_time'].date(),\
                 'address':voucherid, 'ta_da':ta_da_total, 'boring_charges':boring_charges,\
                 'total':total, 'other_charges':other_charges,'transport_id':transport['id'],\
-                'date_of_generation':transport['date_of_generation']})
+                'date_of_generation':transport['date_of_generation'],'request':request_status})
 
 
 @login_required
@@ -612,22 +622,26 @@ def sessionselect(request):
                 Transport = TransportForm1()
                 messages = "Transport Bill for Voucher Number"+" "+ voucher +\
                 " and Session"+" "+session
+                request_status = request_notify()
                 temp = {"TransportForm" : Transport, "session" : session,\
-                "voucher" : voucher, "messages" : messages}
+                "voucher" : voucher, "messages" : messages,'request':request_status}
                 return render(request, 'suspense/transportform.html', temp)
             else:
                 form = SessionSelectForm()
+                request_status = request_notify()
                 errors = "No such voucher number in selected session" 
-                temp = {"SelectForm" : form , "errors" : errors}
+                temp = {"SelectForm" : form , "errors" : errors,'request':request_status}
                 return render(request, 'voucher/sessionselect.html', temp)  
         else:
             form = SessionSelectForm()
-            temp = {"SelectForm" : form}
+            request_status = request_notify()
+            temp = {"SelectForm" : form,'request':request_status}
             return render(request, 'voucher/sessionselect.html', temp)
 
     else:
         form = SessionSelectForm()
-        temp = {"SelectForm" : form}
+        request_status = request_notify()
+        temp = {"SelectForm" : form,'request':request_status}
         return render(request, 'voucher/sessionselect.html', temp)
 """
 This view is used to generate the Transport Bill 
@@ -682,6 +696,7 @@ def transportbill(request):
                 zip_data = zip(date, kilometers, transport_total)
                 header = HeaderFooter.objects.values('header').get(is_active=True)
                 footer = HeaderFooter.objects.values('footer').get(is_active=True)
+                request_status = request_notify()
                 return render(request,'suspense/transport_bill.html', 
                        {'words' : num2eng(total_amount), 
                         'total' : total , 'header':header, 'footer':footer,
@@ -689,7 +704,7 @@ def transportbill(request):
                         "voucherid": voucher, "temp" : temp,
                         'zip_data': zip_data, 'total_amount': total_amount,
                         'date_of_generation' : date_of_generation,
-                        'vehicle' : vehicle}) 
+                        'vehicle' : vehicle,'request':request_status}) 
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
@@ -699,13 +714,15 @@ def transportbill(request):
             if object:
                 TransportForm = TransportForm1(request.POST)
                 message = " Fields are mandatory"
+                request_status = request_notify()
                 temp = {"TransportForm" : TransportForm, "session" : session,\
-                "voucher" : voucher, "message" : message}
+                "voucher" : voucher, "message" : message,'request':request_status}
                 return render(request, 'suspense/transportform.html', temp)
              
     else:
         form = TransportForm1()
-    return render(request, 'suspense/transportform.html', {'TransportForm':form}) 
+        request_status = request_notify()
+    return render(request, 'suspense/transportform.html', {'TransportForm':form,'request':request_status}) 
 
 """
 This view is used to generate TADA bill
@@ -774,18 +791,20 @@ def tada_result(request):
             tada_amount_in_words = tada_obj['tada_amount']
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
+            request_status = request_notify()
             return render(request, 'suspense/tada_result.html',{\
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj,'purchase_order_id': voucher,\
                 'list_staff':list_staff,'header':header,'footer':footer,
-                'words' : num2eng(int(tada_amount)),'total':tada_total })
+                'words' : num2eng(int(tada_amount)),'total':tada_total,'request':request_status })
         else:    
             session = request.POST['session']
             voucher = request.POST['voucher_no']
             form = TaDaForm(request.POST,initial = {'voucher_no':voucher, 'session': session})
             message = 'Fields are mandatory'
             tada = 'enable'
-            return render(request, 'suspense/form.html',{'form':form,'message':message})
+            request_status = request_notify()
+            return render(request, 'suspense/form.html',{'form':form,'message':message,'request':request_status})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
 """
@@ -804,22 +823,26 @@ def tada_order_session(request):
             if object:
                     form = TaDaForm(initial = {'voucher_no':voucher, 'session': session})
                     tada = 'enable'
+                    request_status = request_notify()
                     return render(request, 'suspense/form.html', \
-                    {'form':form,'tada':tada})
+                    {'form':form,'tada':tada,'request':request_status})
             else:
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session"
-                temp = {"form" : form , "errors" : errors}
+                temp = {"form" : form , "errors" : errors,'request':request_status}
+                request_status = request_notify()
                 return render(request, 'suspense/form.html',\
                 temp)
         else:
             form = SessionSelectForm()
+            request_status = request_notify()
             return render(request, 'suspense/form.html', \
-            {'form':form})                 
+            {'form':form,'request':request_status})
     else:
         form = SessionSelectForm()
+        request_status = request_notify()
         return render(request, 'suspense/form.html', \
-            {'form':form}) 
+            {'form':form,'request':request_status}) 
 
 """
 This view is used to fetch and display the data required to mark the suspense order as cleared 
@@ -843,8 +866,8 @@ def mark_clear(request):
         for suspense_var,voucher_var in list_user_clr:
             final_list = zip(suspense_var,voucher_var)
             list_details.append(final_list)    
-    
-        return render(request,'suspense/mark_suspense_clear.html',{'listed':list_details})  
+        request_status = request_notify()
+        return render(request,'suspense/mark_suspense_clear.html',{'listed':list_details,'request':request_status})  
 
 """
 This view updates the status of given order as cleared
