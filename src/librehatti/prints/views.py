@@ -15,12 +15,14 @@ from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import SuspenseOrder
 from django.contrib.auth.decorators import login_required
+from librehatti.catalog.request_change import request_notify
 from django.core.urlresolvers import reverse
 from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedBill
 from librehatti.bills.models import QuotedTaxesApplied
 from librehatti.bills.models import QuotedItem
 from librehatti.suspense.models import QuotedSuspenseOrder
+
 
 @login_required
 def lab_report(request):
@@ -31,9 +33,11 @@ def lab_report(request):
     category = request.GET['sub_category']
     start_date = request.GET['start_date']
     end_date = request.GET['end_date']
+    
     if start_date > end_date:
         error_type = "Date range error"
         error = "Start date cannot be greater than end date"
+        request_status = request_notify()
         temp = {'type': error_type, 'message':error}
         return render(request,'error_page.html',temp)
 
@@ -49,10 +53,10 @@ def lab_report(request):
     total = PurchasedItem.objects.filter(purchase_order__date_time__range
         = (start_date,end_date),item__category=category).\
         aggregate(Sum('price')).get('price__sum', 0.00)
-
+    request_status = request_notify()
     return render(request, 'prints/lab_reports.html', { 'purchase_item':
                    purchase_item,'start_date':start_date,'end_date':end_date,
-                  'total_cost':total,'category_name':category_name})
+                  'total_cost':total,'category_name':category_name,'request':request_status})
 
 @login_required
 def show_form(request):
@@ -65,8 +69,10 @@ def show_form(request):
             return HttpResponseRedirect('/')
     else:
          form = LabReportForm()
+    request_status= request_notify()
+
     return render(request, 'prints/show_form.html', {
-              'form':form
+              'form':form,'request':request_status
     })
 
 @login_required
