@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from librehatti.catalog.request_change import request_notify
 
 class GenerateRegister(View):
 
@@ -103,11 +104,11 @@ class GenerateRegister(View):
             number_of_fields -= 1
             number_of_fields = number_of_fields - self.decrement_field
 
-
+        request_status = request_notify()
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title, 'number_of_fields':number_of_fields,'get_data':
-            self.get_data, 'save_option': self.save_option
+            self.get_data, 'save_option': self.save_option,'request':request_status
             }
 
         try:
