@@ -122,15 +122,19 @@ def request_save(request):
             update(change_request=change_request,confirmed=0,cancelled=0,\
                 request_response=None)
         except:
+        obj = RequestStatus(change_request=change_request)
+        obj.save()
+        request_status = request_notify()
+        return render(request, 'catalog/request_success.html',{'request':request_status })
             obj = RequestStatus(change_request=change_request)
             obj.save()
 
         return render(request, 'catalog/request_success.html')
-
     else:
         form = ChangeRequestForm()
+        request_status = request_notify()
         return render(request, 'catalog/change_request.html', \
-            {'form':form})
+            {'form':form,'request':request_status})
 
 def request_notify():
     notify = RequestStatus.objects.filter(confirmed=False).\
