@@ -12,7 +12,7 @@ from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder, Staff
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-
+from librehatti.catalog.request_change import request_notify
 """
 This function calculates the session id and then initialise or increment 
 voucher number according to the previous purchase order's session id
@@ -264,7 +264,8 @@ def voucher_show(request):
             voucher_no_list.append(value['voucher_no'])
             voucher_obj_distinct.append(value)
     header = HeaderFooter.objects.values('header').order_by('-id')[0]
-    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header})
+    request_status = request_notify()
+    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header,'request':request_status})
 
 
 @login_required
