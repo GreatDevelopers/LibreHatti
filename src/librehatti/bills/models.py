@@ -12,14 +12,18 @@ from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
 
 from tinymce.models import HTMLField
+from django.core.urlresolvers import reverse
 
 class QuoteNote(models.Model):
     note = HTMLField()
     is_active = models.BooleanField(default = False)
     def save(self, *args, **kwargs):
         if self.is_active == True:
-            if QuoteNote.objects.filter(is_active=1):
-                raise ValidationError('Previous Active Note')
+            temp = QuoteNote.objects.filter(is_active=1)
+            if temp:
+                QuoteNote.objects.filter(is_active=1).\
+                update(is_active=0)
+                super(QuoteNote, self).save(*args, **kwargs)
             else:
                 super(QuoteNote, self).save(*args, **kwargs)
         else:
@@ -59,7 +63,7 @@ class QuotedItem(models.Model):
             super(QuotedItem,self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return '%s' % (self.item) + ' - ' '%s' % (self.quote_order)
+        return '%s' % (self.item) + ' - ' '%s' % (self.quoted_order)
 
  
 class QuotedTaxesApplied(models.Model):

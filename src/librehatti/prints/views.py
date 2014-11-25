@@ -360,5 +360,6 @@ def quoted_bill(request):
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
         'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
-        'tax_count':tax_count,'quoted_item':quoted_item,'values':quoted_item_odj,\
-        'cost':cost,'header':header,'footer': footer,'note':note})
+        'tax_count':tax_count,'bill_values':bill_values,\
+        'quoted_order_id':quoted_order_id,\
+        'header':header,'footer': footer,'note':note})
