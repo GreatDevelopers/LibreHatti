@@ -198,8 +198,11 @@ class HeaderFooter(models.Model):
     is_active = models.BooleanField(default = False)
     def save(self, *args, **kwargs):
         if self.is_active == True:
-            if HeaderFooter.objects.filter(is_active=1):
-                raise ValidationError('Previous Active Header and Footer')
+            temp = HeaderFooter.objects.filter(is_active=1)
+            if temp:
+                HeaderFooter.objects.filter(is_active=1).\
+                update(is_active=0)
+                super(HeaderFooter, self).save(*args, **kwargs)
             else:
                 super(HeaderFooter, self).save(*args, **kwargs)
         else:
