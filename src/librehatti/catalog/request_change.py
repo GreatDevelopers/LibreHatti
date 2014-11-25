@@ -143,7 +143,8 @@ def request_notify():
     return number_request
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
+    or u.is_superuser, login_url='/catalog/permission_denied/')
 def list_request(request):
     request_list = ChangeRequest.objects.values('id','description')
     final_request_list = []
@@ -162,7 +163,8 @@ def list_request(request):
     return render(request, 'catalog/list_request.html',{'list':final_request_list})
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
+    or u.is_superuser, login_url='/catalog/permission_denied/')
 def view_request(request):
     request_id = request.GET['id']
     previous_total = ChangeRequest.objects.values('previous_total').filter(id = request_id)[0]
@@ -193,7 +195,8 @@ def view_request(request):
         'request_response':request_response})
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
+    or u.is_superuser, login_url='/catalog/permission_denied/')
 def accept_request(request):
     request_id = request.GET['id']
     today = datetime.now().date()
@@ -233,7 +236,8 @@ def accept_request(request):
     return HttpResponse('Success')
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1, login_url='/catalog/permission_denied/')
+@user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
+    or u.is_superuser, login_url='/catalog/permission_denied/')
 def reject_request(request):
     request_id = request.GET['id']
     today = datetime.now().date()

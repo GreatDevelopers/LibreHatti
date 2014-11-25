@@ -9,13 +9,6 @@ from librehatti.config import _PARENT_CATEGORY
 from librehatti.config import _SUB_CATEGORY
 from librehatti.config import _ITEM
 
-class ConfirmForm(forms.Form):
-    item = forms.CharField()
-    qty = forms.IntegerField()
-    discount = forms.IntegerField()
-    mode_of_payment = forms.ModelChoiceField(queryset=ModeOfPayment.objects.all())
-
-
 class BuyerForm(forms.ModelForm):
     buyer = make_ajax_field(QuotedOrder, 'buyer', 'buyer')
 
