@@ -90,6 +90,60 @@ def bill(request):
     """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.filter(id = id)
+    purchased_item = PurchasedItem.objects.filter(purchase_order=purchase_order).\
+    values('item__category__name',\
+    'item__category').\
+    order_by('item__category').distinct()
+    purchased_item_odj = PurchasedItem.objects.filter(purchase_order=purchase_order).\
+    values('item__name',\
+    'item__category', 'qty',\
+    'item__price_per_unit').order_by('item__category')
+    cost = PurchasedItem.objects.filter(purchase_order=purchase_order).\
+    values('price','item__category','item__name').order_by('item__category')
+    bill_values=[]
+    for category in purchased_item:
+        flag1=1
+        list=[]
+        list.append(category['item__category__name'])
+        item_names=[]
+        for item in purchased_item_odj:
+            if category['item__category'] == item['item__category']:
+                if flag1 == 1:
+                    item_names.append(':')
+                    item_names.append(item['item__name'])
+                    flag1=0
+                else:
+                    item_names.append(',')
+                    item_names.append(item['item__name'])
+        flag1=1
+        item_qty=[]
+        for qty in purchased_item_odj:
+            if category['item__category'] == qty['item__category']:
+                if flag1==1:
+                    item_qty.append(qty['qty'])
+                    flag1=0
+                else:
+                    item_qty.append(',')
+                    item_qty.append(qty['qty'])
+        flag1=1
+        price_unit=[]
+        for price_per in purchased_item_odj:
+            if category['item__category'] == price_per['item__category']:
+                if flag1==1:
+                    price_unit.append(price_per['item__price_per_unit'])
+                    flag1=0
+                else:
+                    price_unit.append(',')
+                    price_unit.append(price_per['item__price_per_unit'])
+        total=0
+        for itemcost in cost:
+            if category['item__category'] == itemcost['item__category']:
+                total=total+itemcost['price']
+        list.append(item_names)
+        list.append(item_qty)
+        list.append(price_unit)
+        list.append(total)
+        bill_values.append(list)
     taxes_applied = TaxesApplied.objects.\
     filter(purchase_order=purchase_order).values('surcharge','tax')
     taxes_applied_obj = TaxesApplied.objects.\
@@ -106,12 +160,22 @@ def bill(request):
     total_discount = purchase_order_obj['total_discount']
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order = purchase_order).aggregate(Count('id'))
-    suspense_order = SuspenseOrder.objects.filter(purchase_order = id)
+    suspense_order = SuspenseOrder.objects.values('distance_estimated').filter(purchase_order = id)
+    #return HttpResponse(suspense_order  )
+    total_distance=0
     if suspense_order:
-        if total_discount == 0:
-            tax_count = taxes_applied_obj['id__count'] + 3
+        for distance in suspense_order:
+            total_distance=total_distance+distance['distance_estimated']
+        if total_distance==0:
+            if total_discount == 0:
+                tax_count = taxes_applied_obj['id__count'] + 2
+            else:
+                tax_count = taxes_applied_obj['id__count'] + 3
         else:
-            tax_count = taxes_applied_obj['id__count'] + 4
+            if total_discount == 0:
+                tax_count = taxes_applied_obj['id__count'] + 3
+            else:
+                tax_count = taxes_applied_obj['id__count'] + 4
     else:
         if total_discount == 0:
             tax_count = taxes_applied_obj['id__count'] + 2
@@ -125,27 +189,17 @@ def bill(request):
     customer_obj = Customer.objects.values('company').get(user = buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
     get(id = organisation_id)
-    voucherid = VoucherId.objects.values('purchased_item__item__category__name',\
-    'purchased_item__item__category','voucher_no', 'session').\
-    filter(purchase_order=purchase_order).distinct().\
-    order_by('purchased_item__item__category')
-    voucherid_obj = VoucherId.objects.values('purchased_item__item__name',\
-    'purchased_item__item__category', 'purchased_item__qty',\
-    'purchased_item__item__price_per_unit').filter(purchase_order=purchase_order).\
-    order_by('purchased_item__item__category')
-    calculatedistribution = CalculateDistribution.objects.\
-    values('voucher_no','total','session').all()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'id':id,'ref':purchase_order_obj , 'date':date,\
-        'purchase_order':purchase_order, 'purchased_item': voucherid,'address':address,\
+        'purchase_order':purchase_order,'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
         'buyer': purchase_order_obj, 'buyer_name': customer_obj, 'site': purchase_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
-        'tax_count':tax_count, 'values':voucherid_obj,\
-        'cost':calculatedistribution,'header':header,'footer': footer})
+        'tax_count':tax_count,'bill_values':bill_values,\
+        'header':header,'footer': footer})
 
 
 @login_required
@@ -291,11 +345,12 @@ def quoted_bill(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'bills/quote_bill.html', {'stc_no' : admin_organisations,\
-        'pan_no' : admin_organisations,'id':id,'ref':quoted_order_obj , 'date':date,\
+        'pan_no' : admin_organisations,'ref':quoted_order_obj , 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
         'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count,'bill_values':bill_values,\
+        'quoted_order_id':quoted_order_id,\
         'header':header,'footer': footer})
