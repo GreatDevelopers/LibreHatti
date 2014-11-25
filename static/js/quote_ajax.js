@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('.sub_category').attr('disabled', 'disabled');
     $('.item').attr('disabled', 'disabled');
     
-    $('.parent_category').change(function(){
+    $('.parent_category').click(function(){
         sub_category_id = this.id.split("-")[1]
              $('#id_quoteditem_set-' + sub_category_id +'-sub_category').empty();
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').removeAttr('disabled');
@@ -21,7 +21,7 @@ $(document).ready(function(){
         })
     })
     
-    $('.sub_category').change(function(){
+    $('.sub_category').click(function(){
         item_id = this.id.split("-")[1]
             $('#id_quoteditem_set-'+ item_id + '-item').empty();
         $('#id_quoteditem_set-'+ item_id + '-item').removeAttr('disabled');
