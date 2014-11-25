@@ -11,6 +11,24 @@ from librehatti.config import _IS_DEBIT
 from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
 
+from tinymce.models import HTMLField
+
+class QuoteNote(models.Model):
+    note = HTMLField()
+    is_active = models.BooleanField(default = False)
+    def save(self, *args, **kwargs):
+        if self.is_active == True:
+            if QuoteNote.objects.filter(is_active=1):
+                raise ValidationError('Previous Active Note')
+            else:
+                super(QuoteNote, self).save(*args, **kwargs)
+        else:
+            super(QuoteNote, self).save(*args, **kwargs)
+    def __unicode__(self):
+        return '%s' % (self.id)
+
+    class Meta:
+        verbose_name_plural = "Quoted Order Note"
 
 class QuotedOrder(models.Model):
     buyer = models.ForeignKey(User,verbose_name= _BUYER)

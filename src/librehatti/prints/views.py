@@ -21,6 +21,8 @@ from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedBill
 from librehatti.bills.models import QuotedTaxesApplied
 from librehatti.bills.models import QuotedItem
+from librehatti.bills.models import QuoteNote
+
 from librehatti.suspense.models import QuotedSuspenseOrder
 
 
@@ -350,13 +352,13 @@ def quoted_bill(request):
     get(id = organisation_id)
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
+    note = QuoteNote.objects.values('note').get(is_active=True)
     return render(request, 'bills/quote_bill.html', {'stc_no' : admin_organisations,\
-        'pan_no' : admin_organisations,'ref':quoted_order_obj , 'date':date,\
+        'pan_no' : admin_organisations,'id':id,'ref':quoted_order_obj , 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
         'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
-        'tax_count':tax_count,'bill_values':bill_values,\
-        'quoted_order_id':quoted_order_id,\
-        'header':header,'footer': footer})
+        'tax_count':tax_count,'quoted_item':quoted_item,'values':quoted_item_odj,\
+        'cost':cost,'header':header,'footer': footer,'note':note})
