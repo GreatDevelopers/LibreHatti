@@ -116,8 +116,16 @@
         </table>
 
     <div>
+{{note.note | safe}}
         {% endblock %}
-        <!-- Dean is liable to change--> 
+        {% block extracontent %}
+        <div id = "declaration">
+            I/We here by agree to the terms & conditions as mentioned above.
+        </div>
+        <div id="declare-sign">
+           <br>(Signature of Client/Deptt. Representative)
+        </div>
+    {% endblock %}        <!-- Dean is liable to change--> 
 
 </body>
 
