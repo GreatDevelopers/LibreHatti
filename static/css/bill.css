@@ -90,3 +90,12 @@ table{
 	float: right;
 	font-weight: bold;
 }
+
+#declaration{
+	float:left;
+}
+
+#declare-sign{
+	float:right;
+	margin-top: 30px;
+}
