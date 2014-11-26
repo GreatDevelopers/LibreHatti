@@ -4,11 +4,8 @@ from django.contrib.auth.admin import *
 from librehatti.bills.forms import ItemSelectForm
 from librehatti.catalog.actions import mark_inactive, mark_active
 from django.http import HttpResponse,HttpResponseRedirect
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import PurchasedItem
 from librehatti.bills.forms import BuyerForm
 
-from tinymce.widgets import TinyMCE
 
 import itertools
 admin.autodiscover() 
@@ -47,15 +44,9 @@ class QuotedOrderAdmin(admin.ModelAdmin):
         request.session['quoted_order_id'] = obj.id
         return HttpResponseRedirect('/suspense/quoted_add_distance/')      
 
-class QuoteNoteAdmin(admin.ModelAdmin):
-    Model = QuoteNote
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        if db_field.name in ('note'):
-            return db_field.formfield(widget=TinyMCE(
-                attrs={'cols': 120, 'rows': 10},
-                mce_attrs={'external_link_list_url': reverse('tinymce.views.flatpages_link_list')},
-            ))
-        return super(QuoteNoteAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+class NoteLineAdmin(admin.ModelAdmin):
+    Model = NoteLine
 
-admin.site.register(QuoteNote,QuoteNoteAdmin)   
+
+admin.site.register(NoteLine,NoteLineAdmin)
 admin.site.register(QuotedOrder, QuotedOrderAdmin)

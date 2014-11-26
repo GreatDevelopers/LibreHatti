@@ -11,28 +11,18 @@ from librehatti.config import _IS_DEBIT
 from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
 
-from tinymce.models import HTMLField
 from django.core.urlresolvers import reverse
 
-class QuoteNote(models.Model):
-    note = HTMLField()
-    is_active = models.BooleanField(default = False)
-    def save(self, *args, **kwargs):
-        if self.is_active == True:
-            temp = QuoteNote.objects.filter(is_active=1)
-            if temp:
-                QuoteNote.objects.filter(is_active=1).\
-                update(is_active=0)
-                super(QuoteNote, self).save(*args, **kwargs)
-            else:
-                super(QuoteNote, self).save(*args, **kwargs)
-        else:
-            super(QuoteNote, self).save(*args, **kwargs)
+class NoteLine(models.Model):
+    note = models.CharField(max_length=400)
+    is_permanent = models.BooleanField(default = False)
+
     def __unicode__(self):
-        return '%s' % (self.id)
+        return '%s' % (self.note)
 
     class Meta:
         verbose_name_plural = "Quoted Order Note"
+
 
 class QuotedOrder(models.Model):
     buyer = models.ForeignKey(User,verbose_name= _BUYER)
@@ -81,8 +71,8 @@ class QuotedBill(models.Model):
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
     amount_received = models.IntegerField()
-   
 
 
-
-
+class QuotedOrderNote(models.Model):
+    quoted_order = models.ForeignKey(QuotedOrder)
+    note = models.CharField(max_length=400)
