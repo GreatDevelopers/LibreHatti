@@ -51,3 +51,9 @@ class ItemSelectForm(forms.ModelForm):
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
 
+
+class SelectNoteForm(forms.Form):
+    quoted_order = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    note_line = forms.ModelMultipleChoiceField(widget=forms.\
+        CheckboxSelectMultiple(attrs={'class': 'note_checkbox'}),\
+        queryset=NoteLine.objects.filter(is_permanent=0))

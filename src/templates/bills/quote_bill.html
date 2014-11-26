@@ -116,7 +116,51 @@
         </table>
 
     <div>
-{{note.note | safe}}
+    <div class="position">
+    <b>NOTE:</b>
+    </div>
+    <div style="clear:both;">
+    </div>
+    <div id="notelist">
+    <ol>
+        {% for value in permanent_note %}
+        <li>{{value.note}}</li>
+        {% endfor %}
+        {% for value in quoted_note %}
+        <li>{{value.note}}</li>
+        {% endfor %}
+        <li>Bank Details For Online Payment:</li>
+    </ol>
+    </div>
+    <div id="account">
+        <table>
+            <tr>
+                <td>Name of Acount Holder</td>
+                <td>:</td>
+                <td>{{account_holder}}</td>
+            </tr>
+            <tr>
+                <td>Name of Bank</td>
+                <td>:</td>
+                <td>{{name_of_bank}}</td>
+            </tr>
+            <tr>
+                <td>Branch</td>
+                <td>:</td>
+                <td>{{branch}}</td>
+            </tr>
+            <tr>
+                <td>Online Account No.</td>
+                <td>:</td>
+                <td>{{online_account}}</td>
+            </tr>
+            <tr>
+                <td>IFSC Code No.</td>
+                <td>:</td>
+                <td>{{ifsc_code}}</td>
+            </tr>
+        </table>
+    </div>
         {% endblock %}
         {% block extracontent %}
         <div id = "declaration">

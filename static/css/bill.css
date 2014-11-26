@@ -99,3 +99,16 @@ table{
 	float:right;
 	margin-top: 30px;
 }
+
+#notelist{
+	position: relative;
+}
+
+#account{
+	margin-left: 40px;
+	width: 80%;
+}
+
+#account td{
+	text-align: left;
+}
