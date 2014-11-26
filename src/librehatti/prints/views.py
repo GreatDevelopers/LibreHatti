@@ -30,7 +30,7 @@ from librehatti.config import _ACCOUNT_HOLDER
 from librehatti.config import _NAME_OF_BANK
 from librehatti.config import _BRANCH
 from librehatti.config import _ONLINE_ACCOUNT
-from librehatti.config import _IFC_CODE
+from librehatti.config import _IFSC_CODE
 
 
 @login_required
@@ -365,7 +365,7 @@ def quoted_bill(request):
     name_of_bank = _NAME_OF_BANK
     branch = _BRANCH
     online_account = _ONLINE_ACCOUNT
-    ifc_code = _IFC_CODE
+    ifsc_code = _IFSC_CODE
     return render(request, 'bills/quote_bill.html', {'stc_no' : admin_organisations,\
         'pan_no' : admin_organisations,'ref':quoted_order_obj , 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
@@ -378,4 +378,4 @@ def quoted_bill(request):
         'header':header,'footer': footer,'permanent_note':permanent_note,\
         'quoted_note':quoted_note,'account_holder':account_holder,\
         'name_of_bank':name_of_bank,'branch':branch,\
-        'online_account':online_account,'ifc_code':ifc_code})
+        'online_account':online_account,'ifsc_code':ifsc_code})
