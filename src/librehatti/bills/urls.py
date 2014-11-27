@@ -7,5 +7,6 @@ urlpatterns = patterns('librehatti.bills.views',
         url(r'^select_note/','select_note'),
         url(r'^select_note_save/','select_note_save'),
         url(r'^new_note_line/','new_note_line'),
-        url(r'^delete_note/','delete_note')
+        url(r'^delete_note/','delete_note'),
+        url(r'^quoted_order_of_session/','quoted_order_of_session')
 )

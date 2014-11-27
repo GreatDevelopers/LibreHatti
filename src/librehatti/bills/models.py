@@ -10,7 +10,7 @@ from librehatti.config import _DELIVERY_ADDRESS
 from librehatti.config import _IS_DEBIT
 from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
-
+from librehatti.voucher.models import FinancialSession
 from django.core.urlresolvers import reverse
 
 class NoteLine(models.Model):
@@ -55,7 +55,12 @@ class QuotedItem(models.Model):
     def __unicode__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.quoted_order)
 
- 
+class QuotedOrderofSession(models.Model):
+    quoted_order = models.ForeignKey(QuotedOrder)
+    quoted_order_session = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+
+
 class QuotedTaxesApplied(models.Model):
     quoted_order = models.ForeignKey(QuotedOrder)
     surcharge = models.ForeignKey(Surcharge)
