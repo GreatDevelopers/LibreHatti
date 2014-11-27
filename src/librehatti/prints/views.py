@@ -23,6 +23,7 @@ from librehatti.bills.models import QuotedTaxesApplied
 from librehatti.bills.models import QuotedItem
 from librehatti.bills.models import NoteLine
 from librehatti.bills.models import QuotedOrderNote
+from librehatti.bills.models import QuotedOrderofSession
 
 from librehatti.suspense.models import QuotedSuspenseOrder
 
@@ -272,6 +273,8 @@ def quoted_bill(request):
     'item__price_per_unit').order_by('item__category')
     cost = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
     values('price','item__category','item__name').order_by('item__category')
+    quoted_order_sessionid = QuotedOrderofSession.objects.filter\
+    (quoted_order_id = quoted_order_id).values('quoted_order_session')[0]
     bill_values=[]
     for category in quoted_item:
         flag1=1
@@ -374,7 +377,7 @@ def quoted_bill(request):
         'buyer': quoted_order_obj, 'buyer_name': customer_obj, 'site': quoted_order_obj,
         'delivery_charges':delivery_charges, 'total_discount':total_discount,\
         'tax_count':tax_count,'bill_values':bill_values,\
-        'quoted_order_id':quoted_order_id,\
+        'quoted_order_id':quoted_order_sessionid['quoted_order_session'],\
         'header':header,'footer': footer,'permanent_note':permanent_note,\
         'quoted_note':quoted_note,'account_holder':account_holder,\
         'name_of_bank':name_of_bank,'branch':branch,\
