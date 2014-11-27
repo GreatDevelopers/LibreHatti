@@ -177,7 +177,6 @@ def bill(request):
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order = purchase_order).aggregate(Count('id'))
     suspense_order = SuspenseOrder.objects.values('distance_estimated').filter(purchase_order = id)
-    #return HttpResponse(suspense_order  )
     total_distance=0
     if suspense_order:
         for distance in suspense_order:
@@ -205,10 +204,13 @@ def bill(request):
     customer_obj = Customer.objects.values('company').get(user = buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no','stc_no').\
     get(id = organisation_id)
+    voucherid = VoucherId.objects.values('purchase_order_of_session').\
+    filter(purchase_order=id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {'stc_no' : admin_organisations,\
-        'pan_no' : admin_organisations,'id':id,'ref':purchase_order_obj , 'date':date,\
+        'pan_no' : admin_organisations,'id':voucherid['purchase_order_of_session'],\
+        'ref':purchase_order_obj , 'date':date,\
         'purchase_order':purchase_order,'address':address,\
         'total_cost': total_cost ,'grand_cost': grand_total ,\
         'taxes_applied': taxes_applied ,'surcharge': surcharge,\
@@ -231,9 +233,12 @@ def tax(request):
     bill = Bill.objects.values('total_cost','total_tax',\
         'purchase_order__date_time').get(purchase_order=id)
     grand_total = bill['total_cost'] + bill['total_tax']
+    voucherid = VoucherId.objects.values('purchase_order_of_session').\
+    filter(purchase_order=id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
-    return render(request, 'prints/tax.html',{'id':id,'details':taxes_applied,\
+    return render(request, 'prints/tax.html',{'id':voucherid['purchase_order_of_session'],\
+        'details':taxes_applied,\
         'bill':bill,'grand_total':grand_total,\
         'header':header,'footer':footer})
 
@@ -244,6 +249,8 @@ def receipt(request):
     It generates a Receipt.
     """
     id = request.GET['order_id']
+    voucherid = VoucherId.objects.values('purchase_order_of_session').\
+    filter(purchase_order=id)[0]
     bill = Bill.objects.values('amount_received').get(purchase_order = id)
     purchase_order = PurchaseOrder.objects.values('buyer','date_time',\
     'delivery_address','mode_of_payment__method').get(id = id)
@@ -252,9 +259,11 @@ def receipt(request):
     customer_obj = Customer.objects.values('company').get(user = purchase_order['buyer'])
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').get(user = purchase_order['buyer'])
-    purchased_item = PurchasedItem.objects.values('item__category__name').filter(purchase_order = id).distinct()
+    purchased_item = PurchasedItem.objects.values('item__category__name').\
+    filter(purchase_order = id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    return render(request, 'prints/receipt.html', {'receiptno': id,\
+    return render(request, 'prints/receipt.html', {\
+        'receiptno': voucherid['purchase_order_of_session'],\
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
         'method': purchase_order, 'buyer':customer_obj, 'material':purchased_item, 'header':header})
 

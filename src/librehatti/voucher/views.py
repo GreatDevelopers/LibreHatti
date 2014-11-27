@@ -257,7 +257,8 @@ def voucher_show(request):
     purchase_order = PurchaseOrder.objects.get(id = id)
     voucher_no_list = []
     voucher_obj_distinct = []
-    voucherid = VoucherId.objects.values('purchase_order','purchased_item', 'voucher_no', 'session').\
+    voucherid = VoucherId.objects.values('purchase_order','purchased_item',\
+        'voucher_no', 'session','purchase_order_of_session').\
     filter(purchase_order = purchase_order)
     for value in voucherid:
         if value['voucher_no'] not in voucher_no_list:
@@ -265,7 +266,9 @@ def voucher_show(request):
             voucher_obj_distinct.append(value)
     header = HeaderFooter.objects.values('header').order_by('-id')[0]
     request_status = request_notify()
-    return render(request, 'voucher/voucher_show.html', {'voucherid' : voucher_obj_distinct, 'header':header,'request':request_status})
+    return render(request, 'voucher/voucher_show.html', {\
+        'voucherid' : voucher_obj_distinct, 'header':header,\
+        'request':request_status})
 
 
 @login_required
@@ -274,10 +277,12 @@ def voucher_print(request):
     session = request.GET['session']
     purchase_order_id = request.GET['purchase_order']
     flag = 0
-    voucherid = VoucherId.objects.values('voucher_no').filter(purchase_order = purchase_order_id)
+    voucherid = VoucherId.objects.values('voucher_no').\
+    filter(purchase_order = purchase_order_id)
     for value in voucherid:
         try:
-            suspense_order = SuspenseOrder.objects.get(voucher = value['voucher_no'], purchase_order = purchase_order_id)
+            suspense_order = SuspenseOrder.objects.\
+            get(voucher = value['voucher_no'], purchase_order = purchase_order_id)
             flag = 1
         except:
             continue
@@ -306,9 +311,13 @@ def voucher_print(request):
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time'].date()
-    bill = Bill.objects.values('delivery_charges','total_cost','grand_total','amount_received').get(purchase_order = purchase_order_id)
+    bill = Bill.objects.values('delivery_charges','total_cost',\
+        'grand_total','amount_received').get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
-    taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value','tax').filter(purchase_order = purchase_order_id)
+    taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
+        'surcharge__value','tax').filter(purchase_order = purchase_order_id)
+    voucheridobj = VoucherId.objects.values('purchase_order_of_session').\
+    filter(purchase_order=purchase_order_id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     if flag == 0:
@@ -316,7 +325,8 @@ def voucher_print(request):
         return render(request, 'voucher/voucher_report.html', {\
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \
-            'ratio':ratio,'d_name': distribution, 'purchase_order': purchase_order,\
+            'ratio':ratio,'d_name': distribution,\
+            'purchase_order': voucheridobj['purchase_order_of_session'],\
             'voucher':number, 'date': date,'address': address,\
             'buyer': purchase_order_obj, 'categoryname': category_name,\
             'total_in_words': total_in_words, 'employee' : emp, 'header': header})
@@ -324,5 +334,6 @@ def voucher_print(request):
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
             'address':address, 'cost':bill, 'inwords':amount_received_inwords,\
-            'date':date, 'suspense_voucher':number, 'job':purchase_order_id,\
+            'date':date, 'suspense_voucher':number,\
+            'job':voucheridobj['purchase_order_of_session'],\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})
