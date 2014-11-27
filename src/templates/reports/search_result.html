@@ -42,12 +42,13 @@
                                 <a href = '/tax/?order_id={{item.1}}'>Generate Tax Details</a> |
                                 <a href = '/voucher/voucher_show/?order_id={{item.1}}'>View Voucher</a> |
                                 <a href = '/receipt/?order_id={{item.1}}'>Generate Receipt</a>
+                            {% elif order and item.0 == 'quoted_order_id' %}
+                                <a href = '/quoted_bill/?quoted_order_id={{item.1}}'>Generate Bill</a>
                             {% elif client and item.0 == 'purchase_order__buyer__id' %}
                                 <a href = '/history/?user_id={{item.1}}'>View History</a>
 	
                             {% else %}
                                 {{item.1}}
-                        
                             {% endif %}
             
                         {% endfor %}
