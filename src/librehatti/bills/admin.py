@@ -42,7 +42,7 @@ class QuotedOrderAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['quoted_order_id'] = obj.id
-        return HttpResponseRedirect('/suspense/quoted_add_distance/')      
+        return HttpResponseRedirect('/bills/quoted_order_of_session/')      
 
 class NoteLineAdmin(admin.ModelAdmin):
     Model = NoteLine

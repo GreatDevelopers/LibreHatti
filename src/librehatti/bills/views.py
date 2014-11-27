@@ -12,6 +12,7 @@ from librehatti.bills.models import QuotedTaxesApplied
 from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedBill
 from librehatti.bills.models import QuotedItem
+from librehatti.bills.models import QuotedOrderofSession
 from librehatti.bills.models import QuotedOrderNote
 from librehatti.bills.models import NoteLine
 from librehatti.suspense.models import QuotedSuspenseOrder
@@ -25,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from librehatti.bills.forms import ItemSelectForm
 from django.core.urlresolvers import reverse
 from librehatti.catalog.request_change import request_notify
+from librehatti.voucher.models import FinancialSession
 
 """
 This view calculate taxes on quoted order, bill data
@@ -74,6 +76,7 @@ def quoted_bill_cal(request):
     request.session['old_post'] = old_post
     request.session['quoted_order_id'] = quoted_order_id
     return HttpResponseRedirect(reverse("librehatti.bills.views.select_note"))
+
 
 
 @login_required
@@ -137,3 +140,40 @@ def delete_note(request):
     for id in delete_note_id:
         NoteLine.objects.filter(id=id).delete()
     return HttpResponse('')
+
+@login_required
+def quoted_order_of_session(request):
+    old_post = request.session.get('old_post')
+    quoted_order_id = request.session.get('quoted_order_id')
+    quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
+    quoted_order_obj = QuotedOrder.objects.values('id','date_time').\
+    get(id = quoted_order_id)
+    quoted_order_date = quoted_order_obj['date_time'].date()
+    financialsession = FinancialSession.objects.\
+    values('id','session_start_date','session_end_date')
+    for value in financialsession:
+        start_date = value['session_start_date']
+        end_date = value['session_end_date']
+        if start_date <= quoted_order_date <= end_date:
+            session_id = value['id']
+    session = FinancialSession.objects.get(id = session_id)
+    max_id = QuotedOrderofSession.objects.all().aggregate(Max('id'))
+    if max_id['id__max'] == None:
+        obj = QuotedOrderofSession(quoted_order = quoted_order,\
+            session= session, quoted_order_session = 1)
+        obj.save()
+    else:
+        quoted_order_of_session = QuotedOrderofSession.objects.\
+        values('quoted_order_session','session').get(id = max_id['id__max'])
+        if quoted_order_of_session['session'] == session_id:
+            obj = QuotedOrderofSession(quoted_order = quoted_order,\
+            session= session,\
+            quoted_order_session = quoted_order_of_session['quoted_order_session'] + 1)
+            obj.save()
+        else:
+            obj = QuotedOrderofSession(quoted_order = quoted_order,\
+            session= session, quoted_order_session = 1)
+            obj.save()
+    request.session['old_post'] = old_post
+    request.session['quoted_order_id'] = quoted_order_id
+    return HttpResponseRedirect(reverse("librehatti.suspense.views.quoted_add_distance"))    
