@@ -69,7 +69,7 @@ def add_distance(request):
         if request.method == 'POST':
             request.session['old_post'] = old_post
             request.session['purchase_order_id'] = purchase_order_id
-            return HttpResponseRedirect('/catalog/bill_cal/')
+            return HttpResponseRedirect(reverse("librehatti.catalog.views.bill_cal"))
         else:
             purchase_order = PurchaseOrder.objects.values('date_time').\
                 get(id = purchase_order_id)
@@ -116,12 +116,12 @@ def add_distance(request):
             suspense.save()
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
-        return HttpResponseRedirect('/catalog/bill_cal/')
+        return HttpResponseRedirect(reverse("librehatti.catalog.views.bill_cal"))
 
     else:
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
-        return HttpResponseRedirect('/catalog/bill_cal/')
+        return HttpResponseRedirect(reverse("librehatti.catalog.views.bill_cal"))
 
 @login_required
 def clearance_search(request):
@@ -158,19 +158,6 @@ def clearance_search(request):
         request_status = request_notify()
         return render(request, 'suspense/suspense_first.html', \
             {'form':form,'request':request_status}) 
-
-
-@login_required
-def clearance(request):
-    if 'Search' in request.GET:
-        ref_no = request.GET['ref_no']
-        cl_report = Clearance_form(initial = {'work_charge':0, 'labour_charge':
-                    0, 'car_taxi_charge':0,'boring_charge_external':0,
-                    'boring_charge_internal':0,'Test_date':datetime.date.today
-                     })
-        request_status = request_notify()
-        temp = {'ref_no':ref_no,'cl_report':cl_report,'request':request_status}
-        return render(request, 'suspense/suspenseform.html',temp)
 
 
 @login_required
@@ -523,7 +510,7 @@ def quoted_add_distance(request):
         if request.method == 'POST':
             request.session['old_post'] = old_post
             request.session['quoted_order_id'] = quoted_order_id
-            return HttpResponseRedirect('/bills/quoted_bill_cal/')
+            return HttpResponseRedirect(reverse("librehatti.bills.views.quoted_bill_cal"))
         else:
             return render(request,'suspense/quoted_add_distance.html',{\
                 'quoted_order_id':quoted_order_id,})
@@ -535,12 +522,12 @@ def quoted_add_distance(request):
         obj.save()
         request.session['old_post'] = old_post
         request.session['quoted_order_id'] = quoted_order_id
-        return HttpResponseRedirect('/bills/quoted_bill_cal/')
+        return HttpResponseRedirect(reverse("librehatti.bills.views.quoted_bill_cal"))
 
     else:
         request.session['old_post'] = old_post
         request.session['quoted_order_id'] = quoted_order_id
-        return HttpResponseRedirect('/bills/quoted_bill_cal/')
+        return HttpResponseRedirect(reverse("librehatti.bills.views.quoted_bill_cal"))
 
 
 @login_required
@@ -643,11 +630,11 @@ def sessionselect(request):
         request_status = request_notify()
         temp = {"SelectForm" : form,'request':request_status}
         return render(request, 'voucher/sessionselect.html', temp)
+
+
 """
 This view is used to generate the Transport Bill 
 """
-
-
 @login_required
 def transportbill(request):
     if 'button1' in request.POST:
@@ -807,10 +794,11 @@ def tada_result(request):
             return render(request, 'suspense/form.html',{'form':form,'message':message,'request':request_status})
     else:
         return HttpResponseRedirect(reverse('librehatti.suspense.views.tada_order_session'))
+
+
 """
 This view is used to render the Allowance 
 """
-
 @login_required
 def tada_order_session(request):
     if request.method == 'POST':
