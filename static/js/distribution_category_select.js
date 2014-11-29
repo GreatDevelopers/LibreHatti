@@ -7,16 +7,18 @@ $(document).ready(function(){
         $('.category').empty();
         $('.category').removeAttr('disabled');
         parent_category_id = $(this).val();
-        request_url = '/catalog/select_sub_category/?cat_id=' + parent_category_id ;
-        $.ajax({
-            url: request_url,
-        datatype:'json',
-            success: function(data){
-                $.each(JSON.parse(data), function(key, value){
-                       $('.category').append('<option value="' + key + '">' + value +'</option>').innerHTML;
-                });
-            }
-        })
+        reverse('librehatti.catalog.views.select_sub_category', function(url) {
+            var request_url = url + "/?cat_id=" + parent_category_id;
+            $.ajax({
+                url: request_url,
+                datatype:'json',
+                success: function(data){
+                    $.each(JSON.parse(data), function(key, value){
+                     $('.category').append('<option value="' + key + '">' + value +'</option>').innerHTML;
+                 });
+                }
+            })
+        });
     })
 });        
-        
+

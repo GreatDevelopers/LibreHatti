@@ -3,63 +3,67 @@
 
 <!DOCTYPE html>
 <html lang="en">    <head>
-    {% block title %}
-        <title>
-            Results of your Search 
-        </title> 
-    {% endblock %}
+{% block title %}
+<title>
+    Results of your Search 
+</title> 
+{% endblock %}
 </head>
 <body>
     {% block content %}
     <div class = "list-results">
-    <h2>Results for {{ title }}</h2>
-    <div  class="search">
-         <table border="1px">
-            
-            <tr> 
-		<th>S.No.</th>
-                {% for field in client %}
-                <th>{{field}}</th>
-                {% endfor %}
+        <h2>Results for {{ title }}</h2>
+        <div  class="search">
+           <table border="1px">
 
-                {% for field in order %}
-                <th>{{field}}</th>
-                {% endfor %}
-		{% if order_id %}
-                        <th>Options</th>
-                    {% endif %}
-             <tr>
-		
+            <tr> 
+              <th>S.No.</th>
+              {% for field in client %}
+              <th>{{field}}</th>
+              {% endfor %}
+
+              {% for field in order %}
+              <th>{{field}}</th>
+              {% endfor %}
+              {% if order_id %}
+              <th>Options</th>
+              {% endif %}
+              <tr>
+
                 {% for result in records %}
                 {% if result %}		
-		<td>{{forloop.counter}}</td>{% endif %}
-                    {% for value in result %}
-		    
-                    <td>
-                        {% for item in value.items %}
-                            {% if order and item.0 == 'purchase_order_id' %}
-                                <a href = '/bill/?order_id={{item.1}}'>Generate Bill</a> |
-                                <a href = '/tax/?order_id={{item.1}}'>Generate Tax Details</a> |
-                                <a href = '/voucher/voucher_show/?order_id={{item.1}}'>View Voucher</a> |
-                                <a href = '/receipt/?order_id={{item.1}}'>Generate Receipt</a>
-                            {% elif order and item.0 == 'quoted_order_id' %}
-                                <a href = '/quoted_bill/?quoted_order_id={{item.1}}'>Generate Bill</a>
-                            {% elif client and item.0 == 'purchase_order__buyer__id' %}
-                                <a href = '/history/?user_id={{item.1}}'>View History</a>
-	
-                            {% else %}
-                                {{item.1}}
-                            {% endif %}
-            
-                        {% endfor %}
-                     </td>
-                    {%endfor%}
-             </tr>
-             {%endfor%}
+                <td>{{forloop.counter}}</td>{% endif %}
+                {% for value in result %}
+
+                <td>
+                    {% for item in value.items %}
+                    
+                    {% if order and item.0 == 'purchase_order_id' %}
+                    <a href = '{% url 'librehatti.prints.views.bill'%}?order_id={{item.1}}'>Generate Bill</a> |
+                    <a href = '{% url 'librehatti.prints.views.tax'%}?order_id={{item.1}}'>Generate Tax Details</a> |
+                    <a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{item.1}}'>View Voucher</a> |
+                    <a href = '{% url 'librehatti.prints.views.receipt'%}?order_id={{item.1}}'>Generate Receipt</a>
+
+                    {% elif order and item.0 == 'quoted_order_id' %}
+                    <a href = '{% url 'librehatti.prints.views.quoted_bill'%}?quoted_order_id={{item.1}}'>Generate Bill</a>
+                    
+                    {% elif client and item.0 == 'purchase_order__buyer__id' %}
+                    <a href = '{% url 'librehatti.reports.previous_history.history' %}?user_id={{item.1}}'>View History</a>
+
+                    {% else %}
+                    {{item.1}}
+                    
+                    {% endif %}
+
+                    {% endfor %}
+                </td>
+                {%endfor%}
+            </tr>
+            {%endfor%}
         </table>
     </div>
-    </div>
-        {% endblock %}
+</div>
+{% endblock %}
 
-    </body>
+</body>
 </html>
