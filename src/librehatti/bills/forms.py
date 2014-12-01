@@ -32,6 +32,7 @@ class ItemSelectForm(forms.ModelForm):
         js = (
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/quote_ajax.js',
+            'js/quoted_price_per_unit.js',
         )
 
     try:
@@ -44,12 +45,14 @@ class ItemSelectForm(forms.ModelForm):
         pass
 
     item = forms.ModelChoiceField(queryset = Product.objects.all(), label = _ITEM)
+    price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
          self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
+         self.fields['price_per_unit'].widget.attrs={'class': 'quoted_price_per_unit'}
 
 
 class SelectNoteForm(forms.Form):

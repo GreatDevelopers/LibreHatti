@@ -217,3 +217,13 @@ def change_request(request):
         request_status = request_notify()
         return render(request, 'catalog/change_request.html', \
             {'form':form,'request':request_status})
+
+
+@login_required
+def price_per_unit(request):
+    item_id = request.GET['item_id']
+    product = Product.objects.values('price_per_unit').get(id=item_id)
+    if product['price_per_unit'] is not None:
+        return HttpResponse(product['price_per_unit'])
+    else:
+        return HttpResponse('fail')

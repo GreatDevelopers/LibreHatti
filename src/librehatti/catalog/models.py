@@ -49,7 +49,7 @@ that product and the organisation with which user deals
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = mptt.fields.TreeForeignKey(Category, related_name="products")
-    price_per_unit = models.IntegerField()
+    price_per_unit = models.IntegerField(blank=True,null=True)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     def __unicode__(self):
         return self.name
@@ -139,13 +139,14 @@ class PurchaseOrder(models.Model):
 
 class PurchasedItem(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
-    price = models.IntegerField()
+    price_per_unit = models.IntegerField()
     qty = models.IntegerField(verbose_name = _QTY)
+    price = models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
         try:
             if self.purchase_order:
-                self.price = self.item.price_per_unit * self.qty
+                self.price = self.price_per_unit * self.qty
                 super(PurchasedItem, self).save(*args, **kwargs)
         except:
             raise ValidationError('No Active Taxes. Unable to add Items')
