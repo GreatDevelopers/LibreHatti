@@ -17,7 +17,7 @@
 {% for value in list_of_registers %}
     <tr>
     	<td>{{value.title}}</td>
-    	<td><a href = '{{local_url}}generate_register/?{{value.selected_fields}}'>View Register</a></td>
+    	<td><a href = '{% url 'view_register' %}?{{value.selected_fields}}'>View Register</a></td>
     </tr>
 {% endfor %}
 </table>

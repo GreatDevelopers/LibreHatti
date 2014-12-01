@@ -29,7 +29,7 @@
                 <td>{{i.id}}</td>
                 <td>{{i.mode_of_payment}}</td>
                 <td>{{i.date_time|date}}</td>
-                <td><a href = '/details/?order_id={{i.id}}'>View Details</a></td>
+                <td><a href = '{% url 'librehatti.reports.previous_history.details' %}?order_id={{i.id}}'>View Details</a></td>
             </tr>
 
             {% endfor %}

@@ -6,6 +6,19 @@
     <meta charset="UTF-8">
     {% block title %}
     {% endblock %}
+    {% block extrahead %}
+    <script type="text/javascript">
+        var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
+
+        function reverse(urlstring, callback) {
+            if (typeof callback != "function") {
+                return false;
+            }
+            
+            $.get(reverseurl + "?string=" + urlstring, callback);
+        }
+    </script>
+    {% endblock %}
     {% block js %}
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'>
         </script>
@@ -20,7 +33,7 @@
         </script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
-        <script src="{% static 'js/new_note_save.js' %}">
+        <script src="{% static 'js/note_save_delete.js' %}">
         </script>
         <script src="{% static 'js/accordion.js' %}">
 	</script>
@@ -32,12 +45,14 @@
             voucher_no = event.target.id.split("_")[1];
             distance = $('#distance_' + voucher_no).val();
             order = $('#order').val();
-            request_url = "/suspense/save_distance/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
+            reverse('librehatti.suspense.views.save_distance', function(url) {
+            var request_url = url + "/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
             $.ajax({
                 url: request_url,
                 success: function(data){
                 }
             });
+        });
         });
     })
     </script>
@@ -48,7 +63,9 @@ $(document).ready(function(){
         $('#id_sub_category').empty();
         $('#id_sub_category').removeAttr('disabled');
         parent_id = $(this).val();
-        request_url = '/print/filter_sub_category/?parent_id=' + parent_id;
+        // request_url = '/print/filter_sub_category/?parent_id=' + parent_id;
+        reverse('librehatti.prints.views.filter_sub_category', function(url) {
+            var request_url = url + "/?parent_id=" + parent_id;
         $.ajax({
             url: request_url,
             datatype: 'json',
@@ -57,7 +74,8 @@ $(document).ready(function(){
                     $('#id_sub_category').append('<option value="' + key + '">' + value + '</option>');
                     });
             }
-       })             
+       })
+    });
     })
 });
 $(function() {

@@ -48,25 +48,6 @@ def index(request):
     return render(request,'index.html',{'request':request_status})
 
 
-@login_required
-def add_categories(request):
-    """
-    It allows the user to add categories.
-    """
-
-    if request.method == 'POST' :
-        form = AddCategory(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirec('/')
-    else:
-        form = AddCategory()
-        request_status = request_notify()
-    return render(request, 'addCategory.html', {
-            'form':form,'request':request_status
-    })
-
-
-
 """
 This view allows filtering of sub category according to parent category of 
 item.

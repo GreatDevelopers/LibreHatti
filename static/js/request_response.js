@@ -1,8 +1,6 @@
 $(document).ready(function(){
     $('.accept_request').click(function(){
         var id = $(this).attr("href");
-        accept_request_url = '/catalog/accept_request/?id=' + id;
-        reject_request_url = '/catalog/reject_request/?id=' + id;
         BootstrapDialog.show({
             title: '<b>Request Response</b>',
             message: 'Are you want to accept this request?',
@@ -12,12 +10,15 @@ $(document).ready(function(){
                 label: ' Yes',
                 action: function(dialogItself){
                     dialogItself.close();
-                    $.ajax({
-                        url: accept_request_url,
-                        success: function(data){
-                            location.reload();
-                        }
-                    })
+                    reverse('librehatti.catalog.request_change.accept_request', function(url) {
+                        var request_url = url + "/?id=" + id;
+                        $.ajax({
+                            url: request_url,
+                            success: function(data){
+                                location.reload();
+                            }
+                        })
+                    });
                 }
             },
             {
@@ -26,15 +27,18 @@ $(document).ready(function(){
                 label: ' No',
                 action: function(dialogItself){
                     dialogItself.close();
-                    $.ajax({
-                        url: reject_request_url,
-                        success: function(data){
-                            location.reload();
-                        }
-                    })
+                    reverse('librehatti.catalog.request_change.reject_request', function(url) {
+                        var request_url = url + "/?id=" + id;
+                        $.ajax({
+                            url: request_url,
+                            success: function(data){
+                                location.reload();
+                            }
+                        })
+                    });
                 }
             }]
         })
-        return false;
-    })
-    });
+return false;
+})
+});

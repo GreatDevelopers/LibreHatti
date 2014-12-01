@@ -100,7 +100,7 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
-        return HttpResponseRedirect('/voucher/voucher_generate/')
+        return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
     def response_change(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id

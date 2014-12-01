@@ -7,9 +7,9 @@
 <script type="text/javascript">
 
 
-$(document).ready(function() {
-    $("[name='date']").datepicker(); 
-    $("#button2").click(function() {
+    $(document).ready(function() {
+        $("[name='date']").datepicker(); 
+        $("#button2").click(function() {
 
         //Insert just after the kilo input in p element
         $("#id_kilometer").parent("p").clone().insertAfter($("#id_date").parent("p"));
@@ -22,7 +22,7 @@ $(document).ready(function() {
         dateelement.insertAfter($("#id_date").parent("p"));
         $("[name='date']").datepicker(); 
     });
-});
+    });
 </script>
 {% endblock %} 
 
@@ -32,13 +32,13 @@ $(document).ready(function() {
         <td>
             <form action='{% url 'librehatti.suspense.views.transportbill' %}' method='POST'>
                 {% if messages %}
-                 <div class="alert alert-success">
-                        {{ messages }} 
+                <div class="alert alert-success">
+                    {{ messages }} 
                 </div>
                 {% endif %}
                 {% if message %}
-                 <div class="alert alert-danger">
-                        {{ message }} 
+                <div class="alert alert-danger">
+                    {{ message }} 
                 </div>
                 {% endif %}
                 {% csrf_token %}

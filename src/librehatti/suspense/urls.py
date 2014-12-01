@@ -3,7 +3,6 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^add_distance', 'add_distance'),
-                   url(r'^clreport/','clearance'),
                    url(r'^clresult/','clearance_result'),
                    url(r'^clsearch/','clearance_search'),
                    url(r'^othercharges/','other_charges'),

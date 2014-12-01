@@ -1,37 +1,37 @@
 {% extends 'base_register.html' %}
 <html>
-    <head>
-        {% block title %}
-        <title>
-            Your Vouchers
-        </title> 
-        {% endblock %}
-        <style>
-            .else { color : red ; }
-            h1{text-align: center;}
-            h2, .else { text-align :center; margin-top:5%; }
-            table{display: inline-block;text-align: center;}
-            table,th,td{border: 1px solid black; border-collapse: collapse;}
-        </style>
-    </head>
-    <body>
-        {% block content %}
-        <div class="list-results">
+<head>
+    {% block title %}
+    <title>
+        Your Vouchers
+    </title> 
+    {% endblock %}
+    <style>
+        .else { color : red ; }
+        h1{text-align: center;}
+        h2, .else { text-align :center; margin-top:5%; }
+        table{display: inline-block;text-align: center;}
+        table,th,td{border: 1px solid black; border-collapse: collapse;}
+    </style>
+</head>
+<body>
+    {% block content %}
+    <div class="list-results">
         <h2>Voucher</h2>
         <div class="shrinked-table">
-         <table border="1px">
+           <table border="1px">
             
             <tr>
-            <th>Purchase Order</th> 
-            <th>Voucher No</th>
-            <th>Options</th>
+                <th>Purchase Order</th> 
+                <th>Voucher No</th>
+                <th>Options</th>
             </tr>
             <tr>
                 {% if voucherid %}
                 {% for value in voucherid %}
                 <td>{{ value.purchase_order_of_session }}</td>
                 <td>{{ value.voucher_no }}</td>
-                <td><a href = '/voucher/voucher_print/?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a>
+                <td><a href = '{% url 'librehatti.voucher.views.voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a>
                 </td>
 
             </tr>
@@ -40,7 +40,7 @@
             {% endif %}
         </table>
     </div>
-    </div>
-        {% endblock %}
-    </body>
+</div>
+{% endblock %}
+</body>
 </html>

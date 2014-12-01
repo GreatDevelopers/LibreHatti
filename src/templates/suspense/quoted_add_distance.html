@@ -13,14 +13,14 @@
 
 <form method = 'POST' action = ''>
 	 {% csrf_token %}
-<table class='add_distance'>
+<table>
 <tr>
-<td>Order:<input type="text" name = "order" readonly="readonly" class = "order" size="7" 
-	id="order" value="{{quoted_order_id}}"></td>
+<td>Order:<input type="text" name = "order" readonly="readonly" class = "quoteorder" size="7" 
+	id="quoteorder" value="{{quoted_order_id}}"></td>
 </tr>
 <tr>
-<td>Distance:<input type="text" name="distance" class = "distance" size = "7" 
-	id="distance" value="0"></td>
+<td>Distance:<input type="text" name="distance" class = "quotedistance" size = "7" 
+	id="quotedistance" value="0"></td>
 </tr>
 </table>
 <input type='submit' class="btn btn-info btn-large" value = 'Next'>

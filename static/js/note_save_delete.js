@@ -8,18 +8,20 @@ $(document).ready(function(){
                 cssClass: 'btn btn-success',
                 label: ' ADD',
                 action: function(dialogItself){
-		            var note_line = document.getElementById('new_note_id').value;
-		            dialogItself.close();
-		            request_url = "/bills/new_note_line/?note_line=" + note_line;
+                  var note_line = document.getElementById('new_note_id').value;
+                  dialogItself.close();
+                  reverse('librehatti.bills.views.new_note_line', function(url) {
+                    var request_url = url + "/?note_line=" + note_line;
                     $.ajax({
                         url: request_url,
                         success: function(data){
                             location.reload();
                         }
                     })
-                }
-            }]
-        })
+                });
+              }
+          }]
+      })
         return false;
     })
     $('.delete_selected').click(function(){
@@ -35,14 +37,16 @@ $(document).ready(function(){
                     $('.note_checkbox:checkbox:checked').each(function(i){
                       val[i] = $(this).val();
                   });
-                    request_url = "/bills/delete_note/?delete_note=" + val;
                     dialogItself.close();
-                    $.ajax({
-                        url: request_url,
-                        success: function(data){
-                            location.reload();
-                        }
-                    })
+                    reverse('librehatti.bills.views.delete_note', function(url) {
+                        var request_url = url + "/?delete_note=" + val;
+                        $.ajax({
+                            url: request_url,
+                            success: function(data){
+                                location.reload();
+                            }
+                        })
+                    });
                 }
             },
             {
@@ -54,6 +58,6 @@ $(document).ready(function(){
                 }
             }]
         })
-        return false;
-    })
-    });
+return false;
+})
+});

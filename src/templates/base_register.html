@@ -6,6 +6,19 @@
     <meta charset="UTF-8">
     {% block title %}
     {% endblock %}
+    {% block extrahead %}
+    <script type="text/javascript">
+        var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
+
+        function reverse(urlstring, callback) {
+            if (typeof callback != "function") {
+                return false;
+            }
+            
+            $.get(reverseurl + "?string=" + urlstring, callback);
+        }
+    </script>
+    {% endblock %}
     {% block js %}
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
     </script>
@@ -17,7 +30,6 @@
     $(document).ready(function(){
     $('.mark_clear').click(function(){
         var addressValue = $(this).attr("href");
-        request_url = '/suspense/mark_status/?' + addressValue;
         BootstrapDialog.show({
             title: '<b>Suspense Clearance</b>',
             message: 'Are you sure that you want to clear this order?',
@@ -26,6 +38,8 @@
                 cssClass: 'btn btn-success',
                 label: ' Yes',
                 action: function(dialogItself){
+                    reverse('librehatti.suspense.views.mark_status', function(url) {
+                    var request_url = url + "/?" + addressValue;
                     $.ajax({
                         url: request_url,
                         success: function(data){
@@ -33,6 +47,7 @@
                             location.reload();
                         }
                     })
+                });
                 }
             },
             {

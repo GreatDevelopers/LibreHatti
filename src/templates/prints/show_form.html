@@ -4,7 +4,7 @@
 {% block content %}
 
     <div class="main-box">
-    <form method="GET" action="/print/lab_report" class="form lab-form">
+    <form method="GET" action={% url 'librehatti.prints.views.lab_report' %} class="form lab-form">
         <h2 class="form-heading"> Create Query: </h2>
 	<div class="form-elements">
         {{form.as_p}}

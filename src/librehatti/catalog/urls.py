@@ -10,7 +10,6 @@ new categories of product
 """
 urlpatterns = patterns('librehatti.catalog.views',
     url(r'^$', 'index'),
-    url(r'^addCategory/','add_categories'),
     url(r'^select_sub_category/', 'select_sub_category'),
     url(r'^jsreverse/', 'jsreverse'),
     url(r'^select_item/', 'select_item'), 
