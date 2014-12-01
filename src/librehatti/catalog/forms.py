@@ -36,6 +36,7 @@ class ItemSelectForm(forms.ModelForm):
         js = (
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/ajax.js',
+            'js/price_per_unit.js'
         )
 
     try:
@@ -48,12 +49,14 @@ class ItemSelectForm(forms.ModelForm):
         pass
 
     item = forms.ModelChoiceField(queryset = Product.objects.all(), label = _ITEM)
+    price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
          self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
+         self.fields['price_per_unit'].widget.attrs={'class': 'price_per_unit'}
 
 class BuyerForm(forms.ModelForm):
     buyer = make_ajax_field(PurchaseOrder, 'buyer', 'buyer')

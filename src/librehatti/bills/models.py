@@ -44,12 +44,13 @@ class QuotedOrder(models.Model):
 
 class QuotedItem(models.Model):
     quoted_order = models.ForeignKey(QuotedOrder)
-    price = models.IntegerField()
+    price_per_unit = models.IntegerField()
     qty = models.IntegerField(verbose_name = _QTY)
+    price = models.IntegerField()
     item = models.ForeignKey(Product)
     def save(self, *args, **kwargs):
         if self.quoted_order:
-            self.price = self.item.price_per_unit * self.qty
+            self.price = self.price_per_unit * self.qty
             super(QuotedItem,self).save(*args, **kwargs)
 
     def __unicode__(self):

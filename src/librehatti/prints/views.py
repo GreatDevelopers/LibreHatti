@@ -113,7 +113,7 @@ def bill(request):
     purchased_item_odj = PurchasedItem.objects.filter(purchase_order=purchase_order).\
     values('item__name',\
     'item__category', 'qty',\
-    'item__price_per_unit').order_by('item__category')
+    'price_per_unit').order_by('item__category')
     cost = PurchasedItem.objects.filter(purchase_order=purchase_order).\
     values('price','item__category','item__name').order_by('item__category')
     bill_values=[]
@@ -146,11 +146,11 @@ def bill(request):
         for price_per in purchased_item_odj:
             if category['item__category'] == price_per['item__category']:
                 if flag1==1:
-                    price_unit.append(price_per['item__price_per_unit'])
+                    price_unit.append(price_per['price_per_unit'])
                     flag1=0
                 else:
                     price_unit.append(',')
-                    price_unit.append(price_per['item__price_per_unit'])
+                    price_unit.append(price_per['price_per_unit'])
         total=0
         for itemcost in cost:
             if category['item__category'] == itemcost['item__category']:
@@ -279,7 +279,7 @@ def quoted_bill(request):
     quoted_item_odj = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
     values('item__name',\
     'item__category', 'qty',\
-    'item__price_per_unit').order_by('item__category')
+    'price_per_unit').order_by('item__category')
     cost = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
     values('price','item__category','item__name').order_by('item__category')
     quoted_order_sessionid = QuotedOrderofSession.objects.filter\
@@ -314,11 +314,11 @@ def quoted_bill(request):
         for price_per in quoted_item_odj:
             if category['item__category'] == price_per['item__category']:
                 if flag1==1:
-                    price_unit.append(price_per['item__price_per_unit'])
+                    price_unit.append(price_per['price_per_unit'])
                     flag1=0
                 else:
                     price_unit.append(',')
-                    price_unit.append(price_per['item__price_per_unit'])
+                    price_unit.append(price_per['price_per_unit'])
         total=0
         for itemcost in cost:
             if category['item__category'] == itemcost['item__category']:
