@@ -74,6 +74,7 @@ class QuotedBill(models.Model):
     quoted_order = models.ForeignKey(QuotedOrder)
     delivery_charges = models.IntegerField()
     total_cost = models.IntegerField()
+    totalplusdelivery = models.IntegerField()
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
     amount_received = models.IntegerField()

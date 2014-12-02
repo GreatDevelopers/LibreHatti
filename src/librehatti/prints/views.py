@@ -165,9 +165,9 @@ def bill(request):
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order = purchase_order).aggregate(Count('id'))
     surcharge = Surcharge.objects.values('id','tax_name','value')
-    bill = Bill.objects.values('total_cost','grand_total','delivery_charges').\
+    bill = Bill.objects.values('totalplusdelivery','grand_total','delivery_charges').\
     get(purchase_order=id)
-    total_cost = bill['total_cost']
+    total_cost = bill['totalplusdelivery']
     grand_total = bill['grand_total']
     delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.\
@@ -230,9 +230,9 @@ def tax(request):
     id = request.GET['order_id']
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name','surcharge__value',\
         'tax','purchase_order__date_time').filter(purchase_order=id)
-    bill = Bill.objects.values('total_cost','total_tax',\
+    bill = Bill.objects.values('totalplusdelivery','total_tax',\
         'purchase_order__date_time').get(purchase_order=id)
-    grand_total = bill['total_cost'] + bill['total_tax']
+    grand_total = bill['totalplusdelivery'] + bill['total_tax']
     voucherid = VoucherId.objects.values('purchase_order_of_session').\
     filter(purchase_order=id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
