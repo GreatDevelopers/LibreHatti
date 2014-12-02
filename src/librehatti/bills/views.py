@@ -43,6 +43,7 @@ def quoted_bill_cal(request):
     filter(quoted_order=quoted_order_id).aggregate(Sum('price'))
     total = quoted_item['price__sum']
     price_total = total - quoted_order_obj['total_discount']
+    totalplusdelivery = price_total
     surcharge = Surcharge.objects.values('id','value','taxes_included')
     delivery_rate = Surcharge.objects.values('value').filter(tax_name = 'Transportation')
     distance = QuotedSuspenseOrder.objects.filter(quoted_order = quoted_order_id).\
@@ -50,6 +51,7 @@ def quoted_bill_cal(request):
     if distance['distance_estimated__sum']:
         delivery_charges = int(distance['distance_estimated__sum'])*\
             delivery_rate[0]['value']
+        totalplusdelivery = totalplusdelivery + delivery_charges
 
     else:
         delivery_charges = 0
@@ -59,7 +61,7 @@ def quoted_bill_cal(request):
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
         if surcharge_tax == 1:
-            taxes = (price_total * surcharge_value)/100
+            taxes = (totalplusdelivery * surcharge_value)/100
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = QuotedTaxesApplied(quoted_order = quoted_order,
             surcharge = surcharge_obj, tax = taxes)
@@ -71,7 +73,8 @@ def quoted_bill_cal(request):
     amount_received = grand_total - quoted_order_obj['tds']
     bill = QuotedBill(quoted_order = quoted_order, total_cost = price_total,
     total_tax = tax_total, grand_total = grand_total,
-    delivery_charges = delivery_charges, amount_received = amount_received)
+    delivery_charges = delivery_charges, amount_received = amount_received,
+    totalplusdelivery=totalplusdelivery)
     bill.save()
     request.session['old_post'] = old_post
     request.session['quoted_order_id'] = quoted_order_id

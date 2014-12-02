@@ -72,14 +72,24 @@
 {% if total_discount %}
 <tr>
     <td>Discount</td>
-    <td  colspan="2" rowspan="{{tax_count}}"></td>
+    <td colspan="2" rowspan="{{tax_count}}"></td>
     <td>{{total_discount}}</td>
+</tr>
+{% endif %}
+{% if delivery_charges %}
+<tr>
+    <td>Transportation</td>
+    {% if total_discount %}
+    {% else %}
+    <td colspan="2" rowspan="{{tax_count}}"></td>
+    {% endif %}
+    <td>{{delivery_charges}}</td>
 </tr>
 {% endif %}
 
             <tr>
                 <td><b>Total </b></td>
-                {% if total_discount %}
+                {% if total_discount or delivery_charges %}
                 {% else %}
                 <td  colspan="2" rowspan="{{tax_count}}"></td>
                 {% endif %}
@@ -101,13 +111,6 @@
             {% endfor %}
   
             {% endif %}
-            
-{% if delivery_charges %}
-<tr>
-    <td>Transportation</td>
-    <td>{{delivery_charges}}</td>
-</tr>
-{% endif %}
             <tr>
                 <td><b>Total </b></td>
                 <td><b>{{grand_cost}}</b></td>
