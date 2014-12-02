@@ -7,9 +7,12 @@ class BuyerLookup(LookupChannel):
     model = User
 
     def get_query(self, q, request):
-        return User.objects.filter(Q(username__icontains=q)| \
-        	Q(first_name__icontains=q) | Q(last_name__icontains=q)).\
-               filter(~Q(id = 1)).select_related('customer')[:15]
+        user = User.objects.all()
+        for value in q.split():
+            user = user.filter(Q(username__icontains=value)| \
+            	Q(first_name__icontains=value) | Q(last_name__icontains=value) |\
+                Q(customer__address__city__icontains=value))[:15]
+        return user
 
     def get_result(self, obj):
         return unicode(obj.username)
