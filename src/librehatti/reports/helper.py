@@ -1,5 +1,4 @@
 import re
-
 from django.db.models import Q
 
 

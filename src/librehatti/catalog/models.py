@@ -2,21 +2,13 @@
 models of catalog are..
 """
 from django.db import models
-
 from django.forms import ModelForm
-
 import useraccounts
-
 from django.contrib.auth.models import User
-
 from django.http import HttpResponse
-
 from mptt.models import MPTTModel, TreeForeignKey
-
 import mptt.fields
-
 from django.core.exceptions import ValidationError
-
 import datetime
 
 from tinymce.models import HTMLField
@@ -40,18 +32,15 @@ class mCategory(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
-
 class Category(MPTTModel):
     name = models.CharField(max_length=100)
-    parent = TreeForeignKey('self', null=True, blank=True, \
-        related_name="children")
+    parent = TreeForeignKey('self', null=True, blank=True, related_name="children")
 
     class MPTTMeta:
         order_insertion_by = ['name']
 
     def __unicode__(self):
         return '%s' % self.name
-
 
 """
 This class defines the name of product, category, price of eact item of
@@ -64,7 +53,6 @@ class Product(models.Model):
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
     def __unicode__(self):
         return self.name
-
 
 """
 This class defines the features of product
@@ -79,7 +67,6 @@ class Attributes(models.Model):
 
     def __unicode__(self):
         return self.name
-
 
 """
 This class defines the details about user, its organisation, along with
@@ -193,9 +180,11 @@ class TaxesApplied(models.Model):
         return "%s" % (self.surcharge)
 
 
+
 """
 This class defines the grand total of the purchase order
 """
+
 class Bill(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     delivery_charges = models.IntegerField()
@@ -204,7 +193,6 @@ class Bill(models.Model):
     total_tax = models.IntegerField()
     grand_total = models.IntegerField()
     amount_received = models.IntegerField()
-
 
 class HeaderFooter(models.Model):
     header = HTMLField()
@@ -226,7 +214,6 @@ class HeaderFooter(models.Model):
 
     class Meta:
         verbose_name_plural = "Header and Footer"
-
 
 class SurchargePaid(models.Model):
     surcharge = models.ForeignKey(Surcharge)
