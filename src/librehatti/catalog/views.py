@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
+
 from django.shortcuts import render
+
 from django.db.models import Sum
 
 from librehatti.catalog.models import Category
@@ -14,12 +16,15 @@ from librehatti.catalog.request_change import request_notify
 from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
+
 from librehatti.voucher.models import VoucherId, CalculateDistribution
 
 from django.core.urlresolvers import reverse
+
 from django.contrib.auth.decorators import login_required
 
 import simplejson
+
 from django import forms
 
 @login_required
@@ -69,6 +74,7 @@ def jsreverse(request):
     string_to_reverse = request.GET['string'];
     return HttpResponse(reverse(string_to_reverse))
 
+
 """
 This view allows filtering of item according to sub category of item.
 """
@@ -91,16 +97,18 @@ def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
-    purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').get(id=purchase_order_id)
+    purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').\
+    get(id=purchase_order_id)
     purchase_item = PurchasedItem.objects.\
     filter(purchase_order=purchase_order_id).aggregate(Sum('price'))
     total = purchase_item['price__sum']
     price_total = total - purchase_order_obj['total_discount']
     totalplusdelivery = price_total
     surcharge = Surcharge.objects.values('id','value','taxes_included')
-    delivery_rate = Surcharge.objects.values('value').filter(tax_name = 'Transportation')
-    distance = SuspenseOrder.objects.filter(purchase_order = purchase_order_id).\
-        aggregate(Sum('distance_estimated'))
+    delivery_rate = Surcharge.objects.values('value').\
+    filter(tax_name = 'Transportation')
+    distance = SuspenseOrder.objects.filter\
+    (purchase_order = purchase_order_id).aggregate(Sum('distance_estimated'))
     if distance['distance_estimated__sum']:
         delivery_charges = int(distance['distance_estimated__sum'])*\
             delivery_rate[0]['value']
@@ -131,7 +139,9 @@ def bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
-    return HttpResponseRedirect(reverse("librehatti.catalog.views.order_added_success"))
+    return HttpResponseRedirect(reverse\
+        ("librehatti.catalog.views.order_added_success"))
+
 
 @login_required
 def list_products(request):
@@ -148,7 +158,8 @@ def list_products(request):
                 attributes_dict[one_product] = attributes_list
             one_category_dict[one_category.name] = attributes_dict
             products_dict[one_category.id] = one_category_dict
-    return render(request,'list_products.html',{'nodes':all_categories, 'products_dict':products_dict})
+    return render(request,'list_products.html',{'nodes':all_categories, \
+        'products_dict':products_dict})
 
 
 @login_required
@@ -160,23 +171,28 @@ def previous_value(request):
         SuspenseOrder.objects.filter(purchase_order=purchase_order_id).delete()
     else:
         pass
-    TaxesApplied.objects.filter(purchase_order=purchase_order_id).delete()
-    voucher_no = VoucherId.objects.values('voucher_no', 'session').filter(purchase_order=purchase_order_id)
+    TaxesApplied.objects.\
+    filter(purchase_order=purchase_order_id).delete()
+    voucher_no = VoucherId.objects.values('voucher_no', 'session').\
+    filter(purchase_order=purchase_order_id)
     for value in voucher_no:
-        CalculateDistribution.objects.get(voucher_no=value['voucher_no'], session=value['session']).delete()
+        CalculateDistribution.objects.\
+        get(voucher_no=value['voucher_no'], session=value['session']).delete()
     VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
-    return HttpResponseRedirect(reverse("librehatti.voucher.views.voucher_generate"))
+    return HttpResponseRedirect(reverse\
+        ("librehatti.voucher.views.voucher_generate"))
 
 @login_required
 def order_added_success(request):
     order_id = request.session.get('purchase_order_id')
-    details = PurchaseOrder.objects.values('buyer__first_name','buyer__last_name'
-        ,'buyer__customer__address__street_address','buyer__customer__title',
-        'buyer__customer__address__city','mode_of_payment__method',
-        'cheque_dd_number','cheque_dd_date').filter(id=order_id)[0]
+    details = PurchaseOrder.objects.values('buyer__first_name',\
+        'buyer__last_name','buyer__customer__address__street_address',\
+        'buyer__customer__title','buyer__customer__address__city',\
+        'mode_of_payment__method','cheque_dd_number',\
+        'cheque_dd_date').filter(id=order_id)[0]
     request_status = request_notify()
-    return render(request,'catalog/order_added_success.html',{'details': details,
-        'order_id':order_id,'request':request_status})
+    return render(request,'catalog/order_added_success.html',\
+        {'details': details,'order_id':order_id,'request':request_status})
 
 
 @login_required
@@ -189,30 +205,35 @@ def change_request(request):
         filter(purchase_order_of_session = purchase_order_of_session).values()
         if object:
             voucherid = VoucherId.objects.\
-            filter(purchase_order_of_session=purchase_order_of_session, session_id=session).\
-            values('purchase_order_id')
+            filter(purchase_order_of_session=purchase_order_of_session,\
+            session_id=session).values('purchase_order_id')
             for value in voucherid:
                 purchase_order = value['purchase_order_id']
-            bill = Bill.objects.values('grand_total').get(purchase_order=purchase_order)
+            bill = Bill.objects.values('grand_total').\
+            get(purchase_order=purchase_order)
             surcharge = TaxesApplied.objects.values('surcharge__tax_name',\
                 'id','tax').filter(purchase_order_id = purchase_order)
-            details = VoucherId.objects.values('purchase_order__buyer__first_name',\
+            details = VoucherId.objects.values\
+            ('purchase_order__buyer__first_name',\
                 'purchase_order__buyer__last_name',
                 'purchase_order__buyer__customer__address__street_address',\
                 'purchase_order__buyer__customer__title',
                 'purchase_order__buyer__customer__address__city',\
                 'purchase_order__mode_of_payment__method',
-                'purchase_order__cheque_dd_number','purchase_order__cheque_dd_date').\
+                'purchase_order__cheque_dd_number',\
+                'purchase_order__cheque_dd_date').\
                 filter(purchase_order_of_session=purchase_order_of_session)[0]
             request_status = request_notify()    
-            return render(request,'catalog/change_form.html',{'details': details,
-            'order_id':purchase_order_of_session,'session':session,\
-            'surcharge':surcharge,'bill':bill,'request':request_status})
+            return render(request,'catalog/change_form.html',\
+                {'details': details,'order_id':purchase_order_of_session,\
+                'session':session,'surcharge':surcharge,'bill':bill,\
+                'request':request_status})
         else:
                 form = ChangeRequestForm()
                 errors = "No such purchase order number in selected session" 
                 request_status = request_notify()
-                temp = {"form" : form , "errors" : errors,'request':request_status}
+                temp = {"form" : form , "errors" : errors,\
+                'request':request_status}
                 
                 return render(request, 'catalog/change_request.html', temp) 
     else:
