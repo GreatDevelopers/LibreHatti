@@ -4,7 +4,6 @@
     <a href="{% url 'admin:index' %}" class="btn btn-primary btn-large">Add Category</a>
 </div>
 {% else %}
-
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
@@ -22,14 +21,12 @@
                 {% endfor %}
             </div>
             <div class="droppable">
-
             </div>
         </div>
     </div>
 </div>
 <div id="cart" class="cart">
     <ul id="cartitems">
-
     </ul>
 </div>
 <script type="text/javascript">
@@ -43,7 +40,7 @@
     // We have the product id. Get the name show
     var name = $(this).siblings("span").html();
     cart.addItem(name, parent, 1);
-    });
+});
 
     //This will make the element draggable
     $(".draggable").draggable();
@@ -53,5 +50,4 @@
 
     });
 </script>
-
 {% endif %} {% endblock %}

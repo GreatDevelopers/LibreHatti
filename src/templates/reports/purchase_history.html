@@ -4,37 +4,35 @@
 <!DOCTYPE html>
 <html lang="en">    
 <head>
-        <title>
-            Purchase History
-        </title>
-    </head>
-    <body>
-        {% block content %}
-        <div class="list-results">
-
+    <title>
+        Purchase History
+    </title>
+</head>
+<body>
+    {% block content %}
+    <div class="list-results">
         <h2> Purchase History </h2>
-         <div  class="search">
-        <table border = "1px">
-            <tr>
-                <th>S.No.</th>
-                <th>Purchase Order No.</th>
-                <th>Mode of Payment</th>
-                <th>Purchase Date</th>
-                <th>Options</th>
-            </tr>
-            {% for i in purchases %}
-
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{i.purchase_order_of_session}}</td>
-                <td>{{i.purchase_order__mode_of_payment__method}}</td>
-                <td>{{i.purchase_order__date_time|date}}</td>
-                <td><a href = '{% url 'librehatti.reports.previous_history.details' %}?order_id={{i.purchase_order}}'>View Details</a></td>
-            </tr>
-
-            {% endfor %}
+        <div  class="search">
+            <table border = "1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Purchase Order No.</th>
+                    <th>Mode of Payment</th>
+                    <th>Purchase Date</th>
+                    <th>Options</th>
+                </tr>
+                {% for i in purchases %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.purchase_order_of_session}}</td>
+                    <td>{{i.purchase_order__mode_of_payment__method}}</td>
+                    <td>{{i.purchase_order__date_time|date}}</td>
+                    <td><a href = '{% url 'librehatti.reports.previous_history.details' %}?order_id={{i.purchase_order}}'>View Details</a></td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
-        </div>
-            {% endblock %}
-    </body>
+    </div>
+    {% endblock %}
+</body>
 </html>

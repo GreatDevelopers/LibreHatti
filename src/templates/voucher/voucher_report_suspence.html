@@ -2,67 +2,63 @@
 <html>
 <head>
 	{% load staticfiles %}
-            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
-	{% block title %}
-	<title>Voucher</title>
-	{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
+    {% block title %}
+    <title>Voucher</title>
+    {% endblock %}
 </head>
-
-
 <body>
 	{% block content %}
-<br>
+    <br>
+    <div id = "pos-right">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
+    <div id = "pos-right">Dated : {{date}} </div>
+    <div class="designation">Director,</div>
+    <br>
+    A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
+    {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} on account of 
 
-<div id = "pos-right">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
-<div id = "pos-right">Dated : {{date}} </div>
-<div class="designation">Director,</div>
-<br>
-A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
-{{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} on account of 
-  
- This amount is kept in suspence till clearance. <br/><br/>
-<div class="receipt-detail">Receipt No. : {{job}}   </div>
-<div class="receipt-detail">Dated: {{date}}</div>
-<div id = "pos-left">
-<br>
-<table  border = "1px">
-
-		<tr>
-			<td>Bill Amount</td>
-			<td id = "pos-right">{{cost.total_cost}}.00</td>
-		</tr>
-		{% for value in tax %}
-		<tr>
-			<td>{{ value.surcharge__tax_name }}  @ {{ value.surcharge__value }}% </td>
-			<td  id = "pos-right">{{ value.tax }}.00</td>
-		</tr>
-		{% endfor %}
-		{% if cost.delivery_charges %}
-        <tr>
+    This amount is kept in suspence till clearance. <br/><br/>
+    <div class="receipt-detail">Receipt No. : {{job}}   </div>
+    <div class="receipt-detail">Dated: {{date}}</div>
+    <div id = "pos-left">
+        <br>
+        <table  border = "1px">
+            <tr>
+               <td>Bill Amount</td>
+               <td id = "pos-right">{{cost.total_cost}}.00</td>
+           </tr>
+           {% for value in tax %}
+           <tr>
+               <td>{{ value.surcharge__tax_name }}  @ {{ value.surcharge__value }}% </td>
+               <td  id = "pos-right">{{ value.tax }}.00</td>
+           </tr>
+           {% endfor %}
+           {% if cost.delivery_charges %}
+           <tr>
             <td>Transportation</td>
             <td  id = "pos-right">{{cost.delivery_charges}}</td>
         </tr>
-{% endif %}
-		<tr>
-				<td>Total Amount </td>
-			<td  id = "pos-right"> {{ cost.grand_total}}.00</td>
-		</tr>	
-		<tr>
-			<td>TDS</td>
-			<td id = "pos-right">{{tds.tds}}.00</td>
-		</tr>
-		<tr>
-			<td>Balance</td>
-			<td id = "pos-right">{{cost.amount_received}}.00</td>
-		</tr>
-</table>
+        {% endif %}
+        <tr>
+            <td>Total Amount </td>
+            <td  id = "pos-right"> {{ cost.grand_total}}.00</td>
+        </tr>
+        <tr>
+           <td>TDS</td>
+           <td id = "pos-right">{{tds.tds}}.00</td>
+       </tr>
+       <tr>
+           <td>Balance</td>
+           <td id = "pos-right">{{cost.amount_received}}.00</td>
+       </tr>
+   </table>
 </div>
 <br><br>
 <div class="voucher-no"><b>Account Clerk (Consultancy)</b>
-<div style = "text-align:right; float:right">
-            <b>Dean Testing & Consultancy Cell</b>
-        </div>
-        </div>
+    <div style = "text-align:right; float:right">
+        <b>Dean Testing & Consultancy Cell</b>
+    </div>
+</div>
 {% endblock %}
 </body>
 </html>

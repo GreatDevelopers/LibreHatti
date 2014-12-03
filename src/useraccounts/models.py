@@ -13,13 +13,14 @@ class OrganisationType(models.Model):
     def __unicode__(self):
         return self.type_desc
 
+
 """
 describes the address details of the admin organisation 
 """
 class Address(models.Model):
     street_address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    pin = models.CharField(max_length=10, blank = True, null = True)
+    pin = models.CharField(max_length=10, blank=True, null=True)
     province = models.CharField(max_length=100)
     nationality = models.CharField(max_length=100)
 
@@ -29,6 +30,7 @@ class Address(models.Model):
     def __unicode__(self):
         return self.street_address + ',' + self.city
 
+
 """
 describes the details of the user's organisation 
 """
@@ -37,13 +39,14 @@ class HattiUser(models.Model):
     address = models.ForeignKey(Address)
     telephone = models.CharField(max_length=500)
     date_joined  = models.DateTimeField(auto_now_add=True)
-    fax = models.CharField(max_length=100, blank = True, null = True)
-    pan_no = models.CharField(max_length=100, blank = True, null = True)
-    stc_no = models.CharField(max_length=100, blank = True, null = True)
+    fax = models.CharField(max_length=100, blank=True, null=True)
+    pan_no = models.CharField(max_length=100, blank=True, null=True)
+    stc_no = models.CharField(max_length=100, blank=True, null=True)
     avatar = models.CharField(max_length=100, null=True, blank=True)
-    tagline = models.CharField(max_length=140, blank = True, null = True)
+    tagline = models.CharField(max_length=140, blank=True, null=True)
     class Meta:
         abstract=True
+
 
 """
 This class inherits the details of HattiUser specifying the title of 
@@ -59,6 +62,7 @@ class AdminOrganisations(HattiUser):
     def __unicode__(self):
         return self.title
 
+
 """
 This class inherits the details of HattiUser whether customer is
 organisation type or individual thus customer will confirm the Is org
@@ -67,9 +71,9 @@ name
 """
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)
-    is_org = models.BooleanField(default = False);
+    is_org = models.BooleanField(default=False);
     org_type = models.ForeignKey(OrganisationType)
-    company = models.CharField(max_length=200, blank = True, null = True)
+    company = models.CharField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):
 	return unicode(self.user)

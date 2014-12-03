@@ -2,68 +2,64 @@
 {% load i18n %} {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">    <head>
+<html lang="en">
+<head>
 {% block title %}
 <title>
-    Results of your Search 
+  Results of your Search
 </title> 
 {% endblock %}
 </head>
 <body>
-    {% block content %}
-    <div class = "list-results">
-        <h2>Results for {{ title }}</h2>
-        <div  class="search">
-           <table border="1px">
+  {% block content %}
+  <div class = "list-results">
+    <h2>Results for {{ title }}</h2>
+    <div  class="search">
+     <table border="1px">
+      <tr>
+        <th>S.No.</th>
+        {% for field in client %}
+        <th>{{field}}</th>
+        {% endfor %}
+        {% for field in order %}
+        <th>{{field}}</th>
+        {% endfor %}
+        {% if order_id %}
+        <th>Options</th>
+        {% endif %}
+        <tr>
+          {% for result in records %}
+          {% if result %}
+          <td>{{forloop.counter}}</td>{% endif %}
+          {% for value in result %}
+          <td>
+            {% for item in value.items %}
 
-            <tr> 
-              <th>S.No.</th>
-              {% for field in client %}
-              <th>{{field}}</th>
-              {% endfor %}
+            {% if order and item.0 == 'purchase_order_id' %}
+            <a href = '{% url 'librehatti.prints.views.bill'%}?order_id={{item.1}}'>Generate Bill</a> |
+            <a href = '{% url 'librehatti.prints.views.tax'%}?order_id={{item.1}}'>Generate Tax Details</a> |
+            <a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{item.1}}'>View Voucher</a> |
+            <a href = '{% url 'librehatti.prints.views.receipt'%}?order_id={{item.1}}'>Generate Receipt</a>
 
-              {% for field in order %}
-              <th>{{field}}</th>
-              {% endfor %}
-              {% if order_id %}
-              <th>Options</th>
-              {% endif %}
-              <tr>
+            {% elif order and item.0 == 'quoted_order_id' %}
+            <a href = '{% url 'librehatti.prints.views.quoted_bill'%}?quoted_order_id={{item.1}}'>Generate Bill</a>
 
-                {% for result in records %}
-                {% if result %}		
-                <td>{{forloop.counter}}</td>{% endif %}
-                {% for value in result %}
+            {% elif client and item.0 == 'purchase_order__buyer__id' %}
+            <a href = '{% url 'librehatti.reports.previous_history.history' %}?user_id={{item.1}}'>View History</a>
 
-                <td>
-                    {% for item in value.items %}
-                    
-                    {% if order and item.0 == 'purchase_order_id' %}
-                    <a href = '{% url 'librehatti.prints.views.bill'%}?order_id={{item.1}}'>Generate Bill</a> |
-                    <a href = '{% url 'librehatti.prints.views.tax'%}?order_id={{item.1}}'>Generate Tax Details</a> |
-                    <a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{item.1}}'>View Voucher</a> |
-                    <a href = '{% url 'librehatti.prints.views.receipt'%}?order_id={{item.1}}'>Generate Receipt</a>
+            {% else %}
+            {{item.1}}
 
-                    {% elif order and item.0 == 'quoted_order_id' %}
-                    <a href = '{% url 'librehatti.prints.views.quoted_bill'%}?quoted_order_id={{item.1}}'>Generate Bill</a>
-                    
-                    {% elif client and item.0 == 'purchase_order__buyer__id' %}
-                    <a href = '{% url 'librehatti.reports.previous_history.history' %}?user_id={{item.1}}'>View History</a>
+            {% endif %}
 
-                    {% else %}
-                    {{item.1}}
-                    
-                    {% endif %}
-
-                    {% endfor %}
-                </td>
-                {%endfor%}
-            </tr>
-            {%endfor%}
-        </table>
+            {% endfor %}
+          </td>
+          {%endfor%}
+        </tr>
+        {%endfor%}
+      </table>
     </div>
-</div>
-{% endblock %}
-
+  </div>
+  {% endblock %}
 </body>
 </html>

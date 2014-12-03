@@ -19,12 +19,14 @@ admin.site.register(OrganisationType)
 admin.site.register(Customer)
 admin.site.unregister(User)
 
+
 """
 This class is used to add, edit or delete the address of the organisation
 or user
 """
 class AddressInline(admin.StackedInline):
      model = Address
+
 
 """
 This class is used to add, edit or delete the details of customer 
@@ -33,6 +35,7 @@ org_type or not
 """
 class CustomerInline(admin.StackedInline):
      model = Customer
+
 
 """
 This class is used to add new customer, edit or delete existing 
@@ -59,4 +62,3 @@ class CustomUserAdd(UserAdmin):
             instance.customer.address.city)
 
 admin.site.register(User,CustomUserAdd)
-

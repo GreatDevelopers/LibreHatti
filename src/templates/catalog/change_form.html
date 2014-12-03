@@ -3,31 +3,31 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    	{% block title %}
-            <title>Change Request</title>
-        {% endblock %}
-    </head>
-    <body> 
-      {% block content %}
-      <h2><center>Purchase order {{ order_id }} of session {{ session }}</center></h2>
-        <div class='order-success'>
-<table>
-	<tr>
-		<th>Client:</th>
-		  <td>{{details.purchase_order__buyer__first_name}}&nbsp;{{details.purchase_order__buyer__last_name}}
-		  	&nbsp;{{details.purchase_order__buyer__customer__title}}</td>
-    </tr>
-    <tr>
-    	<th>Address:</th>
-    	<td>{{details.purchase_order__buyer__customer__address__street_address}}&nbsp;
-    		{{details.purchase_order__buyer__customer__address__city}}</td>
-    </tr>
-    <tr>
-    	<th>Mode Of Payment:</th>
-    	<td>{{details.purchase_order__mode_of_payment__method}}</td>
-    </tr>
-</table>
+<head>
+   {% block title %}
+   <title>Change Request</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <h2><center>Purchase order {{ order_id }} of session {{ session }}</center></h2>
+  <div class='order-success'>
+    <table>
+       <tr>
+          <th>Client:</th>
+          <td>{{details.purchase_order__buyer__first_name}}&nbsp;{{details.purchase_order__buyer__last_name}}
+           &nbsp;{{details.purchase_order__buyer__customer__title}}</td>
+       </tr>
+       <tr>
+           <th>Address:</th>
+           <td>{{details.purchase_order__buyer__customer__address__street_address}}&nbsp;
+              {{details.purchase_order__buyer__customer__address__city}}</td>
+          </tr>
+          <tr>
+           <th>Mode Of Payment:</th>
+           <td>{{details.purchase_order__mode_of_payment__method}}</td>
+       </tr>
+   </table>
 </div>
 <table>
     <tr>
@@ -35,36 +35,35 @@
         </td>
     </tr>
 </table>
-            <form action='{% url 'librehatti.catalog.request_change.request_save' %}?order_id={{order_id}}&session={{session}}' method='POST'>
-            <table class="changeform">
-                {% csrf_token %}
-                <tr>
-                    <th><label>Previous Total:</label></th>
-                    <th><input name="previous_total" value="{{bill.grand_total}}" readonly="readonly" type="text"
-                    id="previous_total" /></th>
-                </tr>
-                <tr>
+<form action='{% url 'librehatti.catalog.request_change.request_save' %}?order_id={{order_id}}&session={{session}}' method='POST'>
+    <table class="changeform">
+        {% csrf_token %}
+        <tr>
+            <th><label>Previous Total:</label></th>
+            <th><input name="previous_total" value="{{bill.grand_total}}" readonly="readonly" type="text"
+                id="previous_total" /></th>
+            </tr>
+            <tr>
                 <th><label>Surcharge:</label></th>
                 <th><label>Previous:</label></th>
                 <th><label>New:</label></th>
-                </tr>
-                {% for value in surcharge %}
-                <tr>
+            </tr>
+            {% for value in surcharge %}
+            <tr>
                 <td><input name="surcharge" value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td> 
                 <td><input name="previous_value" value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td> 
                 <td><input name="new_value" type="number" placeholder="New Value" class="new_value" id="{{value.id}}" /></td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <th><label>New Total:</label></th>
-                    <th><input name="new_total" readonly="readonly" type="text" id="new_total" /></th>
-                </tr>
-            </table>
-                <label for="id_description">Description:</label> 
-                <textarea cols="40" name="description" rows="5" placeholder="Description"></textarea>
-                <input type="submit" class="btn btn-info btn-large" value="Send Request" name='button1' id='button1' />
-            </form>
-
-{% endblock %}
+            </tr>
+            {% endfor %}
+            <tr>
+                <th><label>New Total:</label></th>
+                <th><input name="new_total" readonly="readonly" type="text" id="new_total" /></th>
+            </tr>
+        </table>
+        <label for="id_description">Description:</label>
+        <textarea cols="40" name="description" rows="5" placeholder="Description"></textarea>
+        <input type="submit" class="btn btn-info btn-large" value="Send Request" name='button1' id='button1' />
+    </form>
+    {% endblock %}
 </body>
 </html>

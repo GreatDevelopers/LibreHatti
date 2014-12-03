@@ -19,7 +19,7 @@
     <div class="list-results">
         <h2>Voucher</h2>
         <div class="shrinked-table">
-           <table border="1px">
+         <table border="1px">
             
             <tr>
                 <th>Purchase Order</th> 
@@ -33,9 +33,7 @@
                 <td>{{ value.voucher_no }}</td>
                 <td><a href = '{% url 'librehatti.voucher.views.voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a>
                 </td>
-
             </tr>
-
             {% endfor %}
             {% endif %}
         </table>
