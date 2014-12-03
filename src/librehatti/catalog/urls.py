@@ -1,7 +1,6 @@
 """
 urls of catalog are..
 """
-
 from django.conf.urls import url, patterns
 from django.views.generic import TemplateView
 
@@ -9,8 +8,6 @@ from django.views.generic import TemplateView
 urls showing the list of item purchased and redirects to page of adding 
 new categories of product 
 """
-
-
 urlpatterns = patterns('librehatti.catalog.views',
     url(r'^$', 'index'),
     url(r'^select_sub_category/', 'select_sub_category'),
@@ -23,7 +20,6 @@ urlpatterns = patterns('librehatti.catalog.views',
     url(r'^change_request/','change_request'),
     url(r'^price_per_unit/','price_per_unit'),
 )
-
 
 urlpatterns += patterns('librehatti.catalog.request_change',
    url(r'^request_save/','request_save'),
