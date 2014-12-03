@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import *
+
 from librehatti.suspense.models import SuspenseOrder, Staff, Department
+
 from librehatti.catalog.actions import mark_inactive, mark_active
 from librehatti.catalog.models import *
+
 from librehatti.suspense.forms import StaffForm
 from librehatti.suspense.models import Vehicle, Transport
 
@@ -14,8 +17,8 @@ admin.site.register(Transport)
 admin.site.register(Vehicle)
 
 class SuspenseOrderAdmin(admin.ModelAdmin):
-    exclude=('is_active',)
-    list_display = ['id','buyer','delivery_address','date_time','is_active']
+    exclude = ('is_active',)
+    list_display = ['id', 'buyer', 'delivery_address', 'date_time','is_active']
     model = SuspenseOrder
     actions = [mark_active, mark_inactive] 
     list_filter = ['purchase_order__date_time']
@@ -33,12 +36,14 @@ class SuspenseOrderAdmin(admin.ModelAdmin):
 
     def is_active(self, instance):
         return instance.purchase_order.is_active
-  
+
+
 class StaffAdmin(admin.ModelAdmin):
     form = StaffForm
     model = Staff
-    list_display = ['name', 'department','position', 'daily_ta_da', 'lab']
+    list_display = ['name', 'department', 'position', 'daily_ta_da', 'lab']
     list_per_page = 20
+
 
 admin.site.register(Staff,StaffAdmin) 
 admin.site.register(SuspenseOrder,SuspenseOrderAdmin) 
