@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from librehatti.voucher.models import *
+
 from django.contrib.auth.admin import *
 
 from librehatti.voucher.forms import AssignDistributionForm
@@ -23,9 +25,11 @@ class CategoryDistributionTypeAdmin(admin.ModelAdmin):
     list_display = ['category','parent_category','distribution']
     list_filter = ['category','parent_category']
 
+
 class VoucherIdAdmin(admin.ModelAdmin):
 	model = VoucherId
 	list_display = ['id','voucher_no','session','ratio']
+
 
 admin.site.register(VoucherId, VoucherIdAdmin)
 admin.site.register(FinancialSession, FinancialSessionAdmin)

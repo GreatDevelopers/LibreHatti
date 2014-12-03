@@ -1,8 +1,11 @@
 from django.db import models
+
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Category 
+
 import datetime
+
  
 class FinancialSession(models.Model):
     session_start_date = models.DateField()
@@ -36,7 +39,8 @@ class VoucherId(models.Model):
 
 
 class CategoryDistributionType(models.Model):
-    parent_category = models.ForeignKey(Category, related_name='parent_category')
+    parent_category = models.ForeignKey\
+    (Category, related_name='parent_category')
     category = models.ForeignKey(Category, related_name='category')
     distribution = models.ForeignKey(Distribution)
     def __unicode__(self):
