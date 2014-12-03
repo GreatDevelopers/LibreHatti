@@ -4,48 +4,44 @@
 <!DOCTYPE html>
 <html lang="en">    
 <head>
-<title>Lab Report</title>  
+  <title>Lab Report</title>
 </head>
-
 <body>
   {% block content %}
   <div class='list-results'>
-{% for name in category_name %}
-<h2>Lab Report for {{name.name}}</h2>
-{% endfor %}
-<br><br>
-<p id = "date-range"> From {{start_date}} to {{end_date}} </p>
+    {% for name in category_name %}
+    <h2>Lab Report for {{name.name}}</h2>
+    {% endfor %}
+    <br><br>
+    <p id = "date-range"> From {{start_date}} to {{end_date}} </p>
     <table class='list-results' border="1">
       <tr>
-          <th>Receipt No.</th>
-          <th> Date </th>
-          <th> Client </th>
-          <th> Company </th>
-          <th> Amount</th>
+        <th>Receipt No.</th>
+        <th> Date </th>
+        <th> Client </th>
+        <th> Company </th>
+        <th> Amount</th>
       </tr>  
- 
-{% for i in purchase_item %}
-
-<tr>
-    <td> {{i.purchase_order_id}}</td>
-    <td> {{i.purchase_order__date_time}}</td>
-    {% ifequal i.purchase_order__buyer_id__customer__is_org  1 %}
+      {% for i in purchase_item %}
+      <tr>
+        <td> {{i.purchase_order_id}}</td>
+        <td> {{i.purchase_order__date_time}}</td>
+        {% ifequal i.purchase_order__buyer_id__customer__is_org  1 %}
         <td> {{i.purchase_order__buyer_id__customer__title}}</td>
         <td> {{i.purchase_order__buyer_id__customer__title}}</td>
-    {% else %} 
+        {% else %}
         <td> {{i.purchase_order__buyer_id__username}}</td>
         <td> {{i.purchase_order__buyer_id__customer__company}}</td>
-    {% endifequal %}
-    <td> {{i.price}}</td>
-</tr>
-                 
-{% endfor %}
-<tr> 
-    <td colspan='4'> <center><b>Sum</center></b></td>
-    <td>{{total_cost}}</td>
-</tr>      
-</table>
-</div>
-{% endblock %}
+        {% endifequal %}
+        <td> {{i.price}}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan='4'> <center><b>Sum</center></b></td>
+        <td>{{total_cost}}</td>
+      </tr>
+    </table>
+  </div>
+  {% endblock %}
 </body>
 </html>

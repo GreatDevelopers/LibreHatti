@@ -1,35 +1,29 @@
 {% extends 'bill_base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset='UTF-8'>
-{% block title %}
-        <title>Receipt</title>
-{% endblock %}
-{% load set_var %} 
+    <meta charset='UTF-8'>
+    {% block title %}
+    <title>Receipt</title>
+    {% endblock %}
+    {% load set_var %}
 </head>
-
-
 <body>
     {% block content %}
-
     <div class="container">
-        
         <h2>Receipt</h2>
     </div>
     <div class = "bill-left">
-    <p><span id ="highlight">Receipt No.: </span>{{receiptno}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date}}</span></p>
+        <p><span id ="highlight">Receipt No.: </span>{{receiptno}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date}}</span></p>
     </div>
-
-<p>Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> {{buyer.company}}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} by {{method.mode_of_payment__method}} on account of Testing of
-{% for value in material %}
-{{value.item__category__name}},
-{% endfor %}.</p>
-
-<br><br><br>
-<div id = "pos-right">
-<span id ="highlight">Cashier</span></div>
-{% endblock %}
+    <p>Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> {{buyer.company}}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} by {{method.mode_of_payment__method}} on account of Testing of
+        {% for value in material %}
+        {{value.item__category__name}},
+        {% endfor %}.</p>
+        <br><br><br>
+        <div id = "pos-right">
+            <span id ="highlight">Cashier</span></div>
+            {% endblock %}
 </body>
 </html>
-

@@ -1,16 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %} {% load staticfiles %}
-
 {% block content %}
-
-    <div class="main-box">
+<div class="main-box">
     <form method="GET" action={% url 'librehatti.prints.views.lab_report' %} class="form lab-form">
         <h2 class="form-heading"> Create Query: </h2>
-	<div class="form-elements">
-        {{form.as_p}}
-	</div>
+        <div class="form-elements">
+            {{form.as_p}}
+        </div>
         <p><input type="submit" class = "button-class" name="Submit" value="Submit"></p>
     </form>
-    </div>
-
+</div>
 {% endblock %}
