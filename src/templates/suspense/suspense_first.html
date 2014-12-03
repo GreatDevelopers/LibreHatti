@@ -1,34 +1,33 @@
 {% extends "base.html" %} {% load staticfiles %}
 
 <html>
-    <head>
-        {% block title %}
-        <title>Form</title>
-        {% endblock %}
-        {% block js %}
-        <script src="{% static 'js/clearance.js' %}">
-        </script>
-        {% endblock js %}
-    </head>
-    <body>
-        {% block content %}
-        {% if clearance %}
-            <form method="POST" action={% url 'librehatti.suspense.views.clearance_result' %} >
+<head>
+    {% block title %}
+    <title>Form</title>
+    {% endblock %}
+    {% block js %}
+    <script src="{% static 'js/clearance.js' %}">
+    </script>
+    {% endblock js %}
+</head>
+<body>
+    {% block content %}
+    {% if clearance %}
+    <form method="POST" action={% url 'librehatti.suspense.views.clearance_result' %} >
         {% else %}
-            <form method="POST" action=''>
-        {% endif %}
+        <form method="POST" action=''>
+            {% endif %}
             {% csrf_token %}
-        <table> 
-      {% if message %}
-      <div class="alert alert-danger">
-      {{ message }}
-      </div>
-      {% endif %}
-            {{form.as_p}}
-        
-        </table>
-            <input type="submit" class="btn btn-info btn-large" value="Submit">
-        </form> 
-        {% endblock %}
-    </body>
-</html>
+            <table>
+              {% if message %}
+              <div class="alert alert-danger">
+                  {{ message }}
+              </div>
+              {% endif %}
+              {{form.as_p}}
+          </table>
+          <input type="submit" class="btn btn-info btn-large" value="Submit">
+      </form>
+      {% endblock %}
+  </body>
+  </html>

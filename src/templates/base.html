@@ -20,24 +20,24 @@
     </script>
     {% endblock %}
     {% block js %}
-        <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'>
-        </script>
-        <script src="{% static 'js/jquery-ui.min.js' %}">
-        </script>
-	    <script src="{% static 'js/bootstrap-timepicker.min.js' %}">
-        </script>
-        </script>
-        <script src="{% static 'js/total.js' %}">
-        </script>
-        <script src="{% static 'js/quoted_save_distance.js' %}">
-        </script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
-        <script src="{% static 'js/note_save_delete.js' %}">
-        </script>
-        <script src="{% static 'js/accordion.js' %}">
-	</script>
-   <script type="text/javascript">
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'>
+    </script>
+    <script src="{% static 'js/jquery-ui.min.js' %}">
+    </script>
+    <script src="{% static 'js/bootstrap-timepicker.min.js' %}">
+    </script>
+</script>
+<script src="{% static 'js/total.js' %}">
+</script>
+<script src="{% static 'js/quoted_save_distance.js' %}">
+</script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-dialog.js' %}"></script>
+<script src="{% static 'js/note_save_delete.js' %}">
+</script>
+<script src="{% static 'js/accordion.js' %}">
+</script>
+<script type="text/javascript">
     $(document).ready(function(){
         $('.voucher').attr('disabled', 'disabled');
         $('.material').attr('disabled', 'disabled');
@@ -46,65 +46,65 @@
             distance = $('#distance_' + voucher_no).val();
             order = $('#order').val();
             reverse('librehatti.suspense.views.save_distance', function(url) {
-            var request_url = url + "/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
-            $.ajax({
-                url: request_url,
-                success: function(data){
-                }
+                var request_url = url + "/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
+                $.ajax({
+                    url: request_url,
+                    success: function(data){
+                    }
+                });
             });
         });
-        });
     })
-    </script>
-        <script type="text/javascript">
-$('#id_sub_category').attr('disabled', 'disabled');
-$(document).ready(function(){
-    $('#id_parent_category').change(function(){
-        $('#id_sub_category').empty();
-        $('#id_sub_category').removeAttr('disabled');
-        parent_id = $(this).val();
-        reverse('librehatti.prints.views.filter_sub_category', function(url) {
-            var request_url = url + "/?parent_id=" + parent_id;
-        $.ajax({
-            url: request_url,
-            datatype: 'json',
-            success: function(data){
-                $.each(JSON.parse(data), function(key,value) {
-                    $('#id_sub_category').append('<option value="' + key + '">' + value + '</option>');
-                    });
-            }
-       })
+</script>
+<script type="text/javascript">
+    $('#id_sub_category').attr('disabled', 'disabled');
+    $(document).ready(function(){
+        $('#id_parent_category').change(function(){
+            $('#id_sub_category').empty();
+            $('#id_sub_category').removeAttr('disabled');
+            parent_id = $(this).val();
+            reverse('librehatti.prints.views.filter_sub_category', function(url) {
+                var request_url = url + "/?parent_id=" + parent_id;
+                $.ajax({
+                    url: request_url,
+                    datatype: 'json',
+                    success: function(data){
+                        $.each(JSON.parse(data), function(key,value) {
+                            $('#id_sub_category').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    }
+                })
+            });
+        })
     });
-    })
-});
-$(function() {
-    $('#id_start_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_start_date').datepicker( "option", "showAnim", "clip" )
-    $('#id_end_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_end_date').datepicker( "option", "showAnim", "clip" )
-    .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
-    $('#id_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_start_test_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_end_test_date').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
-    $('#id_Date_of_generation').datepicker({
-        changeMonth: true,
-        changeYear: true,dateFormat:"yy-mm-dd"
-    })
+    $(function() {
+        $('#id_start_date').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
+        $('#id_start_date').datepicker( "option", "showAnim", "clip" )
+        $('#id_end_date').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
+        $('#id_end_date').datepicker( "option", "showAnim", "clip" )
+        .datepicker('widget').wrap('<div class="ll-skin-lugo"/>');
+        $('#id_date').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
+        $('#id_start_test_date').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
+        $('#id_end_test_date').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
+        $('#id_Date_of_generation').datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        })
     /*$('#id_departure_time_from_tcc').timepicker();
     $('#id_arrival_time_at_site').timepicker();
     $('#id_departure_time_from_site').timepicker();
@@ -113,14 +113,14 @@ $(function() {
 </script>
 {% endblock js %}
 {% block extrajs %} {% endblock extrajs %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-timepicker.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/accordion.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-timepicker.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/accordion.css' %}">
 </head>
 <body>
     <div class = "wrapper">
@@ -128,28 +128,27 @@ $(function() {
             <div class ="main-box" id="c-panel"> 
                 <header class="primary-branding">
                    <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
-                </header>
-                {% block content %}{% endblock %}
-            </div>
-            <div class ="account">
-                <nav id="primary_nav_wrap">
-<ul>
-  <li>
-    {% if request == 1 %}
-        <a href="#"><img width="40px" src="{% static 'icons/Settings-1.png' %}"></a>
-    {% else %}
-        <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
-    {% endif %}
-    <ul>
-      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
-      <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
-      <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
-      <li><a href="{% url 'admin:logout' %}">Log out</a></li>
-    </ul>
-  </li>
-</ul>
-</nav>
-            </div>
-
-        </div>
-    </div>
+               </header>
+               {% block content %}{% endblock %}
+           </div>
+           <div class ="account">
+            <nav id="primary_nav_wrap">
+                <ul>
+                  <li>
+                    {% if request == 1 %}
+                    <a href="#"><img width="40px" src="{% static 'icons/Settings-1.png' %}"></a>
+                    {% else %}
+                    <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
+                    {% endif %}
+                    <ul>
+                      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
+                      <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+                      <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
+                      <li><a href="{% url 'admin:logout' %}">Log out</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </nav>
+  </div>
+</div>
+</div>

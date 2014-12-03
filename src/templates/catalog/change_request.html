@@ -1,26 +1,24 @@
 {% extends "base.html" %} {% load staticfiles %}
-
 <html>
-    <head>
-        {% block title %}
-        <title>Form</title>
-        {% endblock %}
-        
-    </head>
-    <body>
-        {% block content %}
-            <form method="POST" action={% url 'librehatti.catalog.views.change_request' %} >
-            {% if errors %}
-                 <div class="alert alert-danger">
-                        {{ errors }} 
-                    </div>
-                {% endif %}
-            {% csrf_token %}
+<head>
+    {% block title %}
+    <title>Form</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <form method="POST" action={% url 'librehatti.catalog.views.change_request' %} >
+        {% if errors %}
+        <div class="alert alert-danger">
+            {{ errors }}
+        </div>
+        {% endif %}
+        {% csrf_token %}
         <table> 
             {{form.as_table}}
         </table>
-            <input type="submit" class="btn btn-info btn-large" value="Submit">
-        </form> 
-        {% endblock %}
-    </body>
+        <input type="submit" class="btn btn-info btn-large" value="Submit">
+    </form>
+    {% endblock %}
+</body>
 </html>

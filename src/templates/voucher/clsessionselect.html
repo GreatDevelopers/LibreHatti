@@ -1,14 +1,13 @@
 {% extends "base.html" %}
-
 {% block content %}
 <table>
     <tr>
         <td>
             <form action='{% url 'librehatti.suspense.views.clearance_search' %}' method='POST'>
                 {% if errors %}
-                 <div class="alert alert-danger">
-                        {{ errors }} 
-                    </div>
+                <div class="alert alert-danger">
+                    {{ errors }}
+                </div>
                 {% endif %}
 
                 {% csrf_token %}

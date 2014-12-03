@@ -20,86 +20,86 @@
     </script>
     {% endblock %}
     {% block js %}
-     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
     </script>
     <script src="{% static 'js/registers.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
     <script src="{% static 'js/request_response.js' %}"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-    $('.mark_clear').click(function(){
-        var addressValue = $(this).attr("href");
-        BootstrapDialog.show({
-            title: '<b>Suspense Clearance</b>',
-            message: 'Are you sure that you want to clear this order?',
-            buttons: [{
-                icon: 'glyphicon glyphicon-ok',
-                cssClass: 'btn btn-success',
-                label: ' Yes',
-                action: function(dialogItself){
-                    reverse('librehatti.suspense.views.mark_status', function(url) {
-                    var request_url = url + "/?" + addressValue;
-                    $.ajax({
-                        url: request_url,
-                        success: function(data){
-                            dialogItself.close();
-                            location.reload();
+        $(document).ready(function(){
+            $('.mark_clear').click(function(){
+                var addressValue = $(this).attr("href");
+                BootstrapDialog.show({
+                    title: '<b>Suspense Clearance</b>',
+                    message: 'Are you sure that you want to clear this order?',
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-ok',
+                        cssClass: 'btn btn-success',
+                        label: ' Yes',
+                        action: function(dialogItself){
+                            reverse('librehatti.suspense.views.mark_status', function(url) {
+                                var request_url = url + "/?" + addressValue;
+                                $.ajax({
+                                    url: request_url,
+                                    success: function(data){
+                                        dialogItself.close();
+                                        location.reload();
+                                    }
+                                })
+                            });
                         }
-                    })
-                });
-                }
-            },
-            {
-                icon: 'glyphicon glyphicon-remove',
-                cssClass: 'btn btn-danger',
-                label: ' No',
-                action: function(dialogItself){
-                    dialogItself.close();
-                }
-            }]
-        })
-        return false;
-    })
-    });
+                    },
+                    {
+                        icon: 'glyphicon glyphicon-remove',
+                        cssClass: 'btn btn-danger',
+                        label: ' No',
+                        action: function(dialogItself){
+                            dialogItself.close();
+                        }
+                    }]
+                })
+return false;
+})
+});
 </script>
-   
-            {% endblock %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">   
+
+{% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
 </head>
 <body>
     <div class = "wrapper">
         <div class="white-board">
             <div class ="main-box" id="c-panel"> 
                 <header class="primary-branding">
-                   <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
-                </header>
-            </div>
-            <div class ="account">
-                <nav id="primary_nav_wrap">
-<ul>
-  <li>
-    {% if request == 1 %}
-        <a href="#"><img width="40px" src="{% static 'icons/Settings-1.png' %}"></a>
-    {% else %}
-        <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
-    {% endif %}
-    <ul>
-      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
-      <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
-      <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
-      <li><a href="{% url 'admin:logout' %}">Log out</a></li>
-    </ul>
-  </li>
-</ul>
-</nav>
-            </div>
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+                 <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
+             </header>
+         </div>
+         <div class ="account">
+            <nav id="primary_nav_wrap">
+                <ul>
+                  <li>
+                    {% if request == 1 %}
+                    <a href="#"><img width="40px" src="{% static 'icons/Settings-1.png' %}"></a>
+                    {% else %}
+                    <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
+                    {% endif %}
+                    <ul>
+                      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
+                      <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+                      <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
+                      <li><a href="{% url 'admin:logout' %}">Log out</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </nav>
+  </div>
+  {% block content %}{% endblock %}
+</div>
+</div>
 </body>
 </html>

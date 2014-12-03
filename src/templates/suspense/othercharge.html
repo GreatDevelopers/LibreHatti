@@ -2,7 +2,7 @@
 <html>
 <head>
     {% load staticfiles %}
-            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
 
     {% block title %}
     <title>Other Charges</title>
@@ -11,44 +11,46 @@
 
 <body>
     {% block content %}
-<div style = "text-align:right">
-            No: __________
+    <div style = "text-align:right">
+        No: __________
+    </div>
+    <div style = "text-align:right">
+        Date: __________
+    </div>
+    <div>A sum of Rs {{total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{other_charges}}/- has been deposited by:-
+    </div>
+    <div>{{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
+        {{address.purchase_order__buyer__customer__address__street_province}}</div>
+        <div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide letter no.________dated________</div>
+        <div>A sum of Rs {{total}}/- was spent for testing on as detailed below.</div>
+        <br>
+        <div id = "pos-left">
+            <table border='1px'>
+                <tr>
+                    <td>T.A/D.A Staff </td>
+                    <td  id = "pos-right">{{ ta_da }}</td>
+                </tr>
+                <tr>
+                    <td>Boring Charges </td>
+                    <td  id = "pos-right">{{boring_charges}}</td>
+                </tr>
+                <tr>
+                    <td>Labour Charges </td>
+                    <td  id = "pos-right">{{ suspense_clearance.labour_charge }}</td>
+                </tr>
+                <tr>
+                    <td>Car/Taxi Charges </td>
+                    <td  id = "pos-right">{{ suspense_clearance.car_taxi_charge }}</td>
+                </tr>
+                <tr>
+                    <td><b>TOTAL</b></td>
+                    <td  id = "pos-right">{{total}}</td>
+                </tr>
+            </table>
         </div>
-<div style = "text-align:right">
-    Date: __________
-</div>
-<div>A sum of Rs {{total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{other_charges}}/- has been deposited by:-</div>
-<div>{{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
-{{address.purchase_order__buyer__customer__address__street_province}}</div>
-<div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide letter no.________dated________</div>
-<div>A sum of Rs {{total}}/- was spent for testing on as detailed below.</div>
-<br>
-<div id = "pos-left">
-<table border='1px'>
-<tr>
-    <td>T.A/D.A Staff </td>
-    <td  id = "pos-right">{{ ta_da }}</td>
-</tr>
-<tr>
-    <td>Boring Charges </td>
-    <td  id = "pos-right">{{boring_charges}}</td>
-</tr>
-<tr>
-    <td>Labour Charges </td>
-    <td  id = "pos-right">{{ suspense_clearance.labour_charge }}</td>
-</tr>
-<tr>
-    <td>Car/Taxi Charges </td>
-    <td  id = "pos-right">{{ suspense_clearance.car_taxi_charge }}</td>
-</tr>
-<tr>
-    <td><b>TOTAL</b></td>
-    <td  id = "pos-right">{{total}}</td>
-</tr>
-</table>
-</div>
-<div class="position">The Transport Bill no. {{transport_id}} dated {{date_of_generation}} for Rs {{other_charges}}/- is attached. The sum of Rs {{other_charges}}/- may be transferred from other charges to Consultancy Transport Fund. The sum of Rs {{ta_da}}/- spent  by Dean Testing & Consultancy mayn Please be paid to him</div>
-<div class = "footer1">DEAN Testing and Consultancy Cell</div>
-{% endblock %}
+        <div class="position">The Transport Bill no. {{transport_id}} dated {{date_of_generation}} for Rs {{other_charges}}/- is attached. The sum of Rs {{other_charges}}/- may be transferred from other charges to Consultancy Transport Fund. The sum of Rs {{ta_da}}/- spent  by Dean Testing & Consultancy mayn Please be paid to him</div>
+        <div class = "footer1">DEAN Testing and Consultancy Cell
+        </div>
+        {% endblock %}
 </body>
 </html>       

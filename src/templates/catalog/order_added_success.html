@@ -3,46 +3,46 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    	{% block title %}
-            <title>Order added</title>
-        {% endblock %}
-    </head>
-    <body> 
-      {% block content %}
-        <div class='order-success'>
-        	<p class='success-message'>Order added <span class='green'>
-        		Successfully</span></p>
-<table>
-	<tr>
-		<th>Client:</th>
-		  <td>{{details.buyer__first_name}}&nbsp;{{details.buyer__last_name}}
-		  	&nbsp;{{details.buyer__customer__title}}</td>
-    </tr>
-    <tr>
-    	<th>Address:</th>
-    	<td>{{details.buyer__customer__address__street_address}}&nbsp;
-    		{{details.buyer__customer__address__city}}</td>
-    </tr>
-    <tr>
-    	<th>Mode Of Payment:</th>
-    	<td>{{details.mode_of_payment__method}}</td>
-    </tr>
-</table>
-<div class='order-success-options'>
-<table>
-<tr>
-	<th colspan='4'><h3>Options</h3></th>
-</tr>
-<tr>
-	<td><a href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
-    <td><a href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
-	<td><a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
-	<td><a href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
-<tr>
-</table>
-</div>
-</div>
-{% endblock %}
+<head>
+   {% block title %}
+   <title>Order added</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='order-success'>
+   <p class='success-message'>Order added <span class='green'>
+      Successfully</span></p>
+      <table>
+       <tr>
+          <th>Client:</th>
+          <td>{{details.buyer__first_name}}&nbsp;{{details.buyer__last_name}}
+           &nbsp;{{details.buyer__customer__title}}</td>
+       </tr>
+       <tr>
+           <th>Address:</th>
+           <td>{{details.buyer__customer__address__street_address}}&nbsp;
+              {{details.buyer__customer__address__city}}</td>
+          </tr>
+          <tr>
+           <th>Mode Of Payment:</th>
+           <td>{{details.mode_of_payment__method}}</td>
+       </tr>
+   </table>
+   <div class='order-success-options'>
+    <table>
+        <tr>
+           <th colspan='4'><h3>Options</h3></th>
+       </tr>
+       <tr>
+           <td><a href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
+           <td><a href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
+           <td><a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
+           <td><a href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
+           <tr>
+           </table>
+       </div>
+   </div>
+   {% endblock %}
 </body>
 </html>

@@ -1,26 +1,25 @@
 <html>
-    
-    <head><title>Lab Reports</title></head>
-    {{header.header | safe}}
-    <table  style="border:1px solid black;border-collapse:collapse;width:1000px">
-        <caption>LAB REPORT </caption>
-        <tr>
-            <th style="border:1px solid black;"> Receipt No.</th>
-            <th style="border:1px solid black;"> Date </th>
-            <th style="border:1px solid black;"> Client </th>
-            <th style="border:1px solid black;"> Company</th>
-            <th style="border:1px solid black;"> Amount</th>
-        </tr>
-        {{% for m in material}}
-        <tr style="border:1px solid black;text-align:centre;">
-            <td style="border:1px solid black;">{{ m.Receipt}</td>
-            <td style="border:1px solid black;">{{m.Date}}</td>
-            <td style="border:1px solid black;">{{m.Client}}</td>
-            <td style="border:1px solid black;">{{m.Company}}</td>
-            <td style="border:1px solid black;">{{m.Amount}}</td>
-        </tr>
-        {%endfor %}
-    </table>
+<head><title>Lab Reports</title></head>
+{{header.header | safe}}
+<table  style="border:1px solid black;border-collapse:collapse;width:1000px">
+    <caption>LAB REPORT </caption>
+    <tr>
+        <th style="border:1px solid black;"> Receipt No.</th>
+        <th style="border:1px solid black;"> Date </th>
+        <th style="border:1px solid black;"> Client </th>
+        <th style="border:1px solid black;"> Company</th>
+        <th style="border:1px solid black;"> Amount</th>
+    </tr>
+    {{% for m in material}}
+    <tr style="border:1px solid black;text-align:centre;">
+        <td style="border:1px solid black;">{{ m.Receipt}</td>
+        <td style="border:1px solid black;">{{m.Date}}</td>
+        <td style="border:1px solid black;">{{m.Client}}</td>
+        <td style="border:1px solid black;">{{m.Company}}</td>
+        <td style="border:1px solid black;">{{m.Amount}}</td>
+    </tr>
+    {%endfor %}
+</table>
 </html>
 
 

@@ -1,37 +1,34 @@
 {% extends 'bill_base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset='UTF-8'>
-{% block title %}
-        <title>Proforma Bill</title>
-{% endblock %}
-{% load set_var %} 
+    <meta charset='UTF-8'>
+    {% block title %}
+    <title>Proforma Bill</title>
+    {% endblock %}
+    {% load set_var %}
 </head>
-
-
 <body>
     {% block content %}
-
     <div class="container">
-        
         <h2>Proforma Bill</h2>
     </div>
     <div class = "bill-left">
-    <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
-    <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
-    <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} </p>
-    <p> To, </p>
-    <p> {{purchase_order.delivery_address}} </p>
-    <p> {{buyer_name.company}}</p>
-    <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
-    {% if address.address__pin != 'None' %}
-    -{{address.address__pin}}, 
-    {% endif %}
-    {{address.address__province}}</p>
-    <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
-    <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
-    </div>
+        <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
+        <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
+        <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} </p>
+        <p> To, </p>
+        <p> {{purchase_order.delivery_address}} </p>
+        <p> {{buyer_name.company}}</p>
+        <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
+            {% if address.address__pin != 'None' %}
+            -{{address.address__pin}},
+            {% endif %}
+            {{address.address__province}}</p>
+            <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
+            <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
+        </div>
         <table class="data" border="1px">
             <tr>
                 <th>Charges For Following</th>
@@ -39,54 +36,47 @@
                 <th>Per</th>
                 <th>Total</th>
             </tr>
-            
             <tr>
                 {% for bill_values in bill_values %}
-            <td>
-                {{bill_values.0}}
-                {%for value in bill_values.1%}
-                {{value}}
-                {% endfor %}
-            </td>
-            <td>
-                {%for value in bill_values.2%}
-                {{value}}
-                {% endfor %}
-                sample./s
-            </td>
-            
-            <td>
-                {%for value in bill_values.3%}
-                {{value}}
-                {% endfor %}
-            </td>
-
-            <td>
-                {{bill_values.4}}
-            </td>
+                <td>
+                    {{bill_values.0}}
+                    {%for value in bill_values.1%}
+                    {{value}}
+                    {% endfor %}
+                </td>
+                <td>
+                    {%for value in bill_values.2%}
+                    {{value}}
+                    {% endfor %}
+                    sample./s
+                </td>
+                <td>
+                    {%for value in bill_values.3%}
+                    {{value}}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{bill_values.4}}
+                </td>
             </tr>
             {% endfor %}
-
-
-
-{% if total_discount %}
-<tr>
-    <td>Discount</td>
-    <td colspan="2" rowspan="{{tax_count}}"></td>
-    <td>{{total_discount}}</td>
-</tr>
-{% endif %}
-{% if delivery_charges %}
-<tr>
-    <td>Transportation</td>
-    {% if total_discount %}
-    {% else %}
-    <td colspan="2" rowspan="{{tax_count}}"></td>
-    {% endif %}
-    <td>{{delivery_charges}}</td>
-</tr>
-{% endif %}
-
+            {% if total_discount %}
+            <tr>
+                <td>Discount</td>
+                <td colspan="2" rowspan="{{tax_count}}"></td>
+                <td>{{total_discount}}</td>
+            </tr>
+            {% endif %}
+            {% if delivery_charges %}
+            <tr>
+                <td>Transportation</td>
+                {% if total_discount %}
+                {% else %}
+                <td colspan="2" rowspan="{{tax_count}}"></td>
+                {% endif %}
+                <td>{{delivery_charges}}</td>
+            </tr>
+            {% endif %}
             <tr>
                 <td><b>Total </b></td>
                 {% if total_discount %}
@@ -95,8 +85,6 @@
                 {% endif %}
                 <td><b>{{total_cost}}</b></td>
             </tr>
-
-
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}
@@ -107,73 +95,67 @@
                 {% endfor %}
                 <td>  {{taxesapplied.tax }} </td>
             </tr>
-               
             {% endfor %}
-  
             {% endif %}
             <tr>
                 <td><b>Total </b></td>
                 <td><b>{{grand_cost}}</b></td>
             </tr>
-        
         </table>
-
-    <div>
-    <div class="position">
-    <b>NOTE:</b>
-    </div>
-    <div style="clear:both;">
-    </div>
-    <div id="notelist">
-    <ol>
-        {% for value in permanent_note %}
-        <li>{{value.note}}</li>
-        {% endfor %}
-        {% for value in quoted_note %}
-        <li>{{value.note}}</li>
-        {% endfor %}
-        <li>Bank Details For Online Payment:</li>
-    </ol>
-    </div>
-    <div id="account">
-        <table>
-            <tr>
-                <td>Name of Acount Holder</td>
-                <td>:</td>
-                <td>{{account_holder}}</td>
-            </tr>
-            <tr>
-                <td>Name of Bank</td>
-                <td>:</td>
-                <td>{{name_of_bank}}</td>
-            </tr>
-            <tr>
-                <td>Branch</td>
-                <td>:</td>
-                <td>{{branch}}</td>
-            </tr>
-            <tr>
-                <td>Online Account No.</td>
-                <td>:</td>
-                <td>{{online_account}}</td>
-            </tr>
-            <tr>
-                <td>IFSC Code No.</td>
-                <td>:</td>
-                <td>{{ifsc_code}}</td>
-            </tr>
-        </table>
-    </div>
-        {% endblock %}
-        {% block extracontent %}
-        <div id = "declaration">
-            I/We here by agree to the terms & conditions as mentioned above.
-        </div>
-        <div id="declare-sign">
-           <br>(Signature of Client/Deptt. Representative)
-        </div>
-    {% endblock %}        <!-- Dean is liable to change--> 
-
+        <div>
+            <div class="position">
+                <b>NOTE:</b>
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div id="notelist">
+                <ol>
+                    {% for value in permanent_note %}
+                    <li>{{value.note}}</li>
+                    {% endfor %}
+                    {% for value in quoted_note %}
+                    <li>{{value.note}}</li>
+                    {% endfor %}
+                    <li>Bank Details For Online Payment:</li>
+                </ol>
+            </div>
+            <div id="account">
+                <table>
+                    <tr>
+                        <td>Name of Acount Holder</td>
+                        <td>:</td>
+                        <td>{{account_holder}}</td>
+                    </tr>
+                    <tr>
+                        <td>Name of Bank</td>
+                        <td>:</td>
+                        <td>{{name_of_bank}}</td>
+                    </tr>
+                    <tr>
+                        <td>Branch</td>
+                        <td>:</td>
+                        <td>{{branch}}</td>
+                    </tr>
+                    <tr>
+                        <td>Online Account No.</td>
+                        <td>:</td>
+                        <td>{{online_account}}</td>
+                    </tr>
+                    <tr>
+                        <td>IFSC Code No.</td>
+                        <td>:</td>
+                        <td>{{ifsc_code}}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endblock %}
+            {% block extracontent %}
+            <div id = "declaration">
+                I/We here by agree to the terms & conditions as mentioned above.
+            </div>
+            <div id="declare-sign">
+             <br>(Signature of Client/Deptt. Representative)
+         </div>
+         {% endblock %}        <!-- Dean is liable to change-->
 </body>
-
 </html>

@@ -1,26 +1,25 @@
 {% extends "base.html" %} {% load staticfiles %}
-
 <html>
-    <head>
-        {% block title %}
-        <title>Form</title>
-        {% endblock %}
-    </head>
-    <body>
-        {% block content %}
-            <form method="POST" action={% url 'librehatti.bills.views.select_note_save' %} >
-            {% csrf_token %}
+<head>
+    {% block title %}
+    <title>Form</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <form method="POST" action={% url 'librehatti.bills.views.select_note_save' %} >
+        {% csrf_token %}
         <table> 
             {{form.as_p}}
         </table>
-            <input type="submit" class="btn btn-info btn-large" value="Submit">
-            <a class = 'add_another' href = ''>
-                <input type="button" class="btn btn-info btn-large" 
-                 name="" value="Add Another"></a>
+        <input type="submit" class="btn btn-info btn-large" value="Submit">
+        <a class = 'add_another' href = ''>
+            <input type="button" class="btn btn-info btn-large"
+            name="" value="Add Another"></a>
             <a class = 'delete_selected' href = ''>
                 <input type="button" class="btn btn-info btn-large btn-danger" 
-                 name="" value="Delete Selected"></a>
-        </form> 
-        {% endblock %}
-    </body>
+                name="" value="Delete Selected"></a>
+    </form>
+    {% endblock %}
+</body>
 </html>

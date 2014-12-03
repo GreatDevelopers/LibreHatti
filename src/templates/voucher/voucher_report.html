@@ -2,81 +2,75 @@
 <html>
 <head>
     {% load staticfiles %}
-            <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
     {% block title %}
-	<title>Voucher</title>
-	{% endblock %}
+    <title>Voucher</title>
+    {% endblock %}
 </head>
-
 <body>
 	{% block content %}
-<br>
-
-<div id = "pos-right">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
-<div id = "pos-right">Dated : {{date}} </div>
-<div class="designation">Director,</div>
-<br>
-Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
-Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}}
-<br/><br/>
-<div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
-<div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
-<div id = "pos-left">
-<br/>
-<table border='1px'>
-<tr>
-	<td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
-</tr>
-
-
-<tr>
-	<td rowspan="5">CREDITS</td>
-	<td>COLLEGE INCOME {{ college_income }}% </td>
-	<td  id = "pos-right">{{ calculate_distribution.college_income_calculated }}</td>
-</tr>
-<tr>
-	<td>ADMN. CHARGES {{ admin_charges }}% </td>
-	<td  id = "pos-right">{{ calculate_distribution.admin_charges_calculated}}</td>
-</tr>
-<tr>
-	<td>CONSULTANCY ASST. </td>
-	<td  id = "pos-right">{{ calculate_distribution.consultancy_asset }}</td>
-</tr>
-<tr>
-	<td>DEV. FUND (CONSULTANCY) </td>
-	<td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
-</tr>
-<tr>
-	<td>TOTAL (Rs.) </td>
-	<td  id = "pos-right">{{ calculate_distribution.total }}</td>
-</tr>
-</table>
+    <br>
+    <div id = "pos-right">No.TCC Job/Voucher : {{ purchase_order }}/{{voucher}} </div>
+    <div id = "pos-right">Dated : {{date}} </div>
+    <div class="designation">Director,</div>
+    <br>
+    Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
+    Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}}
+    <br/><br/>
+    <div >Vide Receipt No. : {{purchase_order }}  Dated: {{date}} </div>
+    <div >Nature of Consultancy : {{ d_name }},  Ratio {{ ratio }} </div>
+    <div id = "pos-left">
+        <br/>
+        <table border='1px'>
+            <tr>
+               <td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
+           </tr>
+           <tr>
+               <td rowspan="5">CREDITS</td>
+               <td>COLLEGE INCOME {{ college_income }}% </td>
+               <td  id = "pos-right">{{ calculate_distribution.college_income_calculated }}</td>
+           </tr>
+           <tr>
+               <td>ADMN. CHARGES {{ admin_charges }}% </td>
+               <td  id = "pos-right">{{ calculate_distribution.admin_charges_calculated}}</td>
+           </tr>
+           <tr>
+               <td>CONSULTANCY ASST. </td>
+               <td  id = "pos-right">{{ calculate_distribution.consultancy_asset }}</td>
+           </tr>
+           <tr>
+               <td>DEV. FUND (CONSULTANCY) </td>
+               <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
+           </tr>
+           <tr>
+               <td>TOTAL (Rs.) </td>
+               <td  id = "pos-right">{{ calculate_distribution.total }}</td>
+           </tr>
+       </table>
+   </div>
+   <br>
+   <br>
+   <div>
+    <table border='1px'>
+        <tr>
+           <TD>NAME OF EMPLOYEES</TD>
+           <TD>DESIGNATION</TD>
+       </tr>
+       {% for emp in employee %}
+       <tr>
+           <TD>{{emp.name}}</TD>
+           <td>{{emp.position}}</TD>
+           </tr>
+           {% endfor %}
+       </table>
+   </div>
+   <div id = "pos-left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
+   <br><br>
+   <div class="voucher-no"><b>Account Clerk (Consultancy)</b>
+    <div style = "text-align:right; float:right">
+        <b>Dean Testing & Consultancy Cell</b>
+    </div>
 </div>
-<br>
-<br>
-<div>
-<table border='1px'>
-
-<tr>
-	<TD>NAME OF EMPLOYEES</TD>
-	<TD>DESIGNATION</TD>
-</tr>
-{% for emp in employee %}
-<tr>
-	<TD>{{emp.name}}</TD>
-	<td>{{emp.position}}</TD>
-</tr>
-{% endfor %}
-</table>
-</div>
-<div id = "pos-left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
-<br><br>
-<div class="voucher-no"><b>Account Clerk (Consultancy)</b>
-<div style = "text-align:right; float:right">
-            <b>Dean Testing & Consultancy Cell</b>
-        </div>
-        </div>
 {% endblock %}
 </body>
 </html>

@@ -3,25 +3,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Index</title>
-    </head>
-    <body> 
-      {% block content %}
-      <div class = 'list-registers'>
-        <div class='view-list'>
-<table border="1px">
-	<tr>
-		<th>Title</th>
-		<th>Options</th>
-{% for value in list_of_registers %}
-    <tr>
-    	<td>{{value.title}}</td>
-    	<td><a href = '{% url 'view_register' %}?{{value.selected_fields}}'>View Register</a></td>
-    </tr>
-{% endfor %}
-</table>
-</div>
+<head>
+    <title>Index</title>
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div class='view-list'>
+        <table border="1px">
+           <tr>
+              <th>Title</th>
+              <th>Options</th>
+              {% for value in list_of_registers %}
+              <tr>
+               <td>{{value.title}}</td>
+               <td><a href = '{% url 'view_register' %}?{{value.selected_fields}}'>View Register</a></td>
+           </tr>
+           {% endfor %}
+       </table>
+   </div>
 </div>
 {% endblock %}
 </body>

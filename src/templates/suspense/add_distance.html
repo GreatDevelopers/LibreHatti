@@ -4,32 +4,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% block title %}
-<title>Add Distance</title>
+    {% block title %}
+    <title>Add Distance</title>
     {% endblock %}
 </head>
 <body>
   {% block content %}
-<form method = 'POST' action = ''>
-	 {% csrf_token %}
-<table class='add_distance'>
-<tr>
-<td style="display:none;">Order:<input type="text" name = "order" class = "order" size="7" 
-	id="order" value="{{purchase_order_id}}"></td>
-</tr>
-{% for value in voucher %}
-<tr>
-<td>Vocher:<input type="text" name = "voucher" class = "voucher" size="7" 
-	id="voucher_{{value.voucher_no}}" value="{{value.voucher_no}}"></td>
-<td>Material:<input type="text" name = "material" class = "material" size="35" 
-	id="material_{{value.voucher_no}}" 
-	value="{{value.purchased_item__item__category__name}}"></td>  
-<td>Distance:<input type="text" name="distance" class = "distance" size = "7" 
-	id="distance_{{value.voucher_no}}" value="0"></td>
-</tr>
-{% endfor %}
-</table>
-<input type='submit' class="btn btn-info btn-large" value = 'Next'>
-</form>
-{% endblock %}
+  <form method = 'POST' action = ''>
+      {% csrf_token %}
+      <table class='add_distance'>
+        <tr>
+            <td style="display:none;">Order:<input type="text" name = "order" class = "order" size="7"
+             id="order" value="{{purchase_order_id}}">
+         </td>
+     </tr>
+     {% for value in voucher %}
+     <tr>
+        <td>Vocher:<input type="text" name = "voucher" class = "voucher" size="7"
+         id="voucher_{{value.voucher_no}}" value="{{value.voucher_no}}"></td>
+         <td>Material:<input type="text" name = "material" class = "material" size="35"
+             id="material_{{value.voucher_no}}"
+             value="{{value.purchased_item__item__category__name}}"></td>
+             <td>Distance:<input type="text" name="distance" class = "distance" size = "7"
+                 id="distance_{{value.voucher_no}}" value="0"></td>
+             </tr>
+             {% endfor %}
+         </table>
+         <input type='submit' class="btn btn-info btn-large" value = 'Next'>
+     </form>
+     {% endblock %}
 </body>

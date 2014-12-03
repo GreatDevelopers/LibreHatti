@@ -5,21 +5,19 @@
 <html lang="en">
 <head>
     {% block title %}
-        <title>
-            Mark Order Clear
-        </title> 
+    <title>
+        Mark Order Clear
+    </title>
     {% endblock %}
-        </head>
-    <body>
-        {% block content %}
-    
-        <div class='list-results'>
+</head>
+<body>
+    {% block content %}
+    <div class='list-results'>
         <h2>Mark Order Clear</h2>
         {% if messages %}
-          {{ messages }}
+        {{ messages }}
         {% endif %}
         <table class='mark_clear_table'  border='1px'>
-            
             <tr>
                 <th>S.No</th>
                 <th>Voucher</th>
@@ -31,10 +29,8 @@
                 <th>Clear date</th> 
                 <th>Status</th>
             </tr>
-
             {% for temp_var in listed %}
             {% for voucher_var,suspense_var in temp_var %}
-            
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ suspense_var.voucher_no }}</td>
@@ -44,22 +40,14 @@
                 <td>{{ suspense_var.field_testing_staff }}</td>
                 <td>{{ suspense_var.test_date }}</td>
                 <td>{{ suspense_var.clear_date }}</td>
-
-
                 <td>
                     <a href='voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}' class='mark_clear'><img src="{% static 'icons/Clean-128.png' %}"><span class="mark_clear_button">Mark Clear</span></a>
                 </td>
             </tr>
-            
             {% endfor %}
             {% endfor %}
-            
-            
         </table>
-    
-
+    </div>
     {% endblock %}
-
-
-    </body>
+</body>
 </html>

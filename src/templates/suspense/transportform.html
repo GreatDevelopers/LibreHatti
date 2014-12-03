@@ -5,8 +5,6 @@
 
 {% block extrajs %}
 <script type="text/javascript">
-
-
     $(document).ready(function() {
         $("[name='date']").datepicker(); 
         $("#button2").click(function() {
@@ -25,7 +23,6 @@
     });
 </script>
 {% endblock %} 
-
 {% block content %}
 <table>
     <tr>
@@ -42,9 +39,7 @@
                 </div>
                 {% endif %}
                 {% csrf_token %}
-
                 {{TransportForm.as_p}}
-                
                 <input type="hidden" value="{{ session }}" name="session" />
                 <input type="hidden" value="{{ voucher }}" name="voucher" />
 

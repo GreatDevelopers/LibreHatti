@@ -20,6 +20,7 @@ class SuspenseOrder(models.Model):
     def __unicode__(self):
         return '%s' % (self.id)
 
+
 class SuspenseClearance(models.Model):
     session = models.ForeignKey(FinancialSession)
     voucher_no = models.IntegerField()
@@ -58,8 +59,9 @@ class Staff(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class TaDa(models.Model):
-    date_of_generation = models.DateField(default = datetime.date.today)
+    date_of_generation = models.DateField(default=datetime.date.today)
     voucher_no = models.IntegerField()
     session = models.IntegerField()
     departure_time_from_tcc= models.TimeField()
@@ -75,12 +77,14 @@ class TaDa(models.Model):
     def __unicode__(self):
        return self.suspense
 
+
 class QuotedSuspenseOrder(models.Model):
     quoted_order = models.ForeignKey('bills.QuotedOrder')
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)
+
 
 class Vehicle(models.Model):
     vehicle_id = models.CharField(max_length=20)
@@ -95,7 +99,7 @@ class Transport(models.Model):
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
     date_of_generation = models.DateField()
-    date = models.CharField(blank=True,max_length=600)
+    date = models.CharField(blank=True, max_length=600)
     total = models.IntegerField()
     voucher_no = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
