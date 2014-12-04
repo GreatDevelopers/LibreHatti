@@ -7,8 +7,9 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder, ModeOfPayment
-from librehatti.voucher.models import FinancialSession
 from librehatti.catalog.models import TaxesApplied
+
+from librehatti.voucher.models import FinancialSession
 
 import itertools
 
@@ -28,8 +29,10 @@ class AddCategory(forms.Form):
     category_name = forms.CharField(max_length=256)
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
 
+
 """
-This form lets user to select item after categories are filtered in dropdown.
+This form lets user to select item after categories
+are filtered in dropdown.
 """
 class ItemSelectForm(forms.ModelForm):
     class Media:
@@ -43,20 +46,23 @@ class ItemSelectForm(forms.ModelForm):
         parent_category = forms.ModelChoiceField(queryset=Category.objects.\
             filter(parent__parent__isnull=True).filter(parent__isnull=False), \
             label= _PARENT_CATEGORY)
-        sub_category = forms.ModelChoiceField(queryset = Category.objects.all(),\
-            label = _SUB_CATEGORY)
+        sub_category = forms.ModelChoiceField\
+        (queryset = Category.objects.all(),label = _SUB_CATEGORY)
     except:
         pass
 
-    item = forms.ModelChoiceField(queryset = Product.objects.all(), label = _ITEM)
+    item = forms.ModelChoiceField\
+    (queryset = Product.objects.all(), label = _ITEM)
     price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
-         self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
+         self.fields['parent_category'].widget.attrs=\
+         {'class': 'parent_category'}
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
          self.fields['price_per_unit'].widget.attrs={'class': 'price_per_unit'}
+
 
 class BuyerForm(forms.ModelForm):
     buyer = make_ajax_field(PurchaseOrder, 'buyer', 'buyer')
@@ -71,6 +77,7 @@ class BuyerForm(forms.ModelForm):
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/cheque_dd_date.js',
             )
+
 
 class ChangeRequestForm(forms.Form):
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())

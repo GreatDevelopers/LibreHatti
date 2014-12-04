@@ -1,12 +1,19 @@
 from django.shortcuts import render
+
 from django.http import HttpResponse
+
 from forms import ClientForm
 from forms import OrderForm
 from forms import AddConstraints
+
 from datetime import datetime
+
 import librehatti.settings as settings
+
 from librehatti.catalog.request_change import request_notify
+
 from librehatti.reports.models import SavedRegisters
+
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -15,8 +22,8 @@ def search_form(request):
     View to display "search.html" i.e. the search interface or form.
     
     First it'll check which type of request is i.e; 'search' request or 
-    'generate register' request. On the basis of that, it'll assign code to 
-    search_type_code which will be used in template.
+    'generate register' request. On the basis of that, it'll assign code
+    to search_type_code which will be used in template.
 
     It'll raise an exception if anyone give invalid value in 'type'.
     """
@@ -31,7 +38,6 @@ def search_form(request):
             'code':search_type_code,
             'url':submit_url,
             'request':request_status    }
-            
         elif request.GET['type'] == 'register':
             submit_url = '/generate_register/'
             search_type_code = '2'
@@ -43,13 +49,12 @@ def search_form(request):
             'add_constraints':add_constraints,'code':search_type_code,
             'url':submit_url,
             'request':request_status    }
-        
         else:
             return HttpResponse('<h1>Page not found</h1>')
     except:
         return HttpResponse('<h1>Invalid URL</h1>')
-    
     return render(request, 'reports/search.html',temp)
+
 
 @login_required
 def save_fields(request):
@@ -66,19 +71,21 @@ def save_fields(request):
 
     selected_fields = request.META['QUERY_STRING']
 
-    save_fields = SavedRegisters(title = title, selected_fields = selected_fields)
+    save_fields = SavedRegisters(title = title,\
+     selected_fields = selected_fields)
     save_fields.save()
     return HttpResponse('1')
+
 
 @login_required
 def list_saved_registers(request):
     """
     List saved registers
     """
-
     local_url = settings.LOCAL_URL
-
-    list_of_registers = SavedRegisters.objects.values('title','selected_fields')
+    list_of_registers = SavedRegisters.objects.\
+    values('title','selected_fields')
     request_status = request_notify()
-    return render(request,'reports/list_of_registers.html', {'list_of_registers':
-        list_of_registers,'local_url': local_url,'request':request_status})
+    return render(request,'reports/list_of_registers.html', \
+        {'list_of_registers':list_of_registers,'local_url': local_url,\
+        'request':request_status})

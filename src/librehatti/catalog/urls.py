@@ -2,7 +2,9 @@
 urls of catalog are..
 """
 from django.conf.urls import url, patterns
+
 from django.views.generic import TemplateView
+
 
 """
 urls showing the list of item purchased and redirects to page of adding 
@@ -20,6 +22,7 @@ urlpatterns = patterns('librehatti.catalog.views',
     url(r'^change_request/','change_request'),
     url(r'^price_per_unit/','price_per_unit'),
 )
+
 
 urlpatterns += patterns('librehatti.catalog.request_change',
    url(r'^request_save/','request_save'),

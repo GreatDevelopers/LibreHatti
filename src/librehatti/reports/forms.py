@@ -6,9 +6,11 @@ from search_choices import CONSTRAINT_CHOICES
 from search_choices import MONTH_CHOICES
 
 import datetime
+
 import itertools
 
 from librehatti.voucher.models import FinancialSession
+
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 
@@ -26,6 +28,7 @@ displays chechboxes for Order Search
 class OrderForm(forms.Form):
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
+
 
 """
 displays checkboxes for Constraints
@@ -69,5 +72,3 @@ class AddConstraints(forms.Form):
 
     grand_total = forms.BooleanField()
     all_registered_user = forms.BooleanField()
-
-
