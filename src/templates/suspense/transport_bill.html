@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     {% block title %}
-    <title>Bill</title>
+    <title>Transport Bill</title>
     {% endblock %}
 </head>
 <body>
@@ -11,11 +11,12 @@
     <div class="container">
         <h2 >Transport Bill</h2>
     </div>
-    <p><span id ="highlight">Bill No:</span> {{ voucherid }}
-    </p>
-    <!-- What is bill date here -->
-    <p><span id ="dated"><span id ="highlight">Dated:</span> {{ date_of_generation }}</span>
-    </p>
+        <div class="voucher-no"><b>Bill No:</b> {{ voucherid }}
+        <div style = "text-align:right; float:right">
+            <b>Dated:</b> {{ date_of_generation }}
+        </div>
+    </div>
+
     <div style="clear: both">
     </div>
     <p><span id ="highlight"> Vehicle: </span >{{ vehicle}} </span>
@@ -45,20 +46,21 @@
             </tr>
             {% endfor %}
             <tr>
-                <td><strong>Total</strong></td>
-                <td></td>
-                <td></td>
+                <td colspan = "3"><center><b>Total</b></center></td>
                 <td> {{ total_amount }}</td>
             </tr>
         </table>
     </div>
-    <br><br>
-    <div align="left"><b>  </b></div>
-    <br><table style="font-size:12pt; width:70%" ;="" align="center">
-    <tr><td colspan="3"><br><br>Passed for payment for Rs. {{ total_amount }}/-<br> ({{ words }}).</td></tr>
-    <tr><td><br><br><br>Dean T&amp;C</td><td><br><br><br>&nbsp;&nbsp;Supt. Actt</td>
-        <td><br><br><br>Director</td></tr></tbody></table><br><br>
-        <div>
-        {% endblock %}
+    <div class="position">Passed for payment for Rs. {{ total_amount }}/-<br> ({{ words }}).</div>
+    <div class='footertable'>
+        <table>
+            <tr>
+                <td>Dean T&amp;C</td>
+                <td>Supdt. Accounts</td>
+                <td>DEAN Testing and Consultancy Cell</td>
+            </tr>
+        </table>
+    </div>
+    {% endblock %}
 </body>
 </html>

@@ -23,6 +23,12 @@
     <div id = "pos-left">
         <br>
         <table  border = "1px">
+        {% if cost.delivery_charges %}
+            <tr>
+              <td>Transportation</td>
+              <td  id = "pos-right">{{cost.delivery_charges}}</td>
+            </tr>
+            {% endif %}
             <tr>
                <td>Bill Amount</td>
                <td id = "pos-right">{{cost.total_cost}}.00</td>
@@ -33,12 +39,6 @@
                <td  id = "pos-right">{{ value.tax }}.00</td>
            </tr>
            {% endfor %}
-           {% if cost.delivery_charges %}
-           <tr>
-            <td>Transportation</td>
-            <td  id = "pos-right">{{cost.delivery_charges}}</td>
-        </tr>
-        {% endif %}
         <tr>
             <td>Total Amount </td>
             <td  id = "pos-right"> {{ cost.grand_total}}.00</td>
