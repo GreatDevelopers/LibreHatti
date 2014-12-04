@@ -707,12 +707,11 @@ def transportbill(request):
                 request_status = request_notify()
                 return render(request, 'suspense/transport_bill.html',
                        {'words':num2eng(total_amount), 'total':total,
-                       'header':header, 'footer':footer,
-                       'kilometers':kilometers, 'rate':rate, 'date':date,
-                        "voucherid":voucher, "temp":temp,
-                        'zip_data':zip_data, 'total_amount':total_amount,
-                        'date_of_generation':date_of_generation,
-                        'vehicle':vehicle,'request':request_status})
+                       'header':header, 'kilometers':kilometers, 'rate':rate,\
+                       'date':date, "voucherid":voucher, "temp":temp,\
+                       'zip_data':zip_data, 'total_amount':total_amount,\
+                       'date_of_generation':date_of_generation,\
+                       'vehicle':vehicle,'request':request_status})
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
@@ -727,10 +726,10 @@ def transportbill(request):
                 "voucher":voucher, "message":message, 'request':request_status}
                 return render(request, 'suspense/transportform.html', temp)
     else:
-        form = TransportForm1()
+        form = SessionSelectForm()
         request_status = request_notify()
-    return render(request, 'suspense/transportform.html', {
-        'TransportForm':form, 'request':request_status})
+        temp = {"SelectForm":form,'request':request_status}
+        return render(request, 'voucher/sessionselect.html', temp)
 
 
 """
@@ -808,7 +807,7 @@ def tada_result(request):
             return render(request, 'suspense/tada_result.html',{\
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
-                'list_staff':list_staff, 'header':header, 'footer':footer,
+                'list_staff':list_staff, 'header':header,\
                 'words':num2eng(int(tada_amount)), 'total':tada_total,\
                 'request':request_status})
         else:    
