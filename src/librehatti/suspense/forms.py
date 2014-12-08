@@ -23,11 +23,9 @@ class Clearance_form(ModelForm):
 
     class Meta:
         model = SuspenseClearance
-        exclude = []
+        exclude = ('work_charge',)
     
     voucher_no = forms.CharField(widget=forms.TextInput(\
-        attrs={'readonly':'readonly'}))
-    car_taxi_charge = forms.CharField(widget=forms.TextInput(\
         attrs={'readonly':'readonly'}))
 
 
