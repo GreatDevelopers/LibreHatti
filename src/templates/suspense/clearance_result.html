@@ -22,10 +22,6 @@
                     <td>{{voucher_no}}</td>
                 </tr>
                 <tr>
-                    <th>Work Charge:</th>
-                    <td>{{work_charge}}</td>
-                </tr>
-                <tr>
                     <th>Labour Charge:</th>
                     <td>{{labour_charge}}</td>
                 </tr>
@@ -58,20 +54,6 @@
                     <td>{{clear_date}}</td>
                 </tr>
             </table>
-
-            <div class='clearance-success-options'>
-                <table>
-                    <tr>
-                        <th colspan='4'><h3>Options</h3></th>
-                    </tr>
-                    <tr>
-                        <td><a href = '{% url 'librehatti.suspense.views.with_transport'%}?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="clearance with transport bill" value="Clearance With Transport Bill"></a></td>
-                        <td><a href = '{% url 'librehatti.suspense.views.withouttransport'%}?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="clearance without transport bill" value="clearance without transport bill"></a></td>
-                        <td><a href = '{% url 'librehatti.suspense.views.without_other_charges'%}?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="without charges" value="Bill without other charges"></a></td>
-                        <td><a href = '{% url 'librehatti.suspense.views.other_charges'%}?voucher_no={{voucher_no}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="other charge report" value="other charge report"></a></td>
-                    <tr>
-                </table>
-            </div>
         </div>
     {% endblock %}
 </body>

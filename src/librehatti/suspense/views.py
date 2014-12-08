@@ -132,23 +132,14 @@ def clearance_search(request):
         object = SuspenseOrder.objects.filter(session_id=session).\
         filter(voucher=voucher).values()
         if object:
-            try:
-                transport = Transport.objects.values('total').\
-                get(voucher_no=voucher, session=session)
-                form = Clearance_form(initial={'voucher_no':voucher,\
-                'session':session, 'car_taxi_charge':transport['total']})
-                clearance = 'enable'
-                request_status = request_notify()
-                return render(request, 'suspense/suspense_first.html', \
-                    {'form':form, 'clearance':clearance,\
-                    'request':request_status})
-            except:
-                form = SessionSelectForm()
-                errors = "No such voucher number in Transport" 
-                request_status = request_notify()
-                temp = {"SelectForm":form , "errors":errors,\
-                'request':request_status}
-                return render(request, 'voucher/clsessionselect.html', temp) 
+            form = Clearance_form(initial={'voucher_no':voucher,\
+            'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
+            'boring_charge_external':0, 'boring_charge_internal':0})
+            clearance = 'enable'
+            request_status = request_notify()
+            return render(request, 'suspense/suspense_first.html', \
+                {'form':form, 'clearance':clearance,\
+                'request':request_status}) 
         else:
             form = SessionSelectForm()
             errors = "No such voucher number in selected session"
@@ -171,7 +162,6 @@ def clearance_result(request):
             formdata = form.cleaned_data
             voucher_no = formdata['voucher_no']
             session = formdata['session']
-            work_charge = formdata['work_charge']
             labour_charge = formdata['labour_charge']
             car_taxi_charge = formdata['car_taxi_charge']
             boring_charge_external = formdata['boring_charge_external']
@@ -192,7 +182,7 @@ def clearance_result(request):
                 SuspenseClearance.objects.\
                 filter(voucher_no=voucher_no, session=financialsession['id']).\
                 update(session=session, voucher_no=voucher_no,\
-                    work_charge=work_charge, labour_charge=labour_charge,\
+                    work_charge=0, labour_charge=labour_charge,\
                     car_taxi_charge=car_taxi_charge,\
                     boring_charge_external=boring_charge_external,\
                     boring_charge_internal=boring_charge_internal,\
@@ -201,7 +191,7 @@ def clearance_result(request):
                     test_date=test_date)
             except:
                 obj= SuspenseClearance(session=session, voucher_no=voucher_no,
-                     work_charge=work_charge, labour_charge=labour_charge,
+                     work_charge=0, labour_charge=labour_charge,
                      car_taxi_charge=car_taxi_charge, 
                      boring_charge_external=boring_charge_external,
                      boring_charge_internal=boring_charge_internal,
@@ -211,8 +201,8 @@ def clearance_result(request):
                 obj.save()
             request_status = request_notify()    
             temp = {'session':session,'voucher_no': voucher_no,\
-                    'work_charge':work_charge ,'labour_charge':
-                    labour_charge, 'car_taxi_charge':car_taxi_charge,
+                    'labour_charge':labour_charge,\
+                    'car_taxi_charge':car_taxi_charge,
                     'boring_charge_external':boring_charge_external,
                     'boring_charge_internal':boring_charge_internal,
                     'lab_testing_staff':lab_testing_staff,
@@ -758,7 +748,6 @@ def tada_result(request):
                 testing_staff_details = Staff.objects.filter(\
                     code=testing_staff_var).values('name','daily_ta_da')
                 list_staff.append(testing_staff_details)
-            #return HttpResponse(list_staff)    
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             voucher_obj = VoucherId.objects.filter(session=session).\
@@ -808,9 +797,8 @@ def tada_result(request):
             return render(request, 'suspense/tada_result.html',{\
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
-                'list_staff':list_staff, 'header':header,\
-                'words':num2eng(int(tada_total)), 'total':tada_total,\
-                'request':request_status})
+                'list_staff':list_staff, 'words':num2eng(int(tada_total)),\
+                'total':tada_total, 'request':request_status})
         else:    
             session = request.POST['session']
             voucher = request.POST['voucher_no']
@@ -894,7 +882,7 @@ def mark_clear(request):
         list_user_clr = zip (list_user,list_clearance)
         for suspense_var,voucher_var in list_user_clr:
             final_list = zip(suspense_var,voucher_var)
-            list_details.append(final_list)    
+            list_details.append(final_list)
         request_status = request_notify()
         return render(request, 'suspense/mark_suspense_clear.html', {
             'listed':list_details, 'request':request_status})
