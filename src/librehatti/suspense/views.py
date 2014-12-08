@@ -746,7 +746,7 @@ def tada_result(request):
             arrival_time_at_site = request.POST['arrival_time_at_site']
             departure_time_from_site = request.POST['departure_time_from_site']
             arrival_time_at_tcc = request.POST['arrival_time_at_tcc']
-            tada_amount = request.POST['tada_amount']
+        
             start_test_date = request.POST['start_test_date']
             end_test_date = request.POST['end_test_date']
             source_site = request.POST['source_site']
@@ -758,6 +758,7 @@ def tada_result(request):
                 testing_staff_details = Staff.objects.filter(\
                     code=testing_staff_var).values('name','daily_ta_da')
                 list_staff.append(testing_staff_details)
+            #return HttpResponse(list_staff)    
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             voucher_obj = VoucherId.objects.filter(session=session).\
@@ -781,7 +782,7 @@ def tada_result(request):
                 arrival_time_at_site=arrival_time_at_site,\
                 departure_time_from_site=departure_time_from_site,\
                 arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_amount, start_test_date=start_test_date,\
+                tada_amount=tada_total, start_test_date=start_test_date,\
                 end_test_date=end_test_date, source_site=source_site,\
                 testing_site=testing_site , testing_staff=testing_staff,)
 
@@ -791,7 +792,7 @@ def tada_result(request):
                 arrival_time_at_site=arrival_time_at_site,\
                 departure_time_from_site=departure_time_from_site,\
                 arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_amount, start_test_date=start_test_date,\
+                tada_amount=tada_total, start_test_date=start_test_date,\
                 end_test_date=end_test_date, source_site=source_site,\
                 testing_site=testing_site , testing_staff=testing_staff )
                 obj.save()
@@ -800,7 +801,7 @@ def tada_result(request):
                 'arrival_time_at_tcc', 'tada_amount', 'start_test_date',\
                 'end_test_date', 'source_site', 'testing_site',\
                 'date_of_generation').get(voucher_no=voucher)
-            tada_amount_in_words = tada_obj['tada_amount']
+            tada_amount_in_words = tada_total
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             request_status = request_notify()
@@ -808,7 +809,7 @@ def tada_result(request):
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
                 'list_staff':list_staff, 'header':header,\
-                'words':num2eng(int(tada_amount)), 'total':tada_total,\
+                'words':num2eng(int(tada_total)), 'total':tada_total,\
                 'request':request_status})
         else:    
             session = request.POST['session']
@@ -846,9 +847,9 @@ def tada_order_session(request):
                 {'form':form, 'tada':tada, 'request':request_status})
             else:
                 form = SessionSelectForm()
+                request_status = request_notify()
                 errors = "No such voucher number in selected session"
                 temp = {"form":form , "errors":errors,'request':request_status}
-                request_status = request_notify()
                 return render(request, 'suspense/form.html', temp)
         else:
             form = SessionSelectForm()

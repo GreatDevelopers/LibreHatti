@@ -53,10 +53,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for a in list_staff%}
-                {% for b in a%}
+                {% for temp_var in list_staff%}
+                {% for daily_tada in temp_var%}
                 <tr>
-                    <td>{{ b.name }}</td>
+                    <td>{{daily_tada.name }}</td>
                     <td>{{tada.start_test_date}}</td>
                     <td>{{tada.departure_time_from_tcc}}</td>
                     <td>{{tada.source_site }}</td>
@@ -69,7 +69,7 @@
                     <td>{{tada.end_test_date}}</td>
                     <td>{{tada.arrival_time_at_tcc}}</td>
                     <td>{{tada.source_site}}</td>
-                    <td>{{b.daily_ta_da}}</td>
+                    <td>{{daily_tada.daily_ta_da}}</td>
                     <td></td>
                 </tr>
                 {% endfor %}
@@ -77,10 +77,11 @@
                 <tr>
                     <td colspan = "13"><center><b>Total</b></center></td>
                 <td><b>{{ total}}</b></td>
+                <td></td>
                 </tr>
             </tbody>
         </table>
-        <div class="position">Passed for payment for Rs. {{ tada.tada_amount }}/-<br> (Rs.{{ words }}only).</div>
+        <div class="position">Passed for payment for Rs. {{ total }}/-<br> (Rs.{{ words }}only).</div>
         <div class='footertable'>
             <table>
                 <tr>
