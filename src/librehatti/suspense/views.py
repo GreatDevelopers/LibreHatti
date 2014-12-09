@@ -861,15 +861,18 @@ def mark_clear(request):
         list_clearance = []
         list_user = []
         list_details = []
+        #return HttpResponse(suspense_obj)
         for suspense_var in suspense_obj:
-            SuspenseClearance_object = SuspenseClearance.objects.\
-            filter(voucher_no=suspense_var['voucher']).\
-            filter(session=suspense_var['session_id']).\
-            values('session', 'voucher_no', 'lab_testing_staff',\
-                'field_testing_staff','test_date','clear_date')
-            list_clearance.append(SuspenseClearance_object)
+            #return HttpResponse(suspense_var['session_id'])
+            SuspenseClearance_object = SuspenseClearance.objects.filter(session = suspense_var['session_id']).filter(voucher_no=suspense_var['voucher']).values('session', 'voucher_no', 'lab_testing_staff','field_testing_staff','test_date','clear_date')
+            #return HttpResponse(SuspenseClearance_object)
+            if SuspenseClearance_object:
+                list_clearance.append(SuspenseClearance_object)
+        #return HttpResponse(list_clearance)
         for temp_var in list_clearance:
+            #return HttpResponse(temp_var)
             for voucher_var in temp_var:
+                #return HttpResponse(voucher_var['voucher_no'])
                 voucher_object = VoucherId.objects.\
                 filter(voucher_no=voucher_var['voucher_no']).\
                 filter(session_id=voucher_var['session']).\
@@ -878,11 +881,13 @@ def mark_clear(request):
                     'purchase_order__buyer__customer__address__street_address',\
                     'purchase_order__buyer__customer__address__city',\
                     'purchase_order__buyer__customer__address__province')
-                list_user.append(voucher_object)
+                if voucher_object:
+                    list_user.append(voucher_object)
         list_user_clr = zip (list_user,list_clearance)
+        #return HttpResponse(list_user_clr)
         for suspense_var,voucher_var in list_user_clr:
             final_list = zip(suspense_var,voucher_var)
-            list_details.append(final_list)
+            list_details.append(final_list)    
         request_status = request_notify()
         return render(request, 'suspense/mark_suspense_clear.html', {
             'listed':list_details, 'request':request_status})
