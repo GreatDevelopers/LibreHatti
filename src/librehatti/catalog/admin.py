@@ -143,8 +143,12 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['parent']
 
 
+class NonPaymentOrderAdmin(admin.ModelAdmin):
+    list_display = ['reference_no', 'dated', 'delivery_address', 'item_type']
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
 admin.site.register(Product, ProductAdmin) 
 admin.site.register(LogEntry, LogEntryAdmin)
+admin.site.register(NonPaymentOrder, NonPaymentOrderAdmin)
