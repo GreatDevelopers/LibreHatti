@@ -16,8 +16,8 @@ class BuyerLookup(LookupChannel):
             user = user.filter(Q(username__icontains=value)| \
                 Q(first_name__icontains=value) \
                 | Q(last_name__icontains=value) \
-                |Q(customer__address__city__icontains=value))[:15]
-        return user
+                |Q(customer__address__city__icontains=value))
+        return user[0:15]
 
     def get_result(self, obj):
         return unicode(obj.username)

@@ -259,3 +259,13 @@ class RequestStatus(models.Model):
     confirmed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
     request_response = models.DateField(null = True)
+
+
+class NonPaymentOrder(models.Model):
+    reference_no = models.IntegerField()
+    dated = models.DateField()
+    delivery_address = models.CharField(max_length=500, blank=True, null=True,\
+        verbose_name = _DELIVERY_ADDRESS)
+    item_type = models.CharField(max_length = 200)
+    def __unicode__(self):
+        return '%s' % (self.id)
