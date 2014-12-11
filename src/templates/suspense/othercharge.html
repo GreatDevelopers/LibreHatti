@@ -17,14 +17,14 @@
     <div style = "text-align:right">
         Date: __________
     </div>
-    <div>A sum of Rs {{total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{other_charges}}/- has been deposited by:-
+    <div>A sum of Rs {{complete_total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{transplusother}}/- has been deposited by:-
     </div>
     <div>{{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
         {{address.purchase_order__buyer__customer__address__street_province}}</div>
         <div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide letter no.________dated________</div>
         <div>A sum of Rs {{total}}/- was spent for testing on as detailed below.</div>
         <br>
-        <div id = "pos-left">
+        <div id = "othercharges">
             <table border='1px'>
                 <tr>
                     <td>T.A/D.A Staff </td>
@@ -44,11 +44,15 @@
                 </tr>
                 <tr>
                     <td><b>TOTAL</b></td>
-                    <td  id = "pos-right">{{total}}</td>
+                    <td  id = "pos-right"><b>{{total}}</b></td>
                 </tr>
             </table>
         </div>
-        <div class="position">The Transport Bill no. {{transport_id}} dated {{date_of_generation}} for Rs {{other_charges}}/- is attached. The sum of Rs {{other_charges}}/- may be transferred from other charges to Consultancy Transport Fund. The sum of Rs {{ta_da}}/- spent  by Dean Testing & Consultancy mayn Please be paid to him</div>
+        <div class="position">
+        {% if transport != 0 %}
+        The Transport Bill no. {{transport.id}} dated {{transport.date_of_generation}} for Rs {{transport.total}}/- is attached. The sum of Rs {{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
+        {% endif %}
+        The sum of Rs {{ta_da}}/- spent  by Dean Testing & Consultancy may Please be paid to him</div>
         <div class = "footer1">DEAN Testing and Consultancy Cell
         </div>
         {% endblock %}

@@ -280,7 +280,7 @@ def voucher_generate(request):
 @login_required
 def voucher_show(request):
     id = request.GET['order_id']
-    purchase_order = PurchaseOrder.objects.get(id = id)
+    purchase_order = PurchaseOrder.objects.get(id=id)
     voucher_no_list = []
     voucher_obj_distinct = []
     voucherid = VoucherId.objects.values('purchase_order','purchased_item',\
@@ -290,10 +290,11 @@ def voucher_show(request):
         if value['voucher_no'] not in voucher_no_list:
             voucher_no_list.append(value['voucher_no'])
             voucher_obj_distinct.append(value)
-    header = HeaderFooter.objects.values('header').order_by('-id')[0]
+    suspense_order = SuspenseOrder.objects.values('voucher', 'session_id_id').\
+    filter(purchase_order=id, is_cleared=1)
     request_status = request_notify()
     return render(request, 'voucher/voucher_show.html', {\
-        'voucherid' : voucher_obj_distinct, 'header':header,\
+        'voucherid' : voucher_obj_distinct, 'suspense_order':suspense_order,\
         'request':request_status})
 
 
@@ -350,7 +351,6 @@ def voucher_print(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     if flag == 0:
-        
         return render(request, 'voucher/voucher_report.html', {\
             'calculate_distribution' : calculatedistribution,\
             'admin_charges': admin_charges, 'college_income': college_income, \

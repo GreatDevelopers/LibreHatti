@@ -4,7 +4,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/voucher.css' %}">
     {% block title %}
-    <title>With Transport</title>
+    <title>Clearance bill</title>
     {% endblock %}
 </head>
 <body>
@@ -23,7 +23,12 @@
     <div class="designation">Director,</div>
     Received a sum of Rs. {{total}}/- ( Rupees {{total_in_words}} only ) 
     <br><br>
-    Vide Cash, Dated
+    Vide 
+    {% if payment.purchase_order__mode_of_payment != 1 %}
+    Cheque {{payment.purchase_order__cheque_dd_number}}, Dated:{{payment.purchase_order__cheque_dd_date}}
+    {% else %}
+    Cash 
+    {% endif %}
     <div>From : {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
         {{address.purchase_order__buyer__customer__address__street_province}}</div>
         <div>Vide Bill No.: GNDEC/TCC/B/{{purchase_order}} Dated: {{order_date}}</div>
@@ -55,7 +60,7 @@
                     <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
                 </tr>
                 <tr>
-                    <td>Work Charges </td>
+                    <td>Work Charges(CONSULTANCY)</td>
                     <td  id = "pos-right">{{ suspense_clearance.work_charge }}</td>
                 </tr>
                 <tr>
@@ -70,15 +75,9 @@
                     <td>Boring Charges (Internal) </td>
                     <td  id = "pos-right">{{ suspense_clearance.boring_charge_internal }}</td>
                 </tr>
-                {% if suspense_clearance.boring_charge_external != 0 %}
-                <tr>
-                    <td>Boring Charges (External) </td>
-                    <td  id = "pos-right">{{ suspense_clearance.boring_charge_external }}</td>
-                </tr>
-                {% endif %}
                 <tr>
                     <td><b>TOTAL</b></td>
-                    <td  id = "pos-right">{{total}}</td>
+                    <td  id = "pos-right"><b>{{total}}</b></td>
                 </tr>
             </table>
         </div>

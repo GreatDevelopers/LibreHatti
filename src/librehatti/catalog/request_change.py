@@ -120,7 +120,7 @@ def request_save(request):
         except:
             obj = RequestStatus(change_request=change_request)
             obj.save()
-            request_status = request_notify()
+        request_status = request_notify()
         return render(request, 'catalog/request_success.html',\
             {'request':request_status })
     else:
@@ -231,6 +231,19 @@ def accept_request(request):
     elif RequestStatus.objects.filter(change_request = request_id).\
         filter(cancelled=True):
         request_status = 'Cancelled'
+    change_request_obj = ChangeRequest.objects.values('new_total',\
+        'purchase_order_of_session','session_id').get(id = request_id)
+    voucherid = VoucherId.objects.values('purchase_order').filter(\
+        purchase_order_of_session=\
+        change_request_obj['purchase_order_of_session'],\
+        session_id=change_request_obj['session_id'])[0]
+    Bill.objects.filter(purchase_order=voucherid['purchase_order']).update(\
+        grand_total=change_request_obj['new_total'])
+    surchargechange = RequestSurchargeChange.objects.values('surcharge_id',\
+        'new_value').filter(change_request_id = request_id)
+    for value in surchargechange:
+        TaxesApplied.objects.filter(id=value['surcharge_id']).\
+        update(tax=value['new_value'])
     plaintext = get_template('catalog/response_change_email.txt')
     content = get_template('catalog/response_change_email.html')
     temp = Context({'previous_total':previous_total,'user':user,
@@ -273,6 +286,19 @@ def reject_request(request):
     elif RequestStatus.objects.filter(change_request = request_id).\
         filter(cancelled=True):
         request_status = 'Cancelled'
+    change_request_obj = ChangeRequest.objects.values('previous_total',\
+        'purchase_order_of_session','session_id').get(id = request_id)
+    voucherid = VoucherId.objects.values('purchase_order').filter(\
+        purchase_order_of_session=\
+        change_request_obj['purchase_order_of_session'],\
+        session_id=change_request_obj['session_id'])[0]
+    Bill.objects.filter(purchase_order=voucherid['purchase_order']).update(\
+        grand_total=change_request_obj['previous_total'])
+    surchargechange = RequestSurchargeChange.objects.values('surcharge_id',\
+        'previous_value').filter(change_request_id = request_id)
+    for value in surchargechange:
+        TaxesApplied.objects.filter(id=value['surcharge_id']).\
+        update(tax=value['previous_value'])
     plaintext = get_template('catalog/response_change_email.txt')
     content = get_template('catalog/response_change_email.html')
     temp = Context({'previous_total':previous_total,'user':user,

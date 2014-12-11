@@ -217,12 +217,18 @@ class SearchResult(View):
             for field in self.fields_list:
                 temporary.append(data[field])
             generated_data_list.append(temporary)
-        flag=0
+        flag = 0
+        suspense_flag = 0
         if 'proforma' in request.GET:
             flag=1
+        suspense = SuspenseOrder.objects.filter(purchase_order=self.title,\
+            is_cleared=1)
+        if suspense:
+            suspense_flag = 1
         request_status = request_notify()    
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,
-            'records':self.results,'request':request_status, 'flag':flag}
+            'records':self.results,'request':request_status, 'flag':flag,\
+            'suspense_flag':suspense_flag}
         return render(request,'reports/search_result.html',temp)
