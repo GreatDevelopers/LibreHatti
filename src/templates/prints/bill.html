@@ -14,9 +14,9 @@
         <h2> Bill</h2>
     </div>
     <div class = "bill-left">
-        <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
-        <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
-        <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} </p>
+        <div><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} </div>
+        <div><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </div>
+        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></div>
         <p> To, </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p> {{buyer_name.company}}</p>
@@ -25,14 +25,16 @@
             -{{address.address__pin}},
             {% endif %}
             {{address.address__province}}</p>
-            <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
-            <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
+            <div><span id ="highlight"> Ref: </span>{{ref.reference}}</div>
+            <div><span id ="highlight"> Site: </span>{{site.delivery_address}}</div>
         </div>
         <table class="data" border="1px">
             <tr>
                 <th>Charges For Following</th>
+                {% if suspense != 1 %}
                 <th>Description</th>
                 <th>Per</th>
+                {% endif %}
                 <th>Total</th>
             </tr>
             <tr>
@@ -43,18 +45,21 @@
                     {{value}}
                     {% endfor %}
                 </td>
+                {% if suspense != 1 %}
                 <td>
                     {%for value in bill_values.2%}
                     {{value}}
                     {% endfor %}
-                    sample./s
+                    sample/s
                 </td>
-
+                {% endif %}
+                {% if suspense != 1 %}
                 <td>
                     {%for value in bill_values.3%}
                     {{value}}
                     {% endfor %}
                 </td>
+                {% endif %}
                 <td>
                     {{bill_values.4}}
                 </td>
@@ -62,26 +67,34 @@
             {% endfor %}
             {% if total_discount %}
             <tr>
-                <td>Discount</td>
+                <td>Discount</td>   
+                {% if suspense != 1 %}
                 <td colspan="2" rowspan="{{tax_count}}"></td>
+                {% endif %}
                 <td>{{total_discount}}</td>
             </tr>
             {% endif %}
+            {% if suspense != 1 %}
             {% if delivery_charges %}
             <tr>
                 <td>Transportation</td>
                 {% if total_discount %}
                 {% else %}
-                <td colspan="2" rowspan="{{tax_count}}"></td>
+                    {% if suspense != 1 %}
+                    <td colspan="2" rowspan="{{tax_count}}"></td>
+                    {% endif %}
                 {% endif %}
                 <td>{{delivery_charges}}</td>
             </tr>
+            {% endif %}
             {% endif %}
             <tr>
                 <td><b>Total </b></td>
                 {% if total_discount or delivery_charges %}
                 {% else %}
-                <td  colspan="2" rowspan="{{tax_count}}"></td>
+                    {% if suspense != 1 %}
+                    <td colspan="2" rowspan="{{tax_count}}"></td>
+                    {% endif %}
                 {% endif %}
                 <td><b>{{total_cost}}</b></td>
             </tr>

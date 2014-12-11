@@ -120,16 +120,24 @@ def bill(request):
     and generates the Grand total.
     """
     id = request.GET['order_id']
+    if 'suspense' in request.GET:
+        suspense = 1
+    else:
+        suspense = 0
     purchase_order = PurchaseOrder.objects.filter(id=id)
     purchased_item = PurchasedItem.objects.filter(\
         purchase_order=purchase_order).values('item__category__name',\
-        'item__category').order_by('item__category').distinct()
+        'item__category','item__category__parent__name').\
+        order_by('item__category').distinct()
     purchased_item_odj = PurchasedItem.objects.filter(\
         purchase_order=purchase_order).values('item__name', 'item__category',\
         'qty', 'price_per_unit').order_by('item__category')
     cost = PurchasedItem.objects.filter(purchase_order=purchase_order).\
-    values('price', 'item__category', 'item__name').order_by('item__category')
+    values('price', 'item__category', 'item__name',\
+        'item__category__parent__name').order_by('item__category')
+    bill_obj = Bill.objects.values('delivery_charges').get(purchase_order=id)
     bill_values = []
+    field_check = 1
     for category in purchased_item:
         flag1 = 1
         list = []
@@ -168,6 +176,13 @@ def bill(request):
         for itemcost in cost:
             if category['item__category'] == itemcost['item__category']:
                 total = total + itemcost['price']
+                if 'suspense' in request.GET:
+                    if field_check == 1:
+                        value = itemcost['item__category__parent__name']
+                        if value.split(':')[1].upper() == 'FIELD WORK' or\
+                        value.split(':')[1].upper() == ' FIELD WORK':
+                            total = total + bill_obj['delivery_charges']
+                            field_check = 0
         list.append(item_names)
         list.append(item_qty)
         list.append(price_unit)
@@ -232,7 +247,8 @@ def bill(request):
         'buyer':purchase_order_obj, 'buyer_name':customer_obj,\
         'site':purchase_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
-        'bill_values':bill_values, 'header':header, 'footer': footer})
+        'bill_values':bill_values, 'header':header, 'footer': footer,\
+        'suspense':suspense})
 
 
 @login_required

@@ -1,0 +1,62 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% block title %}
+   <title>Clearance Options</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='order-success'>
+   <p class='success-message'>Clearance Options</p>
+      <table>
+      <tr>
+          <th>Order No.:</th>
+          <td>{{order_id}}</td>
+       </tr>
+       <tr>
+          <th>Voucher No.:</th>
+          <td>{{voucher_no}}</td>
+       </tr>
+       <tr>
+          <th>Session:</th>
+          <td>{{financialsession.session_start_date}} : {{financialsession.session_end_date}}</td>
+       </tr>
+       <tr>
+          <th>Client:</th>
+          <td>{{details.buyer__first_name}}&nbsp;{{details.buyer__last_name}}
+           &nbsp;{{details.buyer__customer__title}}</td>
+       </tr>
+       <tr>
+           <th>Address:</th>
+           <td>{{details.buyer__customer__address__street_address}}&nbsp;
+              {{details.buyer__customer__address__city}}</td>
+          </tr>
+          <tr>
+           <th>Mode Of Payment:</th>
+           <td>{{details.mode_of_payment__method}}</td>
+       </tr>
+   </table>
+   <div class='order-success-options'>
+    <table>
+        <tr>
+           <th colspan='3'><h3>Options</h3></th>
+       </tr>
+       <tr>
+         {% if with_transport == 0 %}
+           <td><a href = '{% url 'librehatti.suspense.views.with_transport' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="with transport"></a></td>
+          {% else %}
+          <td><a href = '{% url 'librehatti.suspense.views.with_transport' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="without transport"></a></td>
+          {% endif %}
+           <td><a href = '{% url 'librehatti.suspense.views.without_other_charges' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="without other charges"></a></td>
+           <td><a href = '{% url 'librehatti.suspense.views.other_charges' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Other Charges"></a></td>
+       </tr>
+    </table>
+       </div>
+   </div>
+   {% endblock %}
+</body>
+</html>

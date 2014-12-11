@@ -112,3 +112,23 @@ table{
 #account td{
 	text-align: left;
 }
+
+#othercharges table{
+	width:50%;
+}
+
+#othercharges table td{
+	width:70%;
+}
+
+#transportbill{
+	text-align:right;
+	margin-top: 60px;
+}
+
+#transportfooter{
+	padding-top:25px;
+	margin-left: auto;
+	margin-right: auto; 
+	width:55%
+}

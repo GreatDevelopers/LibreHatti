@@ -190,9 +190,14 @@ def order_added_success(request):
         'buyer__customer__title','buyer__customer__address__city',\
         'mode_of_payment__method','cheque_dd_number',\
         'cheque_dd_date').filter(id=order_id)[0]
+    suspense_flag = 0
+    suspense = SuspenseOrder.objects.filter(purchase_order=order_id)
+    if suspense:
+        suspense_flag = 1
     request_status = request_notify()
     return render(request,'catalog/order_added_success.html',\
-        {'details': details,'order_id':order_id,'request':request_status})
+        {'details': details,'order_id':order_id,'request':request_status,\
+        'suspense_flag':suspense_flag})
 
 
 @login_required

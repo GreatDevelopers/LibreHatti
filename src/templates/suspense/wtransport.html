@@ -23,7 +23,12 @@
     <div class="designation">Director,</div>
     Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
     <br><br>
-    Vide Cash, Dated
+    Vide 
+    {% if payment.purchase_order__mode_of_payment != 1 %}
+    Cheque {{payment.purchase_order__cheque_dd_number}}, Dated:{{payment.purchase_order__cheque_dd_date}}
+    {% else %}
+    Cash 
+    {% endif %}
     <div>From : {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
         {{address.purchase_order__buyer__customer__address__street_province}}</div>
         <div>Vide Bill No.: GNDEC/TCC/B/{{purchase_order}} Dated: {{order_date}}</div>
@@ -56,7 +61,7 @@
                 </tr>
                 <tr>
                     <td><b>TOTAL</b></td>
-                    <td  id = "pos-right">{{ calculate_distribution.total }}</td>
+                    <td  id = "pos-right"><b>{{ calculate_distribution.total }}</b></td>
                 </tr>
             </table>
         </div>

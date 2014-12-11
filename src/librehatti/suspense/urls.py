@@ -9,7 +9,6 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^othercharges/','other_charges'),
                    url(r'^tada_result/','tada_result'),
                    url(r'^tada_order_session/','tada_order_session'),
-                   url(r'^withouttransport/','withouttransport'),
                    url(r'^with_transport/','with_transport'),
                    url(r'^without_other_charges/','without_other_charges'),
                    url(r'^transport/', 'transport'),
@@ -19,7 +18,7 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^save_distance', 'save_distance'),
                    url(r'^sessionselect/', 'sessionselect'),
                    url(r'^mark_clear/', 'mark_clear'),
-                   url(r'^mark_status/', 'mark_status')
-
+                   url(r'^mark_status/', 'mark_status'),
+                   url(r'^clearance_options/', 'clearance_options'),
               )                    
         

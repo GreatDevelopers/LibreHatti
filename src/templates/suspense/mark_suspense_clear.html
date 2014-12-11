@@ -8,7 +8,7 @@
     <title>
         Mark Order Clear
     </title>
-    {% endblock %}
+    {% endblock %} 
 </head>
 <body>
     {% block content %}
@@ -41,7 +41,15 @@
                 <td>{{ suspense_var.test_date }}</td>
                 <td>{{ suspense_var.clear_date }}</td>
                 <td>
-                    <a href='voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}' class='mark_clear'><img src="{% static 'icons/Clean-128.png' %}"><span class="mark_clear_button">Mark Clear</span></a>
+                    {% for voucher_cleared in suspense_cleared %}
+                    {% if voucher_cleared.voucher == suspense_var.voucher_no and voucher_cleared.session_id == suspense_var.session %}
+                        {% if voucher_cleared.is_cleared == 1 %}
+                        <a href='{% url 'librehatti.suspense.views.clearance_options'%}?voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}'>Clearance Options</a>
+                        {% else %}
+                        <a href='voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}' class='mark_clear'><img src="{% static 'icons/Clean-128.png' %}"><span class="mark_clear_button">Mark Clear</span></a>
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
                 </td>
             </tr>
             {% endfor %}

@@ -232,58 +232,56 @@ def clearance_result(request):
 def with_transport(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
-    split = session.split(' : ')
-    start_date = datetime.strptime(split[0], '%Y-%m-%d').date()
-    end_date = datetime.strptime(split[1], '%Y-%m-%d').date()
     financialsession = FinancialSession.objects.values('id').\
-    get(session_start_date=start_date, session_end_date=end_date)
+    get(id=session)
+    try:
+        transport = Transport.objects.values('total').get(voucher_no=number,\
+            session=financialsession['id'])
+        transport_total = transport['total']
+    except:
+        transport_total = 0
+    try:
+        tada = TaDa.objects.values('tada_amount').get(voucher_no=number,\
+            session=financialsession['id'])
+        tada_amount = tada['tada_amount']
+    except:
+        tada_amount = 0
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'labour_charge', 'car_taxi_charge', 'boring_charge_internal',\
     'boring_charge_external', 'lab_testing_staff', 'field_testing_staff',\
     'test_date', 'clear_date').\
     get(voucher_no=number, session=financialsession['id'])
-    othercharge = suspenseclearance['labour_charge'] +\
-    suspenseclearance['car_taxi_charge']
+    othercharge = transport_total + suspenseclearance['labour_charge'] +\
+    suspenseclearance['car_taxi_charge'] +\
+    suspenseclearance['boring_charge_external']
+    boring_charge_internal = suspenseclearance['boring_charge_internal']
     lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
     lab_staff_name_list = Staff.objects.values('name', 'position').\
     filter(code__in=lab_staff_list)
-    staff = Staff.objects.filter(code__in=lab_staff_list).\
-    aggregate(Sum('daily_ta_da'))
     field_staff_list = suspenseclearance['field_testing_staff'].split(',')
     field_staff_name_list = Staff.objects.values('name','position').\
     filter(code__in=field_staff_list)
-    staff_obj = Staff.objects.filter(code__in=field_staff_list).\
-    aggregate(Sum('daily_ta_da'))
-    ta_da_total = staff['daily_ta_da__sum'] + staff_obj['daily_ta_da__sum']
-    voucherid = VoucherId.objects.values('ratio', 'purchase_order',\
+    ta_da_total = tada_amount
+    voucherid = VoucherId.objects.values('ratio', 'purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
-    'purchase_order__buyer__last_name',\
+    'purchase_order__buyer__last_name', 'purchase_order__mode_of_payment',\
     'purchase_order__buyer__customer__address__street_address',\
     'purchase_order__buyer__customer__address__city',\
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province','college_income',\
-    'admin_charges').get(voucher_no=number, session=financialsession['id'])
+    'admin_charges', 'purchase_order__cheque_dd_number',\
+    'purchase_order__cheque_dd_date').get(voucher_no=number,\
+    session=financialsession['id'])
     distribution = Distribution.objects.values('name').\
     get(ratio=voucherid['ratio'])
     calculate_distribution = CalculateDistribution.objects.\
     values('college_income_calculated', 'admin_charges_calculated',\
     'consultancy_asset', 'development_fund', 'total').\
     get(voucher_no=number, session=financialsession['id'])
-    if suspenseclearance['boring_charge_external'] != 0:
-        total = calculate_distribution['total'] + othercharge + ta_da_total +\
-        suspenseclearance['work_charge'] +\
-        suspenseclearance['boring_charge_internal'] +\
-        suspenseclearance['boring_charge_external']
-        total_in_words = num2eng(total)
-        rowspan = 10
-    else:
-        total = calculate_distribution['total'] + othercharge + ta_da_total +\
-        suspenseclearance['work_charge'] +\
-        suspenseclearance['boring_charge_internal']
-        total_in_words = num2eng(total)
-        rowspan = 9
+    total = calculate_distribution['total'] + transport_total
+    total_in_words = num2eng(total)
+    rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    request_status = request_notify()
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                 'calculate_distribution':calculate_distribution,\
@@ -291,97 +289,21 @@ def with_transport(request):
                 'field_staff':field_staff_name_list,\
                 'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
                 'distribution':distribution['name'],\
-                'purchase_order':voucherid['purchase_order'],\
+                'purchase_order':voucherid['purchase_order_of_session'],\
                 'order_date':voucherid['purchase_order__date_time'].date(),\
                 'address':voucherid, 'ta_da':ta_da_total,\
                 'othercharge':othercharge, 'total':total,\
                 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid, 'rowspan':rowspan,\
-                'request':request_status})
-
-
-@login_required
-def withouttransport(request):
-    number = request.GET['voucher_no']
-    session = request.GET['session']
-    split = session.split(' : ')
-    start_date = datetime.strptime(split[0], '%Y-%m-%d').date()
-    end_date = datetime.strptime(split[1], '%Y-%m-%d').date()
-    financialsession = FinancialSession.objects.values('id').\
-    get(session_start_date=start_date, session_end_date=end_date)
-    suspenseclearance = SuspenseClearance.objects.values('work_charge',\
-        'labour_charge', 'boring_charge_internal', 'boring_charge_external',\
-        'field_testing_staff', 'lab_testing_staff', 'test_date','clear_date').\
-    get(voucher_no=number, session=financialsession['id'])
-    othercharge = suspenseclearance['labour_charge']
-    lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
-    lab_staff_name_list = Staff.objects.values('name', 'position').\
-    filter(code__in=lab_staff_list)
-    staff = Staff.objects.filter(code__in=lab_staff_list).\
-    aggregate(Sum('daily_ta_da'))
-    field_staff_list = suspenseclearance['field_testing_staff'].split(',')
-    field_staff_name_list = Staff.objects.values('name','position').\
-    filter(code__in=field_staff_list)
-    staff_obj = Staff.objects.filter(code__in=field_staff_list).\
-    aggregate(Sum('daily_ta_da'))
-    ta_da_total = staff['daily_ta_da__sum'] + staff_obj['daily_ta_da__sum']
-    voucherid = VoucherId.objects.values('ratio', 'purchase_order',\
-    'purchase_order__date_time', 'purchase_order__buyer__first_name',\
-    'purchase_order__buyer__last_name',\
-    'purchase_order__buyer__customer__address__street_address',\
-    'purchase_order__buyer__customer__address__city',\
-    'purchase_order__buyer__customer__address__pin',\
-    'purchase_order__buyer__customer__address__province', 'college_income',\
-    'admin_charges').get(voucher_no=number, session=financialsession['id'])
-    distribution = Distribution.objects.values('name').\
-    get(ratio=voucherid['ratio'])
-    calculate_distribution = CalculateDistribution.objects.\
-    values('college_income_calculated', 'admin_charges_calculated',\
-    'consultancy_asset', 'development_fund', 'total').\
-    get(voucher_no=number, session=financialsession['id'])
-    if suspenseclearance['boring_charge_external'] != 0:
-        total = calculate_distribution['total'] + othercharge + ta_da_total +\
-        suspenseclearance['work_charge'] + \
-        suspenseclearance['boring_charge_internal'] +\
-        suspenseclearance['boring_charge_external']
-        total_in_words = num2eng(total)
-        rowspan = 10
-    else:
-        total = calculate_distribution['total'] + othercharge + ta_da_total +\
-        suspenseclearance['work_charge'] +\
-        suspenseclearance['boring_charge_internal']
-        total_in_words = num2eng(total)
-        rowspan = 9
-    header = HeaderFooter.objects.values('header').get(is_active=True)
-    request_status = request_notify()
-    return render(request,'suspense/withouttransport.html', {'header':header,\
-                'voucher_no':number,\
-                'date':suspenseclearance['clear_date'],\
-                'calculate_distribution':calculate_distribution,\
-                'suspense_clearance':suspenseclearance,\
-                'field_staff':field_staff_name_list,\
-                'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
-                'distribution':distribution['name'],\
-                'purchase_order':voucherid['purchase_order'],\
-                'order_date':voucherid['purchase_order__date_time'].date(),\
-                'address':voucherid, 'othercharge':othercharge,\
-                'ta_da':ta_da_total, 'total':total,\
-                'total_in_words':total_in_words,\
-                'test_date':suspenseclearance['test_date'],
-                'charges':voucherid, 'rowspan':rowspan,\
-                'request':request_status})
+                'charges':voucherid, 'rowspan':rowspan, 'payment':voucherid})
 
 
 @login_required
 def without_other_charges(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
-    split = session.split(' : ')
-    start_date = datetime.strptime(split[0], '%Y-%m-%d').date()
-    end_date = datetime.strptime(split[1], '%Y-%m-%d').date()
     financialsession = FinancialSession.objects.values('id').\
-    get(session_start_date=start_date, session_end_date=end_date)
+    get(id=session)
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'boring_charge_internal','field_testing_staff','lab_testing_staff',\
     'test_date','clear_date').get(voucher_no=number,\
@@ -392,14 +314,16 @@ def without_other_charges(request):
     field_staff_list = suspenseclearance['field_testing_staff'].split(',')
     field_staff_name_list = Staff.objects.values('name', 'position').\
     filter(code__in=field_staff_list)
-    voucherid = VoucherId.objects.values('ratio','purchase_order',\
+    voucherid = VoucherId.objects.values('ratio','purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
-    'purchase_order__buyer__last_name',\
+    'purchase_order__buyer__last_name', 'purchase_order__mode_of_payment',\
     'purchase_order__buyer__customer__address__street_address',\
     'purchase_order__buyer__customer__address__city',\
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province', 'college_income',\
-    'admin_charges').get(voucher_no=number, session=financialsession['id'])
+    'admin_charges', 'purchase_order__cheque_dd_number',\
+    'purchase_order__cheque_dd_date').get(voucher_no=number,\
+    session=financialsession['id'])
     distribution = Distribution.objects.values('name').\
     get(ratio=voucherid['ratio'])
     calculate_distribution = CalculateDistribution.objects.\
@@ -408,7 +332,6 @@ def without_other_charges(request):
     get(voucher_no=number, session=financialsession['id'])
     total_in_words = num2eng(calculate_distribution['total'])
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    request_status = request_notify()
     return render(request,'suspense/wtransport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                 'calculate_distribution':calculate_distribution,\
@@ -416,37 +339,37 @@ def without_other_charges(request):
                 'field_staff':field_staff_name_list,\
                 'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
                 'distribution':distribution['name'],\
-                'purchase_order':voucherid['purchase_order'],\
+                'purchase_order':voucherid['purchase_order_of_session'],\
                 'order_date':voucherid['purchase_order__date_time'].date(),\
                 'address':voucherid, 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid,'request':request_status})
+                'charges':voucherid, 'payment':voucherid})
 
 
 @login_required
 def other_charges(request):
     number = request.GET['voucher_no']
     session = request.GET['session']
-    split = session.split(' : ')
-    start_date = datetime.strptime(split[0], '%Y-%m-%d').date()
-    end_date = datetime.strptime(split[1], '%Y-%m-%d').date()
     financialsession = FinancialSession.objects.values('id').\
-    get(session_start_date=start_date, session_end_date=end_date)
-    transport = Transport.objects.values('id','date_of_generation').\
-    get(voucher_no=number, session=financialsession['id'])
+    get(id=session)
+    try:
+        transport = Transport.objects.values('id','date_of_generation','total').\
+        get(voucher_no=number, session=financialsession['id'])
+        transport_total = transport['total']
+    except:
+        transport_total = 0
+        transport = 0
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'boring_charge_internal', 'boring_charge_external', 'labour_charge',\
     'car_taxi_charge', 'field_testing_staff', 'lab_testing_staff',\
     'clear_date').get(voucher_no=number, session=financialsession['id'])
-    lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
-    lab_staff_name_list = Staff.objects.filter(code__in=lab_staff_list).\
-    aggregate(Sum('daily_ta_da'))
-    field_staff_list = suspenseclearance['field_testing_staff'].split(',')
-    field_staff_name_list = Staff.objects.filter(code__in=field_staff_list).\
-    aggregate(Sum('daily_ta_da'))
-    ta_da_total = lab_staff_name_list['daily_ta_da__sum'] +\
-    field_staff_name_list['daily_ta_da__sum']
-    voucherid = VoucherId.objects.values('ratio','purchase_order',\
+    try:
+        tada = TaDa.objects.values('tada_amount').get(voucher_no=number,\
+            session=financialsession['id'])
+        ta_da_total = tada['tada_amount']
+    except:
+        ta_da_total = 0
+    voucherid = VoucherId.objects.values('ratio','purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
     'purchase_order__buyer__last_name',\
     'purchase_order__buyer__customer__address__street_address',\
@@ -454,26 +377,23 @@ def other_charges(request):
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province').\
     get(voucher_no=number, session=financialsession['id'])
-    if suspenseclearance['boring_charge_external'] != 0:
-        boring_charges = suspenseclearance['boring_charge_internal'] +\
-        suspenseclearance['boring_charge_external']
-    else:
-        boring_charges = suspenseclearance['boring_charge_internal']
-    other_charges = boring_charges + suspenseclearance['car_taxi_charge'] +\
+    other_charges = suspenseclearance['boring_charge_external'] +\
+    suspenseclearance['car_taxi_charge'] +\
     suspenseclearance['labour_charge']
     total = other_charges + ta_da_total
+    complete_total = total + transport_total
+    transplusother = other_charges + transport_total
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    request_status = request_notify()
     return render(request,'suspense/othercharge.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                 'suspense_clearance':suspenseclearance,\
-                'purchase_order':voucherid['purchase_order'],\
+                'purchase_order':voucherid['purchase_order_of_session'],\
                 'order_date':voucherid['purchase_order__date_time'].date(),\
                 'address':voucherid, 'ta_da':ta_da_total,\
-                'boring_charges':boring_charges, 'total':total,\
-                'other_charges':other_charges,'transport_id':transport['id'],\
-                'date_of_generation':transport['date_of_generation'],\
-                'request':request_status})
+                'boring_charges':suspenseclearance['boring_charge_external'],\
+                'total':total, 'other_charges':other_charges,\
+                'transport':transport, 'complete_total':complete_total,\
+                'transplusother':transplusother})
 
 
 @login_required
@@ -549,7 +469,7 @@ def quoted_save_distance(request):
     distance = request.GET['distance']
     quoted_order = QuotedOrder.objects.get(pk=quoted_order_id)
     try:
-        suspense = QuotedSuspenseOrder.objects.get(quoted_order = quoted_order_id)
+        suspense = QuotedSuspenseOrder.objects.get(quoted_order=quoted_order_id)
         suspense.distance_estimated = distance
         suspense.save()
     except:
@@ -852,27 +772,28 @@ def tada_order_session(request):
 
 
 """
-This view is used to fetch and display the data required to mark the suspense order as cleared 
+This view is used to fetch and display the data required to mark the
+suspense order as cleared 
 """
 @login_required
 def mark_clear(request):
-        suspense_obj = SuspenseOrder.objects.filter(is_cleared=0).\
+        suspense_obj = SuspenseOrder.objects.filter().\
         values('voucher','session_id')
+        suspense_cleared = SuspenseOrder.objects.filter().values(\
+            'voucher','session_id','is_cleared')
         list_clearance = []
         list_user = []
         list_details = []
-        #return HttpResponse(suspense_obj)
         for suspense_var in suspense_obj:
-            #return HttpResponse(suspense_var['session_id'])
-            SuspenseClearance_object = SuspenseClearance.objects.filter(session = suspense_var['session_id']).filter(voucher_no=suspense_var['voucher']).values('session', 'voucher_no', 'lab_testing_staff','field_testing_staff','test_date','clear_date')
-            #return HttpResponse(SuspenseClearance_object)
+            SuspenseClearance_object = SuspenseClearance.objects.\
+            filter(session = suspense_var['session_id']).\
+            filter(voucher_no=suspense_var['voucher']).values('session',\
+                'voucher_no', 'lab_testing_staff','field_testing_staff',\
+                'test_date','clear_date')
             if SuspenseClearance_object:
                 list_clearance.append(SuspenseClearance_object)
-        #return HttpResponse(list_clearance)
         for temp_var in list_clearance:
-            #return HttpResponse(temp_var)
             for voucher_var in temp_var:
-                #return HttpResponse(voucher_var['voucher_no'])
                 voucher_object = VoucherId.objects.\
                 filter(voucher_no=voucher_var['voucher_no']).\
                 filter(session_id=voucher_var['session']).\
@@ -884,13 +805,13 @@ def mark_clear(request):
                 if voucher_object:
                     list_user.append(voucher_object)
         list_user_clr = zip (list_user,list_clearance)
-        #return HttpResponse(list_user_clr)
         for suspense_var,voucher_var in list_user_clr:
             final_list = zip(suspense_var,voucher_var)
             list_details.append(final_list)    
         request_status = request_notify()
         return render(request, 'suspense/mark_suspense_clear.html', {
-            'listed':list_details, 'request':request_status})
+            'listed':list_details, 'suspense_cleared':suspense_cleared,\
+            'request':request_status})
 
 
 """
@@ -900,6 +821,79 @@ This view updates the status of given order as cleared
 def mark_status(request):
     voucher = request.GET.get('voucher_no')
     session = request.GET.get('session')
+    try:
+        transport = Transport.objects.values('total').get(voucher_no=voucher,\
+            session_id=session)
+        transport_total = transport['total']
+    except:
+        transport_total = 0
+    try:
+        suspenseclearance = SuspenseClearance.objects.values('labour_charge',\
+            'car_taxi_charge','boring_charge_internal','boring_charge_external').\
+        get(voucher_no=voucher, session_id=session)
+        other_charges = transport_total + suspenseclearance['labour_charge'] +\
+        suspenseclearance['car_taxi_charge'] +\
+        suspenseclearance['boring_charge_external']
+        boring_charge_internal = suspenseclearance['boring_charge_internal']
+    except:
+        other_charges = 0
+        boring_charge_internal = 0
+    try:
+        tada = TaDa.objects.values('tada_amount').get(voucher_no=voucher,\
+            session=session)
+        tada_amount = tada['tada_amount']
+    except:
+        tada_amount = 0
+    calculate_distribution = CalculateDistribution.objects.values('total').\
+    get(voucher_no=voucher, session_id=session)
+    suspense_total = calculate_distribution['total'] + transport_total
+    distribution_total = suspense_total - boring_charge_internal -\
+    other_charges - tada_amount
+    voucherid = VoucherId.objects.values('ratio', 'college_income',\
+        'admin_charges').get(voucher_no=voucher, session_id=session)
+    work_charge = (2 * distribution_total) / 100
+    college_income = (voucherid['college_income'] * distribution_total) / 100
+    admin_charges = (voucherid['admin_charges'] * distribution_total) / 100
+    remain_cost = distribution_total - work_charge - college_income -\
+    admin_charges
+    split = voucherid['ratio'].split(':')
+    consultancy_asset = (remain_cost * int(split[0]))/100
+    development_fund = (remain_cost * int(split[1]))/100
+    calculate_distribution_total = college_income + admin_charges +\
+    consultancy_asset + development_fund
+    CalculateDistribution.objects.filter(voucher_no=voucher,\
+        session_id=session).update(college_income_calculated=college_income,\
+        admin_charges_calculated=admin_charges,\
+        consultancy_asset=consultancy_asset, development_fund=development_fund,\
+        total=calculate_distribution_total)
+    SuspenseClearance.objects.filter(voucher_no=voucher, session_id=session).\
+    update(work_charge=work_charge)
     suspense_order_obj = SuspenseOrder.objects.filter(voucher=voucher).\
     filter(session_id=session).update(is_cleared='1')
-    return HttpResponseRedirect("../mark_clear")
+    return HttpResponse("")
+
+
+@login_required
+def clearance_options(request):
+    voucher_no = request.GET.get('voucher_no')
+    session_id = request.GET.get('session')
+    financialsession = FinancialSession.objects.values('session_start_date',\
+        'session_end_date').get(id=session_id)
+    voucherid = VoucherId.objects.values('purchase_order_of_session',\
+        'purchase_order').get(voucher_no=voucher_no, session_id=session_id)
+    with_transport = 0
+    try:
+        Transport.objects.get(voucher_no=voucher_no, session_id=session_id)
+    except:
+        with_transport = 1
+    details = PurchaseOrder.objects.values('buyer__first_name',\
+        'buyer__last_name','buyer__customer__address__street_address',\
+        'buyer__customer__title','buyer__customer__address__city',\
+        'mode_of_payment__method','cheque_dd_number',\
+        'cheque_dd_date').filter(id=voucherid['purchase_order'])[0]
+    request_status = request_notify()
+    return render(request,'suspense/clearance_options.html',\
+        {'details': details,'order_id':voucherid['purchase_order_of_session'],
+        'request':request_status, 'voucher_no':voucher_no,\
+        'session_id':session_id, 'financialsession':financialsession,\
+        'request':request_status, 'with_transport':with_transport})

@@ -41,6 +41,7 @@
     $(document).ready(function(){
         $('.voucher').attr('disabled', 'disabled');
         $('.material').attr('disabled', 'disabled');
+        $('.adddistancesave').attr('disabled', 'disabled');
         $('.add_distance').change(function(event){
             voucher_no = event.target.id.split("_")[1];
             distance = $('#distance_' + voucher_no).val();
@@ -50,6 +51,7 @@
                 $.ajax({
                     url: request_url,
                     success: function(data){
+                        $('.adddistancesave').removeAttr('disabled');
                     }
                 });
             });
