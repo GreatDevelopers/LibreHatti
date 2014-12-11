@@ -620,13 +620,15 @@ def transportbill(request):
                 footer = HeaderFooter.objects.values('footer').\
                 get(is_active=True)
                 request_status = request_notify()
-                return render(request, 'suspense/transport_bill.html',
+                session_id = session.id
+                return render(request, 'suspense/transport_summary.html',
                        {'words':num2eng(total_amount), 'total':total,
                        'header':header, 'kilometers':kilometers, 'rate':rate,\
                        'date':date, "voucherid":voucher, "temp":temp,\
                        'zip_data':zip_data, 'total_amount':total_amount,\
                        'date_of_generation':date_of_generation,\
-                       'vehicle':vehicle,'request':request_status})
+                       'vehicle':vehicle,'request':request_status,
+                       'session':session_id})
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
@@ -719,7 +721,7 @@ def tada_result(request):
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             request_status = request_notify()
-            return render(request, 'suspense/tada_result.html',{\
+            return render(request, 'suspense/tada_summary.html',{\
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
                 'list_staff':list_staff, 'words':num2eng(int(tada_total)),\

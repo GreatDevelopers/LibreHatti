@@ -1,0 +1,59 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% block title %}
+   <title>Order added</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='order-success'>
+   <p class='success-message'>Charges added <span class='green'>
+      Successfully</span></p>
+    <div id = "transport_content">
+
+        <table border="1" align="center">
+            <tr>
+                <th>Date of Use</th>
+                <th>Distance(in Kms)</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+            {% for date,km,amount in zip_data %}
+            <tr>
+                <td>
+                    {{ date }} 
+                </td>
+                <td>
+                    {{ km }}
+                </td>
+                <td>
+                    {{ rate }}
+                </td>
+                <td>
+                    {{ amount }}
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan = "3"><center><b>Total</b></center></td>
+                <td> {{ total_amount }}</td>
+            </tr>
+        </table>
+         <div class='order-success-options'>
+    <table>
+       <tr>
+           <td></td>
+           <td><a target="_blank" href = '{% url 'librehatti.suspense.views.print_transport_bill' %}?voucher_id={{voucherid}}&session={{session}}'><input type="button" class="btn btn-info btn-large" name="" value="Transport Bill"></a></td>
+           <td></td>
+       </tr>
+           </table>
+       </div>
+    </div>
+   </div>
+   {% endblock %}
+</body>
+</html>
