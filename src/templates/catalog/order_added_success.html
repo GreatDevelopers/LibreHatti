@@ -35,19 +35,19 @@
            <th colspan='3'><h3>Options</h3></th>
        </tr>
        <tr>
-           <td><a href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
+           <td><a target="_blank" href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
            <td></td>
-           <td><a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
+           <td><a target="_blank" href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
        </tr>
        <tr>
-           <td><a href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
+           <td><a target="_blank" href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
            <td></td>
-           <td><a href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
+           <td><a target="_blank" href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
        </tr>
        {% if suspense_flag == 1 %}
        <tr>
            <td></td>
-           <td><a href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Suspense Bill"></a></td>
+           <td><a target="_blank" href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Suspense Bill"></a></td>
            <td></td>
        </tr>
        {% endif %}

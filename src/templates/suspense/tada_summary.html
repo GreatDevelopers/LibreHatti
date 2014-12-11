@@ -1,0 +1,71 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% block title %}
+   <title>Order added</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='order-success'>
+   <p class='success-message'>TA/DA added <span class='green'>
+      Successfully</span></p>
+        <table style="width:100%" border = "1px">
+            <thead>
+                <tr>
+                    <th rowspan = "2">Name</th>
+                    <th colspan = "3">Departure(up)</th>
+                    <th colspan = "3">Arrival(up)</th>
+                    <th colspan = "3">Departure(down)</th>
+                    <th colspan = "3">Arrival(down)</th>
+                    <th rowspan = "2">D.A.</th>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Station</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for temp_var in list_staff%}
+                {% for daily_tada in temp_var%}
+                <tr>
+                    <td>{{daily_tada.name }}</td>
+                    <td>{{tada.start_test_date}}</td>
+                    <td>{{tada.departure_time_from_tcc}}</td>
+                    <td>{{tada.source_site }}</td>
+                    <td>{{tada.start_test_date}}</td>
+                    <td>{{tada.arrival_time_at_site}}</td>
+                    <td>{{tada.testing_site}}</td>
+                    <td>{{tada.end_test_date}}</td>
+                    <td>{{tada.departure_time_from_site}}</td>
+                    <td>{{tada.testing_site}}</td>
+                    <td>{{tada.end_test_date}}</td>
+                    <td>{{tada.arrival_time_at_tcc}}</td>
+                    <td>{{tada.source_site}}</td>
+                    <td>{{daily_tada.daily_ta_da}}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+                <tr>
+                    <td colspan = "13"><center><b>Total</b></center></td>
+                <td><b>{{ total}}</b></td>
+                </tr>
+            </tbody>
+        </table>
+   </div>
+   {% endblock %}
+</body>
+</html>
