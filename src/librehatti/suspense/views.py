@@ -528,12 +528,17 @@ def sessionselect(request):
         if form.is_valid():
             session = request.POST['session'][0]
             voucher = request.POST['voucher']
+            Session = FinancialSession.objects.filter(id = session).\
+            values('session_start_date','session_end_date')
+            for date in Session:
+                session_start_date = date['session_start_date']
+                session_end_date =  date['session_end_date']
             object = SuspenseOrder.objects.filter(session_id=session).\
             filter(voucher=voucher).values()
             if object:
                 Transport = TransportForm1()
-                messages = "Transport Bill for Voucher Number"+" "+ voucher +\
-                " and Session"+" "+session
+                messages = " Voucher "+" "+ voucher +" and Session"+" "+\
+                str(session_start_date)+":"+str(session_end_date)
                 request_status = request_notify()
                 temp = {"TransportForm":Transport, "session":session,\
                 "voucher":voucher,"messages":messages,'request':request_status}
