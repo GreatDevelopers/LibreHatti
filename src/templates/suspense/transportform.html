@@ -6,7 +6,10 @@
 {% block extrajs %}
 <script type="text/javascript">
     $(document).ready(function() {
-        $("[name='date']").datepicker(); 
+        $("[name='date']").datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        }); 
         $("#button2").click(function() {
 
         //Insert just after the kilo input in p element
@@ -18,7 +21,10 @@
         //will confuse it with the cloned element and events will not work
         dateelement.children("input[name='date']").replaceWith(newdateelement);
         dateelement.insertAfter($("#id_date").parent("p"));
-        $("[name='date']").datepicker(); 
+        $("[name='date']").datepicker({
+            changeMonth: true,
+            changeYear: true,dateFormat:"yy-mm-dd"
+        }); 
     });
     });
 </script>
