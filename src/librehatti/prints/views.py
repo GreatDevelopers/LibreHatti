@@ -43,6 +43,7 @@ from librehatti.config import _NAME_OF_BANK
 from librehatti.config import _BRANCH
 from librehatti.config import _ONLINE_ACCOUNT
 from librehatti.config import _IFSC_CODE
+from librehatti.config import _YOUR_LETTER_No
 
 
 @login_required
@@ -200,7 +201,7 @@ def bill(request):
     grand_total = bill['grand_total']
     delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.objects.values('buyer',\
-        'buyer__first_name', 'buyer__last_name', 'reference',\
+        'buyer__first_name', 'buyer__last_name', 'reference','date',\
         'delivery_address', 'organisation', 'date_time', 'total_discount').\
     get(id = id)
     total_discount = purchase_order_obj['total_discount']
@@ -238,6 +239,7 @@ def bill(request):
     voucherid = VoucherId.objects.values('purchase_order_of_session').\
     filter(purchase_order=id)[0]
     total_in_words=num2eng(grand_total)
+    ref_letter = _YOUR_LETTER_No
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {\
@@ -251,7 +253,7 @@ def bill(request):
         'total_discount':total_discount, 'tax_count':tax_count,\
         'bill_values':bill_values, 'header':header, 'footer': footer,\
         'suspense':suspense, 'totalplusdelivery':totalplusdelivery,\
-        'total_in_words':total_in_words})
+        'total_in_words':total_in_words, 'ref_letter':ref_letter})
 
 
 @login_required
@@ -288,7 +290,8 @@ def receipt(request):
     filter(purchase_order=id)[0]
     bill = Bill.objects.values('amount_received').get(purchase_order=id)
     purchase_order = PurchaseOrder.objects.values('buyer', 'date_time',\
-    'delivery_address', 'mode_of_payment__method').get(id=id)
+    'delivery_address', 'mode_of_payment__method','mode_of_payment',\
+    'cheque_dd_number', 'cheque_dd_date').get(id=id)
     date = purchase_order['date_time'].date()
     total_in_words = num2eng(bill['amount_received'])
     customer_obj = PurchaseOrder.objects.values('buyer',\

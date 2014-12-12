@@ -24,15 +24,15 @@
     Received a sum of Rs. {{total}}/- ( Rupees {{total_in_words}} only ) 
     <br><br>
     Vide 
-    {% if payment.purchase_order__mode_of_payment != 1 %}
-    Cheque {{payment.purchase_order__cheque_dd_number}}, Dated:{{payment.purchase_order__cheque_dd_date}}
+    {% if payment.purchase_order__mode_of_payment != 1 and payment.purchase_order__mode_of_payment != 4 %}
+    {{payment.purchase_order__mode_of_payment__method}} No. {{payment.purchase_order__cheque_dd_number}} dated:{{payment.purchase_order__cheque_dd_date}}
     {% else %}
-    Cash 
+    {{payment.purchase_order__mode_of_payment__method}}
     {% endif %}
     <div>From : {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
         {{address.purchase_order__buyer__customer__address__street_province}}</div>
-        <div>Vide Bill No.: GNDEC/TCC/B/{{purchase_order}} Dated: {{order_date}}</div>
-        on account of :  Vide Receipt No.: {{purchase_order}} Dated: {{order_date}}
+        <div>Vide Bill No. GNDEC/TCC/B/{{purchase_order}} dated {{order_date}}</div>
+        on account of Vide Receipt No. {{purchase_order}} dated {{order_date}}
         <div>Nature of Consultancy : {{ distribution }},  Ratio {{ ratio }} </div>
         <div id = "pos-left">
             <table border='1px'>

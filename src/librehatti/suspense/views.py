@@ -275,7 +275,8 @@ def with_transport(request):
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province','college_income',\
     'admin_charges', 'purchase_order__cheque_dd_number',\
-    'purchase_order__cheque_dd_date').get(voucher_no=number,\
+    'purchase_order__cheque_dd_date','purchase_order__mode_of_payment__method'\
+    ).get(voucher_no=number,\
     session=financialsession['id'])
     distribution = Distribution.objects.values('name').\
     get(ratio=voucherid['ratio'])
@@ -626,13 +627,15 @@ def transportbill(request):
                 footer = HeaderFooter.objects.values('footer').\
                 get(is_active=True)
                 request_status = request_notify()
-                return render(request, 'suspense/transport_bill.html',
+                session_id = session.id
+                return render(request, 'suspense/transport_summary.html',
                        {'words':num2eng(total_amount), 'total':total,
                        'header':header, 'kilometers':kilometers, 'rate':rate,\
                        'date':date, "voucherid":voucher, "temp":temp,\
                        'zip_data':zip_data, 'total_amount':total_amount,\
                        'date_of_generation':date_of_generation,\
-                       'vehicle':vehicle,'request':request_status})
+                       'vehicle':vehicle,'request':request_status,\
+                       'session':session_id})
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
