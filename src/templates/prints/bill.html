@@ -10,13 +10,15 @@
 </head>
 <body>
     {% block content %}
+    <div class = "bill-left">
+        <div><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} </div>
+        <div><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </div>
+    </div>
     <div class="container">
         <h2> Bill</h2>
     </div>
     <div class = "bill-left">
-        <div><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} </div>
-        <div><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </div>
-        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></div>
+        <div><span id ="highlight">No. : </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></div>
         <p> To, </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p> {{buyer_name.company}}</p>
@@ -60,7 +62,7 @@
                     {% endfor %}
                 </td>
                 {% endif %}
-                <td>
+                <td id="total">
                     {{bill_values.4}}
                 </td>
             </tr>
@@ -71,33 +73,39 @@
                 {% if suspense != 1 %}
                 <td colspan="2" rowspan="{{tax_count}}"></td>
                 {% endif %}
-                <td>{{total_discount}}</td>
+                <td id="total">{{total_discount}}</td>
             </tr>
             {% endif %}
-            {% if suspense != 1 %}
-            {% if delivery_charges %}
+            {% if suspense == 0 %}
             <tr>
-                <td>Transportation</td>
+            <td><b>Total </b></td>
                 {% if total_discount %}
                 {% else %}
                     {% if suspense != 1 %}
                     <td colspan="2" rowspan="{{tax_count}}"></td>
                     {% endif %}
                 {% endif %}
-                <td>{{delivery_charges}}</td>
+                <td id="total"><b>{{total_cost}}</b></td>
             </tr>
             {% endif %}
-            {% endif %}
+            {% if suspense != 1 and delivery_charges != 0 %}
             <tr>
-                <td><b>Total </b></td>
-                {% if total_discount or delivery_charges %}
-                {% else %}
-                    {% if suspense != 1 %}
-                    <td colspan="2" rowspan="{{tax_count}}"></td>
-                    {% endif %}
-                {% endif %}
-                <td><b>{{total_cost}}</b></td>
+                <td>Transportation Charges</td>
+                <td id="total">{{delivery_charges}}</td>
             </tr>
+            {% endif %}
+            {% if suspense != 1 and delivery_charges != 0 %}
+            <tr>
+                <td>Total Amount</td>
+                <td id="total">{{totalplusdelivery}}</td>
+            </tr>
+            {% endif %}
+            {% if suspense == 1 %}
+            <tr>
+                <td><b>Total</b></td>
+                <td id="total"><b>{{totalplusdelivery}}</b></td>
+            </tr>
+            {% endif %}
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}
@@ -106,13 +114,13 @@
                 <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
                 {% endif %}
                 {% endfor %}
-                <td>  {{taxesapplied.tax }} </td>
+                <td id="total">  {{taxesapplied.tax }} </td>
             </tr>
             {% endfor %}
             {% endif %}
             <tr>
-                <td><b>Total </b></td>
-                <td><b>{{grand_cost}}</b></td>
+                <td><b>Total Rs. </b>(Ruppee {{total_in_words}} only)</td>
+                <td id="total"><b>{{grand_cost}}</b></td>
             </tr>
         </table>
         <div>

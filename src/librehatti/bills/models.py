@@ -13,6 +13,8 @@ from librehatti.config import _DELIVERY_ADDRESS
 from librehatti.config import _IS_DEBIT
 from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
+from librehatti.config import _REFERENCE
+from librehatti.config import _REFERENCE_DATE
 
 from librehatti.voucher.models import FinancialSession
 
@@ -33,7 +35,8 @@ class NoteLine(models.Model):
 class QuotedOrder(models.Model):
     buyer = models.ForeignKey(User,verbose_name=_BUYER)
     is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
-    reference = models.CharField(max_length=200)
+    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
+    date = models.DateField(verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True,\
         null=True, verbose_name=_DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')

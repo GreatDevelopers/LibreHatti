@@ -10,12 +10,30 @@
 <body>
 	{% block content %}
     <br>
-    <div id = "pos-right">No. TCC Job/Suspence Voucher : {{ job }}/{{suspense_voucher}} </div>
-    <div id = "pos-right">Dated : {{date}} </div>
+    <div class="vouchertable">
+      <table>
+        <tr>
+          <td>No. TCC Job/Suspence Voucher</td>
+          <td>:</td>
+          <td>{{ job }}/{{suspense_voucher}}</td>
+        </tr>
+        <tr>
+          <td>Dated</td>
+          <td>:</td>
+          <td>{{date}}</td>
+        </tr>
+      </table>
+    </div>
+    <div style="clear:both;">
+        </div>
     <div class="designation">Director,</div>
     <br>
     A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
-    {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} on account of 
+    {{address.address__street_address}}, {{address.address__city}}, 
+    {% if address.address__pin != 'None' %}
+     {{address.address__pin}},
+     {% endif %} 
+     {{address.address__province}} on account of 
 
     This amount is kept in suspence till clearance. <br/><br/>
     <div class="receipt-detail">Receipt No. : {{job}}   </div>
@@ -23,15 +41,9 @@
     <div id = "pos-left">
         <br>
         <table  border = "1px">
-        {% if cost.delivery_charges %}
-            <tr>
-              <td>Transportation</td>
-              <td  id = "pos-right">{{cost.delivery_charges}}</td>
-            </tr>
-            {% endif %}
             <tr>
                <td>Bill Amount</td>
-               <td id = "pos-right">{{cost.total_cost}}.00</td>
+               <td id = "pos-right">{{cost.totalplusdelivery}}.00</td>
            </tr>
            {% for value in tax %}
            <tr>
@@ -56,7 +68,7 @@
 <br><br>
 <div class="voucher-no"><b>Account Clerk (Consultancy)</b>
     <div style = "text-align:right; float:right">
-        <b>Dean Testing & Consultancy Cell</b>
+        <b>Dean Testing & Consultancy</b>
     </div>
 </div>
 {% endblock %}

@@ -341,7 +341,7 @@ def voucher_print(request):
     get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time'].date()
     bill = Bill.objects.values('delivery_charges','total_cost',\
-        'grand_total','amount_received').\
+        'grand_total','amount_received','totalplusdelivery').\
     get(purchase_order = purchase_order_id)
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\

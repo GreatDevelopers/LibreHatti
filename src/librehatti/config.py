@@ -22,3 +22,8 @@ _NAME_OF_BANK = 'Bank Name'
 _BRANCH = 'City'
 _ONLINE_ACCOUNT = 'Online Account No.'
 _IFSC_CODE = 'IFSC Code No.'
+
+"""Reference"""
+_REFERENCE = 'Letter No.'
+_REFERENCE_DATE = 'Letter Date'
+_YOUR_LETTER_No = 'Your Letter No.'

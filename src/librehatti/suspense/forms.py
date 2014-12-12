@@ -24,9 +24,8 @@ class Clearance_form(ModelForm):
     class Meta:
         model = SuspenseClearance
         exclude = ('work_charge',)
-    
-    voucher_no = forms.CharField(widget=forms.TextInput(\
-        attrs={'readonly':'readonly'}))
+        widgets = {'session': forms.HiddenInput(),\
+        'voucher_no': forms.HiddenInput()}
 
 
 class SuspenseForm(ModelForm):
@@ -55,6 +54,8 @@ class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
         exclude = ('date_of_generation','tada_amount')
+        widgets = {'session': forms.HiddenInput(),\
+        'voucher_no': forms.HiddenInput()}
 
 
 class StaffForm(forms.ModelForm):

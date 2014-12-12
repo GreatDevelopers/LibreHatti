@@ -17,13 +17,29 @@
     <div class = "bill-left">
         <p><span id ="highlight">Receipt No.: </span>{{receiptno}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date}}</span></p>
     </div>
-    <p>Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> {{buyer.company}}, {{address.address__street_address}}, {{address.address__city}}, {{address.address__pin}}, {{address.address__province}} by {{method.mode_of_payment__method}} on account of Testing of
+    {% set flag1 = 1 %}
+    <p>Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> 
+    {% if buyer.buyer_id__customer__company %}
+    {{buyer.buyer_id__customer__company}},
+    {% else %}
+    {{buyer.buyer__first_name}} {{buyer.buyer__last_name}},
+    {% endif %}
+     {{address.address__street_address}}, {{address.address__city}}, 
+     {% if address.address__pin != 'None' %}
+     {{address.address__pin}},
+     {% endif %}
+      {{address.address__province}} by {{method.mode_of_payment__method}} on account of Testing of
         {% for value in material %}
-        {{value.item__category__name}},
+        {{value.item__category__name}}
+        {% if flag == 0 %}
+        ,
+        {% else %}
+        {% set flag1 = 0 %}
+        {% endif %}
         {% endfor %}.</p>
-        <br><br><br>
-        <div id = "pos-right">
+        <div id = "mid-right">
             <span id ="highlight">Cashier</span></div>
             {% endblock %}
+}
 </body>
 </html>

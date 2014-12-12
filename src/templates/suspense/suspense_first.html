@@ -5,10 +5,6 @@
     {% block title %}
     <title>Form</title>
     {% endblock %}
-    {% block js %}
-    <script src="{% static 'js/clearance.js' %}">
-    </script>
-    {% endblock js %}
 </head>
 <body>
     {% block content %}
@@ -17,6 +13,11 @@
         {% else %}
         <form method="POST" action=''>
             {% endif %}
+            {% if messages %}
+                <div class="alert alert-success">
+                    {{ messages }} 
+                </div>
+                {% endif %}
             {% csrf_token %}
             <table>
               {% if message %}
