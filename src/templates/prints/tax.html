@@ -15,8 +15,20 @@
         <br><br><br>
         <h2>Tax Details</h2>
     </div>
-    <div id = "pos-right">No.TCC Job : {{ id }} </div>
-    <div id = "pos-right">Dated : {{bill.purchase_order__date_time.date}} </div>
+    <div class="taxtable">
+      <table>
+        <tr>
+          <td>No. TCC Job</td>
+          <td>:</td>
+          <td>{{id}}</td>
+        </tr>
+        <tr>
+          <td>Dated</td>
+          <td>:</td>
+          <td>{{bill.purchase_order__date_time.date}}</td>
+        </tr>
+      </table>
+    </div>
     <table class="data" border="1px">
         <tr>
             <tr>

@@ -193,9 +193,10 @@ def bill(request):
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order=purchase_order).aggregate(Count('id'))
     surcharge = Surcharge.objects.values('id', 'tax_name', 'value')
-    bill = Bill.objects.values('totalplusdelivery', 'grand_total',\
-        'delivery_charges').get(purchase_order=id)
-    total_cost = bill['totalplusdelivery']
+    bill = Bill.objects.values('total_cost', 'totalplusdelivery',\
+        'grand_total', 'delivery_charges').get(purchase_order=id)
+    total_cost = bill['total_cost']
+    totalplusdelivery = bill['totalplusdelivery']
     grand_total = bill['grand_total']
     delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.objects.values('buyer',\
@@ -218,9 +219,9 @@ def bill(request):
                 tax_count = taxes_applied_obj['id__count'] + 3
         else:
             if total_discount == 0:
-                tax_count = taxes_applied_obj['id__count'] + 3
-            else:
                 tax_count = taxes_applied_obj['id__count'] + 4
+            else:
+                tax_count = taxes_applied_obj['id__count'] + 5
     else:
         if total_discount == 0:
             tax_count = taxes_applied_obj['id__count'] + 2
@@ -236,6 +237,7 @@ def bill(request):
         'stc_no').get(id=organisation_id)
     voucherid = VoucherId.objects.values('purchase_order_of_session').\
     filter(purchase_order=id)[0]
+    total_in_words=num2eng(grand_total)
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {\
@@ -248,7 +250,8 @@ def bill(request):
         'site':purchase_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
         'bill_values':bill_values, 'header':header, 'footer': footer,\
-        'suspense':suspense})
+        'suspense':suspense, 'totalplusdelivery':totalplusdelivery,\
+        'total_in_words':total_in_words})
 
 
 @login_required
@@ -288,8 +291,9 @@ def receipt(request):
     'delivery_address', 'mode_of_payment__method').get(id=id)
     date = purchase_order['date_time'].date()
     total_in_words = num2eng(bill['amount_received'])
-    customer_obj = Customer.objects.values('company').\
-    get(user=purchase_order['buyer'])
+    customer_obj = PurchaseOrder.objects.values('buyer',\
+        'buyer__first_name', 'buyer__last_name','buyer_id__customer__company').\
+    get(id = id)
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').\
     get(user = purchase_order['buyer'])

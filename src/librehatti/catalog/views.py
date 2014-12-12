@@ -18,6 +18,7 @@ from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import SuspenseOrder
 
 from librehatti.voucher.models import VoucherId, CalculateDistribution
+from librehatti.voucher.models import FinancialSession
 
 from django.core.urlresolvers import reverse
 
@@ -228,11 +229,16 @@ def change_request(request):
                 'purchase_order__cheque_dd_number',\
                 'purchase_order__cheque_dd_date').\
                 filter(purchase_order_of_session=purchase_order_of_session)[0]
+            session_data = FinancialSession.objects.values(\
+                'session_start_date','session_end_date').get(id=session)
+            messages = "Purchase Order" + " : " + purchase_order_of_session +\
+            " and Session" + " : " + str(session_data['session_start_date']) +\
+            ":" + str(session_data['session_end_date'])
             request_status = request_notify()    
             return render(request,'catalog/change_form.html',\
                 {'details': details,'order_id':purchase_order_of_session,\
                 'session':session,'surcharge':surcharge,'bill':bill,\
-                'request':request_status})
+                'messages':messages, 'request':request_status})
         else:
                 form = ChangeRequestForm()
                 errors = "No such purchase order number in selected session" 

@@ -136,10 +136,15 @@ def clearance_search(request):
             'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
             'boring_charge_external':0, 'boring_charge_internal':0})
             clearance = 'enable'
+            session_data = FinancialSession.objects.values(\
+                'session_start_date','session_end_date').get(id=session)
+            messages = " Voucher" + " : " + voucher + " and Session" + " : " +\
+                str(session_data['session_start_date']) + ":" +\
+                str(session_data['session_end_date'])
             request_status = request_notify()
             return render(request, 'suspense/suspense_first.html', \
                 {'form':form, 'clearance':clearance,\
-                'request':request_status}) 
+                'messages':messages, 'request':request_status}) 
         else:
             form = SessionSelectForm()
             errors = "No such voucher number in selected session"
@@ -278,7 +283,8 @@ def with_transport(request):
     values('college_income_calculated', 'admin_charges_calculated',\
     'consultancy_asset', 'development_fund', 'total').\
     get(voucher_no=number, session=financialsession['id'])
-    total = calculate_distribution['total'] + transport_total
+    total = calculate_distribution['total'] + othercharge + ta_da_total +\
+    suspenseclearance['work_charge'] + boring_charge_internal
     total_in_words = num2eng(total)
     rowspan = 9
     header = HeaderFooter.objects.values('header').get(is_active=True)
@@ -620,15 +626,13 @@ def transportbill(request):
                 footer = HeaderFooter.objects.values('footer').\
                 get(is_active=True)
                 request_status = request_notify()
-                session_id = session.id
-                return render(request, 'suspense/transport_summary.html',
+                return render(request, 'suspense/transport_bill.html',
                        {'words':num2eng(total_amount), 'total':total,
                        'header':header, 'kilometers':kilometers, 'rate':rate,\
                        'date':date, "voucherid":voucher, "temp":temp,\
                        'zip_data':zip_data, 'total_amount':total_amount,\
                        'date_of_generation':date_of_generation,\
-                       'vehicle':vehicle,'request':request_status,
-                       'session':session_id})
+                       'vehicle':vehicle,'request':request_status})
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
@@ -757,9 +761,15 @@ def tada_order_session(request):
                 form = TaDaForm(initial={'voucher_no':voucher,\
                     'session': session})
                 tada = 'enable'
+                session_data = FinancialSession.objects.values(\
+                    'session_start_date','session_end_date').get(id=session)
+                messages = " Voucher" + " : " + voucher + " and Session" + " : " +\
+                str(session_data['session_start_date']) + ":" +\
+                str(session_data['session_end_date'])
                 request_status = request_notify()
                 return render(request, 'suspense/form.html', \
-                {'form':form, 'tada':tada, 'request':request_status})
+                {'form':form, 'tada':tada, 'messages':messages,\
+                'request':request_status})
             else:
                 form = SessionSelectForm()
                 request_status = request_notify()

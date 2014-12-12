@@ -71,7 +71,7 @@ class TaDa(models.Model):
     tada_amount = models.IntegerField()
     start_test_date = models.DateField()
     end_test_date = models.DateField()
-    source_site = models.CharField(max_length=100, default = 'Ludhiana')
+    source_site = models.CharField(max_length=100, default = 'GNDEC, Ludhiana')
     testing_site= models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
     def __unicode__(self):

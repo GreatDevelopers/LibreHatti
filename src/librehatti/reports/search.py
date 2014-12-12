@@ -221,8 +221,7 @@ class SearchResult(View):
         suspense_flag = 0
         if 'proforma' in request.GET:
             flag=1
-        suspense = SuspenseOrder.objects.filter(purchase_order=self.title,\
-            is_cleared=1)
+        suspense = SuspenseOrder.objects.filter(purchase_order=self.title)
         if suspense:
             suspense_flag = 1
         request_status = request_notify()    

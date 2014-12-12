@@ -10,7 +10,11 @@
 </head>
 <body>
   {% block content %}
-  <h2><center>Purchase order {{ order_id }} of session {{ session }}</center></h2>
+  {% if messages %}
+                <div class="alert alert-success">
+                    <h4>{{ messages }}</h4> 
+                </div>
+                {% endif %}
   <div class='order-success'>
     <table>
        <tr>
