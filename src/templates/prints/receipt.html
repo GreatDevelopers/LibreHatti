@@ -28,7 +28,13 @@
      {% if address.address__pin != 'None' %}
      {{address.address__pin}},
      {% endif %}
-      {{address.address__province}} by {{method.mode_of_payment__method}} on account of Testing of
+      {{address.address__province}} by  
+      {% if method.mode_of_payment != 1 and method.mode_of_payment != 4 %}
+    {{method.mode_of_payment__method}} No. {{method.cheque_dd_number}} dated {{method.cheque_dd_date}}
+    {% else %}
+      {{method.mode_of_payment__method}} 
+    {% endif %}
+      on account of Testing of
         {% for value in material %}
         {{value.item__category__name}}
         {% if flag == 0 %}

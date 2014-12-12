@@ -366,4 +366,5 @@ def voucher_print(request):
             'address':address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number,\
             'job':voucheridobj['purchase_order_of_session'],\
-            'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header})
+            'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header,\
+            'material':category_name})

@@ -27,7 +27,7 @@
             -{{address.address__pin}},
             {% endif %}
             {{address.address__province}}</p>
-            <div><span id ="highlight"> Ref: </span>{{ref.reference}}</div>
+            <div><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.date}}</div>
             <div><span id ="highlight"> Site: </span>{{site.delivery_address}}</div>
         </div>
         <table class="data" border="1px">
@@ -119,7 +119,7 @@
             {% endfor %}
             {% endif %}
             <tr>
-                <td><b>Total Rs. </b>(Ruppee {{total_in_words}} only)</td>
+                <td><b>Total Rs. </b>(Rupees {{total_in_words}} only)</td>
                 <td id="total"><b>{{grand_cost}}</b></td>
             </tr>
         </table>

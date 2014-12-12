@@ -19,7 +19,7 @@
 
     <div style="clear: both">
     </div>
-    <p><span id ="highlight"> Vehicle: </span >{{ vehicle}} </span>
+    <p><span id ="highlight"> Vehicle No.: </span >{{ vehicle}} </span>
     </p>
     <div id = "transport_content">
         <table border="1" align="center">
@@ -46,7 +46,7 @@
             </tr>
             {% endfor %}
             <tr>
-                <td colspan = "3"><center><b>Total</b></center></td>
+                <td colspan = "3"><center><b>Total Rs.</b></center></td>
                 <td> {{ total_amount }}</td>
             </tr>
         </table>
@@ -54,7 +54,8 @@
     <div id="transportbill"><b>Dean Testing and Consultancy</b></div>
     <div id="transportfooter">TA.DA Bill have been entered on page...... of TA/DA & Other Charges register. Head other charges
         <div id="transportbill">Dean Testing and Consultancy</div>
-    <div>Passed for payment for Rs. {{ total_amount }}/- (Ruppee {{ words }} only)</div>
+        <br>
+    <div>Passed for payment for Rs. {{ total_amount }}/- (Rupees {{ words }} only)</div>
     <div class='footertable'>
         <table>
             <tr>
