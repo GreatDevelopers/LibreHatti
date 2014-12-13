@@ -44,6 +44,8 @@ import simplejson
 import json 
 from datetime import date, datetime
 
+from django.template.loader import get_template
+from django.template import Context
 
 @login_required
 def add_distance(request):
@@ -917,3 +919,20 @@ def clearance_options(request):
         'request':request_status, 'voucher_no':voucher_no,\
         'session_id':session_id, 'financialsession':financialsession,\
         'request':request_status, 'with_transport':with_transport})
+
+def summary_page(request):
+    session_id = request.GET['session']
+    voucher_no = request.GET['voucher_no']
+    tada = TaDa.objects.values('tada_amount','start_test_date','end_test_date',
+        'testing_site','testing_staff').filter(voucher_no = voucher_no).\
+        filter(session=session_id)[0]
+    transport = Transport.objects.values('rate','total').filter(voucher_no=voucher_no).\
+        filter(session=session_id)[0]
+    distance_travelled = transport['total'] / transport['rate']
+    other_charges = SuspenseClearance.objects.filter(voucher_no = voucher_no).\
+        filter(session=session_id).values()[0]
+    temp = Context({'tada':tada,'distance_travelled':distance_travelled,
+        'other_charge':other_charges,'rate':transport['rate']})
+    content = get_template('suspense/summary.html')
+    html_content = content.render(temp)
+    return HttpResponse(html_content)

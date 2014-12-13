@@ -120,7 +120,8 @@ class PurchaseOrder(models.Model):
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateField(auto_now_add=True)
+    purchase_order_time = models.TimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)
     tds = models.IntegerField(default = 0)
     mode_of_payment = models.ForeignKey(ModeOfPayment)
@@ -265,8 +266,9 @@ class RequestStatus(models.Model):
 
 
 class NonPaymentOrder(models.Model):
-    reference_no = models.IntegerField()
-    dated = models.DateField()
+    buyer = models.ForeignKey(User,verbose_name= _BUYER)
+    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
+    date = models.DateField(verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
     item_type = models.CharField(max_length = 200)

@@ -19,6 +19,13 @@
                <td>{{value.title}}</td>
                <td><a href = '{% url 'view_register' %}?{{value.selected_fields}}'>View Register</a></td>
            </tr>
+           <tr>
+           <td>Daily Report
+           </td>
+           <td>
+             <a href = '{% url "librehatti.reports.register.daily_report_result" %}'>Daily Report Register</a>
+           </td>
+           </tr>
            {% endfor %}
        </table>
    </div>

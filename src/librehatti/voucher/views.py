@@ -36,7 +36,7 @@ def voucher_generate(request):
     purchase_order = PurchaseOrder.objects.values('id','date_time').\
     get(id = purchase_order_id)
     purchase_order_id = purchase_order['id']
-    purchase_order_date = purchase_order['date_time'].date()
+    purchase_order_date = purchase_order['date_time']
     financialsession = FinancialSession.objects.\
     values('id','session_start_date','session_end_date')
     for value in financialsession:
@@ -339,7 +339,7 @@ def voucher_print(request):
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').\
     get(user = purchase_order_obj['buyer'])
-    date = purchase_order_obj['date_time'].date()
+    date = purchase_order_obj['date_time']
     bill = Bill.objects.values('delivery_charges','total_cost',\
         'grand_total','amount_received','totalplusdelivery').\
     get(purchase_order = purchase_order_id)

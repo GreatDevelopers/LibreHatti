@@ -5,12 +5,16 @@ from django.http import HttpResponse
 from forms import ClientForm
 from forms import OrderForm
 from forms import AddConstraints
+from forms import DailyReportForm
+
 
 from datetime import datetime
 
 import librehatti.settings as settings
 
 from librehatti.catalog.request_change import request_notify
+from librehatti.catalog.models import PurchaseOrder
+from librehatti.catalog.models import Bill
 
 from librehatti.reports.models import SavedRegisters
 

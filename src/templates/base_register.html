@@ -26,6 +26,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
     <script src="{% static 'js/request_response.js' %}"></script>
+    <script src="{% static 'js/summary.js' %}"></script>    
     <script type="text/javascript">
         $(document).ready(function(){
             $('.mark_clear').click(function(){
@@ -61,6 +62,13 @@
                 })
 return false;
 })
+});
+$(document).ready(function(){
+    $('#toggle_button').click(function(){
+        $('.primary-branding').hide();
+        $('#toggle-option').hide();
+        $('.account').hide();
+    })
 });
 </script>
 

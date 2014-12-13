@@ -14,6 +14,24 @@ from librehatti.voucher.models import FinancialSession
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 
+
+""" 
+displays form for register
+"""
+class DailyReportForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    mode_of_payment = forms.ModelChoiceField(queryset= ModeOfPayment.objects.all())
+    def __init__(self, *args, **kwargs):
+        super(DailyReportForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].widget.attrs={'class':'form-control'}
+        self.fields['end_date'].widget.attrs={'class':'form-control'}
+        self.fields['mode_of_payment'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+
 """
 displays checkboxes for Client Search
 """

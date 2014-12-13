@@ -1,0 +1,103 @@
+{% load i18n %} {% load staticfiles %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/summary.css' %}">
+</head>
+<body>
+	<div class='summary-content'>
+		<div class='header'>
+			<h3>TA/DA</h3>
+		</div>
+		<div class='content'>
+			<hr>
+			<table class='tada'>
+				<tr>
+					<th>TA/DA Ammount</th>
+					<td>:</td>
+					<td>&#8377; {{tada.tada_amount}}</td>
+				</tr>
+				<tr>
+					<th>Start Test Date</th>
+					<td>:</td>
+					<td>{{tada.start_test_date}}</td>
+				</tr>
+				<tr>
+					<th>End Test Date</th>
+					<td>:</td>
+					<td>{{tada.end_test_date}}</td>
+				</tr>
+				<tr>
+					<th>Testing Site</th>
+					<td>:</td>
+					<td>{{tada.testing_site}}</td>
+				</tr>
+				<tr>
+					<th>Testing Staff Codes</th>
+					<td>:</td>
+					<td>{{tada.testing_staff}}</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class='header'>
+			<h3>Transportation</h3>
+		</div>
+		<div class='content'>
+			<hr>
+			<table class='tada'>
+				<tr>
+					<th>Distance travelled @{{rate}}Rs/Km</th>
+					<td>:</td>
+					<td>{{distance_travelled}} Km</td>
+				</tr>
+			</table>
+		</div>
+		<div class='header'>
+			<h3>Other Details</h3>
+		</div>
+		<div class='content'>
+			<hr>
+			<table class='tada'>
+				<tr>
+					<th>Boring Charge Internal</th>
+					<td>:</td>
+					<td>&#8377; {{other_charge.boring_charge_internal}}</td>
+				</tr>
+				<tr>
+					<th>Boring Charge External</th>
+					<td>:</td>
+					<td>&#8377; {{other_charge.boring_charge_external}}</td>
+				</tr>
+				<tr>
+					<th>Field Testing Staff</th>
+					<td>:</td>
+					<td>{{other_charge.field_testing_staff}}</td>
+				</tr>
+				<tr>
+					<th>Field Testing Staff</th>
+					<td>:</td>
+					<td>{{other_charge.lab_testing_staff}}</td>
+				</tr>
+				<tr>
+					<th>Car/Taxi Charges</th>
+					<td>:</td>
+					<td>&#8377; {{other_charge.car_taxi_charge}}</td>
+				</tr>
+				<tr>
+					<th>Labour Charges</th>
+					<td>:</td>
+					<td>&#8377; {{other_charge.labour_charge}}</td>
+				</tr>
+				<tr>
+					<th>Work Charges</th>
+					<td>:</td>
+					<td>&#8377; {{other_charge.work_charge}}</td>
+				</tr>
+
+
+			</table>
+		</div>
+	</div>
+</body>
+</html>
+

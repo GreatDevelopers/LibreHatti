@@ -82,3 +82,7 @@ class BuyerForm(forms.ModelForm):
 class ChangeRequestForm(forms.Form):
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
     purchase_order = forms.CharField(max_length=10)
+    def __init__(self, *args, **kwargs):
+       super(ChangeRequestForm, self).__init__(*args, **kwargs)
+       self.fields['purchase_order'].widget.attrs={'class':'form-control'}
+       self.fields['session'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
