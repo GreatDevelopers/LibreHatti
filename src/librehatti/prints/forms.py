@@ -25,3 +25,9 @@ class LabReportForm(forms.Form):
             label=_SUB_CATEGORY)
     except:
         pass
+    def __init__(self, *args, **kwargs):
+        super(LabReportForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].widget.attrs={'class':'form-control'}
+        self.fields['end_date'].widget.attrs={'class':'form-control'}
+        self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+        self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}

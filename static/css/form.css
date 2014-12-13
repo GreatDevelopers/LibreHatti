@@ -28,7 +28,6 @@ input[type=text], select{
 	height:35px;
 	text-indent: 5px;
 	font-family: 'Open Sans', 'sans-serif';
-	background-color : #EEEEEE; 
 	color: #34495e;
 }
 
@@ -37,7 +36,6 @@ input[type=number], select{
 	height:35px;
 	text-indent: 5px;
 	font-family: 'Open Sans', 'sans-serif';
-	background-color : #EEEEEE; 
 	color: #34495e;
 }
 
@@ -58,7 +56,7 @@ label{
 	font-family: 'Open Sans', 'sans-serif';
 	font-size: 14px;
 	color: #135375;
-	font-style: italic;
+	margin-bottom: 0px;
 }
 
 ul{
@@ -70,11 +68,6 @@ ul{
 	padding-right: 60px;
 }
 
-input[type="text"], textarea {
-
-  background-color : #EEEEEE; 
-}
-
 p.error input, p.error select {
     border: 2px #F87E7A solid;
     background-color: #F5DDDD;
@@ -82,4 +75,8 @@ p.error input, p.error select {
 tr.error input, tr.error select {
     border: 2px #F87E7A solid;
     background-color: #F5DDDD;
+}
+
+option{
+	text-align: left;
 }
