@@ -24,7 +24,7 @@
                 {% for purchase_order_var in temp_var %}
                 <tr>
                     <td>{{ forloop.counter}}</td>
-                    <td>{{ purchase_order_var.purchase_order_id }}</td>
+                    <td>{{ purchase_order_var.purchase_order__voucherid__purchase_order_of_session }}</td>
                     <td>{{ purchase_order_var.purchase_order__date_time}}</td>
                     <td>{{ purchase_order_var.purchase_order__buyer__first_name }}
                     {{ purchase_order_var.purchase_order__buyer__last_name }},
