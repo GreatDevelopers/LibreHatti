@@ -1,0 +1,45 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+  <title>Consultancy Funds</title>
+</head>
+<body>
+  {% block content %}
+  <div class='list-results'>
+    
+    <h2>Consultancy Funds</h2>
+    
+    <br><br>
+    <p id = "date-range"> Description of {{category_name}} samples From {{start_date}} to {{end_date}} </p>
+    <table class='daily-report-list' border="1">
+      <tr>
+        <th>Purchase Order No.</th>
+        <th> Date </th>
+        <th> Name </th>
+        <th> Consultancy Asset </th>
+        
+      </tr>  
+      {% for i in purchase_item %}
+      <tr>
+        <td> {{i.purchase_order__voucherid__purchase_order_of_session}}</td>
+        <td> {{i.purchase_order__date_time}}</td>
+        <td>{{ i.purchase_order__buyer__first_name }}
+        {{ i.purchase_order__buyer__last_name }},
+        {{ i.purchase_order__buyer__customer__title}}
+        {{i.purchase_order__buyer__customer__user__customer__address__street_address}},
+        {{i.purchase_order__buyer__customer__user__customer__address__city}}</td>
+        <td align= 'right'>{{i.purchase_order__voucherid__session_id__calculatedistribution__consultancy_asset }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan='3'> <center><b>Sum</center></b></td>
+        <td align= 'right'>{{sum}}</td>
+      </tr>
+    </table>
+  </div>
+  {% endblock %}
+</body>
+</html>
