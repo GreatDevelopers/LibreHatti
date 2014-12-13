@@ -17,7 +17,14 @@
               {% for value in list_of_registers %}
               <tr>
                <td>{{value.title}}</td>
-               <td><a href = '{% url "librehatti.reports.views.daily_report_form" %}'>View Register</a></td>
+               <td><a href = '{% url 'view_register' %}?{{value.selected_fields}}'>View Register</a></td>
+           </tr>
+           <tr>
+           <td>Daily Report
+           </td>
+           <td>
+             <a href = '{% url "librehatti.reports.views.daily_report_form" %}'>Daily Report Register</a>
+           </td>
            </tr>
            {% endfor %}
        </table>
