@@ -24,7 +24,12 @@ class DailyReportForm(forms.Form):
 
     start_date = forms.DateField()
     end_date = forms.DateField()
-    Type = forms.ModelChoiceField(queryset= ModeOfPayment.objects.all())
+    mode_of_payment = forms.ModelChoiceField(queryset= ModeOfPayment.objects.all())
+    def __init__(self, *args, **kwargs):
+        super(DailyReportForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].widget.attrs={'class':'form-control'}
+        self.fields['end_date'].widget.attrs={'class':'form-control'}
+        self.fields['mode_of_payment'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 
 
 """
