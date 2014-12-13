@@ -23,7 +23,9 @@ class Clearance_form(ModelForm):
 
     class Meta:
         model = SuspenseClearance
-        exclude = []
+        exclude = ('work_charge',)
+        widgets = {'session': forms.HiddenInput(),\
+        'voucher_no': forms.HiddenInput()}
     
     voucher_no = forms.CharField(widget=forms.TextInput(\
         attrs={'readonly':'readonly'}))
@@ -33,7 +35,6 @@ class Clearance_form(ModelForm):
         super(Clearance_form, self).__init__(*args, **kwargs)
         self.fields['voucher_no'].widget.attrs={'class':'form-control'}
         self.fields['car_taxi_charge'].widget.attrs={'class':'form-control'}
-        self.fields['work_charge'].widget.attrs={'class':'form-control'}
         self.fields['labour_charge'].widget.attrs={'class':'form-control'}
         self.fields['boring_charge_external'].widget.attrs={'class':'form-control'}
         self.fields['boring_charge_internal'].widget.attrs={'class':'form-control'}
@@ -69,6 +70,8 @@ class TaDaForm(ModelForm):
     class Meta:
         model = TaDa
         exclude = ('date_of_generation','tada_amount')
+        widgets = {'session': forms.HiddenInput(),\
+        'voucher_no': forms.HiddenInput()}
     def __init__(self, *args, **kwargs):
         super(TaDaForm, self).__init__(*args, **kwargs)
         self.fields['voucher_no'].widget.attrs={'class':'form-control'}
