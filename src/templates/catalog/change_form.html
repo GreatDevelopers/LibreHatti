@@ -44,7 +44,7 @@
         {% csrf_token %}
         <tr>
             <th><label>Previous Total:</label></th>
-            <th><input name="previous_total" value="{{bill.grand_total}}" readonly="readonly" type="text"
+            <th><input name="previous_total" class='form-control' value="{{bill.grand_total}}" readonly="readonly" type="text"
                 id="previous_total" /></th>
             </tr>
             <tr>
@@ -54,14 +54,14 @@
             </tr>
             {% for value in surcharge %}
             <tr>
-                <td><input name="surcharge" value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td> 
-                <td><input name="previous_value" value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td> 
-                <td><input name="new_value" type="number" placeholder="New Value" class="new_value" id="{{value.id}}" /></td>
+                <td><input name="surcharge" class='form-control' value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td> 
+                <td><input name="previous_value" class='form-control' value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td> 
+                <td><input name="new_value" type="number" class='form-control' placeholder="New Value" class="new_value" id="{{value.id}}" /></td>
             </tr>
             {% endfor %}
             <tr>
                 <th><label>New Total:</label></th>
-                <th><input name="new_total" readonly="readonly" type="text" id="new_total" /></th>
+                <th><input name="new_total" class='form-control' readonly="readonly" type="text" id="new_total" /></th>
             </tr>
         </table>
         <label for="id_description">Description:</label>
