@@ -1,0 +1,13 @@
+.bootstrap-dialog-message br{
+	display: none;
+}
+
+.header{
+	text-align: center;
+}
+
+.content{
+	margin-left: auto;
+	width:50%;
+	margin-right: auto;
+}
