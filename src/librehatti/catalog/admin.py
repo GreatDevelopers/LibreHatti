@@ -143,8 +143,9 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['parent']
 
 
-class NonPaymentOrderAdmin(admin.ModelAdmin):
-    list_display = ['reference_no', 'dated', 'delivery_address', 'item_type']
+class NonPaymentOrderAdmin(AjaxSelectAdmin):
+    form = BuyerForm
+    list_display = ['reference', 'date', 'delivery_address', 'item_type']
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)

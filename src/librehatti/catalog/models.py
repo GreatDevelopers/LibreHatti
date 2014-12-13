@@ -266,8 +266,9 @@ class RequestStatus(models.Model):
 
 
 class NonPaymentOrder(models.Model):
-    reference_no = models.IntegerField()
-    dated = models.DateField()
+    buyer = models.ForeignKey(User,verbose_name= _BUYER)
+    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
+    date = models.DateField(verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
     item_type = models.CharField(max_length = 200)
