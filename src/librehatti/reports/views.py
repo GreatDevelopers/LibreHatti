@@ -107,7 +107,7 @@ def daily_report_result(request):
 
                 end_date = request.POST['end_date']
                 #return HttpResponse(end_date)
-                mode_of_payment = request.POST['Type']
+                mode_of_payment = request.POST['mode_of_payment']
                 list_of_report = []
 
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=(start_date,end_date)).filter(mode_of_payment = mode_of_payment).values('date_time','id')
