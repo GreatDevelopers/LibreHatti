@@ -63,6 +63,13 @@
 return false;
 })
 });
+$(document).ready(function(){
+    $('#toggle_button').click(function(){
+        $('.primary-branding').hide();
+        $('#toggle-option').hide();
+        $('.account').hide();
+    })
+});
 </script>
 
 {% endblock %}

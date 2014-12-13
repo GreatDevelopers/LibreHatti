@@ -155,3 +155,9 @@ a:hover{
 	margin-left: auto;
 	margin-top: 60px;
 }
+
+#toggle-option{
+	float: right;
+margin-top: -42px;
+margin-right: 71px
+}
