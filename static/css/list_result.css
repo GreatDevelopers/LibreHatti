@@ -149,3 +149,11 @@ a:hover{
 .green {
 	color: #2ecc71;
 }
+
+.daily-report-list{
+	width: 90%;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 60px;
+
+}
