@@ -7,7 +7,7 @@
 {% endblock %}
 <body>
   {% block content %}
-  <form method="POST" action='{% url 'librehatti.reports.views.daily_report_result' %}' >
+  <form method="POST" action='{% url 'librehatti.reports.register.daily_report_result' %}' >
        {% csrf_token %}
        {{form.as_p}}
 
