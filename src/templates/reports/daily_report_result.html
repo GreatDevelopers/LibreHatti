@@ -1,0 +1,50 @@
+
+ {% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Index</title>
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.no</th>
+                    <th>Purchase Order No.</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Agency</th>
+                    <th>Total</th>
+                </tr>
+                {% for temp_var in list_of_report %}
+                {% for purchase_order_var in temp_var %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ purchase_order_var.purchase_order_id }}</td>
+                    <td>{{ purchase_order_var.purchase_order__date_time}}</td>
+                    <td>{{ purchase_order_var.purchase_order__buyer__first_name }}
+                    {{ purchase_order_var.purchase_order__buyer__last_name }},
+                    {{ purchase_order_var.purchase_order__buyer__customer__title}}
+                    {{purchase_order_var.purchase_order__buyer__customer__user__customer__address__street_address}},
+                    {{purchase_order_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
+                    <td>{{ purchase_order_var.purchase_order__buyer__customer__company}}</td>
+                    <td align= 'right'>{{  purchase_order_var.grand_total }}</td>
+                    
+                </tr>
+                {% endfor %}
+                <tr >
+                    <td colspan = '5' align = 'center'><b>Sum</b></td>
+                    <td align= 'right'>{{sum}}</td>
+                </tr>
+                
+                {% endfor %}
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>
