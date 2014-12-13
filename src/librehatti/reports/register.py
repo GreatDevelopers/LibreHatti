@@ -26,13 +26,14 @@ def daily_report_result(request):
 
                 end_date = request.POST['end_date']
                 #return HttpResponse(end_date)
-                mode_of_payment = request.POST['Type']
+                mode_of_payment = request.POST['mode_of_payment']
                 list_of_report = []
 
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=(start_date,end_date)).filter(mode_of_payment = mode_of_payment).values('date_time','id')
                 #return HttpResponse(purchase_order)
                 for date_value in purchase_order:
-                        bill_object = Bill.objects.filter(purchase_order_id = date_value['id']).values('grand_total','purchase_order_','purchase_order__date_time','purchase_order__buyer__first_name','purchase_order__buyer__last_name','purchase_order__buyer__customer__user__customer__address__street_address','purchase_order__buyer__customer__user__customer__address__city')
+                        bill_object = Bill.objects.filter(purchase_order_id = date_value['id']).values('grand_total','purchase_order__voucherid__purchase_order_of_session','purchase_order__date_time','purchase_order__buyer__first_name','purchase_order__buyer__last_name','purchase_order__buyer__customer__user__customer__address__street_address','purchase_order__buyer__customer__user__customer__address__city').distinct()
+                        
                         list_of_report.append(bill_object)
                 sum = 0
                 for temp_var in list_of_report:
