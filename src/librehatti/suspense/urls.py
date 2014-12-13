@@ -20,6 +20,7 @@ urlpatterns = patterns('librehatti.suspense.views',
                    url(r'^mark_clear/', 'mark_clear'),
                    url(r'^mark_status/', 'mark_status'),
                    url(r'^clearance_options/', 'clearance_options'),
+                   url(r'^summary_page/','summary_page'),                   
                    #url(r'^print_transport_bill/','print_transport_bill'),
               )                    
         
