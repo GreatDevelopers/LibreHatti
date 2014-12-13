@@ -23,8 +23,6 @@
                 <th>Voucher</th>
                 <th>Name</th>
                 <th>Address</th>
-                <th>Lab testing Staff</th>
-                <th>Field testing Staff</th>
                 <th>Test date</th>
                 <th>Clear date</th>
                 <th>Summary</th>
@@ -37,14 +35,12 @@
                 <td>{{ suspense_var.voucher_no }}</td>
                 <td>{{ voucher_var.purchase_order__buyer__first_name }} {{ voucher_var.purchase_order__buyer__last_name }}</td>
                 <td>{{voucher_var.purchase_order__buyer__customer__address__street_address}},{{voucher_var.purchase_order__buyer__customer__address__city}},{{voucher_var.purchase_order__buyer__customer__address__province}}</td>
-                <td>{{ suspense_var.lab_testing_staff }}</td>
-                <td>{{ suspense_var.field_testing_staff }}</td>
                 <td>{{ suspense_var.test_date }}</td>
                 <td>{{ suspense_var.clear_date }}</td>
                 <td>
                     {% for voucher_cleared in suspense_cleared %}
                     {% if voucher_cleared.voucher == suspense_var.voucher_no and voucher_cleared.session_id == suspense_var.session %}
-                        <a href='voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}' class='summary'><img src="{% static 'icons/Clean-128.png' %}"><span class="mark_clear_button">Summary</span></a>
+                        <a href='voucher_no={{suspense_var.voucher_no}}&session={{suspense_var.session}}' class='summary'><span class="mark_clear_button">Show Summary</span></a>
                     {% endif %}
                     {% endfor %}
                 </td>
