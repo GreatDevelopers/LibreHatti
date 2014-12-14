@@ -20,6 +20,20 @@ from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 
 
+"""
+A form for date range selection
+"""
+class DateRangeSelectionForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    def __init__(self, *args, **kwargs):
+        super(DateRangeSelectionForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].widget.attrs={'class':'form-control'}
+        self.fields['end_date'].widget.attrs={'class':'form-control'}
+
 """ 
 displays form for daily register report
 """
@@ -27,13 +41,9 @@ class DailyReportForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    start_date = forms.DateField()
-    end_date = forms.DateField()
     mode_of_payment = forms.ModelChoiceField(queryset= ModeOfPayment.objects.all())
     def __init__(self, *args, **kwargs):
         super(DailyReportForm, self).__init__(*args, **kwargs)
-        self.fields['start_date'].widget.attrs={'class':'form-control'}
-        self.fields['end_date'].widget.attrs={'class':'form-control'}
         self.fields['mode_of_payment'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 
 '''
@@ -43,8 +53,6 @@ class ConsultancyFunds(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    start_date = forms.DateField()
-    end_date = forms.DateField()
     parent_category = forms.ModelChoiceField(queryset=Category.objects.\
     filter(parent__parent__isnull=True).filter(parent__isnull=False),\
     label=_PARENT_CATEGORY)
@@ -59,8 +67,6 @@ class ConsultancyFunds(forms.Form):
         pass
     def __init__(self, *args, **kwargs):
         super(ConsultancyFunds, self).__init__(*args, **kwargs)
-        self.fields['start_date'].widget.attrs={'class':'form-control'}
-        self.fields['end_date'].widget.attrs={'class':'form-control'}
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
         self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 

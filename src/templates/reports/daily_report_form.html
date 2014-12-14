@@ -9,8 +9,8 @@
   {% block content %}
   <form method="POST" action='{% url 'librehatti.reports.register.daily_report_result' %}' >
        {% csrf_token %}
+       {{date_form.as_p}}
        {{form.as_p}}
-
      <input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1'>
    </form>
    {% endblock %}

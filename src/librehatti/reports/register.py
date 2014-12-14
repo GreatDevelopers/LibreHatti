@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 
-from forms import DailyReportForm
-from forms import ConsultancyFunds
+from librehatti.reports.forms import DailyReportForm
+from librehatti.reports.forms import ConsultancyFunds
+from librehatti.reports.forms import DateRangeSelectionForm
 
 from datetime import datetime
 
@@ -26,7 +27,8 @@ def daily_report_result(request):
     if request.method == 'POST':
         if 'button1' in request.POST:
             form = DailyReportForm(request.POST)
-            if form.is_valid():
+            date_form = DateRangeSelectionForm(request.POST)
+            if form.is_valid() and date_form.is_valid():
                 start_date = request.POST['start_date']
 
                 end_date = request.POST['end_date']
@@ -57,14 +59,16 @@ def daily_report_result(request):
                 {'list_of_report':list_of_report,'sum':sum,'request':request_status})
             else:
                 form = DailyReportForm(request.POST)
+                date_form = DateRangeSelectionForm(request.POST)
                 request_status = request_notify()
                 return render(request,'reports/daily_report_form.html', \
-                {'form':form,'request':request_status})
+                {'form':form,'date_form':date_form,'request':request_status})
     else:
         form = DailyReportForm()
+        date_form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/daily_report_form.html', \
-        {'form':form,'request':request_status}) 
+        {'form':form,'date_form':date_form,'request':request_status}) 
 
 @login_required
 def consultancy_funds_report(request):
@@ -77,7 +81,8 @@ def consultancy_funds_report(request):
         #return HttpResponse(request)
         if 'button1' in request.POST:
             form = ConsultancyFunds(request.POST)
-            if form.is_valid():
+            date_form = DateRangeSelectionForm(request.POST)
+            if form.is_valid() and date_form.is_valid():
                 category = request.POST['sub_category']
                 start_date = request.POST['start_date']
                 end_date = request.POST['end_date']
@@ -109,11 +114,13 @@ def consultancy_funds_report(request):
     	            'request':request_status})
             else:
                 form = ConsultancyFunds(request.POST)
+                date_form = DateRangeSelectionForm(request.POST)
                 request_status = request_notify()
                 return render(request,'reports/consultancy_funds_form.html', \
-                {'form':form,'request':request_status})
+                {'form':form,'date_form':date_form,'request':request_status})
     else:
         form = ConsultancyFunds()
         request_status = request_notify()
+        date_form = DateRangeSelectionForm()
         return render(request,'reports/consultancy_funds_form.html', \
-        {'form':form,'request':request_status}) 
+        {'form':form,'date_form':date_form,'request':request_status}) 
