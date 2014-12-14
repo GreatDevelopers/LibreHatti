@@ -13,6 +13,7 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import Bill
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Category
+from librehatti.catalog.models import TaxesApplied
 
 from django.db.models import Sum
 
@@ -124,3 +125,72 @@ def consultancy_funds_report(request):
         date_form = DateRangeSelectionForm()
         return render(request,'reports/consultancy_funds_form.html', \
         {'form':form,'date_form':date_form,'request':request_status}) 
+
+@login_required
+def tds_report_result(request):
+    """
+    This view is used to display the daily report registers
+    """ 
+    if request.method == 'POST':
+        if 'button1' in request.POST:
+            form = DateRangeSelectionForm(request.POST)
+            if form.is_valid():
+                start_date = request.POST['start_date']
+                end_date = request.POST['end_date']
+                purchase_order = PurchaseOrder.objects.filter(date_time__range=(start_date,end_date)).values('date_time','id')
+                list_of_bill = []
+                for date_value in purchase_order:
+                        bill_object = Bill.objects.filter\
+                        (purchase_order_id = date_value['id']).\
+                        values('purchase_order__voucherid__purchase_order_of_session',\
+                        'purchase_order__date_time',\
+                        'purchase_order__buyer__first_name',\
+                        'purchase_order__buyer__last_name',\
+                        'purchase_order__buyer__customer__user__customer__address__street_address',\
+                        'purchase_order__buyer__customer__user__customer__address__city',
+                        'totalplusdelivery','amount_received','purchase_order__tds','grand_total'\
+                        ).distinct()
+                        list_of_bill.append(bill_object)  
+                list_of_taxes = []
+                for temp_var in purchase_order:
+                    taxes_object = TaxesApplied.objects.filter(purchase_order__date_time__range=(start_date,end_date)).values('surcharge','tax')
+                    list_of_taxes.append(taxes_object)
+                tds_list = zip(list_of_bill,list_of_taxes)
+                totalplusdel = 0
+                amountreceived = 0
+                purchaseordertds = 0
+                grandtotal = 0
+                for temp_var in list_of_bill:
+                    for bill_object_var in temp_var:
+                        totalplusdel = totalplusdel + bill_object_var['totalplusdelivery']
+                        amountreceived = amountreceived + bill_object_var['amount_received']
+                        purchaseordertds = purchaseordertds + bill_object_var['purchase_order__tds']
+                        grandtotal = grandtotal + bill_object_var['grand_total'] 
+                servicetax = 0
+                Heducationcess = 0
+                educationcess = 0
+                for temp_var in list_of_taxes:
+                    for taxes_object_var in temp_var:
+                        if taxes_object_var['surcharge'] == 1:
+                            servicetax = servicetax + taxes_object_var['tax']
+                        elif taxes_object_var['surcharge'] == 3:
+                            Heducationcess = Heducationcess + taxes_object_var['tax']
+                        else:
+                            educationcess = educationcess + taxes_object_var['tax']    
+                request_status = request_notify()
+                return render(request,'reports/tds_report_result.html',\
+                {'tds_list':tds_list,'request':request_status,\
+                'totalplusdel':totalplusdel,'amountreceived':amountreceived\
+                ,'purchaseordertds':purchaseordertds,'grandtotal':grandtotal\
+                ,'servicetax':servicetax,'Heducationcess':Heducationcess,\
+                'educationcess':educationcess})
+            else:
+                form = DateRangeSelectionForm(request.POST)
+                request_status = request_notify()
+                return render(request,'reports/tds_report_form.html', \
+                {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/tds_report_form.html', \
+        {'form':form,'request':request_status}) 

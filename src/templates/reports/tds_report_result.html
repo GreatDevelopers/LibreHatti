@@ -1,0 +1,90 @@
+ {% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Index</title>
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Pritable Version"></a>
+            </div>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.no</th>
+                    <th>Purchase Order No.</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Bill Amount</th>
+                    <th>Service Tax</th>
+                    <th>H.Education Cess</th>
+                    <th>Education Cess</th>
+                    <th>Total Amount</th>
+                    <th>TDS</th>
+                    <th>Received Amount</th>   
+                </tr>
+                {% for bill_object_var,taxes_object_var in tds_list %}
+                
+
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    {% for temp_var in bill_object_var %}
+                    <td>{{ temp_var.purchase_order__voucherid__purchase_order_of_session }}</td>
+                    <td>{{ temp_var.purchase_order__date_time}}</td>
+                    <td>{{ temp_var.purchase_order__buyer__first_name }}
+                    {{ temp_var.purchase_order__buyer__last_name }},
+                    {{ temp_var.purchase_order__buyer__customer__title}}
+                    {{temp_var.purchase_order__buyer__customer__user__customer__address__street_address}},
+                    {{temp_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
+                    <td>
+                        {{temp_var.totalplusdelivery}}
+                    </td>
+                    {% endfor%}
+                    {% for tax_value in taxes_object_var%}
+                    <td>
+                    {% if tax_value.surcharge == 1 %}
+                    {{tax_value.tax}}
+                    {% endif %}
+                    {% if tax_value.surcharge == 3 %}
+                    {{tax_value.tax}}
+                    {% endif %}
+                    {% if tax_value.surcharge == 4 %}
+                    {{tax_value.tax}}
+                    {% endif %}
+
+                    </td>
+                    {% endfor %}
+                    {% for temp_var in bill_object_var %}
+                    <td>{{temp_var.grand_total}}</td>
+                    <td>{{temp_var.purchase_order__tds}}</td>
+                    <td>{{temp_var.amount_received}}</td>
+                     {% endfor %}
+                </tr>
+
+                
+
+                {% endfor %}
+                <tr >
+                    <td colspan = '4' align = 'center'><b>Sum</b></td>
+                    <td>{{totalplusdel}}</td>
+                    <td>{{servicetax}}</td>
+                    <td>{{Heducationcess}}</td>
+                    <td>{{educationcess}}</td>
+                    <td>{{amountreceived}}</td>
+                    <td>{{purchaseordertds}}</td>
+                    <td>{{grandtotal}}</td>
+
+                </tr>
+
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>
