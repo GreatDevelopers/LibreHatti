@@ -11,21 +11,29 @@
 </head>
 <body>
     {% block content %}
+    <div class = "bill-left">
+        <div><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} </div>
+        <div><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </div>
+    </div>
     <div class="container">
         <h2>Proforma Bill</h2>
     </div>
     <div class = "bill-left">
-        <p><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} <span id = "dated"><span id ="highlight">Dated : </span>{{ date.date}}</span></p>
-        <p><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </p>
-        <p><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} </p>
-        <p> To, </p>
+        <p><span id ="highlight">No. : </span>GNDEC/TCC/B/{{quoted_order_id}} </p>
+        <p> To </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p> {{buyer_name.company}}</p>
-        <p>{{buyer.buyer__first_name}} {{buyer.buyer__last_name}}, {{address.address__street_address}} {{address.address__city}}
+        <p>
+        {% if buyer.buyer__first_name %}
+        {{buyer.buyer__first_name}} {{buyer.buyer__last_name}}
+        {% else %}
+        {{buyer.buyer__customer__title}}
+        {% endif %}
+        , {{address.address__street_address}}, {{address.address__city}}
             {% if address.address__pin != 'None' %}
             -{{address.address__pin}},
             {% endif %}
-            {{address.address__province}}</p>
+            , {{address.address__province}}</p>
             <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
             <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
         </div>
@@ -55,7 +63,7 @@
                     {{value}}
                     {% endfor %}
                 </td>
-                <td>
+                <td id="total">
                     {{bill_values.4}}
                 </td>
             </tr>
@@ -64,17 +72,7 @@
             <tr>
                 <td>Discount</td>
                 <td colspan="2" rowspan="{{tax_count}}"></td>
-                <td>{{total_discount}}</td>
-            </tr>
-            {% endif %}
-            {% if delivery_charges %}
-            <tr>
-                <td>Transportation</td>
-                {% if total_discount %}
-                {% else %}
-                <td colspan="2" rowspan="{{tax_count}}"></td>
-                {% endif %}
-                <td>{{delivery_charges}}</td>
+                <td id="total">{{total_discount}}</td>
             </tr>
             {% endif %}
             <tr>
@@ -83,8 +81,18 @@
                 {% else %}
                 <td  colspan="2" rowspan="{{tax_count}}"></td>
                 {% endif %}
-                <td><b>{{total_cost}}</b></td>
+                <td id="total"><b>{{total_cost}}</b></td>
             </tr>
+            {% if delivery_charges != 0 %}
+            <tr>
+                <td>Transportation Charges</td>
+                <td id="total">{{delivery_charges}}</td>
+            </tr>
+            <tr>
+                <td>Total Amount</td>
+                <td id="total">{{totalplusdelivery}}</td>
+            </tr>
+            {% endif %}
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}
@@ -93,18 +101,18 @@
                 <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
                 {% endif %}
                 {% endfor %}
-                <td>  {{taxesapplied.tax }} </td>
+                <td id="total">  {{taxesapplied.tax }} </td>
             </tr>
             {% endfor %}
             {% endif %}
             <tr>
                 <td><b>Total </b></td>
-                <td><b>{{grand_cost}}</b></td>
+                <td id="total"><b>{{grand_cost}}</b></td>
             </tr>
         </table>
         <div>
             <div class="position">
-                <b>NOTE:</b>
+                <b>Terms & Conditions:</b>
             </div>
             <div style="clear:both;">
             </div>

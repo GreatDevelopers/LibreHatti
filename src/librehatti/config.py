@@ -26,4 +26,4 @@ _IFSC_CODE = 'IFSC Code No.'
 """Reference"""
 _REFERENCE = 'Letter No.'
 _REFERENCE_DATE = 'Letter Date'
-_YOUR_LETTER_No = 'Your Letter No.'
+_YOUR_LETTER_No = 'Your letter No.'

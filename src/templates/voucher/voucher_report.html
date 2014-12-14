@@ -13,14 +13,11 @@
     <div class="vouchertable">
       <table>
         <tr>
-          <td>No. TCC Job/Suspence Voucher</td>
-          <td>:</td>
+          <td>No. TCC Job/Suspence Voucher:</td>
           <td>{{ purchase_order }}/{{voucher}}</td>
         </tr>
         <tr>
-          <td>Dated</td>
-          <td>:</td>
-          <td>{{date}}</td>
+          <td colspan="2">Dated : {{date}}</td>
         </tr>
       </table>
     </div>
@@ -29,7 +26,13 @@
     <div class="designation">Director,</div>
     <br>
     Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
-    Vide Cash from {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}, {{address.address__street_address}}, {{address.address__city}}, 
+    Vide Cash from 
+    {% if buyer.buyer__first_name %}
+    {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}
+    {% else %}
+    {{buyer.buyer__customer__title}}
+    {% endif %}
+    , {{address.address__street_address}}, {{address.address__city}}, 
     {% if address.address__pin != 'None' %}
      {{address.address__pin}},
      {% endif %} 

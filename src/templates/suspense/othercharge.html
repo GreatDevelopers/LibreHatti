@@ -19,8 +19,17 @@
     </div>
     <div>A sum of Rs {{complete_total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{transplusother}}/- has been deposited by:-
     </div>
-    <div>{{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}, {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}, {{address.purchase_order__buyer__customer__address__street_pin}}
-        {{address.purchase_order__buyer__customer__address__street_province}}</div>
+    <div>
+    {% if address.purchase_order__buyer__first_name %}
+    {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}
+    {% else %}
+    {{address.purchase_order__buyer__customer__title}}
+    {% endif %}
+    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}
+    {% if address.purchase_order__buyer__customer__address__pin != 'None' %}
+    , {{address.purchase_order__buyer__customer__address__pin}}
+    {% endif %}
+       , {{address.purchase_order__buyer__customer__address__province}}</div>
         <div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide letter no.________dated________</div>
         <div>A sum of Rs {{total}}/- was spent for testing on as detailed below.</div>
         <br>

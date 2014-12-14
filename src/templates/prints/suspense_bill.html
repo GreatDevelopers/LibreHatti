@@ -4,7 +4,7 @@
 <head>
     <meta charset='UTF-8'>
     {% block title %}
-    <title>Bill</title>
+    <title>Suspense Bill</title>
     {% endblock %}
     {% load set_var %}
 </head>
@@ -39,8 +39,6 @@
         <table class="data" border="1px">
             <tr>
                 <th>Charges For Following</th>
-                <th>Description</th>
-                <th>Per</th>
                 <th>Total</th>
             </tr>
             <tr>
@@ -51,47 +49,14 @@
                     {{value}}
                     {% endfor %}
                 </td>
-                <td>
-                    {%for value in bill_values.2%}
-                    {{value}}
-                    {% endfor %}
-                    sample/s
-                </td>
-                <td>
-                    {%for value in bill_values.3%}
-                    {{value}}
-                    {% endfor %}
-                </td>
                 <td id="total">
-                    {{bill_values.4}}
+                    {{bill_values.2}}
                 </td>
             </tr>
             {% endfor %}
-            {% if total_discount %}
-            <tr>
-                <td>Discount</td>   
-                <td colspan="2" rowspan="{{tax_count}}"></td>
-                <td id="total">{{total_discount}}</td>
-            </tr>
-            {% endif %}
-            <tr>
             <td><b>Total </b></td>
-                {% if total_discount %}
-                {% else %}
-                    <td colspan="2" rowspan="{{tax_count}}"></td>
-                {% endif %}
-                <td id="total"><b>{{total_cost}}</b></td>
+                <td id="total"><b>{{totalplusdelivery}}</b></td>
             </tr>
-            {% if delivery_charges != 0 %}
-            <tr>
-                <td>Transportation Charges</td>
-                <td id="total">{{delivery_charges}}</td>
-            </tr>
-            <tr>
-                <td>Total Amount</td>
-                <td id="total">{{totalplusdelivery}}</td>
-            </tr>
-            {% endif %}
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}

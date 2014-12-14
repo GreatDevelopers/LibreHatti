@@ -277,9 +277,9 @@ def with_transport(request):
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province','college_income',\
     'admin_charges', 'purchase_order__cheque_dd_number',\
-    'purchase_order__cheque_dd_date','purchase_order__mode_of_payment__method'\
-    ).get(voucher_no=number,\
-    session=financialsession['id'])
+    'purchase_order__cheque_dd_date','purchase_order__mode_of_payment__method',\
+    'purchase_order__buyer__customer__title').filter(voucher_no=number,\
+    session=financialsession['id'])[0]
     distribution = Distribution.objects.values('name').\
     get(ratio=voucherid['ratio'])
     calculate_distribution = CalculateDistribution.objects.\
@@ -384,8 +384,9 @@ def other_charges(request):
     'purchase_order__buyer__customer__address__street_address',\
     'purchase_order__buyer__customer__address__city',\
     'purchase_order__buyer__customer__address__pin',\
-    'purchase_order__buyer__customer__address__province').\
-    get(voucher_no=number, session=financialsession['id'])
+    'purchase_order__buyer__customer__address__province',\
+    'purchase_order__buyer__customer__title').filter(voucher_no=number,\
+    session=financialsession['id'])[0]
     other_charges = suspenseclearance['boring_charge_external'] +\
     suspenseclearance['car_taxi_charge'] +\
     suspenseclearance['labour_charge']
@@ -455,16 +456,6 @@ def quoted_add_distance(request):
         else:
             return render(request,'suspense/quoted_add_distance.html',{\
                 'quoted_order_id':quoted_order_id,})
-    elif old_post['mode_of_payment'] != '1':
-        quoted_order=QuotedOrder.objects.get(id=quoted_order_id)
-        obj = QuotedSuspenseOrder(quoted_order=quoted_order,\
-            distance_estimated=0)
-        obj.save()
-        request.session['old_post'] = old_post
-        request.session['quoted_order_id'] = quoted_order_id
-        return HttpResponseRedirect(\
-            reverse("librehatti.bills.views.quoted_bill_cal"))
-
     else:
         request.session['old_post'] = old_post
         request.session['quoted_order_id'] = quoted_order_id
@@ -844,22 +835,27 @@ def mark_status(request):
     voucher = request.GET.get('voucher_no')
     session = request.GET.get('session')
     try:
+        est_transport = SuspenseOrder.objects.values('distance_estimated').\
+        get(voucher=voucher, session_id_id=session)
+        delivery_rate = Surcharge.objects.values('value').\
+        filter(tax_name = 'Transportation')[0]
+        est_transport_total = est_transport['distance_estimated'] *\
+        delivery_rate['value']
+    except:
+        est_transport_total = 0
+    try:
         transport = Transport.objects.values('total').get(voucher_no=voucher,\
             session_id=session)
         transport_total = transport['total']
     except:
         transport_total = 0
-    try:
-        suspenseclearance = SuspenseClearance.objects.values('labour_charge',\
-            'car_taxi_charge','boring_charge_internal','boring_charge_external').\
-        get(voucher_no=voucher, session_id=session)
-        other_charges = transport_total + suspenseclearance['labour_charge'] +\
-        suspenseclearance['car_taxi_charge'] +\
-        suspenseclearance['boring_charge_external']
-        boring_charge_internal = suspenseclearance['boring_charge_internal']
-    except:
-        other_charges = 0
-        boring_charge_internal = 0
+    suspenseclearance = SuspenseClearance.objects.values('labour_charge',\
+        'car_taxi_charge','boring_charge_internal','boring_charge_external').\
+    get(voucher_no=voucher, session_id=session)
+    other_charges = transport_total + suspenseclearance['labour_charge'] +\
+    suspenseclearance['car_taxi_charge'] +\
+    suspenseclearance['boring_charge_external']
+    boring_charge_internal = suspenseclearance['boring_charge_internal']
     try:
         tada = TaDa.objects.values('tada_amount').get(voucher_no=voucher,\
             session=session)
@@ -868,11 +864,11 @@ def mark_status(request):
         tada_amount = 0
     calculate_distribution = CalculateDistribution.objects.values('total').\
     get(voucher_no=voucher, session_id=session)
-    suspense_total = calculate_distribution['total'] + transport_total
+    suspense_total = calculate_distribution['total'] + est_transport_total
     distribution_total = suspense_total - boring_charge_internal -\
     other_charges - tada_amount
     voucherid = VoucherId.objects.values('ratio', 'college_income',\
-        'admin_charges').get(voucher_no=voucher, session_id=session)
+        'admin_charges').filter(voucher_no=voucher, session_id=session)[0]
     work_charge = (2 * distribution_total) / 100
     college_income = (voucherid['college_income'] * distribution_total) / 100
     admin_charges = (voucherid['admin_charges'] * distribution_total) / 100
@@ -902,7 +898,7 @@ def clearance_options(request):
     financialsession = FinancialSession.objects.values('session_start_date',\
         'session_end_date').get(id=session_id)
     voucherid = VoucherId.objects.values('purchase_order_of_session',\
-        'purchase_order').get(voucher_no=voucher_no, session_id=session_id)
+        'purchase_order').filter(voucher_no=voucher_no, session_id=session_id)[0]
     with_transport = 0
     try:
         Transport.objects.get(voucher_no=voucher_no, session_id=session_id)

@@ -47,7 +47,7 @@ def quoted_bill_cal(request):
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
-    quoted_order_obj = QuotedOrder.objects.values('total_discount', 'tds').\
+    quoted_order_obj = QuotedOrder.objects.values('total_discount').\
     get(id=quoted_order_id)
     quoted_item = QuotedItem.objects.\
     filter(quoted_order=quoted_order_id).aggregate(Sum('price'))
@@ -81,7 +81,7 @@ def quoted_bill_cal(request):
     filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
     tax_total = taxes_applied_obj['tax__sum']
     grand_total = price_total + tax_total + delivery_charges
-    amount_received = grand_total - quoted_order_obj['tds']
+    amount_received = grand_total
     bill = QuotedBill(quoted_order=quoted_order, total_cost=price_total,
     total_tax=tax_total, grand_total=grand_total,
     delivery_charges=delivery_charges, amount_received=amount_received,
@@ -97,8 +97,7 @@ def quoted_order_added_success(request):
     quoted_order_id = request.session.get('quoted_order_id')
     details = QuotedOrder.objects.values('buyer__first_name',\
         'buyer__last_name', 'buyer__customer__address__street_address',\
-        'buyer__customer__title', 'buyer__customer__address__city',\
-        'mode_of_payment__method', 'cheque_dd_number','cheque_dd_date').\
+        'buyer__customer__title', 'buyer__customer__address__city').\
     filter(id=quoted_order_id)[0]
     return render(request, 'bills/quoted_success.html', {'details':details,
         'quoted_order_id':quoted_order_id})

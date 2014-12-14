@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('.quotedadddistancesave').attr('disabled', 'disabled');
     $('.quotedistance').change(function(event){
         var quoted_order_no = document.getElementById('quoteorder').value;
         var distance = document.getElementById('quotedistance').value;
@@ -7,6 +8,7 @@ $(document).ready(function(){
             $.ajax({
                 url: request_url,
                 success: function(data){
+                    $('.quotedadddistancesave').removeAttr('disabled');
                 }
             });
         });
