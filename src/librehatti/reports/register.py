@@ -129,7 +129,7 @@ def consultancy_funds_report(request):
 @login_required
 def tds_report_result(request):
     """
-    This view is used to display the daily report registers
+    This view is used to display the TDS report registers
     """ 
     if request.method == 'POST':
         if 'button1' in request.POST:
@@ -183,7 +183,7 @@ def tds_report_result(request):
                 'totalplusdel':totalplusdel,'amountreceived':amountreceived\
                 ,'purchaseordertds':purchaseordertds,'grandtotal':grandtotal\
                 ,'servicetax':servicetax,'Heducationcess':Heducationcess,\
-                'educationcess':educationcess})
+                'educationcess':educationcess,'start_date':start_date,'end_date':end_date})
             else:
                 form = DateRangeSelectionForm(request.POST)
                 request_status = request_notify()
@@ -194,3 +194,86 @@ def tds_report_result(request):
         request_status = request_notify()
         return render(request,'reports/tds_report_form.html', \
         {'form':form,'request':request_status}) 
+
+@login_required
+def payment_register(request):
+    """
+    This view is used to display the payment registers
+    """ 
+    if request.method == 'POST':
+        if 'button1' in request.POST:
+            form = DateRangeSelectionForm(request.POST)
+            if form.is_valid():
+                start_date = request.POST['start_date']
+                end_date = request.POST['end_date']
+                purchase_order = PurchaseOrder.objects.filter\
+                (date_time__range=(start_date,end_date)).values(\
+                    'date_time','id')
+               
+                list_of_bill = []
+                for date_value in purchase_order:
+                        bill_object = Bill.objects.\
+                        filter(purchase_order_id = date_value['id']).\
+                        values('purchase_order__voucherid__purchase_order_of_session',\
+                        'purchase_order__date_time',\
+                        'purchase_order__buyer__first_name',\
+                        'purchase_order__buyer__last_name',\
+                        'purchase_order__buyer__customer__user__customer__address__street_address',\
+                        'purchase_order__buyer__customer__user__customer__address__city',
+                        'totalplusdelivery','purchase_order__tds','amount_received'\
+                        ,'purchase_order__buyer__customer__user__email',\
+                        'purchase_order__buyer__customer__telephone',\
+                        'purchase_order__buyer__customer__company').distinct()
+                list_of_bill.append(bill_object)  
+                list_of_taxes = []
+                for temp_var in purchase_order:
+                    taxes_object = TaxesApplied.objects.filter(purchase_order__date_time__range=(start_date,end_date)).values('surcharge','tax')
+                    list_of_taxes.append(taxes_object)
+                for date_value in purchase_order:
+                        Category = Bill.objects.\
+                        filter(purchase_order_id = date_value['id']).\
+                        values('purchase_order__purchaseditem__item__category__name')
+                list_of_material = []
+                for material_name in Category:
+                    material =str((material_name['purchase_order__purchaseditem__item__category__name']+","))
+                    list_of_material.append(material)
+                material_list = "".join(str(x) for x in list_of_material)   
+                payment_register_list = zip(list_of_bill,list_of_taxes)
+                totalplusdel = 0
+                amountreceived = 0
+                purchaseordertds = 0
+                grandtotal = 0
+                for temp_var in list_of_bill:
+                    for bill_object_var in temp_var:
+                        totalplusdel = totalplusdel + bill_object_var['totalplusdelivery']
+                        purchaseordertds = purchaseordertds + bill_object_var['purchase_order__tds']
+                        amountreceived = amountreceived + bill_object_var['amount_received'] 
+                servicetax = 0
+                Heducationcess = 0
+                educationcess = 0
+                for temp_var in list_of_taxes:
+                    for taxes_object_var in temp_var:
+                        if taxes_object_var['surcharge'] == 1:
+                            servicetax = servicetax + taxes_object_var['tax']
+                        elif taxes_object_var['surcharge'] == 3:
+                            Heducationcess = Heducationcess + taxes_object_var['tax']
+                        else:
+                            educationcess = educationcess + taxes_object_var['tax']    
+                request_status = request_notify()
+                return render(request,'reports/payment_register_result.html',\
+                {'payment_register_list':payment_register_list,'request':request_status,\
+                'totalplusdel':totalplusdel,'amountreceived':amountreceived\
+                ,'purchaseordertds':purchaseordertds,\
+                'servicetax':servicetax,'Heducationcess':Heducationcess,\
+                'educationcess':educationcess,'start_date':start_date,\
+                'end_date':end_date,'list_of_material':material_list})
+            else:
+                form = DateRangeSelectionForm(request.POST)
+                request_status = request_notify()
+                return render(request,'reports/payment_register_form.html', \
+                {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/payment_register_form.html', \
+        {'form':form,'request':request_status})         
