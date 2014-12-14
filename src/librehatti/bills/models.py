@@ -39,11 +39,9 @@ class QuotedOrder(models.Model):
     date = models.DateField(verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True,\
         null=True, verbose_name=_DELIVERY_ADDRESS)
-    organisation = models.ForeignKey('useraccounts.AdminOrganisations')
+    organisation = models.ForeignKey('useraccounts.AdminOrganisations',default=1)
     date_time = models.DateTimeField(auto_now_add=True)
     total_discount = models.IntegerField(default=0)
-    tds = models.IntegerField(default=0)
-    mode_of_payment = models.ForeignKey(ModeOfPayment)
     cheque_dd_number = models.CharField(max_length=50, blank=True)
     cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(default=True)

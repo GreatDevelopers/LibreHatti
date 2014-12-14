@@ -119,7 +119,7 @@ class PurchaseOrder(models.Model):
     date = models.DateField(verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
-    organisation = models.ForeignKey('useraccounts.AdminOrganisations')
+    organisation = models.ForeignKey('useraccounts.AdminOrganisations', default=1)
     date_time = models.DateField(auto_now_add=True)
     purchase_order_time = models.TimeField(auto_now_add=True)
     total_discount = models.IntegerField(default = 0)

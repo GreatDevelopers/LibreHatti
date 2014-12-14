@@ -26,7 +26,12 @@
     <div class="designation">Director,</div>
     <br>
     A sum of Rs. {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
-    {{address.address__street_address}}, {{address.address__city}}, 
+    {% if buyer.buyer__first_name %}
+    {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}
+    {% else %}
+    {{buyer.buyer__customer__title}}
+    {% endif %}
+    , {{address.address__street_address}}, {{address.address__city}}, 
     {% if address.address__pin != 'None' %}
      {{address.address__pin}},
      {% endif %} 

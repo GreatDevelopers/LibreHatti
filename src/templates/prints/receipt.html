@@ -19,12 +19,12 @@
     </div>
     {% set flag1 = 1 %}
     <p>Received a sum of Rs.{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> 
-    {% if buyer.buyer_id__customer__company %}
-    {{buyer.buyer_id__customer__company}},
+    {% if buyer.buyer__first_name %}
+    {{buyer.buyer__first_name}} {{buyer.buyer__last_name}}
     {% else %}
-    {{buyer.buyer__first_name}} {{buyer.buyer__last_name}},
+    {{buyer.buyer__customer__title}}
     {% endif %}
-     {{address.address__street_address}}, {{address.address__city}}, 
+     , {{address.address__street_address}}, {{address.address__city}}, 
      {% if address.address__pin != 'None' %}
      {{address.address__pin}},
      {% endif %}
@@ -36,12 +36,14 @@
     {% endif %}
       on account of Testing of
         {% for value in material %}
-        {{value.item__category__name}}
-        {% if flag == 0 %}
+        {% if flag1 == 0 and not forloop.last %}
         ,
+        {% elif forloop.last %}
+        &
         {% else %}
         {% set flag1 = 0 %}
         {% endif %}
+        {{value.item__category__name}}
         {% endfor %}.</p>
         <div id = "mid-right">
             <span id ="highlight">Cashier</span></div>
