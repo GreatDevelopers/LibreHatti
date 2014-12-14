@@ -335,7 +335,7 @@ def voucher_print(request):
     emp = Staff.objects.values('name','position').filter(lab=lab_id)
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
-    'tds').get(id = purchase_order)
+    'tds','buyer__customer__title').get(id = purchase_order)
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').\
     get(user = purchase_order_obj['buyer'])
@@ -367,4 +367,4 @@ def voucher_print(request):
             'date':date, 'suspense_voucher':number,\
             'job':voucheridobj['purchase_order_of_session'],\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header,\
-            'material':category_name})
+            'material':category_name, 'buyer': purchase_order_obj})

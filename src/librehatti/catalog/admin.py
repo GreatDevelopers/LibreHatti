@@ -145,7 +145,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class NonPaymentOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
-    list_display = ['reference', 'date', 'delivery_address', 'item_type']
+    list_display = ['reference','reference_date', 'date', 'delivery_address', 'item_type']
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
