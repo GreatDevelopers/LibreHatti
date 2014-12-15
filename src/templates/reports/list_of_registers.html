@@ -23,6 +23,7 @@
                <a href = '{% url 'view_register' %}?{{value.selected_fields}}'>
                View Register</a></td>
            </tr>
+           {% endfor %}
            <tr>
            <td>Daily Report
            </td>
@@ -32,7 +33,6 @@
               Daily Report Register
               </a>
            </td>
-           </tr>
            </tr>
            <tr>
            <td>Consultancy Funds
@@ -44,24 +44,30 @@
               </a>
            </td>
            </tr>
-
-
            <tr><td>TDS Register</td>
            <td><a href =
               '{% url "librehatti.reports.register.tds_report_result"%}'>
               TDS Register
            </a></td>
            </tr>
-
            <tr><td>Payment Register</td>
            <td><a href =
               '{% url "librehatti.reports.register.payment_register"%}'>
               Payment Register
            </a></td>
            </tr>
-
-
-           {% endfor %}
+           <tr><td>Suspense Clearance Register</td>
+           <td><a href =
+              '{% url "librehatti.reports.register.suspense_clearance_register"%}'>
+              Suspense Clearance Register
+           </a></td>
+           </tr>
+           <tr><td>Monthly Register</td>
+           <td><a href =
+              '{% url "librehatti.reports.register.monthly_register"%}'>
+              Monthly Register
+           </a></td>
+           </tr>
        </table>
    </div>
 </div>

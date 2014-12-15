@@ -383,7 +383,7 @@ def receipt(request):
     purchase_order = PurchaseOrder.objects.values('buyer', 'date_time',\
     'delivery_address', 'mode_of_payment__method','mode_of_payment',\
     'cheque_dd_number', 'cheque_dd_date').get(id=id)
-    date = purchase_order['date_time'].date()
+    date = purchase_order['date_time']
     total_in_words = num2eng(bill['amount_received'])
     customer_obj = PurchaseOrder.objects.values('buyer',\
         'buyer__first_name', 'buyer__last_name','buyer__customer__title').\

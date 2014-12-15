@@ -1,0 +1,81 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Index</title>
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Pritable Version"></a>
+            </div>
+    <div class='daily-report-list'>
+        Detailed list of Service tax @{{surcharge.value}}% (Including Education tax) for the month of {{month}}, {{year}}
+        <table border="1px">
+                <tr>
+                    <th>S.no</th>
+                    <th>Receipt No.</th>
+                    <th>Date</th>
+                    <th>Name of Parties</th>
+                    <th>Amount</th>
+                    <th>Service Tax ({{surcharge.0}}%)</th>
+                    <th>Edu. Cess ({{surcharge.1}}%)</th>
+                    <th>H. Edu. Cess ({{surcharge.2}}%)</th>
+                    <th>Total</th>
+                </tr>
+                {% for value in result %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td align= 'right'>{{ value.3 }}</td>
+                    <td align= 'right'>{{ value.4 }}</td>
+                    <td align= 'right'>{{ value.5 }}</td>
+                    <td align= 'right'>{{ value.6 }}</td>
+                    <td align= 'right'>{{ value.7 }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><b><center>SUM</center></b></td>
+                    <td align= 'right'>{{total}}</td>
+                    <td align= 'right'>{{service_tax}}</td>
+                    <td align= 'right'>{{education_tax}}</td>
+                    <td align= 'right'>{{heducation_tax}}</td>
+                    <td align= 'right'>{{totalplustax}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5"></td>
+                    <td colspan="3" align="center"><b>{{total_taxes}}</b></td>
+                </tr>
+       </table>
+   </div>
+   <div class='daily-report-list'>
+        <table border="1px">
+            <tr>
+                <td colspan="4"><center>Service Tax Already Paid</center></td>
+                <td align= 'right'>{{service}}</td>
+                <td align= 'right'>{{education}}</td>
+                <td align= 'right'>{{highereducation}}</td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td align= 'right'>{{servicenotpaid}}</td>
+                <td align= 'right'>{{educationnotpaid}}</td>
+                <td align= 'right'>{{heducationnotpaid}}</td>
+            </tr>
+            <tr>
+                <td colspan="4"><center><b>Total Amount</b></center></td>
+                <td colspan="3" align= 'center'><b>{{total_taxes_not_paid}}</b></td>
+            </tr>
+        </table>
+    </div>
+</div>
+ {% endblock %}
+</body>
+</html>
