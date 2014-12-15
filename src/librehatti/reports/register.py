@@ -577,3 +577,62 @@ def monthly_register(request):
         request_status = request_notify()
         return render(request,'reports/monthly_form.html', \
         {'form':form, 'data_form':data_form, 'request':request_status})
+
+
+@login_required
+def main_register(request):
+    """
+    This view is used to display the payment registers
+    """ 
+    if request.method == 'POST':
+        if 'button1' in request.POST:
+            form = MonthYearForm(request.POST)
+            if form.is_valid():
+                month = request.POST['month']
+                year = request.POST['year']
+                list_of_client = []
+                purchase_order = PurchaseOrder.objects.\
+                filter(date_time__month = month).\
+                filter(date_time__year = year).values('date_time',\
+                 'id')
+                for a in purchase_order:
+                    p = PurchaseOrder.objects.filter(id = a['id']).values('voucherid__purchase_order_of_session',\
+                    'date_time',\
+                    'buyer__first_name',\
+                    'buyer__last_name',\
+                    'buyer__customer__title',\
+                    'buyer__customer__user__customer__address__street_address',\
+                    'buyer__customer__user__customer__address__city',\
+                    'purchaseditem__item__category__name')
+                    list_of_client.append(p)
+                temp_list = []
+                for temp_value in purchase_order:
+                    voucher_obj = VoucherId.objects.filter(purchase_order_id = temp_value['id']).values('voucher_no','session')
+                    temp_list.append(voucher_obj)
+                list_of_caldis= []
+                for value in temp_list:
+                    for v_val in value: 
+                        calculated_distribution = CalculateDistribution.objects.\
+                        filter(voucher_no=v_val['voucher_no'])\
+                        .filter(session = v_val['session'])\
+                        .values('college_income_calculated','admin_charges_calculated',\
+                        'consultancy_asset','development_fund','total')
+                    list_of_caldis.append(calculated_distribution)
+                #return HttpResponse(list_of_caldis)
+                
+                main_list = zip(list_of_client,list_of_caldis)
+                
+                request_status = request_notify()
+                return render(request,'reports/main_register_result.html',\
+                {'request':request_status,\
+                 'main_list':main_list})
+            else:
+                form = MonthYearForm(request.POST)
+                request_status = request_notify()
+                return render(request,'reports/main_register_form.html', \
+                {'form':form,'request':request_status})
+    else:
+        form = MonthYearForm()
+        request_status = request_notify()
+        return render(request,'reports/main_register_form.html', \
+        {'form':form,'request':request_status})         
