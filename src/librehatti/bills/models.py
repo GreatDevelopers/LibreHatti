@@ -40,7 +40,7 @@ class QuotedOrder(models.Model):
     delivery_address = models.CharField(max_length=500, blank=True,\
         null=True, verbose_name=_DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations',default=1)
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateField(auto_now_add=True)
     total_discount = models.IntegerField(default=0)
     cheque_dd_number = models.CharField(max_length=50, blank=True)
     cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)

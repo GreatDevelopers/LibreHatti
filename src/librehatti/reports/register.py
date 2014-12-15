@@ -26,6 +26,10 @@ from librehatti.suspense.models import SuspenseClearance
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
 
+from librehatti.bills.models import QuotedOrder
+from librehatti.bills.models import QuotedOrderofSession
+from librehatti.bills.models import QuotedTaxesApplied
+from librehatti.bills.models import QuotedItem
 
 from django.db.models import Sum
 
@@ -635,4 +639,78 @@ def main_register(request):
         form = MonthYearForm()
         request_status = request_notify()
         return render(request,'reports/main_register_form.html', \
-        {'form':form,'request':request_status})         
+        {'form':form,'request':request_status})
+
+
+@login_required
+def proforma_register(request):
+    """
+    This view is used to display the proforma registers
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            quotedorder = QuotedOrder.objects.values('id',\
+                'quotedorderofsession__quoted_order_session', 'date_time',\
+                'buyer__first_name', 'buyer__last_name',\
+                'buyer__customer__title',\
+                'buyer__customer__address__street_address',\
+                'buyer__customer__address__city',\
+                'buyer__customer__company', 'buyer__customer__telephone',\
+                'buyer__email', 'quotedbill__totalplusdelivery',\
+                'quotedbill__grand_total').filter(\
+                date_time__range=(start_date,end_date))
+            temp = []
+            result = []
+            material_list = ''
+            flag = 1
+            for order in quotedorder:
+                temp.append(order[\
+                    'quotedorderofsession__quoted_order_session'])
+                temp.append(order['date_time'])
+                if order['buyer__first_name']:
+                    name = order['buyer__first_name'] + ' ' +\
+                    order['buyer__last_name']
+                else:
+                    name = order['buyer__customer__title']
+                temp.append(name)
+                temp.append(order['buyer__customer__address__street_address'])
+                temp.append(order['buyer__customer__address__city'])
+                temp.append(order['buyer__customer__company'])
+                quoteditem = QuotedItem.objects.values('item__category__name').\
+                filter(quoted_order=order['id']).distinct()
+                for item in quoteditem:
+                    if flag == 1:
+                        material_list = item['item__category__name']
+                        flag = 0
+                    else:
+                        material_list = material_list + ', ' +\
+                        item['item__category__name']
+                temp.append(material_list)
+                temp.append(order['buyer__customer__telephone'])
+                temp.append(order['buyer__email'])
+                temp.append(order['quotedbill__totalplusdelivery'])
+                taxes = QuotedTaxesApplied.objects.values('tax').filter(\
+                    quoted_order=order['id'])
+                for taxvalue in taxes:
+                    temp.append(taxvalue['tax'])
+                temp.append(order['quotedbill__grand_total'])
+                result.append(temp)
+                temp = []
+                flag = 1
+                material_list = ''
+            request_status = request_notify()
+            return render(request,'reports/proforma_register.html',\
+            {'result':result, 'request':request_status})
+        else:
+            form = DateRangeSelectionForm()
+            request_status = request_notify()
+            return render(request,'reports/proforma_reg_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/proforma_reg_form.html', \
+        {'form':form,'request':request_status})

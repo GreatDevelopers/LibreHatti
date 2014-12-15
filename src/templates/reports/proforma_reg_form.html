@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %} {% load staticfiles %} 
+
+<html>
+{% block title %}
+<title>Form</title>
+{% endblock %}
+<body>
+  {% block content %}
+  <table>
+  <form class="form-horizontal" role="form" method="POST"  action='{% url 'librehatti.reports.register.proforma_register' %}' >
+    <div class="form-group">
+        {% csrf_token %}
+            {% for field in form %}
+                <tr>
+                    <td><label for="gen_category">{{ field.label_tag }}</label></td>      
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td><input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1'></td>
+                </tr>
+    </div>
+</form>
+</table>
+   {% endblock %}
+ </body>
+ </html>
