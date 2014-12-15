@@ -13,8 +13,8 @@
    <h2></h2>
     
     <br><br>
-    <p id = "date-range"> TDS Register from {{start_date}} to {{end_date}} </p>
- 
+    <div class = 'heading'><p > Payment Register from {{start_date}} to {{end_date}} </p>
+    </div>
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
@@ -27,15 +27,20 @@
                     <th>Purchase Order No.</th>
                     <th>Date</th>
                     <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Company</th>
+                    <th>Material</th>
+                    <th>Contact No</th>
+                    <th>Email Address</th>
                     <th>Bill Amount</th>
                     <th>Service Tax</th>
                     <th>H.Education Cess</th>
                     <th>Education Cess</th>
-                    <th>Total Amount</th>
                     <th>TDS</th>
                     <th>Received Amount</th>   
                 </tr>
-                {% for bill_object_var,taxes_object_var in tds_list %}
+                {% for bill_object_var,taxes_object_var in payment_register_list %}
                 
 
                 <tr>
@@ -44,10 +49,14 @@
                     <td>{{ temp_var.purchase_order__voucherid__purchase_order_of_session }}</td>
                     <td>{{ temp_var.purchase_order__date_time}}</td>
                     <td>{{ temp_var.purchase_order__buyer__first_name }}
-                    {{ temp_var.purchase_order__buyer__last_name }},
+                    {{ temp_var.purchase_order__buyer__last_name }}
                     {{ temp_var.purchase_order__buyer__customer__title}}
-                    {{temp_var.purchase_order__buyer__customer__user__customer__address__street_address}},
-                    {{temp_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
+                    <td>{{temp_var.purchase_order__buyer__customer__user__customer__address__street_address}}</td>
+                    <td>{{temp_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
+                    <td>{{temp_var.purchase_order__buyer__customer__company}}</td>
+                    <td>{{ list_of_material }}</td>
+                    <td>{{ temp_var.purchase_order__buyer__customer__telephone }}</td>
+                    <td>{{ temp_var.purchase_order__buyer__customer__user__email }}</td>
                     <td>
                         {{temp_var.totalplusdelivery}}
                     </td>
@@ -67,24 +76,22 @@
                     </td>
                     {% endfor %}
                     {% for temp_var in bill_object_var %}
-                    <td>{{temp_var.grand_total}}</td>
                     <td>{{temp_var.purchase_order__tds}}</td>
                     <td>{{temp_var.amount_received}}</td>
+
                      {% endfor %}
                 </tr>
 
-                
 
                 {% endfor %}
                 <tr >
-                    <td colspan = '4' align = 'center'><b>Sum</b></td>
+                    <td colspan = '10' align = 'center'><b>Sum</b></td>
                     <td>{{totalplusdel}}</td>
                     <td>{{servicetax}}</td>
                     <td>{{Heducationcess}}</td>
                     <td>{{educationcess}}</td>
-                    <td>{{amountreceived}}</td>
                     <td>{{purchaseordertds}}</td>
-                    <td>{{grandtotal}}</td>
+                    <td>{{amountreceived}}</td>
 
                 </tr>
 
