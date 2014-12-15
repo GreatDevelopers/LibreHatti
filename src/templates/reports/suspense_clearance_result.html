@@ -1,0 +1,62 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Index</title>
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Pritable Version"></a>
+            </div>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.no</th>
+                    <th>Voucher No.</th>
+                    <th>Date</th>
+                    <th>Receipt</th>
+                    <th>Address</th>
+                    <th>Type of Material</th>
+                    <th>College Income %</th>
+                    <th>Admin Charges %</th>
+                    <th>Consultancy</th>
+                    <th>Dev. Fund</th>
+                    <th>Trans. Total</th>
+                    <th>TaDa</th>
+                    <th>Work Charges</th>
+                    <th>Other Charges</th>
+                    <th>Boring charges internal</th>
+                    <th>Total</th>
+                </tr>
+                {% for value in result %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td>{{ value.3 }}</td>
+                    <td>{{ value.4 }}</td>
+                    <td>{{ value.5 }}</td>
+                    <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
+                    <td>{{ value.8 }}</td>
+                    <td>{{ value.9 }}</td>
+                    <td>{{ value.10 }}</td>
+                    <td>{{ value.11 }}</td>
+                    <td>{{ value.12 }}</td>
+                    <td>{{ value.13 }}</td>
+                    <td>{{ value.14 }}</td>
+                </tr>
+                {% endfor %}
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>

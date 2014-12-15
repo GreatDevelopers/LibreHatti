@@ -129,3 +129,32 @@ class AddConstraints(forms.Form):
 
     grand_total = forms.BooleanField()
     all_registered_user = forms.BooleanField()
+
+
+class MonthYearForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    month = forms.ChoiceField(MONTH_CHOICES)
+    year = forms.ChoiceField(choices= [(datetime.date.today().year, datetime.\
+        date.today().year)] + [(x, x) for x in range(2000, 2050)], \
+        required=False)
+    def __init__(self, *args, **kwargs):
+        super(MonthYearForm, self).__init__(*args, **kwargs)
+        self.fields['month'].widget.attrs={'class':'form-control'}
+        self.fields['year'].widget.attrs={'class':'form-control'}
+
+
+class PaidTaxesForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    paid_service_tax = forms.IntegerField()
+    paid_education_tax = forms.IntegerField()
+    paid_higher_education_tax = forms.IntegerField()
+    def __init__(self, *args, **kwargs):
+        super(PaidTaxesForm, self).__init__(*args, **kwargs)
+        self.fields['paid_service_tax'].widget.attrs={'class':'form-control'}
+        self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
+        self.fields['paid_higher_education_tax'].widget.attrs={\
+        'class':'form-control'}
