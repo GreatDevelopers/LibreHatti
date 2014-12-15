@@ -7,8 +7,8 @@
 }
 form .aligned .results_on_deck {
     padding-left: 0;
-    margin-left: 20em;
-    margin-top: -31px;
+    margin-left: 0em;
+    margin-top: 0px;
 }
 .results_on_deck > div {
 	margin-bottom: -1.6em;
