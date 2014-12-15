@@ -163,7 +163,7 @@ def quoted_order_of_session(request):
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
     quoted_order_obj = QuotedOrder.objects.values('id', 'date_time').\
     get(id=quoted_order_id)
-    quoted_order_date = quoted_order_obj['date_time'].date()
+    quoted_order_date = quoted_order_obj['date_time']
     financialsession = FinancialSession.objects.\
     values('id', 'session_start_date', 'session_end_date')
     for value in financialsession:

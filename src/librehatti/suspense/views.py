@@ -98,7 +98,7 @@ def add_distance(request):
     elif old_post['mode_of_payment'] != '1':
         purchase_order = PurchaseOrder.objects.values('date_time').\
             get(id=purchase_order_id)
-        purchase_order_date = purchase_order['date_time'].date()
+        purchase_order_date = purchase_order['date_time']
         financialsession = FinancialSession.objects.\
             values('id', 'session_start_date', 'session_end_date')
         for value in financialsession:
@@ -299,7 +299,7 @@ def with_transport(request):
                 'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
                 'distribution':distribution['name'],\
                 'purchase_order':voucherid['purchase_order_of_session'],\
-                'order_date':voucherid['purchase_order__date_time'].date(),\
+                'order_date':voucherid['purchase_order__date_time'],\
                 'address':voucherid, 'ta_da':ta_da_total,\
                 'othercharge':othercharge, 'total':total,\
                 'total_in_words':total_in_words,\
@@ -349,7 +349,7 @@ def without_other_charges(request):
                 'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
                 'distribution':distribution['name'],\
                 'purchase_order':voucherid['purchase_order_of_session'],\
-                'order_date':voucherid['purchase_order__date_time'].date(),\
+                'order_date':voucherid['purchase_order__date_time'],\
                 'address':voucherid, 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
                 'charges':voucherid, 'payment':voucherid})
@@ -398,7 +398,7 @@ def other_charges(request):
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                 'suspense_clearance':suspenseclearance,\
                 'purchase_order':voucherid['purchase_order_of_session'],\
-                'order_date':voucherid['purchase_order__date_time'].date(),\
+                'order_date':voucherid['purchase_order__date_time'],\
                 'address':voucherid, 'ta_da':ta_da_total,\
                 'boring_charges':suspenseclearance['boring_charge_external'],\
                 'total':total, 'other_charges':other_charges,\
