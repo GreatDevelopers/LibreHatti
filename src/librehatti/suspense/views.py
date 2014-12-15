@@ -81,7 +81,7 @@ def add_distance(request):
         else:
             purchase_order = PurchaseOrder.objects.values('date_time').\
                 get(id=purchase_order_id)
-            purchase_order_date = purchase_order['date_time'].date()
+            purchase_order_date = purchase_order['date_time']
             financialsession = FinancialSession.objects.\
                 values('id', 'session_start_date', 'session_end_date')
             for value in financialsession:

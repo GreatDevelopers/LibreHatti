@@ -123,7 +123,7 @@ def bill_cal(request):
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
         if surcharge_tax == 1:
-            taxes = (totalplusdelivery * surcharge_value)/100
+            taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = TaxesApplied(purchase_order = purchase_order,
             surcharge = surcharge_obj, tax = taxes)
