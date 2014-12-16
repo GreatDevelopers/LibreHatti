@@ -869,14 +869,14 @@ def mark_status(request):
     other_charges - tada_amount
     voucherid = VoucherId.objects.values('ratio', 'college_income',\
         'admin_charges').filter(voucher_no=voucher, session_id=session)[0]
-    work_charge = (2 * distribution_total) / 100
-    college_income = (voucherid['college_income'] * distribution_total) / 100
-    admin_charges = (voucherid['admin_charges'] * distribution_total) / 100
+    work_charge = round((2 * distribution_total) / 100)
+    college_income = round((voucherid['college_income'] * distribution_total) / 100)
+    admin_charges = round((voucherid['admin_charges'] * distribution_total) / 100)
     remain_cost = distribution_total - work_charge - college_income -\
     admin_charges
     split = voucherid['ratio'].split(':')
-    consultancy_asset = (remain_cost * int(split[0]))/100
-    development_fund = (remain_cost * int(split[1]))/100
+    consultancy_asset = round((remain_cost * int(split[0]))/100)
+    development_fund = round((remain_cost * int(split[1]))/100)
     calculate_distribution_total = college_income + admin_charges +\
     consultancy_asset + development_fund
     CalculateDistribution.objects.filter(voucher_no=voucher,\
