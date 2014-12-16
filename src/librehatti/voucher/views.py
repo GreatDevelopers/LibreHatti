@@ -196,14 +196,14 @@ def voucher_generate(request):
                 values('ratio', 'college_income', 'admin_charges').\
                 get(id = distribution_type['distribution'])
                 cost_college_income = \
-                (price * distribution_obj['college_income'])/100
+                round((price * distribution_obj['college_income'])/100)
                 cost_admin_charges = \
-                (price * distribution_obj['admin_charges'])/100
+                round((price * distribution_obj['admin_charges'])/100)
                 remain_cost = price - \
                 (cost_college_income + cost_admin_charges)
                 split = distribution_obj['ratio'].split(':')
-                cost_consultancy_asset = (remain_cost * int(split[0]))/100
-                cost_development_fund = (remain_cost * int(split[1]))/100
+                cost_consultancy_asset = round((remain_cost * int(split[0]))/100)
+                cost_development_fund = round((remain_cost * int(split[1]))/100)
                 calculate_distribution = CalculateDistribution(\
                 voucher_no = voucher_number, \
                 college_income_calculated = cost_college_income,\
@@ -227,14 +227,14 @@ def voucher_generate(request):
                 values('ratio', 'college_income', 'admin_charges').\
                 get(id = distribution_type['distribution'])
                 cost_college_income = \
-                (price * distribution_obj['college_income'])/100
+                round((price * distribution_obj['college_income'])/100)
                 cost_admin_charges = \
-                (price * distribution_obj['admin_charges'])/100
+                round((price * distribution_obj['admin_charges'])/100)
                 remain_cost = \
                 price - (cost_college_income + cost_admin_charges)
                 split = distribution_obj['ratio'].split(':')
-                cost_consultancy_asset = (remain_cost * int(split[0]))/100
-                cost_development_fund = (remain_cost * int(split[1]))/100
+                cost_consultancy_asset = round((remain_cost * int(split[0]))/100)
+                cost_development_fund = round((remain_cost * int(split[1]))/100)
                 calculate_distribution = CalculateDistribution(\
                 voucher_no = voucher_number,\
                 college_income_calculated = cost_college_income,\
@@ -255,14 +255,14 @@ def voucher_generate(request):
                 values('ratio', 'college_income', 'admin_charges').\
                 get(id = distribution_type['distribution'])
                 cost_college_income = \
-                (price * distribution_obj['college_income'])/100
+                round((price * distribution_obj['college_income'])/100)
                 cost_admin_charges = \
-                (price * distribution_obj['admin_charges'])/100
+                round((price * distribution_obj['admin_charges'])/100)
                 remain_cost = \
                 price - (cost_college_income + cost_admin_charges)
                 split = distribution_obj['ratio'].split(':')
-                cost_consultancy_asset = (remain_cost * int(split[0]))/100
-                cost_development_fund = (remain_cost * int(split[1]))/100
+                cost_consultancy_asset = round((remain_cost * int(split[0]))/100)
+                cost_development_fund = round((remain_cost * int(split[1]))/100)
                 calculate_distribution = CalculateDistribution(\
                 voucher_no = voucher_number,\
                 college_income_calculated = cost_college_income,\
