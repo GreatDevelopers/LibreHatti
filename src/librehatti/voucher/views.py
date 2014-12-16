@@ -323,15 +323,14 @@ def voucher_print(request):
     'college_income', 'admin_charges', 'distribution__name',\
     'purchased_item__item__category__name',\
     'purchased_item__item__category__parent__parent').\
-    filter(voucher_no = number, session = session)
-    for value in voucherid:
-        purchase_order = value['purchase_order']
-        distribution = value['distribution__name']
-        ratio = value['ratio']
-        college_income = value['college_income']
-        admin_charges = value['admin_charges']
-        category_name = value['purchased_item__item__category__name']
-        lab_id = value['purchased_item__item__category__parent__parent']
+    filter(voucher_no = number, session = session)[0]
+    purchase_order = voucherid['purchase_order']
+    distribution = voucherid['distribution__name']
+    ratio = voucherid['ratio']
+    college_income = voucherid['college_income']
+    admin_charges = voucherid['admin_charges']
+    category_name = voucherid['purchased_item__item__category__name']
+    lab_id = voucherid['purchased_item__item__category__parent__parent']
     emp = Staff.objects.values('name','position').filter(lab=lab_id)
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
@@ -357,7 +356,7 @@ def voucher_print(request):
             'ratio':ratio,'d_name': distribution,\
             'purchase_order': voucheridobj['purchase_order_of_session'],\
             'voucher':number, 'date': date,'address': address,\
-            'buyer': purchase_order_obj, 'categoryname': category_name,\
+            'buyer': purchase_order_obj, 'material': category_name,\
             'total_in_words': total_in_words, 'employee' : emp,\
              'header': header})
         voucherid_obj = VoucherId.objects.values

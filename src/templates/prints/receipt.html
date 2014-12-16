@@ -38,7 +38,7 @@
         {% for value in material %}
         {% if flag1 == 0 and not forloop.last %}
         ,
-        {% elif forloop.last %}
+        {% elif forloop.last and not forloop.first %}
         &
         {% else %}
         {% set flag1 = 0 %}
