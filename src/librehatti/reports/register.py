@@ -17,6 +17,7 @@ from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import TaxesApplied
 from librehatti.catalog.models import Surcharge
+from librehatti.catalog.models import NonPaymentOrder
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
@@ -424,6 +425,7 @@ def suspense_clearance_register(request):
                 temp.append(grand_total)
                 result.append(temp)
                 temp = []
+                address = ''
             request_status = request_notify()
             return render(request,'reports/suspense_clearance_result.html',\
             {'result':result, 'request':request_status})
@@ -552,6 +554,7 @@ def monthly_register(request):
                 value['purchase_order__bill__grand_total']
                 result.append(temp)
                 temp = []
+                address = ''
             total_taxes = service_tax + education_tax + heducation_tax
             servicenotpaid = service_tax - service
             educationnotpaid = education_tax - education
@@ -701,6 +704,7 @@ def proforma_register(request):
                 temp = []
                 flag = 1
                 material_list = ''
+                name = ''
             request_status = request_notify()
             return render(request,'reports/proforma_register.html',\
             {'result':result, 'request':request_status})
@@ -713,4 +717,64 @@ def proforma_register(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/proforma_reg_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def non_payment_register(request):
+    """
+    This view is used to display the non payment registers
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            non_payment_order = NonPaymentOrder.objects.values(\
+                'buyer__first_name', 'buyer__last_name', 'date',\
+                'buyer__customer__title', 'buyer__customer__address__pin',\
+                'buyer__customer__address__street_address',\
+                'buyer__customer__address__city',\
+                'buyer__customer__address__province', 'reference',\
+                'reference_date', 'item_type', 'delivery_address').filter(\
+                date__range=(start_date,end_date))
+            temp = []
+            result = []
+            for order in non_payment_order:
+                temp.append(order['date'])
+                if order['buyer__first_name']:
+                    name = order['buyer__first_name'] + ' ' +\
+                    order['buyer__last_name']
+                else:
+                    name = order['buyer__customer__title']
+                temp.append(name)
+                if order['buyer__customer__address__pin'] == None:
+                    address = order['buyer__customer__address__street_address']\
+                    + ', ' + order['buyer__customer__address__city'] + ', ' +\
+                    order['buyer__customer__address__province']
+                else:
+                    address = order['buyer__customer__address__street_address']\
+                    + ', ' + order['buyer__customer__address__city'] + ', ' +\
+                    order['buyer__customer__address__pin'] + ', ' +\
+                    order['buyer__customer__address__province']
+                temp.append(address)
+                temp.append(order['reference'])
+                temp.append(order['reference_date'])
+                temp.append(order['item_type'])
+                temp.append(order['delivery_address'])
+                result.append(temp)
+                temp = []
+                address = ''
+            request_status = request_notify()
+            return render(request,'reports/non_payment_register.html',\
+            {'result':result, 'request':request_status})
+        else:
+            form = DateRangeSelectionForm()
+            request_status = request_notify()
+            return render(request,'reports/non_payment_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/non_payment_form.html', \
         {'form':form,'request':request_status})
