@@ -26,6 +26,7 @@ from librehatti.suspense.models import SuspenseClearance
 
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import Distribution
 
 from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedOrderofSession
@@ -318,6 +319,8 @@ def suspense_clearance_register(request):
                 'purchase_order__voucherid__purchase_order_of_session').\
             filter(is_cleared=1,\
             purchase_order__date_time__range=(start_date,end_date))
+            distribution = Distribution.objects.values('college_income',\
+                'admin_charges').filter()[0]
             result = []
             temp = []
             for suspense in suspenseorder:
@@ -428,7 +431,8 @@ def suspense_clearance_register(request):
                 address = ''
             request_status = request_notify()
             return render(request,'reports/suspense_clearance_result.html',\
-            {'result':result, 'request':request_status})
+            {'result':result, 'request':request_status,\
+            'distribution':distribution})
         else:
             form = DateRangeSelectionForm()
             request_status = request_notify()
@@ -460,8 +464,11 @@ def monthly_register(request):
             heducation_tax = 0
             total = 0
             totalplustax = 0
+            surcharge_list = []
             surcharge = Surcharge.objects.values('value').filter(\
-                taxes_included=1)[0]
+                taxes_included=1)
+            for sur_charge in surcharge:
+                surcharge_list.append(sur_charge['value'])
             voucherid = VoucherId.objects.values('purchase_order_of_session',\
                 'purchase_order', 'purchase_order__date_time',\
                 'purchase_order__bill__totalplusdelivery',\
@@ -563,8 +570,8 @@ def monthly_register(request):
             heducationnotpaid
             request_status = request_notify()
             return render(request,'reports/monthly_report.html',\
-            {'result':result, 'request':request_status, 'surcharge':surcharge,\
-            'month':month, 'year':year, 'total':total,\
+            {'result':result, 'request':request_status, 'month':month,\
+            'year':year, 'total':total, 'surcharge_list':surcharge_list,\
             'totalplustax':totalplustax, 'service_tax':service_tax,\
             'education_tax':education_tax, 'heducation_tax':heducation_tax,\
             'total_taxes':total_taxes, 'servicenotpaid':servicenotpaid,\
