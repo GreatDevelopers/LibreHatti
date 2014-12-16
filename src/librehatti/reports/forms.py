@@ -149,9 +149,9 @@ class PaidTaxesForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    paid_service_tax = forms.IntegerField()
-    paid_education_tax = forms.IntegerField()
-    paid_higher_education_tax = forms.IntegerField()
+    paid_service_tax = forms.IntegerField(initial=0)
+    paid_education_tax = forms.IntegerField(initial=0)
+    paid_higher_education_tax = forms.IntegerField(initial=0)
     def __init__(self, *args, **kwargs):
         super(PaidTaxesForm, self).__init__(*args, **kwargs)
         self.fields['paid_service_tax'].widget.attrs={'class':'form-control'}
