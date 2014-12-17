@@ -668,39 +668,69 @@ def main_register(request):
                 list_of_client = []
                 purchase_order = PurchaseOrder.objects.\
                 filter(date_time__month = month).\
-                filter(date_time__year = year).values('date_time',\
-                 'id')
-                for a in purchase_order:
-                    p = PurchaseOrder.objects.filter(id = a['id']).values('voucherid__purchase_order_of_session',\
+                filter(date_time__year = year).values('voucherid__purchase_order_of_session',\
+                    'voucherid__session',\
+                    'voucherid',\
                     'date_time',\
                     'buyer__first_name',\
                     'buyer__last_name',\
+                    'buyer__customer__address__pin',\
                     'buyer__customer__title',\
-                    'buyer__customer__user__customer__address__street_address',\
-                    'buyer__customer__user__customer__address__city',\
-                    'purchaseditem__item__category__name')
-                    list_of_client.append(p)
+                    'buyer__customer__address__street_address',\
+                    'buyer__customer__address__city',\
+                    'buyer__customer__address__province',\
+                    )
                 temp_list = []
+                result = []
                 for temp_value in purchase_order:
-                    voucher_obj = VoucherId.objects.filter(purchase_order_id = temp_value['id']).values('voucher_no','session')
-                    temp_list.append(voucher_obj)
-                list_of_caldis= []
-                for value in temp_list:
-                    for v_val in value: 
-                        calculated_distribution = CalculateDistribution.objects.\
-                        filter(voucher_no=v_val['voucher_no'])\
-                        .filter(session = v_val['session'])\
+                    temp_list.append(temp_value['voucherid__purchase_order_of_session'])
+                    temp_list.append(temp_value['date_time'])
+                    if temp_value['buyer__first_name']:
+                        if temp_value[\
+                        'buyer__customer__address__pin'] == None:
+                            name = temp_value['buyer__first_name']\
+                            + temp_value['buyer__last_name']
+                        else:
+                            name = temp_value['buyer__first_name'] +\
+                            temp_value['buyer__last_name']
+                    else:
+                        if temp_value[\
+                        'buyer__customer__address__pin'] == None:
+                            name =\
+                            + temp_value['buyer__customer__title']
+                        else:
+                            name =\
+                            temp_value['buyer__customer__title']
+                    temp_list.append(name)
+                    temp_list.append(
+                            temp_value[\
+                            'buyer__customer__address__street_address']\
+                            + ', ' + \
+                            temp_value[\
+                            'buyer__customer__address__city']\
+                            + ', ' + \
+                            temp_value[\
+                            'buyer__customer__address__province'])
+                    material = VoucherId.objects.values('purchased_item__item_id__category__name').filter(voucher_no = temp_value['voucherid'])
+                    for value in material:
+                        temp_list.append(value['purchased_item__item_id__category__name'])
+                    calculated_distribution = CalculateDistribution.objects.\
+                        filter(voucher_no=temp_value['voucherid'])\
+                        .filter(session = temp_value['voucherid__session'])\
                         .values('college_income_calculated','admin_charges_calculated',\
                         'consultancy_asset','development_fund','total')
-                    list_of_caldis.append(calculated_distribution)
-                #return HttpResponse(list_of_caldis)
-                
-                main_list = zip(list_of_client,list_of_caldis)
-                
+                    for value in calculated_distribution:
+                        temp_list.append(value['college_income_calculated'])
+                        temp_list.append(value['admin_charges_calculated'])
+                        temp_list.append(value['consultancy_asset'])
+                        temp_list.append(value['development_fund'])
+                        temp_list.append(value['total'])                                                        
+                        result.append(temp_list)
+                        temp_list = []
                 request_status = request_notify()
                 return render(request,'reports/main_register_result.html',\
                 {'request':request_status,\
-                 'main_list':main_list})
+                 'result':result,'month':month,'year':year})
             else:
                 form = MonthYearForm(request.POST)
                 request_status = request_notify()
@@ -710,7 +740,7 @@ def main_register(request):
         form = MonthYearForm()
         request_status = request_notify()
         return render(request,'reports/main_register_form.html', \
-        {'form':form,'request':request_status})
+        {'form':form,'request':request_status})         
 
 
 @login_required
