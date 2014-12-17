@@ -128,30 +128,64 @@ def consultancy_funds_report(request):
                 category = request.POST['sub_category']
                 start_date = request.POST['start_date']
                 end_date = request.POST['end_date']
-                purchase_item = PurchasedItem.objects.\
-                filter(purchase_order__date_time__range=(start_date, end_date),\
-                	item__category=category).values\
-                ('purchase_order__voucherid__purchase_order_of_session',\
-                 'purchase_order__date_time',\
-                 'purchase_order__buyer__first_name',\
-                 'purchase_order__buyer__last_name',\
-                 'purchase_order__buyer__customer__title',\
-                 'purchase_order__buyer__customer__user__customer__address__street_address',\
-                 'purchase_order__buyer__customer__user__customer__address__city',\
-                 'purchase_order__voucherid__session_id__calculatedistribution__consultancy_asset').distinct()
+                
+                purchase_order = PurchaseOrder.objects.filter(date_time__range=\
+                    (start_date,end_date)).values('id',\
+                    'date_time',\
+                    'buyer__first_name',\
+                    'buyer__last_name',\
+                    'buyer__customer__address__pin',\
+                    'buyer__customer__address__street_address',\
+                    'buyer__customer__address__city',\
+                    'buyer__customer__address__province',\
+                    'buyer__customer__telephone',\
+                    'buyer__customer__user__email',\
+                    'buyer__customer__company',\
+                    'organisation__organisation_type__type_desc')
+                temp_list = []
+                result = []
+                for temp_value in purchase_order:
+                    voucher_object = VoucherId.objects.filter(purchase_order__purchaseditem__item__category = category ).values('purchase_order_of_session','voucher_no').distinct()
+                for value in voucher_object:
+                    temp_list.append(value['purchase_order_of_session'])
+                    voucher_number = value['voucher_no']
+                temp_list.append(temp_value['date_time'])
+                if temp_value['buyer__first_name']:
+                    if temp_value[\
+                    'buyer__customer__address__pin'] == None:
+                        name = temp_value['buyer__first_name']\
+                        +" "+ temp_value['buyer__last_name']
+                    else:
+                        name = temp_value['buyer__first_name'] +\
+                        " "+temp_value['buyer__last_name']
+                else:
+                    if temp_value[\
+                    'buyer__customer__address__pin'] == None:
+                        name =\
+                        + temp_value['buyer__customer__title']
+                    else:
+                        name =\
+                        temp_value['buyer__customer__title']
+                temp_list.append(name)
+                temp_list.append(temp_value['buyer__customer__address__street_address'])
+                temp_list.append(temp_value['buyer__customer__address__city'])
+                consultancy_var = CalculateDistribution.objects.filter(voucher_no = voucher_number).values('consultancy_asset')
+                consultancyasset = 0
+                for value in consultancy_var:
+                    consultancyasset = value['consultancy_asset']
+                    temp_list.append(consultancyasset)
+                result.append(temp_list)
+                temp_list = []
+
                 category_name = Category.objects.filter(id=category).values('name')
-                for a in category_name:
-                	category_value = a['name']
-                sum = PurchasedItem.objects.filter(\
-                    purchase_order__date_time__range=(start_date,end_date),\
-                    item__category=category).\
-                aggregate(Sum('purchase_order__voucherid__session_id__calculatedistribution__consultancy_asset')).\
-                get('purchase_order__voucherid__session_id__calculatedistribution__consultancy_asset__sum', 0.00)
+                for value in category_name:
+                    category_value = value['name']
+                
                 request_status = request_notify()
-                return render(request, 'reports/consultancy_funds_result.html', {'purchase_item':
-    	            purchase_item,'start_date':start_date, 'end_date':end_date,
-    	            'sum':sum, 'category_name':category_value,\
-    	            'request':request_status})
+                return render(request, 'reports/consultancy_funds_result.html', {'result':result,\
+                    'start_date':start_date, 'end_date':end_date,\
+                    'sum':sum, 'category_name':category_value,\
+                    'request':request_status})
             else:
                 form = ConsultancyFunds(request.POST)
                 date_form = DateRangeSelectionForm(request.POST)
