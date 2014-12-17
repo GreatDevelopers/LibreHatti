@@ -101,8 +101,8 @@
                 </tr>
                 {% for field_staff_name in field_staff%}
                 <tr>
-                    <td>{{ field_staff_name.name }}</td>
-                    <td>{{ field_staff_name.position }}</td>
+                    <td>{{ field_staff_name.0 }}</td>
+                    <td>{{ field_staff_name.1 }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -118,8 +118,8 @@
                 </tr>
                 {% for lab_staff_name in lab_staff%}
                 <tr>
-                    <td>{{ lab_staff_name.name }}</td>
-                    <td>{{ lab_staff_name.position }}</td>
+                    <td>{{ lab_staff_name.0 }}</td>
+                    <td>{{ lab_staff_name.1 }}</td>
                 </tr>
                 {% endfor %}
             </table>

@@ -212,6 +212,9 @@ def voucher_generate(request):
                 development_fund = cost_development_fund,\
                 total = price, session = session)
                 calculate_distribution.save()
+                voucher_total = VoucherTotal(voucher_no=voucher_number,\
+                    session=session, total=price)
+                voucher_total.save()
                 price = 0
                 flag = 1
                 i = i + 1
@@ -243,6 +246,9 @@ def voucher_generate(request):
                 development_fund = cost_development_fund, total = price,\
                 session = session)
                 calculate_distribution.save()
+                voucher_total = VoucherTotal(voucher_no=voucher_number,\
+                    session=session, total=price)
+                voucher_total.save()
             else:
                 price = 0
                 price_item = purchased_item_obj['price']
@@ -271,6 +277,9 @@ def voucher_generate(request):
                 development_fund = cost_development_fund, total = price,\
                 session = session)
                 calculate_distribution.save()
+                voucher_total = VoucherTotal(voucher_no=voucher_number,\
+                    session=session, total=price)
+                voucher_total.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
     return HttpResponseRedirect(\

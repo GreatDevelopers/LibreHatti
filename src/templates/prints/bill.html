@@ -53,9 +53,15 @@
                 </td>
                 <td>
                     {%for value in bill_values.2%}
+                    {% if not forloop.last %}
                     {{value}}
-                    {% endfor %}
+                    {% endif %}
+                    {% if value == 'no_unit' and forloop.last %}
                     sample/s
+                    {% elif value != 'no_unit' and forloop.last %}
+                    {{value}}
+                    {% endif %}
+                    {% endfor %}
                 </td>
                 <td>
                     {%for value in bill_values.3%}
