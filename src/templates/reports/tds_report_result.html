@@ -10,13 +10,7 @@
 </head>
 <body>
   {% block content %}
-
   <div class = 'list-registers'>
-   <h2></h2>
-    
-    <br><br>
-    <p id = "date-range"> TDS Register from {{start_date}} to {{end_date}} </p>
- 
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
@@ -24,11 +18,14 @@
             </div>
     <div class='daily-report-list'>
         <table border="1px">
+    <p id = "date-range"> TDS Register from {{start_date}} to {{end_date}} </p>
+
                 <tr>
                     <th>S.no</th>
                     <th>Purchase Order No.</th>
                     <th>Date</th>
-                    <th>Name</th>
+                    <th>Name of Client</th>
+                    <th>Contact Number</th>
                     <th>Bill Amount</th>
                     <th>Service Tax</th>
                     <th>H.Education Cess</th>
@@ -37,62 +34,41 @@
                     <th>TDS</th>
                     <th>Received Amount</th>   
                 </tr>
-                {% for bill_object_var,taxes_object_var in tds_list %}
-                
-
+                {% for value in result %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    {% for temp_var in bill_object_var %}
-                    <td>{{ temp_var.purchase_order__voucherid__purchase_order_of_session }}</td>
-                    <td>{{ temp_var.purchase_order__date_time}}</td>
-                    <td>{{ temp_var.purchase_order__buyer__first_name }}
-                    {{ temp_var.purchase_order__buyer__last_name }},
-                    {{ temp_var.purchase_order__buyer__customer__title}}
-                    {{temp_var.purchase_order__buyer__customer__user__customer__address__street_address}},
-                    {{temp_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
-                    <td>
-                        {{temp_var.totalplusdelivery}}
-                    </td>
-                    {% endfor%}
-                    {% for tax_value in taxes_object_var%}
-                    <td>
-                    {% if tax_value.surcharge == 1 %}
-                    {{tax_value.tax}}
-                    {% endif %}
-                    {% if tax_value.surcharge == 3 %}
-                    {{tax_value.tax}}
-                    {% endif %}
-                    {% if tax_value.surcharge == 4 %}
-                    {{tax_value.tax}}
-                    {% endif %}
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1}}</td>
+                    <td>{{ value.2}}
+                    {{ value.3 }}
+                    {{value.4}}</td>
+                    <td>{{ value.5 }}</td>
+                    <td>{{ value.6 }}</td>
+                    <td>{{ value.8 }}</td>
+                    <td>{{ value.9 }}</td>
+                    <td>{{ value.10 }}</td>
+                    <td>{{ value.11 }}</td>
+                    <td>{{ value.12 }}</td>
+                    <td>{{ value.13 }}</td>
 
-                    </td>
-                    {% endfor %}
-                    {% for temp_var in bill_object_var %}
-                    <td>{{temp_var.grand_total}}</td>
-                    <td>{{temp_var.purchase_order__tds}}</td>
-                    <td>{{temp_var.amount_received}}</td>
-                     {% endfor %}
-                </tr>
+                    </tr>
 
-                
 
                 {% endfor %}
-                <tr >
-                    <td colspan = '4' align = 'center'><b>Sum</b></td>
-                    <td>{{totalplusdel}}</td>
+                </tr>
+                    <td colspan = '5' align = 'center'><b>Sum</b></td>
+                    <td>{{billamount}}</td>
                     <td>{{servicetax}}</td>
                     <td>{{Heducationcess}}</td>
                     <td>{{educationcess}}</td>
                     <td>{{amountreceived}}</td>
-                    <td>{{purchaseordertds}}</td>
+                    <td>{{tds}}</td>
                     <td>{{grandtotal}}</td>
 
                 </tr>
 
        </table>
    </div>
-</div>
- {% endblock %}
+</div> {% endblock %}
 </body>
 </html>
