@@ -65,7 +65,8 @@ def daily_report_result(request):
                 temp_list = []
                 result = []
                 for temp_value in purchase_order:
-                    temp_list.append(temp_value['voucherid__purchase_order_of_session'])
+                    temp_list.append(\
+                        temp_value['voucherid__purchase_order_of_session'])
                     temp_list.append(temp_value['date_time'])
                     if temp_value['buyer__first_name']:
                         if temp_value[\
@@ -85,8 +86,10 @@ def daily_report_result(request):
                             temp_value['buyer__customer__title']
                     temp_list.append(name)
                     
-                    temp_list.append(temp_value['buyer__customer__user__customer__address__street_address'])
-                    temp_list.append(temp_value['buyer__customer__user__customer__address__city'])
+                    temp_list.append(\
+                        temp_value['buyer__customer__user__customer__address__street_address'])
+                    temp_list.append(\
+                        temp_value['buyer__customer__user__customer__address__city'])
                     temp_list.append(temp_value['bill__grand_total'])
                     result.append(temp_list)
                     temp_list = []
@@ -97,7 +100,8 @@ def daily_report_result(request):
                 request_status = request_notify()
                 return render(request,'reports/daily_report_result.html',\
                 {'result':result,'sum':sum,\
-                'start_date':start_date,'end_date':end_date,'request':request_status})
+                'start_date':start_date,'end_date':end_date,\
+                'request':request_status})
             else:
                 form = DailyReportForm(request.POST)
                 date_form = DateRangeSelectionForm(request.POST)
@@ -145,7 +149,9 @@ def consultancy_funds_report(request):
                 temp_list = []
                 result = []
                 for temp_value in purchase_order:
-                    voucher_object = VoucherId.objects.filter(purchase_order__purchaseditem__item__category = category ).values('purchase_order_of_session','voucher_no').distinct()
+                    voucher_object = VoucherId.objects.\
+                    filter(purchase_order__purchaseditem__item__category = category ).\
+                    values('purchase_order_of_session','voucher_no').distinct()
                 for value in voucher_object:
                     temp_list.append(value['purchase_order_of_session'])
                     voucher_number = value['voucher_no']
@@ -167,9 +173,12 @@ def consultancy_funds_report(request):
                         name =\
                         temp_value['buyer__customer__title']
                 temp_list.append(name)
-                temp_list.append(temp_value['buyer__customer__address__street_address'])
-                temp_list.append(temp_value['buyer__customer__address__city'])
-                consultancy_var = CalculateDistribution.objects.filter(voucher_no = voucher_number).values('consultancy_asset')
+                temp_list.append(\
+                    temp_value['buyer__customer__address__street_address'])
+                temp_list.append(\
+                    temp_value['buyer__customer__address__city'])
+                consultancy_var = CalculateDistribution.objects.\
+                filter(voucher_no = voucher_number).values('consultancy_asset')
                 consultancyasset = 0
                 for value in consultancy_var:
                     consultancyasset = value['consultancy_asset']
@@ -182,7 +191,8 @@ def consultancy_funds_report(request):
                     category_value = value['name']
                 
                 request_status = request_notify()
-                return render(request, 'reports/consultancy_funds_result.html', {'result':result,\
+                return render(request, 'reports/consultancy_funds_result.html',\
+                 {'result':result,\
                     'start_date':start_date, 'end_date':end_date,\
                     'sum':sum, 'category_name':category_value,\
                     'request':request_status})
@@ -245,7 +255,9 @@ def tds_report_result(request):
                 list_of_taxes = []
                 for temp_value in bill_object:
                     flag = 1
-                    voucher_object = VoucherId.objects.filter(purchase_order_id = temp_value['purchase_order__id']).values('purchase_order_of_session').distinct()
+                    voucher_object = VoucherId.objects.\
+                    filter(purchase_order_id = temp_value['purchase_order__id']).\
+                    values('purchase_order_of_session').distinct()
                     for value in voucher_object:
                         temp_list.append(value['purchase_order_of_session'])
                     temp_list.append(temp_value['purchase_order__date_time'])
@@ -270,7 +282,8 @@ def tds_report_result(request):
                     'purchase_order__buyer__customer__address__street_address'])
                     temp_list.append(temp_value[\
                     'purchase_order__buyer__customer__address__city'])
-                    temp_list.append(temp_value['purchase_order__buyer__customer__telephone'])
+                    temp_list.append(\
+                        temp_value['purchase_order__buyer__customer__telephone'])
                     temp_list.append(temp_value['totalplusdelivery'])
                     taxesapplied = TaxesApplied.objects.values('tax').filter(\
                     purchase_order=voucher_object)
@@ -316,7 +329,8 @@ def tds_report_result(request):
                 {'result':result,'request':request_status,\
                 'servicetax':servicetax,'Heducationcess':Heducationcess,\
                 'educationcess':educationcess,'start_date':start_date,\
-                'grandtotal':grandtotal,'end_date':end_date,'billamount':billamount,'tds':tds,'amountreceived':amountreceived})
+                'grandtotal':grandtotal,'end_date':end_date,\
+                'billamount':billamount,'tds':tds,'amountreceived':amountreceived})
 
             else:
                 form = DateRangeSelectionForm(request.POST)
@@ -368,7 +382,9 @@ def payment_register(request):
                 list_of_taxes = []
                 for temp_value in bill_object:
                     flag = 1
-                    voucher_object = VoucherId.objects.filter(purchase_order_id = temp_value['purchase_order__id']).values('purchase_order_of_session').distinct()
+                    voucher_object = VoucherId.objects.\
+                    filter(purchase_order_id = temp_value['purchase_order__id']).\
+                    values('purchase_order_of_session').distinct()
                     for value in voucher_object:
                         temp_list.append(value['purchase_order_of_session'])
                     temp_list.append(temp_value['purchase_order__date_time'])
@@ -397,7 +413,10 @@ def payment_register(request):
                     'purchase_order__buyer__customer__company'])
                     
                     
-                    material = PurchasedItem.objects.values('item__category__name').filter(purchase_order__id =temp_value['purchase_order__id']).distinct()
+                    material = PurchasedItem.objects.values\
+                    ('item__category__name').\
+                    filter(purchase_order__id =\
+                        temp_value['purchase_order__id']).distinct()
                     for item in material:
                         if flag == 1:
                             material_list = item['item__category__name']
@@ -455,7 +474,8 @@ def payment_register(request):
                 {'result':result,'request':request_status,\
                 'servicetax':servicetax,'Heducationcess':Heducationcess,\
                 'educationcess':educationcess,'start_date':start_date,\
-                'end_date':end_date,'billamount':billamount,'tds':tds,'amountreceived':amountreceived})
+                'end_date':end_date,'billamount':billamount,\
+                'tds':tds,'amountreceived':amountreceived})
             else:
                 form = DateRangeSelectionForm(request.POST)
                 request_status = request_notify()
@@ -767,7 +787,7 @@ def monthly_register(request):
 @login_required
 def main_register(request):
     """
-    This view is used to display the payment registers
+    This view is used to display the Main register
     """ 
     if request.method == 'POST':
         if 'button1' in request.POST:
@@ -778,7 +798,8 @@ def main_register(request):
                 list_of_client = []
                 purchase_order = PurchaseOrder.objects.\
                 filter(date_time__month = month).\
-                filter(date_time__year = year).values('voucherid__purchase_order_of_session',\
+                filter(date_time__year = year).\
+                values('voucherid__purchase_order_of_session',\
                     'voucherid__session',\
                     'voucherid',\
                     'date_time',\
@@ -821,13 +842,17 @@ def main_register(request):
                             + ', ' + \
                             temp_value[\
                             'buyer__customer__address__province'])
-                    material = VoucherId.objects.values('purchased_item__item_id__category__name').filter(voucher_no = temp_value['voucherid'])
+                    material = VoucherId.objects.\
+                    values('purchased_item__item_id__category__name').\
+                    filter(voucher_no = temp_value['voucherid'])
                     for value in material:
-                        temp_list.append(value['purchased_item__item_id__category__name'])
+                        temp_list.append(\
+                            value['purchased_item__item_id__category__name'])
                     calculated_distribution = CalculateDistribution.objects.\
                         filter(voucher_no=temp_value['voucherid'])\
                         .filter(session = temp_value['voucherid__session'])\
-                        .values('college_income_calculated','admin_charges_calculated',\
+                        .values('college_income_calculated',\
+                        'admin_charges_calculated',\
                         'consultancy_asset','development_fund','total')
                     for value in calculated_distribution:
                         temp_list.append(value['college_income_calculated'])
@@ -986,3 +1011,83 @@ def non_payment_register(request):
         request_status = request_notify()
         return render(request,'reports/non_payment_form.html', \
         {'form':form,'request':request_status})
+
+@login_required
+def client_register(request):
+    """
+    This view is used to display the client register
+    """ 
+    if request.method == 'POST':
+        if 'button1' in request.POST:
+            form = DateRangeSelectionForm(request.POST)
+            if form.is_valid():
+                start_date = request.POST['start_date']
+                end_date = request.POST['end_date']
+                list_of_client = []
+                purchase_order = PurchaseOrder.objects.filter(date_time__range=\
+                    (start_date,end_date)).values(
+                    'date_time',\
+                    'buyer__first_name',\
+                    'buyer__last_name',\
+                    'buyer__customer__address__pin',\
+                    'buyer__customer__address__street_address',\
+                    'buyer__customer__address__city',\
+                    'buyer__customer__address__province',\
+                    'buyer__customer__telephone',\
+                    'buyer__customer__user__email',\
+                    'buyer__customer__company',\
+                    'organisation__organisation_type__type_desc')
+                temp_list = []
+                result = []
+                for temp_value in purchase_order:
+                        temp_list.append(temp_value['date_time'])
+                        if temp_value['buyer__first_name']:
+                            if temp_value[\
+                            'buyer__customer__address__pin'] == None:
+                                name = temp_value['buyer__first_name']\
+                                + temp_value['buyer__last_name']
+                            else:
+                                name = temp_value['buyer__first_name'] +\
+                                temp_value['buyer__last_name']
+                        else:
+                            if temp_value[\
+                            'buyer__customer__address__pin'] == None:
+                                name =\
+                                + temp_value['buyer__customer__title']
+                            else:
+                                name =\
+                                temp_value['buyer__customer__title']
+                        temp_list.append(name)
+                        temp_list.append(\
+                            temp_value['buyer__customer__address__street_address'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__company'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__address__city'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__address__pin'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__address__province'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__user__email'])
+                        temp_list.append(\
+                            temp_value['buyer__customer__telephone'])
+                        temp_list.append(\
+                            temp_value['organisation__organisation_type__type_desc'])
+
+                        result.append(temp_list)
+                        temp_list = []
+                request_status = request_notify()
+                return render(request,'reports/client_register_result.html',\
+                {'request':request_status,\
+                 'result':result})
+            else:
+                form = DateRangeSelectionForm(request.POST)
+                request_status = request_notify()
+                return render(request,'reports/client_register_form.html', \
+                {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/client_register_form.html', \
+        {'form':form,'request':request_status})                 
