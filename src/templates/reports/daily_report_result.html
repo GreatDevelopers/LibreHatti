@@ -18,39 +18,35 @@
                 name="" value="Show Pritable Version"></a>
             </div>
     <div class='daily-report-list'>
+<div class='daily-report-list'>
         <table border="1px">
+            <p > Client Register from {{start_date}} and {{end_date}} </p>
+            
+
                 <tr>
                     <th>S.no</th>
-                    <th>Purchase Order No.</th>
+                    <th>Purchase Order</th>
                     <th>Date</th>
                     <th>Name</th>
                     <th>Agency</th>
                     <th>Total</th>
+
                 </tr>
-                {% for temp_var in list_of_report %}
-                {% for purchase_order_var in temp_var %}
+                {% for value in result %}
                 <tr>
-                    <td>{{ forloop.counter}}</td>
-                    <td>{{ purchase_order_var.purchase_order__voucherid__purchase_order_of_session }}</td>
-                    <td>{{ purchase_order_var.purchase_order__date_time}}</td>
-                    <td>{{ purchase_order_var.purchase_order__buyer__first_name }}
-                    {{ purchase_order_var.purchase_order__buyer__last_name }},
-                    {{ purchase_order_var.purchase_order__buyer__customer__title}}
-                    {{purchase_order_var.purchase_order__buyer__customer__user__customer__address__street_address}},
-                    {{purchase_order_var.purchase_order__buyer__customer__user__customer__address__city}}</td>
-                    <td>{{ purchase_order_var.purchase_order__buyer__customer__company}}</td>
-                    <td align= 'right'>{{  purchase_order_var.grand_total }}</td>
-                    
-                </tr>
-                {% endfor %}
-                <tr >
-                    <td colspan = '5' align = 'center'><b>Sum</b></td>
-                    <td align= 'right'>{{sum}}</td>
-                </tr>
-                
-                {% endfor %}
-       </table>
-   </div>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1}}</td>
+                    <td>{{ value.2}}{{ value.3 }}
+                    {{value.4}}</td>
+                    <td></td>
+                    <td align="right">{{ value.5 }}</td>
+                    </tr>
+                {% endfor %} 
+                <tr>
+                    <td colspan="5" align="center"><b>Sum</b></td>
+                    <td align="right">{{sum}}</td>
+                </tr>  </div>
 </div>
  {% endblock %}
 </body>

@@ -4,14 +4,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% block title %}
-    <title>Payment Register</title>
-{% endblock %}
+    {% block title %}
+    <title>Client Register</title>
+    {% endblock %}
+
 </head>
 <body>
   {% block content %}
 
   <div class = 'list-registers'>
+   
+    
+    
+    
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
@@ -19,26 +24,22 @@
             </div>
     <div class='daily-report-list'>
         <table border="1px">
-            <div class = 'heading'><p > Payment Register from {{start_date}} to {{end_date}} </p>
-    </div>
+            <p > Client Register  </p>
+            
 
                 <tr>
                     <th>S.no</th>
-                    <th>Purchase Order No.</th>
                     <th>Date</th>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>City</th>
                     <th>Company</th>
-                    <th>Material</th>
-                    <th>Contact No</th>
+                    <th>City</th>
+                    <th>Pin Code</th>
+                    <th>State</th>
                     <th>Email Address</th>
-                    <th>Bill Amount</th>
-                    <th>Service Tax</th>
-                    <th>H.Education Cess</th>
-                    <th>Education Cess</th>
-                    <th>TDS</th>
-                    <th>Received Amount</th>   
+                    <th>Contact No</th>
+                    <th>Organistion</th>
+
                 </tr>
                 {% for value in result %}
                 <tr>
@@ -50,29 +51,11 @@
                     <td>{{value.4}}</td>
                     <td>{{ value.5 }}</td>
                     <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
                     <td>{{ value.8 }}</td>
                     <td>{{ value.9 }}</td>
-                    <td>{{ value.10 }}</td>
-                    <td>{{ value.11 }}</td>
-                    <td>{{ value.12 }}</td>
-                    <td>{{ value.13 }}</td>
-                    <td>{{ value.14 }}</td>
-                    <td>{{ value.15 }}</td>
-
                     </tr>
-
-
                 {% endfor %}
-                <tr >
-                    <td colspan = '10' align = 'center'><b>Sum</b></td>
-                    <td>{{ billamount }}</td>
-                    <td>{{servicetax}}</td>
-                    <td>{{Heducationcess}}</td>
-                    <td>{{educationcess}}</td>
-                    <td>{{tds}}</td>
-                    <td>{{amountreceived}}</td>
-
-                </tr>
 
        </table>
    </div>

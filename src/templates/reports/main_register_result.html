@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 {% block title %}
-    <title>Monthly Register</title>
+    <title>Main Register</title>
 {% endblock %}
 </head>
 <body>
@@ -23,6 +23,9 @@
             </div>
     <div class='daily-report-list'>
         <table border="1px">
+            <p > Main Register of {{month}},{{year}} </p>
+            
+
                 <tr>
                     <th>S.no</th>
                     <th>Purchase Order No.</th>
@@ -35,27 +38,20 @@
                     <th>Development</th>
                     <th>Total</th>   
                 </tr>
-                {% for purchase_object_var,voucher_object_var in main_list %}
+                {% for value in result %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    {% for temp_var in purchase_object_var %}
-                    <td>{{ temp_var.voucherid__purchase_order_of_session }}</td>
-                    <td>{{ temp_var.date_time}}</td>
-                    <td>{{ temp_var.buyer__first_name }}
-                    {{ temp_var.buyer__last_name }}
-                    {{ temp_var.buyer__customer__title}}
-                    {{temp_var.buyer__customer__user__customer__address__street_address}}
-                    {{temp_var.buyer__customer__user__customer__address__city}}</td>
-                    <td>{{ temp_var.purchaseditem__item__category__name }}</td>
-                    {% endfor %}
-                    {% for temp_var in voucher_object_var %}
-                    <td>{{ temp_var.college_income_calculated}}</td>
-                    <td>{{ temp_var.admin_charges_calculated}}</td>
-                    <td>{{ temp_var.consultancy_asset}}</td>
-                    <td>{{ temp_var.development_fund}}</td>
-                    <td>{{ temp_var.total}}</td> 
-                     {% endfor %}
-                </tr>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1}}</td>
+                    <td>{{ value.2}}
+                    {{ value.3 }}</td>
+                    <td>{{value.4}}</td>
+                    <td>{{ value.5 }}</td>
+                    <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
+                    <td>{{ value.8 }}</td>
+                    <td>{{ value.9 }}</td>
+                    </tr>
 
 
                 {% endfor %}
