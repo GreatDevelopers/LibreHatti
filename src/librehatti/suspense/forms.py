@@ -27,10 +27,6 @@ class Clearance_form(ModelForm):
         widgets = {'session': forms.HiddenInput(),\
         'voucher_no': forms.HiddenInput()}
     
-    voucher_no = forms.CharField(widget=forms.TextInput(\
-        attrs={'readonly':'readonly'}))
-    car_taxi_charge = forms.CharField(widget=forms.TextInput(\
-        attrs={'readonly':'readonly'}))
     def __init__(self, *args, **kwargs):
         super(Clearance_form, self).__init__(*args, **kwargs)
         self.fields['voucher_no'].widget.attrs={'class':'form-control'}

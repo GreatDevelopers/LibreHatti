@@ -159,6 +159,12 @@ def bill(request):
                 else:
                     item_qty.append(',')
                     item_qty.append(qty['qty'])
+        try:
+            unit = Unit.objects.values('unit').get(\
+                category=category['item__category'])
+            item_qty.append(unit['unit'])
+        except:
+            item_qty.append('no_unit')
         flag1 = 1
         price_unit = []
         for price_per in purchased_item_obj:
@@ -472,7 +478,7 @@ def quoted_bill(request):
     totalplusdelivery = bill['totalplusdelivery']
     quoted_order_obj = QuotedOrder.objects.values('buyer','buyer__first_name',\
         'buyer__last_name','reference','delivery_address','organisation',\
-        'date_time','total_discount','buyer__customer__title').get(\
+        'date_time','total_discount','buyer__customer__title', 'date').get(\
         id = quoted_order_id)
     total_discount = quoted_order_obj['total_discount']
     taxes_applied_obj = QuotedTaxesApplied.objects.\
@@ -513,6 +519,8 @@ def quoted_bill(request):
     branch = _BRANCH
     online_account = _ONLINE_ACCOUNT
     ifsc_code = _IFSC_CODE
+    ref_letter = _YOUR_LETTER_No
+    total_in_words = num2eng(grand_total)
     return render(request, 'bills/quote_bill.html', {
         'stc_no':admin_organisations,'pan_no':admin_organisations,\
         'ref':quoted_order_obj, 'date':date,\
@@ -522,10 +530,10 @@ def quoted_bill(request):
         'buyer':quoted_order_obj, 'buyer_name':customer_obj,\
         'site': quoted_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
-        'bill_values':bill_values,\
+        'bill_values':bill_values, 'total_in_words':total_in_words,\
         'quoted_order_id':quoted_order_sessionid['quoted_order_session'],\
         'header':header,'footer':footer, 'permanent_note':permanent_note,\
         'quoted_note':quoted_note, 'account_holder':account_holder,\
         'name_of_bank':name_of_bank, 'branch':branch,\
         'online_account':online_account, 'ifsc_code':ifsc_code,\
-        'totalplusdelivery':totalplusdelivery})
+        'totalplusdelivery':totalplusdelivery, 'ref_letter':ref_letter})

@@ -275,3 +275,10 @@ class NonPaymentOrder(models.Model):
     item_type = models.CharField(max_length = 200)
     def __unicode__(self):
         return '%s' % (self.id)
+
+
+class Unit(models.Model):
+    category = models.ForeignKey(Category, blank=True, null=True)
+    unit = models.CharField(max_length=100, blank=True, null=True)
+    def __unicode__(self):
+        return '%s' % (self.unit)

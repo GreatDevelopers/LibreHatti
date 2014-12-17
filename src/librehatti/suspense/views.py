@@ -131,8 +131,8 @@ def clearance_search(request):
         sessiondata = SessionSelectForm(request.POST)
         voucher = sessiondata.data['voucher']
         session = sessiondata.data['session']
-        object = SuspenseOrder.objects.filter(session_id=session).\
-        filter(voucher=voucher).values()
+        object = VoucherId.objects.filter(session_id=session).\
+        filter(voucher_no=voucher).values()
         if object:
             form = Clearance_form(initial={'voucher_no':voucher,\
             'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
@@ -151,9 +151,9 @@ def clearance_search(request):
             form = SessionSelectForm()
             errors = "No such voucher number in selected session"
             request_status = request_notify()
-            temp = {"SelectForm":form , "errors":errors,\
+            temp = {"form":form , "message":errors,\
             'request':request_status}
-            return render(request, 'voucher/clsessionselect.html', temp)
+            return render(request, 'suspense/suspense_first.html', temp)
     else:
         form = SessionSelectForm()
         request_status = request_notify()
@@ -263,11 +263,23 @@ def with_transport(request):
     suspenseclearance['boring_charge_external']
     boring_charge_internal = suspenseclearance['boring_charge_internal']
     lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
-    lab_staff_name_list = Staff.objects.values('name', 'position').\
-    filter(code__in=lab_staff_list)
+    lab_staff_name_list = []
+    for lab_staff_value in lab_staff_list:
+        lab_temp = []
+        lab_staff_obj = Staff.objects.values('name', 'position').\
+        filter(code=lab_staff_value)[0]
+        lab_temp.append(lab_staff_obj['name'])
+        lab_temp.append(lab_staff_obj['position'])
+        lab_staff_name_list.append(lab_temp)
     field_staff_list = suspenseclearance['field_testing_staff'].split(',')
-    field_staff_name_list = Staff.objects.values('name','position').\
-    filter(code__in=field_staff_list)
+    field_staff_name_list = []
+    for field_staff_value in field_staff_list:
+        field_temp = []
+        field_staff_obj = Staff.objects.values('name','position').\
+        filter(code=field_staff_value)[0]
+        field_temp.append(field_staff_obj['name'])
+        field_temp.append(field_staff_obj['position'])
+        field_staff_name_list.append(field_temp)
     ta_da_total = tada_amount
     voucherid = VoucherId.objects.values('ratio', 'purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\

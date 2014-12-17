@@ -19,7 +19,7 @@
         <h2>Proforma Bill</h2>
     </div>
     <div class = "bill-left">
-        <p><span id ="highlight">No. : </span>GNDEC/TCC/B/{{quoted_order_id}} </p>
+        <div><span id ="highlight">No. : </span>GNDEC/TCC/B/{{quoted_order_id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
         <p> To </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p> {{buyer_name.company}}</p>
@@ -34,8 +34,8 @@
             -{{address.address__pin}},
             {% endif %}
             , {{address.address__province}}</p>
-            <p><span id ="highlight"> Ref: </span>{{ref.reference}}</p>
-            <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
+            <div><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.date}}</div>
+            <div><span id ="highlight"> Site: </span>{{site.delivery_address}}</div>
         </div>
         <table class="data" border="1px">
             <tr>
@@ -56,7 +56,7 @@
                     {%for value in bill_values.2%}
                     {{value}}
                     {% endfor %}
-                    sample./s
+                    sample/s
                 </td>
                 <td>
                     {%for value in bill_values.3%}
@@ -106,7 +106,7 @@
             {% endfor %}
             {% endif %}
             <tr>
-                <td><b>Total </b></td>
+                <td><b>Total Rs. </b>({{total_in_words}} only)</td>
                 <td id="total"><b>{{grand_cost}}</b></td>
             </tr>
         </table>

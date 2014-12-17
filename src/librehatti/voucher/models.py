@@ -55,3 +55,9 @@ class CalculateDistribution(models.Model):
     development_fund = models.IntegerField()
     total = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
+
+
+class VoucherTotal(models.Model):
+    voucher_no = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+    total = models.IntegerField()
