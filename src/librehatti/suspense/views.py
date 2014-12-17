@@ -320,54 +320,6 @@ def with_transport(request):
 
 
 @login_required
-def without_other_charges(request):
-    number = request.GET['voucher_no']
-    session = request.GET['session']
-    financialsession = FinancialSession.objects.values('id').\
-    get(id=session)
-    suspenseclearance = SuspenseClearance.objects.values('work_charge',\
-    'boring_charge_internal','field_testing_staff','lab_testing_staff',\
-    'test_date','clear_date').get(voucher_no=number,\
-    session=financialsession['id'])
-    lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
-    lab_staff_name_list = Staff.objects.values('name', 'position').\
-    filter(code__in=lab_staff_list)
-    field_staff_list = suspenseclearance['field_testing_staff'].split(',')
-    field_staff_name_list = Staff.objects.values('name', 'position').\
-    filter(code__in=field_staff_list)
-    voucherid = VoucherId.objects.values('ratio','purchase_order_of_session',\
-    'purchase_order__date_time', 'purchase_order__buyer__first_name',\
-    'purchase_order__buyer__last_name', 'purchase_order__mode_of_payment',\
-    'purchase_order__buyer__customer__address__street_address',\
-    'purchase_order__buyer__customer__address__city',\
-    'purchase_order__buyer__customer__address__pin',\
-    'purchase_order__buyer__customer__address__province', 'college_income',\
-    'admin_charges', 'purchase_order__cheque_dd_number',\
-    'purchase_order__cheque_dd_date').get(voucher_no=number,\
-    session=financialsession['id'])
-    distribution = Distribution.objects.values('name').\
-    get(ratio=voucherid['ratio'])
-    calculate_distribution = CalculateDistribution.objects.\
-    values('college_income_calculated','admin_charges_calculated',\
-    'consultancy_asset','development_fund','total').\
-    get(voucher_no=number, session=financialsession['id'])
-    total_in_words = num2eng(calculate_distribution['total'])
-    header = HeaderFooter.objects.values('header').get(is_active=True)
-    return render(request,'suspense/wtransport.html', {'header':header,\
-                'voucher_no':number, 'date':suspenseclearance['clear_date'],\
-                'calculate_distribution':calculate_distribution,\
-                'suspense_clearance':suspenseclearance,\
-                'field_staff':field_staff_name_list,\
-                'lab_staff':lab_staff_name_list, 'ratio':voucherid['ratio'],\
-                'distribution':distribution['name'],\
-                'purchase_order':voucherid['purchase_order_of_session'],\
-                'order_date':voucherid['purchase_order__date_time'],\
-                'address':voucherid, 'total_in_words':total_in_words,\
-                'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid, 'payment':voucherid})
-
-
-@login_required
 def other_charges(request):
     number = request.GET['voucher_no']
     session = request.GET['session']

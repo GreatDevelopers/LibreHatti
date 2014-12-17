@@ -54,25 +54,50 @@ def daily_report_result(request):
                 list_of_report = []
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=\
                     (start_date,end_date)).filter(mode_of_payment=\
-                    mode_of_payment).values('date_time','id')
-                for date_value in purchase_order:
-                    bill_object = Bill.objects.filter\
-                    (purchase_order_id = date_value['id']).\
-                    values('grand_total',\
-                    'purchase_order__voucherid__purchase_order_of_session',\
-                    'purchase_order__date_time',\
-                    'purchase_order__buyer__first_name',\
-                    'purchase_order__buyer__last_name',\
-                    'purchase_order__buyer__customer__user__customer__address__street_address',\
-                    'purchase_order__buyer__customer__user__customer__address__city').distinct()
-                    list_of_report.append(bill_object)
+                    mode_of_payment).values('date_time',\
+                    'bill__grand_total',\
+                    'voucherid__purchase_order_of_session',\
+                    'buyer__first_name',\
+                    'buyer__last_name',\
+                    'buyer__customer__address__pin',\
+                    'buyer__customer__user__customer__address__street_address',\
+                    'buyer__customer__user__customer__address__city').distinct()
+                temp_list = []
+                result = []
+                for temp_value in purchase_order:
+                    temp_list.append(temp_value['voucherid__purchase_order_of_session'])
+                    temp_list.append(temp_value['date_time'])
+                    if temp_value['buyer__first_name']:
+                        if temp_value[\
+                        'buyer__customer__address__pin'] == None:
+                            name = temp_value['buyer__first_name']\
+                            +" "+ temp_value['buyer__last_name']
+                        else:
+                            name = temp_value['buyer__first_name'] +\
+                            " "+temp_value['buyer__last_name']
+                    else:
+                        if temp_value[\
+                        'buyer__customer__address__pin'] == None:
+                            name =\
+                            + temp_value['buyer__customer__title']
+                        else:
+                            name =\
+                            temp_value['buyer__customer__title']
+                    temp_list.append(name)
+                    
+                    temp_list.append(temp_value['buyer__customer__user__customer__address__street_address'])
+                    temp_list.append(temp_value['buyer__customer__user__customer__address__city'])
+                    temp_list.append(temp_value['bill__grand_total'])
+                    result.append(temp_list)
+                    temp_list = []
+
                 sum = 0
-                for temp_var in list_of_report:
-                    for total in temp_var:
-                        sum = sum + total['grand_total']
+                for temp_var in purchase_order:
+                    sum = sum + temp_var['bill__grand_total']
                 request_status = request_notify()
                 return render(request,'reports/daily_report_result.html',\
-                {'list_of_report':list_of_report,'sum':sum,'request':request_status})
+                {'result':result,'sum':sum,\
+                'start_date':start_date,'end_date':end_date,'request':request_status})
             else:
                 form = DailyReportForm(request.POST)
                 date_form = DateRangeSelectionForm(request.POST)
@@ -85,6 +110,8 @@ def daily_report_result(request):
         request_status = request_notify()
         return render(request,'reports/daily_report_form.html', \
         {'form':form,'date_form':date_form,'request':request_status}) 
+
+
 
 @login_required
 def consultancy_funds_report(request):
