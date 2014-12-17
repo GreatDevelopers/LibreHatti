@@ -43,10 +43,17 @@ class mCategory(models.Model):
         return unicode(self.name)
 
 
+class Unit(models.Model):
+    unit = models.CharField(max_length=100)
+    def __unicode__(self):
+        return '%s' % (self.unit)
+
+
 class Category(MPTTModel):
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', null=True, blank=True, \
         related_name="children")
+    unit = models.ForeignKey(Unit, null=True, blank=True)
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -275,10 +282,3 @@ class NonPaymentOrder(models.Model):
     item_type = models.CharField(max_length = 200)
     def __unicode__(self):
         return '%s' % (self.id)
-
-
-class Unit(models.Model):
-    category = models.ForeignKey(Category, blank=True, null=True)
-    unit = models.CharField(max_length=100, blank=True, null=True)
-    def __unicode__(self):
-        return '%s' % (self.unit)

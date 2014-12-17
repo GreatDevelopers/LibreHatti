@@ -124,7 +124,8 @@ def bill(request):
     purchase_order = PurchaseOrder.objects.filter(id=id)
     purchased_item = PurchasedItem.objects.filter(\
         purchase_order=purchase_order).values('item__category__name',\
-        'item__category','item__category__parent__name').\
+        'item__category','item__category__parent__name','item__category__unit',\
+        'item__category__unit__unit').\
         order_by('item__category').distinct()
     purchased_item_obj = PurchasedItem.objects.filter(\
         purchase_order=purchase_order).values('item__name', 'item__category',\
@@ -159,11 +160,9 @@ def bill(request):
                 else:
                     item_qty.append(',')
                     item_qty.append(qty['qty'])
-        try:
-            unit = Unit.objects.values('unit').get(\
-                category=category['item__category'])
-            item_qty.append(unit['unit'])
-        except:
+        if category['item__category__unit']:
+            item_qty.append(category['item__category__unit__unit'])
+        else:
             item_qty.append('no_unit')
         flag1 = 1
         price_unit = []
