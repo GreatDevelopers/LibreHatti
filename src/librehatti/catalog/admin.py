@@ -137,10 +137,11 @@ class HeaderAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'parent']
+    list_display = ['id', 'name', 'parent','unit']
     search_fields = ['name']
     actions = [duplicate_event]
     list_filter = ['parent']
+    list_per_page = 20
 
 
 class NonPaymentOrderAdmin(AjaxSelectAdmin):
