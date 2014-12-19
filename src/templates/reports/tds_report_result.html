@@ -27,9 +27,9 @@
                     <th>Name of Client</th>
                     <th>Contact Number</th>
                     <th>Bill Amount</th>
-                    <th>Service Tax</th>
-                    <th>H.Education Cess</th>
-                    <th>Education Cess</th>
+                    <th>Service Tax ({{surcharge_values.0}}%)</th>
+                    <th>Education Cess ({{surcharge_values.1}}%)</th>
+                    <th>H.Education Cess ({{surcharge_values.2}}%)</th>
                     <th>Total Amount</th>
                     <th>TDS</th>
                     <th>Received Amount</th>   
@@ -44,12 +44,12 @@
                     {{value.4}}</td>
                     <td>{{ value.5 }}</td>
                     <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
                     <td>{{ value.8 }}</td>
                     <td>{{ value.9 }}</td>
                     <td>{{ value.10 }}</td>
                     <td>{{ value.11 }}</td>
                     <td>{{ value.12 }}</td>
-                    <td>{{ value.13 }}</td>
 
                     </tr>
 

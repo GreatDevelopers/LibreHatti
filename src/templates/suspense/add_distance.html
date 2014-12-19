@@ -10,7 +10,7 @@
 </head>
 <body>
   {% block content %}
-  <form method = 'POST' action = ''>
+  <form method = 'POST' class="form-horizontal" action = ''>
       {% csrf_token %}
       <table class='add_distance'>
         <tr>
@@ -20,17 +20,19 @@
      </tr>
      {% for value in voucher %}
      <tr>
-        <td>Vocher:<input type="text" name = "voucher" class = "voucher" size="7"
+        <td>Vocher:<input type="text" name = "voucher" class = "voucher form-control" size="7"
          id="voucher_{{value.voucher_no}}" value="{{value.voucher_no}}"></td>
-         <td>Material:<input type="text" name = "material" class = "material" size="35"
+         <td>Material:<input type="text" name = "material" class = "material form-control" size="35"
              id="material_{{value.voucher_no}}"
              value="{{value.purchased_item__item__category__name}}"></td>
-             <td>Distance:<input type="text" name="distance" class = "distance" size = "7"
+             <td>Distance:<input type="text" name="distance" class = "distance form-control" size = "7"
                  id="distance_{{value.voucher_no}}" value="0"></td>
              </tr>
              {% endfor %}
          </table>
+         <div id="add_distance_div">
          <input type='submit' class="btn btn-info btn-large adddistancesave" value = 'Next'>
+        </div>
      </form>
      {% endblock %}
 </body>

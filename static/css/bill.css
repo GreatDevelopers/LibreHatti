@@ -160,3 +160,8 @@ table th{
 #voucher-no{
 	margin-top: 50px;
 }
+
+.othertable{
+	float: right;
+	width: 20%;
+}

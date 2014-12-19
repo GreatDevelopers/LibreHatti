@@ -51,12 +51,25 @@
                 $.ajax({
                     url: request_url,
                     success: function(data){
-                        $('.adddistancesave').removeAttr('disabled');
                     }
                 });
             });
         });
     })
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+    $('#add_distance_div').dblclick(function(){
+        $('.adddistancesave').removeAttr('disabled');
+    });
+})
+</script>
+<script type="text/javascript">
+        $(document).ready(function(){
+    $('.btn-large').click(function(){
+        $('.btn-large').attr('disabled', 'disabled');
+    })
+});
 </script>
 <script type="text/javascript">
     $('#id_sub_category').attr('disabled', 'disabled');
@@ -104,10 +117,6 @@
             changeYear: true,dateFormat:"yy-mm-dd"
         })
         $('#id_Date_of_generation').datepicker({
-            changeMonth: true,
-            changeYear: true,dateFormat:"yy-mm-dd"
-        })
-        $('#id_test_date').datepicker({
             changeMonth: true,
             changeYear: true,dateFormat:"yy-mm-dd"
         })
