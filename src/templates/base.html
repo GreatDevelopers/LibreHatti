@@ -124,10 +124,34 @@
             changeMonth: true,
             changeYear: true,dateFormat:"yy-mm-dd"
         })
-    /*$('#id_departure_time_from_tcc').timepicker();
-    $('#id_arrival_time_at_site').timepicker();
-    $('#id_departure_time_from_site').timepicker();
-    $('#id_arrival_time_at_tcc').timepicker(); */   
+    $('#id_departure_time_from_tcc').timepicker({
+    defaultTime: 'value',
+    minuteStep: 1,
+    disableFocus: true,
+    template: 'dropdown',
+    showMeridian:false
+});
+    $('#id_arrival_time_at_site').timepicker({
+    defaultTime: 'value',
+    minuteStep: 1,
+    disableFocus: true,
+    template: 'dropdown',
+    showMeridian:false
+});
+    $('#id_departure_time_from_site').timepicker({
+    defaultTime: 'value',
+    minuteStep: 1,
+    disableFocus: true,
+    template: 'dropdown',
+    showMeridian:false
+});
+    $('#id_arrival_time_at_tcc').timepicker({
+    defaultTime: 'value',
+    minuteStep: 1,
+    disableFocus: true,
+    template: 'dropdown',
+    showMeridian:false
+}); 
 });       
 </script>
 {% endblock js %}
