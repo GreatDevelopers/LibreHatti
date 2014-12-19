@@ -657,82 +657,82 @@ def monthly_register(request):
                 taxes_included=1)
             for sur_charge in surcharge:
                 surcharge_list.append(sur_charge['value'])
-            voucherid = VoucherId.objects.values('purchase_order_of_session',\
-                'purchase_order', 'purchase_order__date_time',\
-                'purchase_order__bill__totalplusdelivery',\
-                'purchase_order__bill__grand_total',\
-                'purchase_order__buyer__first_name',\
-                'purchase_order__buyer__last_name',\
-                'purchase_order__buyer__customer__title',\
-                'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__city',\
-                'purchase_order__buyer__customer__address__pin',\
-                'purchase_order__buyer__customer__address__province').\
-            filter(purchase_order__date_time__month=month,\
-                purchase_order__date_time__year=year)
+            purchase_order = PurchaseOrder.objects.values('date_time', 'id',\
+                'bill__totalplusdelivery', 'bill__grand_total',\
+                'buyer__first_name', 'buyer__last_name',\
+                'buyer__customer__title',\
+                'buyer__customer__address__street_address',\
+                'buyer__customer__address__city',\
+                'buyer__customer__address__pin',\
+                'buyer__customer__address__province').\
+            filter(date_time__month=month,\
+                date_time__year=year)
             temp = []
             result = []
             i=0
-            for value in voucherid:
-                temp.append(value['purchase_order_of_session'])
-                temp.append(value['purchase_order__date_time'])
-                if value['purchase_order__buyer__first_name']:
+            for value in purchase_order:
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order_of_session').filter(\
+                    purchase_order=value['id'])[0]
+                temp.append(voucherid['purchase_order_of_session'])
+                temp.append(value['date_time'])
+                if value['buyer__first_name']:
                     if value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        address = value['purchase_order__buyer__first_name']\
-                        + value['purchase_order__buyer__last_name']\
+                    'buyer__customer__address__pin'] == None:
+                        address = value['buyer__first_name']\
+                        + value['buyer__last_name']\
                         + ', ' +\
                         value[\
-                        'purchase_order__buyer__customer__address__street_address']\
+                        'buyer__customer__address__street_address']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'buyer__customer__address__city']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__province']
+                        'buyer__customer__address__province']
                     else:
-                        address = value['purchase_order__buyer__first_name'] +\
-                        value['purchase_order__buyer__last_name'] +\
+                        address = value['buyer__first_name'] +\
+                        value['buyer__last_name'] +\
                         ', ' +\
                         value[\
-                        'purchase_order__buyer__customer__address__street_address']\
+                        'buyer__customer__address__street_address']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'buyer__customer__address__city']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__province']
+                        'buyer__customer__address__province']
                 else:
                     if value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
+                    'buyer__customer__address__pin'] == None:
                         address =\
-                        + value['purchase_order__buyer__customer__title']\
+                        + value['buyer__customer__title']\
                         + ', ' +\
                         value[\
-                        'purchase_order__buyer__customer__address__street_address']\
+                        'buyer__customer__address__street_address']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'buyer__customer__address__city']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__province']
+                        'buyer__customer__address__province']
                     else:
                         address =\
-                        value['purchase_order__buyer__customer__title'] +\
+                        value['buyer__customer__title'] +\
                         ', ' +\
                         value[\
-                        'purchase_order__buyer__customer__address__street_address']\
+                        'buyer__customer__address__street_address']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'buyer__customer__address__city']\
                         + ', ' + \
                         value[\
-                        'purchase_order__buyer__customer__address__province']
+                        'buyer__customer__address__province']
                 temp.append(address)
-                temp.append(value['purchase_order__bill__totalplusdelivery'])
-                total = total+value['purchase_order__bill__totalplusdelivery']
+                temp.append(value['bill__totalplusdelivery'])
+                total = total+value['bill__totalplusdelivery']
                 taxesapplied = TaxesApplied.objects.values('tax').filter(\
-                    purchase_order=value['purchase_order'])
+                    purchase_order=value['id'])
                 for taxvalue in taxesapplied:
                     temp.append(taxvalue['tax'])
                     if i == 0:
@@ -744,9 +744,9 @@ def monthly_register(request):
                     else:
                         heducation_tax = heducation_tax + taxvalue['tax']
                         i = 0
-                temp.append(value['purchase_order__bill__grand_total'])
+                temp.append(value['bill__grand_total'])
                 totalplustax = totalplustax +\
-                value['purchase_order__bill__grand_total']
+                value['bill__grand_total']
                 result.append(temp)
                 temp = []
                 address = ''
@@ -916,7 +916,8 @@ def proforma_register(request):
                 temp.append(order['buyer__customer__address__street_address'])
                 temp.append(order['buyer__customer__address__city'])
                 temp.append(order['buyer__customer__company'])
-                quoteditem = QuotedItem.objects.values('item__category__name').\
+                quoteditem = QuotedItem.objects.values('item__category__name',\
+                    'item__category__id').\
                 filter(quoted_order=order['id']).distinct()
                 for item in quoteditem:
                     if flag == 1:
