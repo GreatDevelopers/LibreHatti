@@ -18,6 +18,8 @@ from ajax_select import make_ajax_field
 from librehatti.config import _PARENT_CATEGORY
 from librehatti.config import _SUB_CATEGORY
 from librehatti.config import _ITEM
+from librehatti.config import _TYPE
+
 
 """
 This form allows user to fill the category name of product
@@ -53,12 +55,14 @@ class ItemSelectForm(forms.ModelForm):
 
     item = forms.ModelChoiceField\
     (queryset = Product.objects.all(), label = _ITEM)
+    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',))
+    type = forms.ChoiceField(choices=CHOICES, label = _TYPE)
     price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
          super(ItemSelectForm, self).__init__(*args, **kwargs)
-         self.fields['parent_category'].widget.attrs=\
-         {'class': 'parent_category'}
+         self.fields['type'].widget.attrs={'class': 'type'}
+         self.fields['parent_category'].widget.attrs={'class': 'parent_category'}
          self.fields['sub_category'].widget.attrs={'class': 'sub_category'}
          self.fields['item'].widget.attrs={'class': 'item'}
          self.fields['price_per_unit'].widget.attrs={'class': 'price_per_unit'}

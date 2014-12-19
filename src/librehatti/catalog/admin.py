@@ -80,7 +80,7 @@ This class is used to add, edit or delete the details of item purchased
 class PurchasedItemInline(admin.StackedInline):
     form = ItemSelectForm
     model = PurchasedItem
-    fields = ['parent_category', 'sub_category', 'item','price_per_unit', 'qty', ]
+    fields = ['type','parent_category', 'sub_category', 'item','price_per_unit', 'qty', ]
     extra = 10
 
 
