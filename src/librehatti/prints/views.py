@@ -195,7 +195,7 @@ def bill(request):
     grand_total = bill['grand_total']
     delivery_charges = bill['delivery_charges']
     purchase_order_obj = PurchaseOrder.objects.values('buyer',\
-        'buyer__first_name', 'buyer__last_name', 'reference','date',\
+        'buyer__first_name', 'buyer__last_name', 'reference','reference_date',\
         'delivery_address', 'organisation', 'date_time', 'total_discount',\
         'buyer__customer__title').get(id = id)
     total_discount = purchase_order_obj['total_discount']
@@ -320,7 +320,7 @@ def suspense_bill(request):
     totalplusdelivery = bill['totalplusdelivery']
     grand_total = bill['grand_total']
     purchase_order_obj = PurchaseOrder.objects.values('buyer',\
-        'buyer__first_name', 'buyer__last_name', 'reference','date',\
+        'buyer__first_name', 'buyer__last_name', 'reference','reference_date',\
         'delivery_address', 'organisation', 'date_time', 'total_discount',\
         'buyer__customer__title').get(id = id)
     taxes_applied_obj = TaxesApplied.objects.\
@@ -477,8 +477,8 @@ def quoted_bill(request):
     totalplusdelivery = bill['totalplusdelivery']
     quoted_order_obj = QuotedOrder.objects.values('buyer','buyer__first_name',\
         'buyer__last_name','reference','delivery_address','organisation',\
-        'date_time','total_discount','buyer__customer__title', 'date').get(\
-        id = quoted_order_id)
+        'date_time','total_discount','buyer__customer__title',\
+        'reference_date').get(id = quoted_order_id)
     total_discount = quoted_order_obj['total_discount']
     taxes_applied_obj = QuotedTaxesApplied.objects.\
     filter(quoted_order=quoted_order).aggregate(Count('id'))
