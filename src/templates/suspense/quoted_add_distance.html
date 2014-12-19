@@ -11,17 +11,15 @@
 <body>
   {% block content %}
 
-  <form method = 'POST' action = ''>
+  <form method = 'POST' class="form-horizontal" action = ''>
       {% csrf_token %}
       <table>
         <tr>
-            <td>Order:<input type="text" name = "order" readonly="readonly" class = "quoteorder" size="7"
+            <td>Order:<input type="text" name = "order" readonly="readonly" class = "quoteorder form-control" size="7"
                id="quoteorder" value="{{quoted_order_id}}"></td>
-           </tr>
-           <tr>
-            <td>Distance:<input type="text" name="distance" class = "quotedistance" size = "7"
+            <td>Distance:<input type="text" name="distance" class = "quotedistance form-control" size = "7"
                id="quotedistance" value="0"></td>
-           </tr>
+        </tr>
        </table>
        <input type='submit' class="btn btn-info btn-large quotedadddistancesave" value = 'Next'>
    </form>
