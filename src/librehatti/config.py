@@ -7,6 +7,7 @@ _PARENT_CATEGORY = 'Lab'
 _SUB_CATEGORY = 'Material'
 _ITEM = 'Test'
 _QTY = 'Quantity'
+_TYPE = 'Type Of Work'
 
 """User Configs"""
 _SENDER_EMAIL = 'your email'

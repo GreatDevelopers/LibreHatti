@@ -23,6 +23,7 @@ from librehatti.voucher.models import FinancialSession
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 import simplejson
 
@@ -86,7 +87,23 @@ def select_item(request):
     product_dict = {}
     for product in products:
         product_dict[product.id] = product.name
-    return HttpResponse(simplejson.dumps(product_dict))     
+    return HttpResponse(simplejson.dumps(product_dict))
+
+"""
+This view allows filtering labs according to selected work.
+"""
+@login_required
+def select_type(request):
+    type_id = request.GET['type_id']
+    if type_id == '1':
+        work = 'Lab Work'
+    else:
+        work = 'Field Work'
+    categories = Category.objects.filter(Q(name__icontains=work))
+    category_dict = {}
+    for category in categories:
+        category_dict[category.id] = category.name.split(':')[0]
+    return HttpResponse(simplejson.dumps(category_dict))         
 
 
 """
