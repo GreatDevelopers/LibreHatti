@@ -129,12 +129,8 @@ def consultancy_funds_report(request):
         date_form = DateRangeSelectionForm(request.POST)
         if form.is_valid() and date_form.is_valid():
             category = request.POST['sub_category']
-            #return HttpResponse(category)
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
-            
-            # purchase_order = PurchaseOrder.objects.filter(date_time__range=\
-            #     (start_date,end_date)).values('id',\
             voucher_object = VoucherId.objects.\
             filter(purchase_order__date_time__range = (start_date,end_date)).\
             filter(purchased_item__item__category = category ).\
@@ -149,15 +145,11 @@ def consultancy_funds_report(request):
             'purchase_order__buyer__customer__address__province',\
             'purchase_order__buyer__customer__title',\
             'purchased_item__item__category').distinct()
-            #return HttpResponse(voucher_object)   
             temp_list = []
             result = []
             for temp_value in voucher_object:
-                #return HttpResponse(voucher_object)
                 temp_list.append(temp_value['purchase_order_of_session'])
-                #voucher_number = temp_value['voucher_no']
                 temp_list.append(temp_value['purchase_order__date_time'])
-                #return HttpResponse(temp_value['date_time'])
                 if temp_value['purchase_order__buyer__first_name']:
                     if temp_value[\
                     'purchase_order__buyer__customer__address__pin'] == None:
@@ -181,10 +173,8 @@ def consultancy_funds_report(request):
                     temp_value['purchase_order__buyer__customer__address__city'])
                 consultancy_var = CalculateDistribution.objects.values('consultancy_asset').get(voucher_no = temp_value['voucher_no'],session_id = temp_value['session_id'] )
                 temp_list.append(consultancy_var['consultancy_asset'])
-                #return HttpResponse(consultancyasset)
                 result.append(temp_list)
                 temp_list = []
-            #return HttpResponse(result) 
             category_name = Category.objects.filter(id=category).values('name')
             for value in category_name:
                 category_value = value['name']

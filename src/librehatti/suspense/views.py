@@ -501,7 +501,7 @@ This view is used to render the Transport Bill
 """
 @login_required
 def sessionselect(request):
-    if 'button1' in request.POST:
+    if request.method == 'POST':
         form = SessionSelectForm(request.POST)
         if form.is_valid():
             session = request.POST['session'][0]
