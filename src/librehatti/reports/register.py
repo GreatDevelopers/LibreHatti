@@ -61,7 +61,8 @@ def daily_report_result(request):
                     'buyer__last_name',\
                     'buyer__customer__address__pin',\
                     'buyer__customer__user__customer__address__street_address',\
-                    'buyer__customer__user__customer__address__city').distinct()
+                    'buyer__customer__user__customer__address__city',\
+                    'buyer__customer__title').distinct()
                 temp_list = []
                 result = []
                 for temp_value in purchase_order:
@@ -229,7 +230,11 @@ def tds_report_result(request):
                 grandtotal = 0
                 temp_list = []
                 result = []
-
+                surcharge_values = []
+                surcharge_value = Surcharge.objects.values('value').filter(\
+                    taxes_included=1)
+                for sur_value in surcharge_value:
+                    surcharge_values.append(sur_value['value'])
                 bill_object = Bill.objects.\
                 filter(purchase_order__date_time__range=(start_date,end_date)).\
                 values('purchase_order__date_time',\
@@ -286,7 +291,7 @@ def tds_report_result(request):
                         temp_value['purchase_order__buyer__customer__telephone'])
                     temp_list.append(temp_value['totalplusdelivery'])
                     taxesapplied = TaxesApplied.objects.values('tax').filter(\
-                    purchase_order=voucher_object)
+                    purchase_order=temp_value['purchase_order__id'])
                     tax_var = 0
                     for taxvalue in taxesapplied:
                         temp_list.append(taxvalue['tax'])
@@ -299,11 +304,10 @@ def tds_report_result(request):
                         else:
                             heducation_tax = heducation_tax + taxvalue['tax']
                             tax_var = 0
-                            temp_list.append(temp_value['purchase_order__tds'])
-                            temp_list.append(temp_value['amount_received'])  
-                            result.append(temp_list)
+                    temp_list.append(temp_value['amount_received'])  
                     temp_list.append(temp_value['purchase_order__tds'])
                     temp_list.append(temp_value['grand_total'])        
+                    result.append(temp_list)
                     temp_list = []
 
                     billamount = billamount + temp_value['totalplusdelivery']
@@ -330,7 +334,8 @@ def tds_report_result(request):
                 'servicetax':servicetax,'Heducationcess':Heducationcess,\
                 'educationcess':educationcess,'start_date':start_date,\
                 'grandtotal':grandtotal,'end_date':end_date,\
-                'billamount':billamount,'tds':tds,'amountreceived':amountreceived})
+                'billamount':billamount,'tds':tds,'amountreceived':amountreceived,\
+                'surcharge_values':surcharge_values})
 
             else:
                 form = DateRangeSelectionForm(request.POST)
@@ -362,6 +367,11 @@ def payment_register(request):
                 amountreceived = 0
                 temp_list = []
                 result = []
+                surcharge_values = []
+                surcharge_value = Surcharge.objects.values('value').filter(\
+                    taxes_included=1)
+                for sur_value in surcharge_value:
+                    surcharge_values.append(sur_value['value'])
                 bill_object = Bill.objects.\
                 filter(purchase_order__date_time__range=(start_date,end_date)).\
                 values('purchase_order__date_time',\
@@ -475,7 +485,8 @@ def payment_register(request):
                 'servicetax':servicetax,'Heducationcess':Heducationcess,\
                 'educationcess':educationcess,'start_date':start_date,\
                 'end_date':end_date,'billamount':billamount,\
-                'tds':tds,'amountreceived':amountreceived})
+                'tds':tds,'amountreceived':amountreceived,\
+                'surcharge_values':surcharge_values})
             else:
                 form = DateRangeSelectionForm(request.POST)
                 request_status = request_notify()
@@ -902,6 +913,11 @@ def proforma_register(request):
             result = []
             material_list = ''
             flag = 1
+            surcharge_values = []
+            surcharge_value = Surcharge.objects.values('value').filter(\
+                taxes_included=1)
+            for sur_value in surcharge_value:
+                surcharge_values.append(sur_value['value'])
             for order in quotedorder:
                 temp.append(order[\
                     'quotedorderofsession__quoted_order_session'])
@@ -940,7 +956,8 @@ def proforma_register(request):
                 name = ''
             request_status = request_notify()
             return render(request,'reports/proforma_register.html',\
-            {'result':result, 'request':request_status})
+            {'result':result, 'request':request_status,\
+            'surcharge_values':surcharge_values})
         else:
             form = DateRangeSelectionForm()
             request_status = request_notify()
@@ -1036,7 +1053,8 @@ def client_register(request):
                     'buyer__customer__telephone',\
                     'buyer__customer__user__email',\
                     'buyer__customer__company',\
-                    'organisation__organisation_type__type_desc')
+                    'organisation__organisation_type__type_desc',\
+                    'buyer__customer__title')
                 temp_list = []
                 result = []
                 for temp_value in purchase_order:

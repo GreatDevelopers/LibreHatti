@@ -11,12 +11,20 @@
 
 <body>
     {% block content %}
-    <div style = "text-align:right">
-        No: __________
+    <div class="othertable">
+      <table>
+        <tr>
+          <td>OT Vr. No.</td>
+          <td>{{ voucher_no }}</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td>_________</td>
+        </tr>
+      </table>
     </div>
-    <div style = "text-align:right">
-        Date: __________
-    </div>
+    <div style="clear:both;">
+        </div>
     <div>A sum of Rs {{complete_total}}/- (TA/DA staff Rs {{ta_da}}, Other charges Rs {{transplusother}}/- has been deposited by:-
     </div>
     <div>
@@ -59,7 +67,7 @@
         </div>
         <div class="position">
         {% if transport != 0 %}
-        The Transport Bill no. {{transport.id}} dated {{transport.date_of_generation}} for Rs {{transport.total}}/- is attached. The sum of Rs {{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
+        The Transport Bill No. {{transport.id}} dated {{transport.date_of_generation}} for Rs {{transport.total}}/- is attached. The sum of Rs {{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
         {% endif %}
         The sum of Rs {{ta_da}}/- spent  by Dean Testing & Consultancy may Please be paid to him</div>
         <div class = "footer1">DEAN Testing and Consultancy
