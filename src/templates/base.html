@@ -72,8 +72,8 @@
 });
 </script>
 <script type="text/javascript">
-    $('#id_sub_category').attr('disabled', 'disabled');
     $(document).ready(function(){
+        $('#id_sub_category').attr('disabled', 'disabled');
         $('#id_parent_category').change(function(){
             $('#id_sub_category').empty();
             $('#id_sub_category').removeAttr('disabled');
