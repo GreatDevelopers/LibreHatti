@@ -15,7 +15,7 @@ class SuspenseOrder(models.Model):
     voucher = models.IntegerField()
     purchase_order = models.ForeignKey(PurchaseOrder)
     session_id = models.ForeignKey(FinancialSession)
-    distance_estimated = models.IntegerField()
+    distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
         return '%s' % (self.id)
@@ -31,7 +31,7 @@ class SuspenseClearance(models.Model):
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200)
     field_testing_staff = models.CharField(max_length=200)
-    test_date = models.DateField(default=datetime.date.today)
+    test_date = models.CharField(max_length=600)
     clear_date = models.DateField(default=datetime.date.today)
 
 

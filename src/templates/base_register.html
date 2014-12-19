@@ -71,6 +71,13 @@ $(document).ready(function(){
     })
 });
 </script>
+<script type="text/javascript">
+        $(document).ready(function(){
+    $('.btn-large').click(function(){
+        $('.btn-large').attr('disabled', 'disabled');
+    })
+});
+</script>
 
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">

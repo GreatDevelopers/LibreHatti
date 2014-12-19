@@ -37,6 +37,7 @@ from librehatti.bills.models import QuotedItem
 
 from librehatti.voucher.models import VoucherId, Distribution
 from librehatti.voucher.models import FinancialSession, CalculateDistribution
+from librehatti.voucher.models import VoucherTotal
 
 from django.contrib.auth.decorators import login_required
 
@@ -81,6 +82,7 @@ def add_distance(request):
         else:
             purchase_order = PurchaseOrder.objects.values('date_time').\
                 get(id=purchase_order_id)
+            purchase_order_obj = PurchaseOrder.objects.get(id=purchase_order_id)
             purchase_order_date = purchase_order['date_time']
             financialsession = FinancialSession.objects.\
                 values('id', 'session_start_date', 'session_end_date')
@@ -89,10 +91,20 @@ def add_distance(request):
                 end_date = value['session_end_date']
                 if start_date <= purchase_order_date <= end_date:
                     session_id = value['id']
+            financial_obj = FinancialSession.objects.get(id=session_id)
             voucher = VoucherId.objects.values('voucher_no',
                 'purchased_item__item__category__name').\
-                filter(purchased_item__in=field_work).\
-                filter(session=session_id)
+                filter(purchase_order=purchase_order_id).\
+                filter(session=session_id).distinct()
+            for voucher_val in voucher:
+                try:
+                    SuspenseOrder.objects.filter(\
+                        voucher=voucher_val['voucher_no'],\
+                        session_id = financial_obj)
+                except:
+                    suspense_obj = SuspenseOrder(voucher=voucher_val['voucher_no'],\
+                        purchase_order=purchase_order_obj, session_id=financial_obj)
+                    suspense_obj.save()
             return render(request,'suspense/add_distance.html',{
                 'voucher':voucher, 'purchase_order_id': purchase_order_id})
     elif old_post['mode_of_payment'] != '1':
@@ -131,8 +143,8 @@ def clearance_search(request):
         sessiondata = SessionSelectForm(request.POST)
         voucher = sessiondata.data['voucher']
         session = sessiondata.data['session']
-        object = VoucherId.objects.filter(session_id=session).\
-        filter(voucher_no=voucher).values()
+        object = SuspenseOrder.objects.filter(session_id=session).\
+        filter(voucher=voucher).values()
         if object:
             form = Clearance_form(initial={'voucher_no':voucher,\
             'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
@@ -183,6 +195,8 @@ def clearance_result(request):
             end_date = datetime.strptime(split[1], '%Y-%m-%d').date()
             financialsession = FinancialSession.objects.values('id').\
             get(session_start_date=start_date, session_end_date=end_date)
+            suspense_object = SuspenseOrder.objects.filter(voucher=voucher_no,\
+                session_id=session).update(is_cleared=0)
             try:
                 SuspenseClearance.objects.get(voucher_no=voucher_no,\
                     session=financialsession['id'])
@@ -555,6 +569,8 @@ def transportbill(request):
                 for temp_var in kilometers:
                     distance = distance + int(temp_var)
                 total = rate * distance
+                suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
+                session_id=session).update(is_cleared=0)
                 try:
                     if Transport.objects.filter(voucher_no=voucher).exists():
                         Transport.objects.filter(voucher_no = voucher).\
@@ -627,7 +643,6 @@ def tada_result(request):
             arrival_time_at_site = request.POST['arrival_time_at_site']
             departure_time_from_site = request.POST['departure_time_from_site']
             arrival_time_at_tcc = request.POST['arrival_time_at_tcc']
-        
             start_test_date = request.POST['start_test_date']
             end_test_date = request.POST['end_test_date']
             source_site = request.POST['source_site']
@@ -654,6 +669,8 @@ def tada_result(request):
             for temp_var in list_staff:
                 for tada_value in temp_var:
                     tada_total = tada_value['daily_ta_da'] + tada_total
+            suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
+                session_id=session).update(is_cleared=0)
             if TaDa.objects.filter(voucher_no=voucher).\
             filter(session=session).exists():
                 TaDa.objects.filter(voucher_no=voucher).\
@@ -826,7 +843,7 @@ def mark_status(request):
         tada_amount = tada['tada_amount']
     except:
         tada_amount = 0
-    calculate_distribution = CalculateDistribution.objects.values('total').\
+    calculate_distribution = VoucherTotal.objects.values('total').\
     get(voucher_no=voucher, session_id=session)
     suspense_total = calculate_distribution['total'] + est_transport_total
     distribution_total = suspense_total - boring_charge_internal -\
