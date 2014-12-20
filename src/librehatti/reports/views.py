@@ -7,6 +7,7 @@ from forms import OrderForm
 from forms import AddConstraints
 from forms import DailyReportForm
 
+import simplejson
 
 from datetime import datetime
 
@@ -15,6 +16,7 @@ import librehatti.settings as settings
 from librehatti.catalog.request_change import request_notify
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import Bill
+from librehatti.catalog.models import Category
 
 from librehatti.reports.models import SavedRegisters
 
@@ -93,3 +95,16 @@ def list_saved_registers(request):
     return render(request,'reports/list_of_registers.html', \
         {'list_of_registers':list_of_registers,'local_url': local_url,\
         'request':request_status})
+
+
+@login_required
+def filter_sub_category(request):
+    """
+    This view filters the sub_category according to the parent_category.
+    """
+    parent_category = request.GET['parent_id']
+    sub_categories = Category.objects.filter(parent=parent_category)
+    sub_category_dict = {}
+    for sub_category in sub_categories:
+        sub_category_dict[sub_category.id] = sub_category.name
+    return HttpResponse(simplejson.dumps(sub_category_dict))

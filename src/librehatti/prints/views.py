@@ -16,8 +16,6 @@ from django.db.models import Sum, Count
 
 import simplejson
 
-from forms import LabReportForm
-
 from useraccounts.models import AdminOrganisations
 from useraccounts.models import Customer
 from useraccounts.models import Address
@@ -44,73 +42,6 @@ from librehatti.config import _BRANCH
 from librehatti.config import _ONLINE_ACCOUNT
 from librehatti.config import _IFSC_CODE
 from librehatti.config import _YOUR_LETTER_No
-
-
-@login_required
-def lab_report(request):
-    """
-    It generates the report which lists all the orders for the test
-    selected and the in the entered Time Span.
-    """
-    category = request.GET['sub_category']
-    start_date = request.GET['start_date']
-    end_date = request.GET['end_date']
-    
-    if start_date > end_date:
-        error_type = "Date range error"
-        error = "Start date cannot be greater than end date"
-        request_status = request_notify()
-        temp = {'type':error_type, 'message':error}
-        return render(request, 'error_page.html', temp)
-
-    purchase_item = PurchasedItem.objects.\
-    filter(purchase_order__date_time__range=(start_date, end_date),\
-        item__category=category).values(\
-        'purchase_order_id', 'purchase_order__date_time',
-        'purchase_order__buyer_id__username',
-        'purchase_order__buyer_id__customer__title',
-        'purchase_order__buyer_id__customer__company', 'price',
-        'purchase_order__buyer_id__customer__is_org')
-    category_name = Category.objects.values('name').filter(id=category)
-
-    total = PurchasedItem.objects.filter(purchase_order__date_time__range
-        = (start_date,end_date),item__category=category).\
-        aggregate(Sum('price')).get('price__sum', 0.00)
-    request_status = request_notify()
-    return render(request, 'prints/lab_reports.html', {'purchase_item':
-                   purchase_item,'start_date':start_date, 'end_date':end_date,
-                  'total_cost':total, 'category_name':category_name,\
-                  'request':request_status})
-
-
-@login_required
-def show_form(request):
-    """
-    This view is to show the form for Lab Report.
-    """
-    if request.method == 'POST':
-        form = LabReportForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('/')
-    else:
-         form = LabReportForm()
-    request_status= request_notify()
-
-    return render(request, 'prints/show_form.html', {
-              'form':form, 'request':request_status
-    })
-
-@login_required
-def filter_sub_category(request):
-    """
-    This view filters the sub_category according to the parent_category.
-    """
-    parent_category = request.GET['parent_id']
-    sub_categories = Category.objects.filter(parent=parent_category)
-    sub_category_dict = {}
-    for sub_category in sub_categories:
-        sub_category_dict[sub_category.id] = sub_category.name
-    return HttpResponse(simplejson.dumps(sub_category_dict))
 
 
 @login_required

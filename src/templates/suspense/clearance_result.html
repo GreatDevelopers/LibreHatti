@@ -5,13 +5,20 @@
     <title>
         Suspense Job
     </title>
+    <style type="text/css">
+    .clearance_table{
+        width: 200% !important;
+        margin-top: 50px;
+    }
+    </style>
     {% endblock %}
 </head>
 <body>
     {% block content %}
     <div class='clearance-success'>
         <p class='success-message'>Clearance <span class='green'>
-            Successful</span></p>
+            Successful</span></p></div>
+            <div class="clearance_table">
             <table>
                 <tr>
                     <th>Session:</th>
@@ -54,7 +61,7 @@
                     <td>{{clear_date}}</td>
                 </tr>
             </table>
-        </div>
+            </div>
     {% endblock %}
 </body>
 </html>
