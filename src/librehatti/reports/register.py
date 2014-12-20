@@ -503,8 +503,7 @@ def suspense_clearance_register(request):
                 'purchase_order__buyer__customer__address__street_address',\
                 'purchase_order__buyer__customer__address__city',\
                 'purchase_order__buyer__customer__address__pin',\
-                'purchase_order__buyer__customer__address__province',\
-                'purchase_order__voucherid__purchase_order_of_session').\
+                'purchase_order__buyer__customer__address__province').\
             filter(is_cleared=1,\
             purchase_order__date_time__range=(start_date,end_date))
             distribution = Distribution.objects.values('college_income',\
@@ -514,8 +513,11 @@ def suspense_clearance_register(request):
             for suspense in suspenseorder:
                 temp.append(suspense['voucher'])
                 temp.append(suspense['purchase_order__date_time'])
-                temp.append(suspense[\
-                    'purchase_order__voucherid__purchase_order_of_session'])
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order_of_session').filter(\
+                    voucher_no=suspense['voucher'],\
+                    session_id=suspense['session_id'])[0]
+                temp.append(voucherid['purchase_order_of_session'])
                 if suspense['purchase_order__buyer__first_name']:
                     if suspense[\
                     'purchase_order__buyer__customer__address__pin'] == None:
@@ -622,7 +624,7 @@ def suspense_clearance_register(request):
             {'result':result, 'request':request_status,\
             'distribution':distribution})
         else:
-            form = DateRangeSelectionForm()
+            form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
             return render(request,'reports/suspense_clearance_form.html', \
             {'form':form,'request':request_status})
@@ -768,8 +770,8 @@ def monthly_register(request):
             'service':service, 'education':education, 'highereducation':\
             highereducation})
         else:
-            form = MonthYearForm()
-            data_form = PaidTaxesForm()
+            form = MonthYearForm(request.POST)
+            data_form = PaidTaxesForm(request.POST)
             request_status = request_notify()
             return render(request,'reports/monthly_form.html', \
             {'form':form, 'data_form':data_form, 'request':request_status})
@@ -945,7 +947,7 @@ def proforma_register(request):
             {'result':result, 'request':request_status,\
             'surcharge_values':surcharge_values})
         else:
-            form = DateRangeSelectionForm()
+            form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
             return render(request,'reports/proforma_reg_form.html', \
             {'form':form,'request':request_status})
@@ -1005,7 +1007,7 @@ def non_payment_register(request):
             return render(request,'reports/non_payment_register.html',\
             {'result':result, 'request':request_status})
         else:
-            form = DateRangeSelectionForm()
+            form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
             return render(request,'reports/non_payment_form.html', \
             {'form':form,'request':request_status})
@@ -1093,4 +1095,55 @@ def client_register(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/client_register_form.html', \
-        {'form':form,'request':request_status})                 
+        {'form':form,'request':request_status})
+
+
+@login_required
+def lab_report(request):
+    """
+    This view is used to display the lab reports
+    """ 
+    if request.method == 'POST':
+        form = ConsultancyFunds(request.POST)
+        date_form = DateRangeSelectionForm(request.POST)
+        if form.is_valid() and date_form.is_valid():
+            category = request.POST['sub_category']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            if start_date > end_date:
+                error_type = "Date range error"
+                error = "Start date cannot be greater than end date"
+                request_status = request_notify()
+                temp = {'type':error_type, 'message':error}
+                return render(request, 'error_page.html', temp)
+
+            purchase_item = PurchasedItem.objects.\
+            filter(purchase_order__date_time__range=(start_date, end_date),\
+                item__category=category).values(\
+                'purchase_order_id', 'purchase_order__date_time',
+                'purchase_order__buyer_id__username',
+                'purchase_order__buyer_id__customer__title',
+                'purchase_order__buyer_id__customer__company', 'price',
+                'purchase_order__buyer_id__customer__is_org')
+            category_name = Category.objects.values('name').filter(id=category)
+
+            total = PurchasedItem.objects.filter(purchase_order__date_time__range
+                = (start_date,end_date),item__category=category).\
+                aggregate(Sum('price')).get('price__sum', 0.00)
+            request_status = request_notify()
+            return render(request, 'reports/lab_report.html', {'purchase_item':
+                           purchase_item,'start_date':start_date, 'end_date':end_date,
+                          'total_cost':total, 'category_name':category_name,\
+                          'request':request_status})
+        else:
+            form = ConsultancyFunds(request.POST)
+            date_form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/lab_report_form.html', \
+            {'form':form,'date_form':date_form,'request':request_status})
+    else:
+        form = ConsultancyFunds()
+        request_status = request_notify()
+        date_form = DateRangeSelectionForm()
+        return render(request,'reports/lab_report_form.html', \
+        {'form':form,'date_form':date_form,'request':request_status})

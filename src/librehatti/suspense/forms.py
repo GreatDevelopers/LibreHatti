@@ -97,6 +97,9 @@ class StaffForm(forms.ModelForm):
 
 
 class SessionSelectForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+    
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
     voucher = forms.CharField()
     def __init__(self, *args, **kwargs):

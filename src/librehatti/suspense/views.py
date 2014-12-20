@@ -141,31 +141,37 @@ def add_distance(request):
 def clearance_search(request):
     if request.method == 'POST':
         sessiondata = SessionSelectForm(request.POST)
-        voucher = sessiondata.data['voucher']
-        session = sessiondata.data['session']
-        object = SuspenseOrder.objects.filter(session_id=session).\
-        filter(voucher=voucher).values()
-        if object:
-            form = Clearance_form(initial={'voucher_no':voucher,\
-            'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
-            'boring_charge_external':0, 'boring_charge_internal':0})
-            clearance = 'enable'
-            session_data = FinancialSession.objects.values(\
-                'session_start_date','session_end_date').get(id=session)
-            messages = " Voucher" + " : " + voucher + " and Session" + " : " +\
-                str(session_data['session_start_date']) + ":" +\
-                str(session_data['session_end_date'])
-            request_status = request_notify()
-            return render(request, 'suspense/suspense_first.html', \
-                {'form':form, 'clearance':clearance,\
-                'messages':messages, 'request':request_status}) 
+        if sessiondata.is_valid():
+            voucher = sessiondata.data['voucher']
+            session = sessiondata.data['session']
+            object = SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values()
+            if object:
+                form = Clearance_form(initial={'voucher_no':voucher,\
+                'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
+                'boring_charge_external':0, 'boring_charge_internal':0})
+                clearance = 'enable'
+                session_data = FinancialSession.objects.values(\
+                    'session_start_date','session_end_date').get(id=session)
+                messages = " Voucher" + " : " + voucher + " and Session" + " : " +\
+                    str(session_data['session_start_date']) + ":" +\
+                    str(session_data['session_end_date'])
+                request_status = request_notify()
+                return render(request, 'suspense/suspense_first.html', \
+                    {'form':form, 'clearance':clearance,\
+                    'messages':messages, 'request':request_status}) 
+            else:
+                form = SessionSelectForm()
+                errors = "No such voucher number in selected session"
+                request_status = request_notify()
+                temp = {"form":form , "message":errors,\
+                'request':request_status}
+                return render(request, 'suspense/suspense_first.html', temp)
         else:
-            form = SessionSelectForm()
-            errors = "No such voucher number in selected session"
+            form = SessionSelectForm(request.POST)
             request_status = request_notify()
-            temp = {"form":form , "message":errors,\
-            'request':request_status}
-            return render(request, 'suspense/suspense_first.html', temp)
+            return render(request, 'suspense/suspense_first.html',\
+                {'form':form, 'request':request_status})
     else:
         form = SessionSelectForm()
         request_status = request_notify()
@@ -529,7 +535,7 @@ def sessionselect(request):
                 'request':request_status}
                 return render(request, 'voucher/sessionselect.html', temp)  
         else:
-            form = SessionSelectForm()
+            form = SessionSelectForm(request.POST)
             request_status = request_notify()
             temp = {"SelectForm":form, 'request':request_status}
             return render(request, 'voucher/sessionselect.html', temp)
@@ -545,70 +551,69 @@ This view is used to generate the Transport Bill
 """
 @login_required
 def transportbill(request):
-    if 'button1' in request.POST:
+    if request.method == 'POST':
         form = TransportForm1(request.POST)
         if form.is_valid():
-            if 'button1' in request.POST:
-                if not 'session' in request.POST:
-                    HttpResponseRedirect(\
-                        reverse("librehatti.suspense.views.sessionselect"))
-                session = FinancialSession.objects.\
-                get(id=request.POST['session'])
-                voucher = request.POST['voucher']
-                date_of_generation = request.POST['Date_of_generation']
-                vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
-                kilometers_list = simplejson.dumps(\
-                    request.POST.getlist("kilometer"))
-                kilometers = json.loads(kilometers_list)
-                dated = simplejson.dumps(request.POST.getlist("date"))
-                date = json.loads(dated)
-                rate_object = Surcharge.objects.filter(\
-                    tax_name='transportation').values('value')[0]
-                rate = int(rate_object['value'])
-                distance = 0
-                for temp_var in kilometers:
-                    distance = distance + int(temp_var)
-                total = rate * distance
-                suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
-                session_id=session).update(is_cleared=0)
-                try:
-                    if Transport.objects.filter(voucher_no=voucher).exists():
-                        Transport.objects.filter(voucher_no = voucher).\
-                        update(vehicle=vehicle,kilometer=kilometers ,\
-                        date_of_generation=date_of_generation, total = total,\
-                        date=date, rate=rate, voucher_no=voucher,\
-                        session=session)
-                    else:
-                        obj = Transport(vehicle=vehicle, kilometer=kilometers,\
-                        date_of_generation=date_of_generation, total=total,\
-                        date=date, rate=rate, voucher_no=voucher,\
-                        session=session)
-                        obj.save()
-                except:
-                    pass 
-                temp = Transport.objects.filter(voucher_no=voucher).values()
-                total_amount = Transport.objects.filter(voucher_no=voucher).\
-                aggregate(Sum('total')).get('total__sum', 0.00)
-                zipped_data = zip(date, kilometers)
-                transport_total = [] 
-                for date_var,kilometers_var in zipped_data:
-                    cal_total = rate * int(kilometers_var)
-                    transport_total.append(cal_total)
-                zip_data = zip(date, kilometers, transport_total)
-                header = HeaderFooter.objects.values('header').\
-                get(is_active=True)
-                footer = HeaderFooter.objects.values('footer').\
-                get(is_active=True)
-                request_status = request_notify()
-                session_id = session.id
-                return render(request, 'suspense/transport_summary.html',
-                       {'words':num2eng(total_amount), 'total':total,
-                       'header':header, 'kilometers':kilometers, 'rate':rate,\
-                       'date':date, "voucherid":voucher, "temp":temp,\
-                       'zip_data':zip_data, 'total_amount':total_amount,\
-                       'date_of_generation':date_of_generation,\
-                       'vehicle':vehicle,'request':request_status,\
-                       'session':session_id})
+            if not 'session' in request.POST:
+                HttpResponseRedirect(\
+                    reverse("librehatti.suspense.views.sessionselect"))
+            session = FinancialSession.objects.\
+            get(id=request.POST['session'])
+            voucher = request.POST['voucher']
+            date_of_generation = request.POST['Date_of_generation']
+            vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
+            kilometers_list = simplejson.dumps(\
+                request.POST.getlist("kilometer"))
+            kilometers = json.loads(kilometers_list)
+            dated = simplejson.dumps(request.POST.getlist("date"))
+            date = json.loads(dated)
+            rate_object = Surcharge.objects.filter(\
+                tax_name='transportation').values('value')[0]
+            rate = int(rate_object['value'])
+            distance = 0
+            for temp_var in kilometers:
+                distance = distance + int(temp_var)
+            total = rate * distance
+            suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
+            session_id=session).update(is_cleared=0)
+            try:
+                if Transport.objects.filter(voucher_no=voucher).exists():
+                    Transport.objects.filter(voucher_no = voucher).\
+                    update(vehicle=vehicle,kilometer=kilometers ,\
+                    date_of_generation=date_of_generation, total = total,\
+                    date=date, rate=rate, voucher_no=voucher,\
+                    session=session)
+                else:
+                    obj = Transport(vehicle=vehicle, kilometer=kilometers,\
+                    date_of_generation=date_of_generation, total=total,\
+                    date=date, rate=rate, voucher_no=voucher,\
+                    session=session)
+                    obj.save()
+            except:
+                pass 
+            temp = Transport.objects.filter(voucher_no=voucher).values()
+            total_amount = Transport.objects.filter(voucher_no=voucher).\
+            aggregate(Sum('total')).get('total__sum', 0.00)
+            zipped_data = zip(date, kilometers)
+            transport_total = [] 
+            for date_var,kilometers_var in zipped_data:
+                cal_total = rate * int(kilometers_var)
+                transport_total.append(cal_total)
+            zip_data = zip(date, kilometers, transport_total)
+            header = HeaderFooter.objects.values('header').\
+            get(is_active=True)
+            footer = HeaderFooter.objects.values('footer').\
+            get(is_active=True)
+            request_status = request_notify()
+            session_id = session.id
+            return render(request, 'suspense/transport_summary.html',
+                   {'words':num2eng(total_amount), 'total':total,
+                   'header':header, 'kilometers':kilometers, 'rate':rate,\
+                   'date':date, "voucherid":voucher, "temp":temp,\
+                   'zip_data':zip_data, 'total_amount':total_amount,\
+                   'date_of_generation':date_of_generation,\
+                   'vehicle':vehicle,'request':request_status,\
+                   'session':session_id})
         else:
             message = " Fields are mandatory"
             session = request.POST['session']
@@ -759,7 +764,7 @@ def tada_order_session(request):
                 temp = {"form":form , "errors":errors,'request':request_status}
                 return render(request, 'suspense/form.html', temp)
         else:
-            form = SessionSelectForm()
+            form = SessionSelectForm(request.POST)
             request_status = request_notify()
             return render(request, 'suspense/form.html', {
                 'form':form, 'request':request_status})
