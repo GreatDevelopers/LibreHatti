@@ -53,7 +53,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/path//LibreHatti/static',
+    '/path/to/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
