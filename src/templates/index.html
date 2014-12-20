@@ -22,7 +22,7 @@
 			<a href= {% url 'admin:bills_quotedorder_add' %}><img src="{% static 'icons/Note-Information-256.png' %}"><span class="panel-text">Add Proforma</span></a>
 		</li>
 		<li class="panel-item" id="search">
-			<a href= '{% url 'librehatti.reports.views.search_form' %}?type=search'><img src="{% static 'icons/Search-256.png' %}"><span class="panel-text">Search</span></a>
+			<a href= {% url 'admin:catalog_nonpaymentorder_add' %}><img src="{% static 'icons/Hand-Sign-04-256.png' %}"><span class="panel-text">Non-Payment</span></a>
 		</li>
 		<li class="panel-item" id="registers">
 			<a href='{% url 'reports.views.list_saved_registers' %}'><img src="{% static 'icons/Documents-256.png' %}"><span class="panel-text"> View Registers</span></a>
@@ -30,8 +30,8 @@
 		<li class="panel-item" id="registers">
 			<a href='{% url 'librehatti.reports.views.search_form' %}?type=register'><img src="{% static 'icons/Document-Settings-256.png' %}"><span class="panel-text">Generate Registers</span></a>
 		</li>
-		<li class="panel-item" id="porforma">
-			<a href= '{% url 'librehatti.catalog.views.list_products' %}'><img src="{% static 'icons/Menu-256.png' %}"><span class="panel-text">Catalog</span></a>
+		<li class="panel-item" id="search">
+			<a href= '{% url 'librehatti.reports.views.search_form' %}?type=search'><img src="{% static 'icons/Search-256.png' %}"><span class="panel-text">Search</span></a>
 		</li>
 		<li class="panel-item" id="clearance">
 			<a href= '{% url 'librehatti.catalog.request_change.request_save' %}'><img src="{% static 'icons/Hand-Sign.png' %}"><span class="panel-text">Request Change</span></a>
