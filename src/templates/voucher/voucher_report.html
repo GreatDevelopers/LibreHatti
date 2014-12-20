@@ -25,7 +25,7 @@
         </div>
     <div class="designation">Director,</div>
     <br>
-    Received a sum of Rs. {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
+    Received a sum of &#8377; {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
     Vide Cash from 
     {% if buyer.buyer__first_name %}
     {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}
@@ -64,7 +64,7 @@
                <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
            </tr>
            <tr>
-               <td>TOTAL (Rs.) </td>
+               <td>TOTAL (&#8377;) </td>
                <td  id = "pos-right">{{ calculate_distribution.total }}</td>
            </tr>
        </table>
