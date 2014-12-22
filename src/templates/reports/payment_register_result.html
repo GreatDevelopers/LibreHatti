@@ -15,24 +15,24 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
     <h2><center>Payment Register</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
         <p><center>Payment Register from {{start_date}} to {{end_date}} </center></p>
                 <tr>
-                    <th>S.no</th>
-                    <th>Purchase Order No.</th>
-                    <th>Date</th>
+                    <th>S.No.</th>
+                    <th>Receipt No.</th>
+                    <th>Dated</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>City</th>
                     <th>Company</th>
                     <th>Material</th>
-                    <th>Contact No</th>
+                    <th>Contact No.</th>
                     <th>Email Address</th>
-                    <th>Bill Amount</th>
+                    <th>Charges</th>
                     <th>Service Tax ({{surcharge_values.0}}%)</th>
                     <th>Education Cess ({{surcharge_values.1}}%)</th>
                     <th>H.Education Cess ({{surcharge_values.2}}%)</th>
@@ -51,12 +51,12 @@
                     <td>{{ value.6 }}</td>
                     <td>{{ value.8 }}</td>
                     <td>{{ value.9 }}</td>
-                    <td>{{ value.10 }}</td>
-                    <td>{{ value.11 }}</td>
-                    <td>{{ value.12 }}</td>
-                    <td>{{ value.13 }}</td>
-                    <td>{{ value.14 }}</td>
-                    <td>{{ value.15 }}</td>
+                    <td align="right">{{ value.10 }}</td>
+                    <td align="right">{{ value.11 }}</td>
+                    <td align="right">{{ value.12 }}</td>
+                    <td align="right">{{ value.13 }}</td>
+                    <td align="right">{{ value.14 }}</td>
+                    <td align="right">{{ value.15 }}</td>
 
                     </tr>
 
@@ -64,12 +64,12 @@
                 {% endfor %}
                 <tr >
                     <td colspan = '10' align = 'center'><b>Sum</b></td>
-                    <td>{{ billamount }}</td>
-                    <td>{{servicetax}}</td>
-                    <td>{{Heducationcess}}</td>
-                    <td>{{educationcess}}</td>
-                    <td>{{tds}}</td>
-                    <td>{{amountreceived}}</td>
+                    <td align="right">{{ billamount }}</td>
+                    <td align="right">{{servicetax}}</td>
+                    <td align="right">{{Heducationcess}}</td>
+                    <td align="right">{{educationcess}}</td>
+                    <td align="right">{{tds}}</td>
+                    <td align="right">{{amountreceived}}</td>
 
                 </tr>
 

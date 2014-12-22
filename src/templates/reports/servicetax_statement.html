@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 {% block title %}
-    <title>Service Tax Statement</title>
+    <title>Service Tax Report</title>
 {% endblock %}
 </head>
 <body>
@@ -14,17 +14,18 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
+    <h2><center>Service Tax Statement</center></h2>
     <div class='daily-report-list'>
-        Detailed list of Service tax @{{surcharge.value}}% (Including Education tax) for the month of {{month}}, {{year}}
+        <center>Detailed list of Service tax @{{surcharge_list.0}}% (Including Education tax) for the month of {{month}}, {{year}}</center>
         <table border="1px">
                 <tr>
-                    <th>S.no</th>
+                    <th>S.No.</th>
                     <th>Receipt No.</th>
-                    <th>Date</th>
+                    <th>Dated</th>
                     <th>Name of Parties</th>
-                    <th>Amount</th>
+                    <th>Charges</th>
                     <th>Service Tax ({{surcharge_list.0}}%)</th>
                     <th>Education Cess ({{surcharge_list.1}}%)</th>
                     <th>H.Education Cess ({{surcharge_list.2}}%)</th>

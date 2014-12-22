@@ -4,6 +4,7 @@ Models for the useraccounts are..
 from django.db import models
 from django.contrib.auth.models import User
 
+from librehatti.config import _COUNTRY
 
 """
 describes the type of organisation where the user deals
@@ -22,7 +23,7 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     pin = models.CharField(max_length=10, blank=True, null=True)
     province = models.CharField(max_length=100)
-    nationality = models.CharField(max_length=100)
+    nationality = models.CharField(max_length=100, default=_COUNTRY)
 
     class Meta:
         verbose_name_plural = "Addresses"

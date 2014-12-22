@@ -18,6 +18,7 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import TaxesApplied
 from librehatti.catalog.models import Surcharge
 from librehatti.catalog.models import NonPaymentOrder
+from librehatti.catalog.models import ModeOfPayment
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
@@ -50,6 +51,7 @@ def daily_report_result(request):
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             mode_of_payment = request.POST['mode_of_payment']
+            mode_name = ModeOfPayment.objects.values('method').get(id=mode_of_payment)
             list_of_report = []
             purchase_order = PurchaseOrder.objects.filter(date_time__range=\
                 (start_date,end_date)).filter(mode_of_payment=\
@@ -99,7 +101,7 @@ def daily_report_result(request):
                 sum = sum + temp_var['bill__grand_total']
             request_status = request_notify()
             return render(request,'reports/daily_report_result.html',\
-            {'result':result,'sum':sum,\
+            {'result':result,'sum':sum, 'mode_name':mode_name,\
             'start_date':start_date,'end_date':end_date,\
             'request':request_status})
         else:
@@ -636,9 +638,9 @@ def suspense_clearance_register(request):
 
 
 @login_required
-def monthly_register(request):
+def servicetax_register(request):
     """
-    This view is used to display the monthly registers
+    This view is used to display the servicetax_register registers
     """
     if request.method == 'POST':
         form = MonthYearForm(request.POST)
@@ -759,7 +761,7 @@ def monthly_register(request):
             total_taxes_not_paid = servicenotpaid + educationnotpaid +\
             heducationnotpaid
             request_status = request_notify()
-            return render(request,'reports/monthly_report.html',\
+            return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
             'year':year, 'total':total, 'surcharge_list':surcharge_list,\
             'totalplustax':totalplustax, 'service_tax':service_tax,\
@@ -773,13 +775,13 @@ def monthly_register(request):
             form = MonthYearForm(request.POST)
             data_form = PaidTaxesForm(request.POST)
             request_status = request_notify()
-            return render(request,'reports/monthly_form.html', \
+            return render(request,'reports/servicetax_form.html', \
             {'form':form, 'data_form':data_form, 'request':request_status})
     else:
         form = MonthYearForm()
         data_form = PaidTaxesForm()
         request_status = request_notify()
-        return render(request,'reports/monthly_form.html', \
+        return render(request,'reports/servicetax_form.html', \
         {'form':form, 'data_form':data_form, 'request':request_status})
 
 
@@ -809,6 +811,8 @@ def main_register(request):
                 'buyer__customer__address__city',\
                 'buyer__customer__address__province',\
                 )
+            distribution = Distribution.objects.values('college_income',\
+                'admin_charges').filter()[0]
             temp_list = []
             result = []
             for temp_value in purchase_order:
@@ -862,7 +866,7 @@ def main_register(request):
                     temp_list = []
             request_status = request_notify()
             return render(request,'reports/main_register_result.html',\
-            {'request':request_status,\
+            {'request':request_status, 'distribution':distribution,\
              'result':result,'month':month,'year':year})
         else:
             form = MonthYearForm(request.POST)
@@ -894,7 +898,7 @@ def proforma_register(request):
                 'buyer__customer__address__city',\
                 'buyer__customer__company', 'buyer__customer__telephone',\
                 'buyer__email', 'quotedbill__totalplusdelivery',\
-                'quotedbill__grand_total').filter(\
+                'quotedbill__grand_total', 'delivery_address').filter(\
                 date_time__range=(start_date,end_date))
             temp = []
             result = []
@@ -929,6 +933,7 @@ def proforma_register(request):
                         material_list = material_list + ', ' +\
                         item['item__category__name']
                 temp.append(material_list)
+                temp.append(order['delivery_address'])
                 temp.append(order['buyer__customer__telephone'])
                 temp.append(order['buyer__email'])
                 temp.append(order['quotedbill__totalplusdelivery'])
@@ -986,7 +991,7 @@ def non_payment_register(request):
                 else:
                     name = order['buyer__customer__title']
                 temp.append(name)
-                if order['buyer__customer__address__pin'] == None:
+                if order['buyer__customer__address__pin'] == 'None':
                     address = order['buyer__customer__address__street_address']\
                     + ', ' + order['buyer__customer__address__city'] + ', ' +\
                     order['buyer__customer__address__province']
@@ -1120,11 +1125,17 @@ def lab_report(request):
             purchase_item = PurchasedItem.objects.\
             filter(purchase_order__date_time__range=(start_date, end_date),\
                 item__category=category).values(\
-                'purchase_order_id', 'purchase_order__date_time',
-                'purchase_order__buyer_id__username',
-                'purchase_order__buyer_id__customer__title',
-                'purchase_order__buyer_id__customer__company', 'price',
-                'purchase_order__buyer_id__customer__is_org')
+                'purchase_order_id', 'purchase_order__date_time', 'price',
+                'purchase_order__buyer__first_name',
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__title',
+                'purchase_order__buyer__customer__company',
+                'purchase_order__buyer__customer__address__street_address',
+                'purchase_order__buyer__customer__address__city',
+                'purchase_order__buyer__customer__address__pin',
+                'purchase_order__buyer__customer__address__province',
+                'purchase_order__buyer__email','purchase_order__delivery_address',\
+                'purchase_order__buyer__customer__telephone')
             category_name = Category.objects.values('name').filter(id=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range

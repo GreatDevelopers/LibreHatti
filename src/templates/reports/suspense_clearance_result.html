@@ -14,21 +14,21 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
     <h2><center>Suspense Clearance Register</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
-                    <th>S.no</th>
+                    <th>S.No.</th>
                     <th>Voucher No.</th>
-                    <th>Date</th>
-                    <th>Receipt</th>
+                    <th>Dated</th>
+                    <th>Receipt No.</th>
                     <th>Address</th>
                     <th>Type of Material</th>
                     <th>College Income {{distribution.college_income}}%</th>
                     <th>Admin Charges {{distribution.admin_charges}}%</th>
-                    <th>Consultancy</th>
+                    <th>Consultant Share</th>
                     <th>Dev. Fund</th>
                     <th>Trans. Total</th>
                     <th>TaDa</th>
@@ -45,16 +45,16 @@
                     <td>{{ value.2 }}</td>
                     <td>{{ value.3 }}</td>
                     <td>{{ value.4 }}</td>
-                    <td>{{ value.5 }}</td>
-                    <td>{{ value.6 }}</td>
-                    <td>{{ value.7 }}</td>
-                    <td>{{ value.8 }}</td>
-                    <td>{{ value.9 }}</td>
-                    <td>{{ value.10 }}</td>
-                    <td>{{ value.11 }}</td>
-                    <td>{{ value.12 }}</td>
-                    <td>{{ value.13 }}</td>
-                    <td>{{ value.14 }}</td>
+                    <td align="right">{{ value.5 }}</td>
+                    <td align="right">{{ value.6 }}</td>
+                    <td align="right">{{ value.7 }}</td>
+                    <td align="right">{{ value.8 }}</td>
+                    <td align="right">{{ value.9 }}</td>
+                    <td align="right">{{ value.10 }}</td>
+                    <td align="right">{{ value.11 }}</td>
+                    <td align="right">{{ value.12 }}</td>
+                    <td align="right">{{ value.13 }}</td>
+                    <td align="right">{{ value.14 }}</td>
                 </tr>
                 {% endfor %}
        </table>
