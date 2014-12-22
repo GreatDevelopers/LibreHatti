@@ -71,21 +71,10 @@ def daily_report_result(request):
                     temp_value['voucherid__purchase_order_of_session'])
                 temp_list.append(temp_value['date_time'])
                 if temp_value['buyer__first_name']:
-                    if temp_value[\
-                    'buyer__customer__address__pin'] == None:
-                        name = temp_value['buyer__first_name']\
-                        +" "+ temp_value['buyer__last_name']
-                    else:
-                        name = temp_value['buyer__first_name'] +\
-                        " "+temp_value['buyer__last_name']
+                    name = temp_value['buyer__first_name']\
+                    +" "+ temp_value['buyer__last_name']
                 else:
-                    if temp_value[\
-                    'buyer__customer__address__pin'] == None:
-                        name =\
-                        + temp_value['buyer__customer__title']
-                    else:
-                        name =\
-                        temp_value['buyer__customer__title']
+                    name =temp_value['buyer__customer__title']
                 temp_list.append(name)
                 
                 temp_list.append(\
@@ -153,21 +142,10 @@ def consultancy_funds_report(request):
                 temp_list.append(temp_value['purchase_order_of_session'])
                 temp_list.append(temp_value['purchase_order__date_time'])
                 if temp_value['purchase_order__buyer__first_name']:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        name = temp_value['purchase_order__buyer__first_name']\
-                        +" "+ temp_value['purchase_order__buyer__last_name']
-                    else:
-                        name = temp_value['purchase_order__buyer__first_name'] +\
-                        " "+temp_value['purchase_order__buyer__last_name']
+                    name = temp_value['purchase_order__buyer__first_name']\
+                    +" "+ temp_value['purchase_order__buyer__last_name']
                 else:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        name =\
-                        + temp_value['purchase_order__buyer__customer__title']
-                    else:
-                        name =\
-                        temp_value['purchase_order__buyer__customer__title']
+                    name =temp_value['purchase_order__buyer__customer__title']
                 temp_list.append(name)
                 temp_list.append(\
                     temp_value['purchase_order__buyer__customer__address__street_address'])
@@ -256,21 +234,10 @@ def tds_report_result(request):
                     temp_list.append(value['purchase_order_of_session'])
                 temp_list.append(temp_value['purchase_order__date_time'])
                 if temp_value['purchase_order__buyer__first_name']:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
                         name = temp_value['purchase_order__buyer__first_name']\
                         +" "+ temp_value['purchase_order__buyer__last_name']
-                    else:
-                        name = temp_value['purchase_order__buyer__first_name'] +\
-                        " "+temp_value['purchase_order__buyer__last_name']
                 else:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        name =\
-                        + temp_value['purchase_order__buyer__customer__title']
-                    else:
-                        name =\
-                        temp_value['purchase_order__buyer__customer__title']
+                    name =temp_value['purchase_order__buyer__customer__title']
                 temp_list.append(name)
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__address__street_address'])
@@ -374,6 +341,7 @@ def payment_register(request):
             ,'purchase_order__buyer__customer__user__email',\
             'purchase_order__buyer__customer__telephone',\
             'purchase_order__buyer__customer__company')
+            #return HttpResponse(bill_object)
             servicetax = 0
             Heducationcess = 0
             educationcess = 0
@@ -382,26 +350,17 @@ def payment_register(request):
                 flag = 1
                 voucher_object = VoucherId.objects.\
                 filter(purchase_order_id = temp_value['purchase_order__id']).\
-                values('purchase_order_of_session').distinct()
+                values('purchase_order_of_session','voucher_no').distinct()
+                #return HttpResponse(voucher_object)
                 for value in voucher_object:
                     temp_list.append(value['purchase_order_of_session'])
                 temp_list.append(temp_value['purchase_order__date_time'])
                 if temp_value['purchase_order__buyer__first_name']:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        name = temp_value['purchase_order__buyer__first_name']\
-                        +" "+ temp_value['purchase_order__buyer__last_name']
-                    else:
-                        name = temp_value['purchase_order__buyer__first_name'] +\
-                        " "+temp_value['purchase_order__buyer__last_name']
+                    name = temp_value['purchase_order__buyer__first_name']\
+                    +" "+ temp_value['purchase_order__buyer__last_name']
                 else:
-                    if temp_value[\
-                    'purchase_order__buyer__customer__address__pin'] == None:
-                        name =\
-                        + temp_value['purchase_order__buyer__customer__title']
-                    else:
-                        name =\
-                        temp_value['purchase_order__buyer__customer__title']
+                    name =\
+                    temp_value['purchase_order__buyer__customer__title']
                 temp_list.append(name)
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__address__street_address'])
@@ -430,24 +389,27 @@ def payment_register(request):
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__user__email'])
                 temp_list.append(temp_value['totalplusdelivery'])
-                taxesapplied = TaxesApplied.objects.values('tax').filter(\
-                purchase_order=voucher_object)
-                tax_var = 0
-                for taxvalue in taxesapplied:
-                    temp_list.append(taxvalue['tax'])
-                    if tax_var == 0:
-                        service_tax = service_tax + taxvalue['tax']
-                        tax_var = tax_var + 1
-                    elif tax_var == 1:
-                        education_tax = education_tax + taxvalue['tax']
-                        tax_var = tax_var + 1
-                    else:
-                        heducation_tax = heducation_tax + taxvalue['tax']
-                        tax_var = 0
-                        temp_list.append(temp_value['purchase_order__tds'])
-                        temp_list.append(temp_value['amount_received'])  
-                        result.append(temp_list)
-                        temp_list = []
+                for value in voucher_object:
+                    taxesapplied = TaxesApplied.objects.values('tax').filter(\
+                    purchase_order__voucherid__purchase_order_of_session=\
+                    value['purchase_order_of_session'])
+                    #return HttpResponse(taxesapplied)
+                    tax_var = 0
+                    for taxvalue in taxesapplied:
+                        temp_list.append(taxvalue['tax'])
+                        if tax_var == 0:
+                            service_tax = service_tax + taxvalue['tax']
+                            tax_var = tax_var + 1
+                        elif tax_var == 1:
+                            education_tax = education_tax + taxvalue['tax']
+                            tax_var = tax_var + 1
+                        else:
+                            heducation_tax = heducation_tax + taxvalue['tax']
+                            tax_var = 0
+                temp_list.append(temp_value['purchase_order__tds'])
+                temp_list.append(temp_value['amount_received'])  
+                result.append(temp_list)
+                temp_list = []
                 material_list = ''
                 billamount = billamount + temp_value['totalplusdelivery']
                 tds = tds + temp_value['purchase_order__tds']
@@ -681,57 +643,29 @@ def servicetax_register(request):
                 temp.append(voucherid['purchase_order_of_session'])
                 temp.append(value['date_time'])
                 if value['buyer__first_name']:
-                    if value[\
-                    'buyer__customer__address__pin'] == None:
-                        address = value['buyer__first_name']\
-                        + value['buyer__last_name']\
-                        + ', ' +\
-                        value[\
-                        'buyer__customer__address__street_address']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__city']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__province']
-                    else:
-                        address = value['buyer__first_name'] +\
-                        value['buyer__last_name'] +\
-                        ', ' +\
-                        value[\
-                        'buyer__customer__address__street_address']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__city']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__province']
+                    address = value['buyer__first_name']\
+                    + value['buyer__last_name']\
+                    + ', ' +\
+                    value[\
+                    'buyer__customer__address__street_address']\
+                    + ', ' + \
+                    value[\
+                    'buyer__customer__address__city']\
+                    + ', ' + \
+                    value[\
+                    'buyer__customer__address__province']
                 else:
-                    if value[\
-                    'buyer__customer__address__pin'] == None:
-                        address =\
-                        + value['buyer__customer__title']\
-                        + ', ' +\
-                        value[\
-                        'buyer__customer__address__street_address']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__city']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__province']
-                    else:
-                        address =\
-                        value['buyer__customer__title'] +\
-                        ', ' +\
-                        value[\
-                        'buyer__customer__address__street_address']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__city']\
-                        + ', ' + \
-                        value[\
-                        'buyer__customer__address__province']
+                    address =\
+                    value['buyer__customer__title']\
+                    + ', ' +\
+                    value[\
+                    'buyer__customer__address__street_address']\
+                    + ', ' + \
+                    value[\
+                    'buyer__customer__address__city']\
+                    + ', ' + \
+                    value[\
+                    'buyer__customer__address__province']
                 temp.append(address)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']
@@ -801,7 +735,7 @@ def main_register(request):
             filter(date_time__year = year).\
             values('voucherid__purchase_order_of_session',\
                 'voucherid__session',\
-                'voucherid',\
+                'voucherid__voucher_no',\
                 'date_time',\
                 'buyer__first_name',\
                 'buyer__last_name',\
@@ -819,21 +753,10 @@ def main_register(request):
                 temp_list.append(temp_value['voucherid__purchase_order_of_session'])
                 temp_list.append(temp_value['date_time'])
                 if temp_value['buyer__first_name']:
-                    if temp_value[\
-                    'buyer__customer__address__pin'] == None:
                         name = temp_value['buyer__first_name']\
                         + temp_value['buyer__last_name']
-                    else:
-                        name = temp_value['buyer__first_name'] +\
-                        temp_value['buyer__last_name']
                 else:
-                    if temp_value[\
-                    'buyer__customer__address__pin'] == None:
-                        name =\
-                        + temp_value['buyer__customer__title']
-                    else:
-                        name =\
-                        temp_value['buyer__customer__title']
+                        name =temp_value['buyer__customer__title']
                 temp_list.append(name)
                 temp_list.append(
                         temp_value[\
@@ -846,12 +769,12 @@ def main_register(request):
                         'buyer__customer__address__province'])
                 material = VoucherId.objects.\
                 values('purchased_item__item_id__category__name').\
-                filter(voucher_no = temp_value['voucherid'])
+                filter(voucher_no = temp_value['voucherid__voucher_no'])
                 for value in material:
                     temp_list.append(\
                         value['purchased_item__item_id__category__name'])
                 calculated_distribution = CalculateDistribution.objects.\
-                    filter(voucher_no=temp_value['voucherid'])\
+                    filter(voucher_no=temp_value['voucherid__voucher_no'])\
                     .filter(session = temp_value['voucherid__session'])\
                     .values('college_income_calculated',\
                     'admin_charges_calculated',\
@@ -1052,21 +975,11 @@ def client_register(request):
             for temp_value in purchase_order:
                     temp_list.append(temp_value['date_time'])
                     if temp_value['buyer__first_name']:
-                        if temp_value[\
-                        'buyer__customer__address__pin'] == None:
-                            name = temp_value['buyer__first_name']\
-                            + temp_value['buyer__last_name']
-                        else:
-                            name = temp_value['buyer__first_name'] +\
-                            temp_value['buyer__last_name']
+                        name = temp_value['buyer__first_name']\
+                        + temp_value['buyer__last_name']
                     else:
-                        if temp_value[\
-                        'buyer__customer__address__pin'] == None:
-                            name =\
-                            + temp_value['buyer__customer__title']
-                        else:
-                            name =\
-                            temp_value['buyer__customer__title']
+                        name =\
+                        + temp_value['buyer__customer__title']
                     temp_list.append(name)
                     temp_list.append(\
                         temp_value['buyer__customer__address__street_address'])
