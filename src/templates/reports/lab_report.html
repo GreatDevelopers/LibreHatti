@@ -12,7 +12,7 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
 <div class='daily-report-list'>
   <div class='list-results'>
@@ -23,29 +23,45 @@
     <p id = "date-range"> From {{start_date}} to {{end_date}} </p>
     <table class='list-results' border="1">
       <tr>
+        <th>S.No.</th>
         <th>Receipt No.</th>
-        <th> Date </th>
-        <th> Client </th>
+        <th> Dated </th>
+        <th> Name </th>
+        <th>Address</th>
         <th> Company </th>
+        <th>Site</th>
+        <th>Email</th>
+        <th>Contact No.</th>
         <th> Amount</th>
       </tr>  
-      {% for i in purchase_item %}
+      {% for val in purchase_item %}
       <tr>
-        <td> {{i.purchase_order_id}}</td>
-        <td> {{i.purchase_order__date_time}}</td>
-        {% ifequal i.purchase_order__buyer_id__customer__is_org  1 %}
-        <td> {{i.purchase_order__buyer_id__customer__title}}</td>
-        <td> {{i.purchase_order__buyer_id__customer__title}}</td>
+        <td>{{ forloop.counter }}</td>
+        <td> {{val.purchase_order_id}}</td>
+        <td> {{val.purchase_order__date_time}}</td>
+        <td> 
+        {% if val.purchase_order__buyer__first_name != '' %}
+        {{val.purchase_order__buyer__first_name}} {{val.purchase_order__buyer__last_name}}
         {% else %}
-        <td> {{i.purchase_order__buyer_id__username}}</td>
-        <td> {{i.purchase_order__buyer_id__customer__company}}</td>
-        {% endifequal %}
-        <td> {{i.price}}</td>
+        {{val.purchase_order__buyer__customer__title}} 
+        {% endif %}
+        </td>
+        <td>{{val.purchase_order__buyer__customer__company}}</td>
+        <td>{{val.purchase_order__buyer__customer__address__street_address}}, {{val.purchase_order__buyer__customer__address__city}}
+        {% if val.purchase_order__buyer__customer__address__pin != 'None' and val.purchase_order__buyer__customer__address__pin != '' %}
+        , {{val.purchase_order__buyer__customer__address__pin}}
+        {% endif %}
+        , {{val.purchase_order__buyer__customer__address__province}}
+        </td>
+        <td>{{val.purchase_order__delivery_address}}</td>
+        <td>{{val.purchase_order__buyer__email}}</td>
+        <td>{{val.purchase_order__buyer__customer__telephone}}</td>
+        <td align="right"> {{val.price}}</td>
       </tr>
       {% endfor %}
       <tr>
-        <td colspan='4'> <center><b>Sum</center></b></td>
-        <td>{{total_cost}}</td>
+        <td colspan='9'> <center><b>Sum</center></b></td>
+        <td align="right">{{total_cost}}</td>
       </tr>
     </table>
   </div>

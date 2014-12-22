@@ -8,6 +8,7 @@ _SUB_CATEGORY = 'Material'
 _ITEM = 'Test'
 _QTY = 'Quantity'
 _TYPE = 'Type Of Work'
+_COUNTRY = 'Country'
 
 """User Configs"""
 _SENDER_EMAIL = 'your email'

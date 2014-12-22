@@ -15,7 +15,7 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
    <h2><center>Main Register</center></h2>    
     <div class='daily-report-list'>
@@ -24,14 +24,14 @@
             
 
                 <tr>
-                    <th>S.no</th>
-                    <th>Purchase Order No.</th>
-                    <th>Date</th>
+                    <th>S.No.</th>
+                    <th>Receipt No.</th>
+                    <th>Dated</th>
                     <th>Name</th>
                     <th>Material</th>
-                    <th>College Income</th>
-                    <th>Admin Charges</th>
-                    <th>Consultancy</th>
+                    <th>College Income {{distribution.college_income}}%</th>
+                    <th>Admin Charges {{distribution.admin_charges}}%</th>
+                    <th>Consultant Share</th>
                     <th>Development</th>
                     <th>Total</th>   
                 </tr>
@@ -43,11 +43,11 @@
                     <td>{{ value.2}}
                     {{ value.3 }}</td>
                     <td>{{value.4}}</td>
-                    <td>{{ value.5 }}</td>
-                    <td>{{ value.6 }}</td>
-                    <td>{{ value.7 }}</td>
-                    <td>{{ value.8 }}</td>
-                    <td>{{ value.9 }}</td>
+                    <td align="right">{{ value.5 }}</td>
+                    <td align="right">{{ value.6 }}</td>
+                    <td align="right">{{ value.7 }}</td>
+                    <td align="right">{{ value.8 }}</td>
+                    <td align="right">{{ value.9 }}</td>
                     </tr>
 
 

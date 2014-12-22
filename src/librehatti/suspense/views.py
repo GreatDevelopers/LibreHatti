@@ -655,14 +655,17 @@ def tada_result(request):
             testing_staff = request.POST['testing_staff']
             testing_staff_list = testing_staff.split(',')
             list_staff = []
-            no_of_days = datetime.strptime(end_test_date, '%Y-%m-%d') -\
-            datetime.strptime(start_test_date, '%Y-%m-%d')
+            if start_test_date == end_test_date:
+                days = 1
+            else:
+                no_of_days = datetime.strptime(end_test_date, '%Y-%m-%d') -\
+                datetime.strptime(start_test_date, '%Y-%m-%d')
+                days = no_of_days.days + 1
             for testing_staff_var in testing_staff_list:
                 testing_staff_details = Staff.objects.filter(\
                     code=testing_staff_var).values('name','daily_ta_da')
                 for tada_val in testing_staff_details:
-                    tada_val['daily_ta_da'] = tada_val['daily_ta_da'] *\
-                    no_of_days.days
+                    tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
                 list_staff.append(testing_staff_details)
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)

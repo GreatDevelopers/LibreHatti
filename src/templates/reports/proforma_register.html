@@ -14,23 +14,24 @@
     <div id='toggle-option'>
             <a id = 'toggle_button'>
                 <input type="button" class="btn btn-info btn-large" 
-                name="" value="Show Pritable Version"></a>
+                name="" value="Show Printable Version"></a>
             </div>
     <h2><center>Proforma Register</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
-                    <th>S.no</th>
+                    <th>S.No.</th>
                     <th>Proforma Bill No.</th>
-                    <th>Date</th>
+                    <th>Dated</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>City</th>
                     <th>Company</th>
                     <th>Material</th>
+                    <th>Site</th>
                     <th>Contact No.</th>
                     <th>Email Address</th>
-                    <th>Total</th>
+                    <th>Charges</th>
                     <th>Service Tax ({{surcharge_values.0}}%)</th>
                     <th>Education Tax ({{surcharge_values.1}}%)</th>
                     <th>H.Education Tax ({{surcharge_values.2}}%)</th>
@@ -48,11 +49,12 @@
                     <td>{{ value.6 }}</td>
                     <td>{{ value.7 }}</td>
                     <td>{{ value.8 }}</td>
-                    <td align="right">{{ value.9 }}</td>
+                    <td>{{ value.9 }}</td>
                     <td align="right">{{ value.10 }}</td>
                     <td align="right">{{ value.11 }}</td>
                     <td align="right">{{ value.12 }}</td>
                     <td align="right">{{ value.13 }}</td>
+                    <td align="right">{{ value.14 }}</td>
                 </tr>
                 {% endfor %}
        </table>

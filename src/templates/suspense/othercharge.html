@@ -34,7 +34,7 @@
     {{address.purchase_order__buyer__customer__title}}
     {% endif %}
     , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}
-    {% if address.purchase_order__buyer__customer__address__pin != 'None' %}
+    {% if address.purchase_order__buyer__customer__address__pin != 'None' and address.purchase_order__buyer__customer__address__pin != '' %}
     , {{address.purchase_order__buyer__customer__address__pin}}
     {% endif %}
        , {{address.purchase_order__buyer__customer__address__province}}</div>

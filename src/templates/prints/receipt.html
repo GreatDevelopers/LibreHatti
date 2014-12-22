@@ -25,7 +25,7 @@
     {{buyer.buyer__customer__title}}
     {% endif %}
      , {{address.address__street_address}}, {{address.address__city}}, 
-     {% if address.address__pin != 'None' %}
+     {% if address.address__pin != 'None' and address.address__pin != '' %}
      {{address.address__pin}},
      {% endif %}
       {{address.address__province}} by  
