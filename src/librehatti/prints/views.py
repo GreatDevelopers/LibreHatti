@@ -342,7 +342,8 @@ def quoted_bill(request):
     quoted_order_id = request.GET['quoted_order_id']
     quoted_order = QuotedOrder.objects.filter(id=quoted_order_id)
     quoted_item = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
-    values('item__category__name', 'item__category').\
+    values('item__category__name', 'item__category', 'item__category__unit',
+        'item__category__unit__unit').\
     order_by('item__category').distinct()
     quoted_item_obj = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
     values('item__name',\
@@ -376,6 +377,10 @@ def quoted_bill(request):
                 else:
                     item_qty.append(',')
                     item_qty.append(qty['qty'])
+        if category['item__category__unit']:
+            item_qty.append(category['item__category__unit__unit'])
+        else:
+            item_qty.append('no_unit')
         flag1 = 1
         price_unit = []
         for price_per in quoted_item_obj:
