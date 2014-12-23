@@ -19,7 +19,7 @@
         <h2>Proforma Bill</h2>
     </div>
     <div class = "bill-left">
-        <div><span id ="highlight">No. : </span>GNDEC/TCC/B/{{quoted_order_id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
+        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
         <p> To </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p> {{buyer_name.company}}</p>
@@ -130,13 +130,13 @@
                     {% for value in quoted_note %}
                     <li>{{value.note}}</li>
                     {% endfor %}
-                    <li>Bank Details For Online Payment:</li>
+                    <li>Bank Details For RTGS Payment:</li>
                 </ol>
             </div>
             <div id="account">
                 <table>
                     <tr>
-                        <td>Name of Acount Holder</td>
+                        <td>Acount Holder</td>
                         <td>:</td>
                         <td>{{account_holder}}</td>
                     </tr>
@@ -151,7 +151,7 @@
                         <td>{{branch}}</td>
                     </tr>
                     <tr>
-                        <td>Online Account No.</td>
+                        <td>Account No.</td>
                         <td>:</td>
                         <td>{{online_account}}</td>
                     </tr>
