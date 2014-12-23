@@ -34,14 +34,14 @@ class DateRangeSelectionForm(forms.Form):
         self.fields['start_date'].widget.attrs={'class':'form-control'}
         self.fields['end_date'].widget.attrs={'class':'form-control'}
 
-""" 
+"""
 displays form for daily register report
 """
 class DailyReportForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    mode_of_payment = forms.ModelChoiceField(queryset= ModeOfPayment.objects.all())
+    mode_of_payment = forms.ChoiceField(choices=[('1','Cash'),('2','DD/Cheque/RTGS')])
     def __init__(self, *args, **kwargs):
         super(DailyReportForm, self).__init__(*args, **kwargs)
         self.fields['mode_of_payment'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
@@ -81,7 +81,7 @@ class ClientForm(forms.Form):
 
 """
 displays chechboxes for Order Search
-"""        
+"""
 class OrderForm(forms.Form):
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
@@ -91,10 +91,10 @@ class OrderForm(forms.Form):
 displays checkboxes for Constraints
 """
 class AddConstraints(forms.Form):
-    
+
     additional_constraints = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices= CONSTRAINT_CHOICES)
-    
+
     amount_greater_than = forms.FloatField(required=False, initial = 0)
     amount_less_than = forms.FloatField(required=False, initial = 1000000)
 
@@ -105,7 +105,7 @@ class AddConstraints(forms.Form):
         date.today().year)] + [(x, x) for x in range(2000, 2050)], \
         required=False)
     month = forms.ChoiceField(MONTH_CHOICES)
-    
+
     session_id = FinancialSession.objects.values_list('id',flat = True)
     session_start = FinancialSession.objects.values_list('session_start_date',\
         flat = True)
@@ -115,7 +115,7 @@ class AddConstraints(forms.Form):
         str(end)) for id, start, end in itertools.izip(session_id, \
         session_start, session_end)]
     session = forms.ChoiceField(session_choices)
-    
+
     surcharges = forms.ModelMultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, queryset= Surcharge.objects.filter(
         taxes_included = True))

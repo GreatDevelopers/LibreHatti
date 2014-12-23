@@ -54,17 +54,30 @@ def daily_report_result(request):
             mode_of_payment = request.POST['mode_of_payment']
             mode_name = ModeOfPayment.objects.values('method').get(id=mode_of_payment)
             list_of_report = []
-            purchase_order = PurchaseOrder.objects.filter(date_time__range=\
-                (start_date,end_date)).filter(mode_of_payment=\
-                mode_of_payment).values('date_time',\
-                'bill__grand_total',\
-                'voucherid__purchase_order_of_session',\
-                'buyer__first_name',\
-                'buyer__last_name',\
-                'buyer__customer__address__pin',\
-                'buyer__customer__user__customer__address__street_address',\
-                'buyer__customer__user__customer__address__city',\
-                'buyer__customer__title').distinct()
+            if mode_of_payment == '1':
+                purchase_order = PurchaseOrder.objects.filter(date_time__range=\
+                    (start_date,end_date)).filter(mode_of_payment__method=\
+                    'Cash').values('date_time',\
+                    'bill__grand_total',\
+                    'voucherid__purchase_order_of_session',\
+                    'buyer__first_name',\
+                    'buyer__last_name',\
+                    'buyer__customer__address__pin',\
+                    'buyer__customer__user__customer__address__street_address',\
+                    'buyer__customer__user__customer__address__city',\
+                    'buyer__customer__title').distinct()
+            else:
+                purchase_order = PurchaseOrder.objects.filter(date_time__range=\
+                     (start_date,end_date)).exclude(mode_of_payment__method=\
+                     'Cash').values('date_time',\
+                     'bill__grand_total',\
+                     'voucherid__purchase_order_of_session',\
+                     'buyer__first_name',\
+                     'buyer__last_name',\
+                     'buyer__customer__address__pin',\
+                     'buyer__customer__user__customer__address__street_address',\
+                     'buyer__customer__user__customer__address__city',\
+                     'buyer__customer__title').distinct()
             temp_list = []
             result = []
             for temp_value in purchase_order:
@@ -741,6 +754,10 @@ def main_register(request):
             month = request.POST['month']
             year = request.POST['year']
             list_of_client = []
+            suspense_order = SuspenseOrder.objects.\
+            values_list('purchase_order', flat=True).\
+            filter(purchase_order__date_time__month=month).\
+            filter(purchase_order__date_time__year=year)
             purchase_order = PurchaseOrder.objects.\
             filter(date_time__month = month).\
             filter(date_time__year = year).\
@@ -755,7 +772,7 @@ def main_register(request):
                 'buyer__customer__address__street_address',\
                 'buyer__customer__address__city',\
                 'buyer__customer__address__province',\
-                )
+                ).exclude(id__in = suspense_order)
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             temp_list = []

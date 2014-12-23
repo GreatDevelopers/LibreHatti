@@ -134,6 +134,7 @@ class PurchaseOrder(models.Model):
     mode_of_payment = models.ForeignKey(ModeOfPayment)
     cheque_dd_number = models.CharField(max_length=50, blank=True)
     cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
+    type_of_service = models.ForeignKey('useraccounts.OrganisationType')
     is_active = models.BooleanField(default = True)
     def save(self, *args, **kwargs):
 
