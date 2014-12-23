@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import *
 
-from librehatti.suspense.models import SuspenseOrder, Staff, Department
+from librehatti.suspense.models import SuspenseOrder, Staff, Department, StaffPosition
 
 from librehatti.catalog.actions import mark_inactive, mark_active
 from librehatti.catalog.models import *
@@ -44,6 +44,10 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = ['name', 'department', 'position', 'daily_ta_da', 'lab']
     list_per_page = 20
 
+class StaffPositionAdmin(admin.ModelAdmin):
+    model = StaffPosition
+    list_display = ['position', 'rank']
 
-admin.site.register(Staff,StaffAdmin) 
+admin.site.register(Staff,StaffAdmin)
+admin.site.register(StaffPosition,StaffPositionAdmin) 
 admin.site.register(SuspenseOrder,SuspenseOrderAdmin) 

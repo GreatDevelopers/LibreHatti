@@ -43,13 +43,19 @@ class Department(models.Model):
     def __unicode__(self):
         return self.title
 
+class StaffPosition(models.Model):
+    position = models.CharField(max_length=50)
+    rank = models.IntegerField()
+
+    def __unicode__(self):
+        return self.position
 
 class Staff(models.Model):
     department = models.ForeignKey(Department)
     code = models.CharField(max_length=5)
     name = models.CharField(max_length=50)
     daily_ta_da = models.IntegerField(blank=True)
-    position = models.CharField(max_length=100)
+    position = models.ForeignKey(StaffPosition)
     lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
 
