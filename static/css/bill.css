@@ -110,7 +110,7 @@ table th{
 
 #account{
 	margin-left: 40px;
-	width: 80%;
+	width: 100%;
 }
 
 #account td{
@@ -149,7 +149,7 @@ table th{
 
 .vouchertable{
 	float: right;
-	width: 33%;
+	width: 50%;
 }
 
 .taxtable{
