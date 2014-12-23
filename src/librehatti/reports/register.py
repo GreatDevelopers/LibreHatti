@@ -9,6 +9,7 @@ from librehatti.reports.forms import MonthYearForm
 from librehatti.reports.forms import PaidTaxesForm
 
 from datetime import datetime
+import calendar
 
 from librehatti.catalog.request_change import request_notify
 from librehatti.catalog.models import PurchaseOrder
@@ -43,7 +44,7 @@ from django.contrib.auth.decorators import login_required
 def daily_report_result(request):
     """
     This view is used to display the daily report registers
-    """ 
+    """
     if request.method == 'POST':
         form = DailyReportForm(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
@@ -76,7 +77,7 @@ def daily_report_result(request):
                 else:
                     name =temp_value['buyer__customer__title']
                 temp_list.append(name)
-                
+
                 temp_list.append(\
                     temp_value['buyer__customer__user__customer__address__street_address'])
                 temp_list.append(\
@@ -89,6 +90,9 @@ def daily_report_result(request):
             for temp_var in purchase_order:
                 sum = sum + temp_var['bill__grand_total']
             request_status = request_notify()
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+
             return render(request,'reports/daily_report_result.html',\
             {'result':result,'sum':sum, 'mode_name':mode_name,\
             'start_date':start_date,'end_date':end_date,\
@@ -104,14 +108,14 @@ def daily_report_result(request):
         date_form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/daily_report_form.html', \
-        {'form':form,'date_form':date_form,'request':request_status}) 
+        {'form':form,'date_form':date_form,'request':request_status})
 
 
 
 @login_required
 def consultancy_funds_report(request):
     """
-    It generates the report which lists all 
+    It generates the report which lists all
     the Consultancy Funds for the Material
     selected and the in the entered Time Span.
     """
@@ -158,8 +162,10 @@ def consultancy_funds_report(request):
             category_name = Category.objects.filter(id=category).values('name')
             for value in category_name:
                 category_value = value['name']
-            
+
             request_status = request_notify()
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             return render(request, 'reports/consultancy_funds_result.html',\
              {'result':result,\
                 'start_date':start_date, 'end_date':end_date,\
@@ -176,13 +182,13 @@ def consultancy_funds_report(request):
         request_status = request_notify()
         date_form = DateRangeSelectionForm()
         return render(request,'reports/consultancy_funds_form.html', \
-        {'form':form,'date_form':date_form,'request':request_status}) 
+        {'form':form,'date_form':date_form,'request':request_status})
 
 @login_required
 def tds_report_result(request):
     """
     This view is used to display the TDS report registers
-    """ 
+    """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
         if form.is_valid():
@@ -260,9 +266,9 @@ def tds_report_result(request):
                     else:
                         heducation_tax = heducation_tax + taxvalue['tax']
                         tax_var = 0
-                temp_list.append(temp_value['amount_received'])  
+                temp_list.append(temp_value['amount_received'])
                 temp_list.append(temp_value['purchase_order__tds'])
-                temp_list.append(temp_value['grand_total'])        
+                temp_list.append(temp_value['grand_total'])
                 result.append(temp_list)
                 temp_list = []
 
@@ -275,16 +281,18 @@ def tds_report_result(request):
             values('surcharge','tax')
             for value in tax:
                 list_of_taxes.append(value)
-        
+
             for taxes_object_var in tax:
                 if taxes_object_var['surcharge'] == 1:
                     servicetax = servicetax + taxes_object_var['tax']
                 elif taxes_object_var['surcharge'] == 3:
                     Heducationcess = Heducationcess + taxes_object_var['tax']
                 else:
-                    educationcess = educationcess + taxes_object_var['tax']    
+                    educationcess = educationcess + taxes_object_var['tax']
 
             request_status = request_notify()
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             return render(request,'reports/tds_report_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -302,13 +310,13 @@ def tds_report_result(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/tds_report_form.html', \
-        {'form':form,'request':request_status}) 
+        {'form':form,'request':request_status})
 
 @login_required
 def payment_register(request):
     """
     This view is used to display the payment registers
-    """ 
+    """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
         if form.is_valid():
@@ -368,8 +376,8 @@ def payment_register(request):
                 'purchase_order__buyer__customer__address__city'])
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__company'])
-                
-                
+
+
                 material = PurchasedItem.objects.values\
                 ('item__category__name').\
                 filter(purchase_order__id =\
@@ -407,29 +415,31 @@ def payment_register(request):
                             heducation_tax = heducation_tax + taxvalue['tax']
                             tax_var = 0
                 temp_list.append(temp_value['purchase_order__tds'])
-                temp_list.append(temp_value['amount_received'])  
+                temp_list.append(temp_value['amount_received'])
                 result.append(temp_list)
                 temp_list = []
                 material_list = ''
                 billamount = billamount + temp_value['totalplusdelivery']
                 tds = tds + temp_value['purchase_order__tds']
                 amountreceived = amountreceived + temp_value['amount_received']
-            
+
             tax = TaxesApplied.objects.\
             filter(purchase_order__date_time__range=(start_date,end_date)).\
             values('surcharge','tax')
             for value in tax:
                 list_of_taxes.append(value)
-        
+
             for taxes_object_var in tax:
                 if taxes_object_var['surcharge'] == 1:
                     servicetax = servicetax + taxes_object_var['tax']
                 elif taxes_object_var['surcharge'] == 3:
                     Heducationcess = Heducationcess + taxes_object_var['tax']
                 else:
-                    educationcess = educationcess + taxes_object_var['tax']    
+                    educationcess = educationcess + taxes_object_var['tax']
 
             request_status = request_notify()
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             return render(request,'reports/payment_register_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -695,6 +705,7 @@ def servicetax_register(request):
             total_taxes_not_paid = servicenotpaid + educationnotpaid +\
             heducationnotpaid
             request_status = request_notify()
+            month = calendar.month_name[int(month)]
             return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
             'year':year, 'total':total, 'surcharge_list':surcharge_list,\
@@ -723,7 +734,7 @@ def servicetax_register(request):
 def main_register(request):
     """
     This view is used to display the Main register
-    """ 
+    """
     if request.method == 'POST':
         form = MonthYearForm(request.POST)
         if form.is_valid():
@@ -784,13 +795,14 @@ def main_register(request):
                     temp_list.append(value['admin_charges_calculated'])
                     temp_list.append(value['consultancy_asset'])
                     temp_list.append(value['development_fund'])
-                    temp_list.append(value['total'])                                                        
+                    temp_list.append(value['total'])
                     result.append(temp_list)
                     temp_list = []
+            month_name = calendar.month_name[int(month)]
             request_status = request_notify()
             return render(request,'reports/main_register_result.html',\
             {'request':request_status, 'distribution':distribution,\
-             'result':result,'month':month,'year':year})
+             'result':result,'month':month_name,'year':year})
         else:
             form = MonthYearForm(request.POST)
             request_status = request_notify()
@@ -800,7 +812,7 @@ def main_register(request):
         form = MonthYearForm()
         request_status = request_notify()
         return render(request,'reports/main_register_form.html', \
-        {'form':form,'request':request_status})         
+        {'form':form,'request':request_status})
 
 
 @login_required
@@ -949,7 +961,7 @@ def non_payment_register(request):
 def client_register(request):
     """
     This view is used to display the client register
-    """ 
+    """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
         if form.is_valid():
@@ -1020,7 +1032,7 @@ def client_register(request):
 def lab_report(request):
     """
     This view is used to display the lab reports
-    """ 
+    """
     if request.method == 'POST':
         form = ConsultancyFunds(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
