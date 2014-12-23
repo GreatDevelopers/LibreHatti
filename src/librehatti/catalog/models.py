@@ -123,7 +123,7 @@ class PurchaseOrder(models.Model):
     buyer = models.ForeignKey(User,verbose_name= _BUYER)
     is_debit = models.BooleanField(default = False, verbose_name = _IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
-    reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
+    reference_date = models.DateField(blank=True, null=True, verbose_name=_REFERENCE_DATE)
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations', default=1)
