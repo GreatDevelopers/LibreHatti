@@ -198,3 +198,8 @@ and (max-width : 800px) {
 margin-left: auto;
 margin-right: auto;
 }
+
+.change_request{
+	width: 200%;
+	margin-left: -170px;
+}

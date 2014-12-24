@@ -15,7 +15,7 @@
                     <h4>{{ messages }}</h4> 
                 </div>
                 {% endif %}
-  <div class='order-success'>
+  <div class='change_request'>
     <table>
        <tr>
           <th>Client:</th>
@@ -56,7 +56,7 @@
             <tr>
                 <td><input name="surcharge" class='form-control' value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td> 
                 <td><input name="previous_value" class='form-control' value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td> 
-                <td><input name="new_value" type="number" class='form-control' placeholder="New Value" class="new_value" id="{{value.id}}" /></td>
+                <td><input name="new_value" type="number" class='form-control new_value' placeholder="New Value" id="{{value.id}}" /></td>
             </tr>
             {% endfor %}
             <tr>

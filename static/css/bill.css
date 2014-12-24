@@ -147,14 +147,15 @@ table th{
 	padding-right: 150px;
 }
 
-.vouchertable{
+.susvouchertable{
 	float: right;
-	width: 50%;
+	width: 48%;
 }
 
 .taxtable{
 	float: right;
-	width: 18%;
+	width: 20%;
+	margin-bottom: 50px;
 }
 
 #voucher-no{
@@ -164,4 +165,9 @@ table th{
 .othertable{
 	float: right;
 	width: 20%;
+}
+
+.vouchertable{
+	float: right;
+	width: 43%;
 }

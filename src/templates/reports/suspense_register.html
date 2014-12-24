@@ -1,0 +1,80 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block title %}
+    <title>Suspense Register</title>
+{% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Printable Version"></a>
+            </div>
+    <h2><center>Suspense Clearance Register</center></h2>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Voucher No.</th>
+                    <th>Receipt No.</th>
+                    <th>Receipt Date</th>
+                    <th>Address</th>
+                    <th>Type of Material</th>
+                    <th>Amount</th>
+                    <th>Transportation</th>
+                    <th>Amount + Transportation</th>
+                    <th>Bill Amount</th>
+                    <th>Sevice Tax</th>
+                    <th>Edu. Cess</th>
+                    <th>H. Edu. Cess</th>
+                    <th>Total Amount</th>
+                    <th>TDS</th>
+                    <th>Received Amount</th>
+                    <th>D.O.T</th>
+                    <th>Mode of Payment</th>
+                    <th>DD/Cheque No.</th>
+                    <th>DD/Cheque Dated</th>
+                    <th>Clear Amount</th>
+                    <th>No. & Date</th>
+                </tr>
+                {% for value in result %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td>{{ value.3 }}{{ value.4 }}</td>
+                    <td>{{ value.5 }}</td>
+                    <td align="right">{{ value.6 }}</td>
+                    <td align="right">{{ value.7 }}</td>
+                    <td align="right">{{ value.8 }}</td>
+                    <td align="right">{{ value.9 }}</td>
+                    <td align="right">{{ value.10 }}</td>
+                    <td align="right">{{ value.11 }}</td>
+                    <td align="right">{{ value.12 }}</td>
+                    <td align="right">{{ value.13 }}</td>
+                    <td align="right">{{ value.14 }}</td>
+                    <td align="right">{{ value.15 }}</td>
+                    <td></td>
+                    <td>{{ value.16 }}</td>
+                    <td>
+                    {% if value.17 != None %}
+                    {{ value.17 }}
+                    {% endif %}
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>

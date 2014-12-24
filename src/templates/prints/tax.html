@@ -12,20 +12,15 @@
 <body>
     {% block content %}
     <div class="container">
-        <br><br><br>
         <h2>Tax Details</h2>
     </div>
     <div class="taxtable">
       <table>
         <tr>
-          <td>No. TCC Job</td>
-          <td>:</td>
-          <td>{{id}}</td>
+          <td>No. TCC Job: {{id}}</td>
         </tr>
         <tr>
-          <td>Dated</td>
-          <td>:</td>
-          <td>{{bill.purchase_order__date_time}}</td>
+          <td>Dated: {{bill.purchase_order__date_time}}</td>
         </tr>
       </table>
     </div>
@@ -41,7 +36,7 @@
           </tr>
           {% for value in details %}
           <td>
-            {{ value.surcharge__tax_name}}@{{ value.surcharge__value }}
+            {{ value.surcharge__tax_name}} @ {{ value.surcharge__value }}
         </td>
         <td>
            {{ value.tax }}
