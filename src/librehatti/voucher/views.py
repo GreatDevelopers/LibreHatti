@@ -340,10 +340,12 @@ def voucher_print(request):
     admin_charges = voucherid['admin_charges']
     category_name = voucherid['purchased_item__item__category__name']
     lab_id = voucherid['purchased_item__item__category__parent__parent']
-    emp = Staff.objects.values('name','position').filter(lab=lab_id)
+    emp = Staff.objects.values('name','position__position').filter(lab=lab_id).\
+    order_by('position__rank')
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
-    'tds','buyer__customer__title').get(id = purchase_order)
+    'tds','buyer__customer__title','buyer__customer__company').\
+    get(id = purchase_order)
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').\
     get(user = purchase_order_obj['buyer'])
@@ -354,7 +356,8 @@ def voucher_print(request):
     amount_received_inwords = num2eng(bill['amount_received'])
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
         'surcharge__value','tax').filter(purchase_order = purchase_order_id)
-    voucheridobj = VoucherId.objects.values('purchase_order_of_session').\
+    voucheridobj = VoucherId.objects.values('purchase_order_of_session',
+        'purchase_order__mode_of_payment__method').\
     filter(purchase_order=purchase_order_id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
@@ -368,11 +371,11 @@ def voucher_print(request):
             'buyer': purchase_order_obj, 'material': category_name,\
             'total_in_words': total_in_words, 'employee' : emp,\
              'header': header})
-        voucherid_obj = VoucherId.objects.values
     else:
         return render(request, 'voucher/voucher_report_suspence.html',{
             'address':address, 'cost':bill, 'inwords':amount_received_inwords,\
             'date':date, 'suspense_voucher':number,\
             'job':voucheridobj['purchase_order_of_session'],\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header,\
-            'material':category_name, 'buyer': purchase_order_obj})
+            'material':category_name, 'buyer': purchase_order_obj,
+            'method':voucheridobj['purchase_order__mode_of_payment__method']})

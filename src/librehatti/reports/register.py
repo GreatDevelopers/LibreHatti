@@ -1100,3 +1100,98 @@ def lab_report(request):
         date_form = DateRangeSelectionForm()
         return render(request,'reports/lab_report_form.html', \
         {'form':form,'date_form':date_form,'request':request_status})
+
+
+@login_required
+def suspense_register(request):
+    """
+    This view is used to display the suspense registers
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspenseorder = SuspenseOrder.objects.filter(
+                purchase_order__date_time__range=(start_date, end_date)).values(
+                'voucher', 'session_id', 'purchase_order__buyer__first_name',
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__title',
+                'purchase_order__buyer__customer__address__street_address',
+                'purchase_order__buyer__customer__address__city',
+                'purchase_order__buyer__customer__address__pin',
+                'purchase_order__buyer__customer__address__province',
+                'purchase_order__bill__total_cost', 'purchase_order__date_time',
+                'purchase_order__bill__totalplusdelivery',
+                'purchase_order__bill__grand_total', 'purchase_order__tds',
+                'purchase_order__bill__amount_received',
+                'purchase_order__mode_of_payment__method',
+                'purchase_order__cheque_dd_number', 'purchase_order',
+                'purchase_order__cheque_dd_date', 'distance_estimated')
+            rate = Surcharge.objects.values('value').get(tax_name='Transportation')
+            result = []
+            previous_order = 0
+            for value in suspenseorder:
+                temp_list = []
+                address = ''
+                amountplustrans = 0
+                temp_list.append(value['voucher'])
+                voucherid = VoucherId.objects.filter(voucher_no=value['voucher'],
+                    session_id=value['session_id']).values(
+                    'purchase_order_of_session',
+                    'purchased_item__item_id__category__name')[0]
+                temp_list.append(voucherid['purchase_order_of_session'])
+                temp_list.append(value['purchase_order__date_time'])
+                if value['purchase_order__buyer__first_name']:
+                    name = value['purchase_order__buyer__first_name'] + ' ' +\
+                    value['buyer__last_name']
+                else:
+                    name = value['purchase_order__buyer__customer__title']
+                temp_list.append(name)
+                if value['purchase_order__buyer__customer__address__pin'] != 'None':
+                    address = ', ' + \
+                    value['purchase_order__buyer__customer__address__street_address'] +\
+                    ', ' + value['purchase_order__buyer__customer__address__city'] +\
+                    '-' + value['purchase_order__buyer__customer__address__pin'] +\
+                    ', ' + value['purchase_order__buyer__customer__address__province']
+                else:
+                    address = ', ' + \
+                    value['purchase_order__buyer__customer__address__street_address'] + \
+                    ', ' + value['purchase_order__buyer__customer__address__city'] +\
+                    ', ' + value['purchase_order__buyer__customer__address__province']
+                temp_list.append(address)
+                temp_list.append(voucherid['purchased_item__item_id__category__name'])
+                caldistribute = CalculateDistribution.objects.values('total').\
+                filter(voucher_no=value['voucher'], session_id=value['session_id'])[0]
+                temp_list.append(caldistribute['total'])
+                transport = value['distance_estimated'] * rate['value']
+                temp_list.append(transport)
+                amountplustrans = caldistribute['total'] + transport
+                temp_list.append(amountplustrans)
+                if previous_order != value['purchase_order']:
+                    temp_list.append(value['purchase_order__bill__totalplusdelivery'])
+                    taxesapplied = TaxesApplied.objects.values('tax').filter(\
+                        purchase_order=value['purchase_order'])
+                    for tax_val in taxesapplied:
+                        temp_list.append(tax_val['tax'])
+                    temp_list.append(value['purchase_order__bill__grand_total'])
+                    temp_list.append(value['purchase_order__tds'])
+                    temp_list.append(value['purchase_order__bill__amount_received'])
+                    temp_list.append(value['purchase_order__mode_of_payment__method'])
+                    temp_list.append(value['purchase_order__cheque_dd_number'])
+                    temp_list.append(value['purchase_order__cheque_dd_date'])
+                result.append(temp_list)
+                previous_order = value['purchase_order']
+            request_status = request_notify()
+            return render(request,'reports/suspense_register.html',\
+            {'request':request_status, 'result':result})
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/suspense_form.html', \
+            {'form':form, 'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/suspense_form.html', \
+        {'form':form, 'request':request_status})

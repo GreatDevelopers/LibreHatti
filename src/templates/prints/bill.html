@@ -21,7 +21,6 @@
         <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
         <p> To </p>
         <p> {{purchase_order.delivery_address}} </p>
-        <p> {{buyer_name.company}}</p>
         <p>
         {% if buyer.buyer__first_name %}
         {{buyer.buyer__first_name}} {{buyer.buyer__last_name}}
@@ -33,6 +32,9 @@
             -{{address.address__pin}}
             {% endif %}
             , {{address.address__province}}</p>
+        {% if buyer_name.company %}
+        <p><b>Agency:</b> {{buyer_name.company}}</p>
+        {% endif %}
             <div><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.reference_date}}</div>
             <div><span id ="highlight"> Site: </span>{{site.delivery_address}}</div>
         </div>
