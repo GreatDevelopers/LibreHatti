@@ -15,11 +15,11 @@
         <h2>Receipt</h2>
     </div>
     <div class = "bill-left">
-        <p><span id ="highlight">Receipt No. </span>{{receiptno}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date}}</span></p>
+        <p><span id ="highlight">Receipt No. </span>{{receiptno}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date |date:"d M, Y"}}</span></p>
     </div>
     {% set flag1 = 1 %}
-    <p>Received a sum of &#8377;{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i> 
-    {% if buyer.buyer__first_name %}
+    <p>Received a sum of &#8377;{{cost.amount_received}} (Rupees  {{ amount }}only) from  <i>
+	{% if buyer.buyer__first_name %}
     {{buyer.buyer__first_name}} {{buyer.buyer__last_name}}
     {% else %}
     {{buyer.buyer__customer__title}}
