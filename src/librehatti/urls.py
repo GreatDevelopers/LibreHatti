@@ -46,5 +46,6 @@ urlpatterns = patterns('',
     url(r'^voucher/', include('librehatti.voucher.urls')),
     url(r'^receipt/', 'librehatti.prints.views.receipt'),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^programmeletter/', 'librehatti.programmeletter.views.programmeletter'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
