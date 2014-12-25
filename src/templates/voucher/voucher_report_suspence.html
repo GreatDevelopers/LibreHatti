@@ -10,17 +10,16 @@
 <body>
 	{% block content %}
     <br>
-    <div class="susvouchertable">
-      <table>
-        <tr>
-          <td>No. TCC Job/Suspence Voucher:</td>
-          <td>{{ job }}/{{suspense_voucher}}</td>
-        </tr>
-        <tr>
-          <td colspan="2">Dated : {{date}}</td>
-        </tr>
-      </table>
-    </div>
+<div class='bill-left'>
+	<span id='highlight'>
+		Receipt No./Suspence Voucher:</span>
+			{{ job }}/{{suspense_voucher}}
+	<span id='dated'>
+		<span id='highlight'>Dated:</span>
+		{{date |date:"d M, Y"}}
+	</span>
+</div>
+<br>
     <div style="clear:both;">
         </div>
     <div class="designation">Director,</div>

@@ -14,23 +14,23 @@
     <div class="container">
         <h2>Tax Details</h2>
     </div>
-    <div class="taxtable">
-      <table>
-        <tr>
-          <td>No. TCC Job: {{id}}</td>
-        </tr>
-        <tr>
-          <td>Dated: {{bill.purchase_order__date_time}}</td>
-        </tr>
-      </table>
-    </div>
+<div class='bill-left'>
+	<span id='highlight'>
+		Receipt No.</span>{{id}}
+	<span id='dated'>
+		<span id='highlight'>
+		Dated:</span>
+		{{bill.purchase_order__date_time |date:"d M, Y"}}
+	</span>
+</div>
+<br>
     <table class="data" border="1px">
         <tr>
             <tr>
                 <td>
-                	Total
+                	Charges for Testing/Checking/Designing
                 </td>
-                <td>
+                <td id='total'>
                   {{bill.totalplusdelivery}}
               </td>
           </tr>
@@ -38,7 +38,7 @@
           <td>
             {{ value.surcharge__tax_name}} @ {{ value.surcharge__value }}
         </td>
-        <td>
+        <td id='total'>
            {{ value.tax }}
        </td>
    </tr>
@@ -47,7 +47,7 @@
     <td>
        Total Amount
    </td>
-   <td>
+   <td id='total'>
       {{grand_total}}
   </td>
 </tr>

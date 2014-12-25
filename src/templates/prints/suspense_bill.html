@@ -18,7 +18,7 @@
         <h2> Bill</h2>
     </div>
     <div class = "bill-left">
-        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
+        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date|date:"d M, Y" }}</span></div>
         <p> To </p>
         <p> {{purchase_order.delivery_address}} </p>
         <p>

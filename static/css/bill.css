@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
 
 body{
+text-align: justify;
 	background-color:#fafafa;
 	font-family: 'Open Sans', 'sans-serif';
 }
@@ -22,6 +23,18 @@ body{
 	float:left;
 	margin-left: 20px;
 	margin-top: 20px;
+}
+
+.main_header{
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo{
+	height: 125px;
+	margin-top: -175px;
+	margin-bottom: 65px;
 }
 
 .container{
