@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'librehatti.bills',
     'librehatti.reports',
     'librehatti.voucher',
+    'librehatti.programmeletter',
 )
 
 SUIT_CONFIG = {
@@ -152,4 +153,5 @@ LOGGING = {
 
 AJAX_LOOKUP_CHANNELS = {
     'buyer': ('librehatti.catalog.lookups', 'BuyerLookup'),
+    'staff': ('librehatti.programmeletter.stafflookups', 'StaffLookup'),
 }
