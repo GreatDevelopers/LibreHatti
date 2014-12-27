@@ -47,27 +47,27 @@
         <br/>
         <table border='1px'>
             <tr>
-               <td colspan="3">THE DISTRIBUTION MAY BE MADE AS</td>
+               <th colspan="3">The Distribution May Be Made As</th>
            </tr>
            <tr>
-               <td rowspan="5">CREDITS</td>
-               <td>COLLEGE INCOME {{ college_income }}% </td>
+               <th rowspan="5">Credits</th>
+               <td>College Income @ {{ college_income }}% </td>
                <td  id = "pos-right">{{ calculate_distribution.college_income_calculated }}</td>
            </tr>
            <tr>
-               <td>ADMN. CHARGES {{ admin_charges }}% </td>
+               <td>Admin Charges @ {{ admin_charges }}% </td>
                <td  id = "pos-right">{{ calculate_distribution.admin_charges_calculated}}</td>
            </tr>
            <tr>
-               <td>CONSULTANCY ASST. </td>
+               <td>Consultancy Share </td>
                <td  id = "pos-right">{{ calculate_distribution.consultancy_asset }}</td>
            </tr>
            <tr>
-               <td>DEV. FUND (CONSULTANCY) </td>
+               <td>Development Funds (Consultancy) </td>
                <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
            </tr>
            <tr>
-               <td>TOTAL (&#8377;) </td>
+               <td>Total (&#8377;) </td>
                <td  id = "pos-right">{{ calculate_distribution.total }}</td>
            </tr>
        </table>
@@ -77,18 +77,18 @@
    <div>
     <table border='1px'>
         <tr>
-           <TD>NAME OF EMPLOYEES</TD>
-           <TD>DESIGNATION</TD>
+           <th>Name Of Employees</th>
+           <th>Designation</th>
        </tr>
        {% for emp in employee %}
        <tr>
-           <TD>{{emp.name}}</TD>
+           <td>{{emp.name}}</td>
            <td>{{emp.position__position}}</TD>
            </tr>
            {% endfor %}
        </table>
    </div>
-   <div id = "pos-left">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE. </div>
+   <div id = "pos-left">The Work Has Been Executed By The Persons Mentioned Above. </div>
    <br><br>
    <div id="voucher-no"><b>Accounts Clerk (Consultancy)</b>
     <div style = "text-align:right; float:right">
