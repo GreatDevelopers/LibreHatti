@@ -43,6 +43,7 @@ class StaffAdmin(admin.ModelAdmin):
     model = Staff
     list_display = ['name', 'department', 'position', 'daily_ta_da', 'lab']
     list_per_page = 20
+    search_fields = ['name']
 
 class StaffPositionAdmin(admin.ModelAdmin):
     model = StaffPosition
