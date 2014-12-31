@@ -148,6 +148,18 @@ class NonPaymentOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
     list_display = ['reference','reference_date', 'date', 'delivery_address', 'item_type']
 
+    def response_add(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['nonpaymentorder_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
+    def response_change(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['purchase_order_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)

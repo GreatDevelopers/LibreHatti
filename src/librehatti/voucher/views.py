@@ -357,7 +357,9 @@ def voucher_print(request):
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
         'surcharge__value','tax').filter(purchase_order = purchase_order_id)
     voucheridobj = VoucherId.objects.values('purchase_order_of_session',
-        'purchase_order__mode_of_payment__method').\
+        'purchase_order__mode_of_payment__method',
+        'purchase_order__cheque_dd_number','purchase_order__cheque_dd_date',
+        'purchase_order__mode_of_payment').\
     filter(purchase_order=purchase_order_id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
@@ -378,4 +380,7 @@ def voucher_print(request):
             'job':voucheridobj['purchase_order_of_session'],\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header,\
             'material':category_name, 'buyer': purchase_order_obj,
-            'method':voucheridobj['purchase_order__mode_of_payment__method']})
+            'method':voucheridobj['purchase_order__mode_of_payment__method'],
+            'method_number':voucheridobj['purchase_order__cheque_dd_number'],
+            'method_date':voucheridobj['purchase_order__cheque_dd_date'],
+            'method_id':voucheridobj['purchase_order__mode_of_payment']})
