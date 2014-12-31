@@ -68,6 +68,7 @@ $(document).ready(function(){
         $('.primary-branding').hide();
         $('#toggle-option').hide();
         $('.account').hide();
+        $('.back').hide();
     })
 });
 </script>
@@ -79,6 +80,8 @@ $(document).ready(function(){
 });
 </script>
 
+{% endblock %}
+{% block extrajs %}
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
@@ -93,6 +96,9 @@ $(document).ready(function(){
                 <header class="primary-branding">
                  <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
              </header>
+         </div>
+         <div class="back">
+             <a href={{back_link}}><img width="40px" src="{% static 'icons/Previous-128.png' %}"</a>
          </div>
          <div class ="account">
             <nav id="primary_nav_wrap">

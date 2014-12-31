@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from django.core.urlresolvers import reverse
+
 from django.http import HttpResponse
 
 from librehatti.reports.forms import DailyReportForm
@@ -105,7 +107,7 @@ def daily_report_result(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
-
+            back_link=reverse('librehatti.reports.register.daily_report_result')
             return render(request,'reports/daily_report_result.html',\
             {'result':result,'sum':sum, 'mode_name':mode_name,\
             'start_date':start_date,'end_date':end_date,\
@@ -179,6 +181,7 @@ def consultancy_funds_report(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            back_link=reverse('librehatti.reports.register.consultancy_funds_report')
             return render(request, 'reports/consultancy_funds_result.html',\
              {'result':result,\
                 'start_date':start_date, 'end_date':end_date,\
@@ -306,6 +309,7 @@ def tds_report_result(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            back_link=reverse('librehatti.reports.register.tds_report_result')
             return render(request,'reports/tds_report_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -453,6 +457,7 @@ def payment_register(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
+            back_link=reverse('librehatti.reports.register.payment_register')
             return render(request,'reports/payment_register_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -607,9 +612,10 @@ def suspense_clearance_register(request):
                 temp = []
                 address = ''
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.suspense_clearance_register')
             return render(request,'reports/suspense_clearance_result.html',\
             {'result':result, 'request':request_status,\
-            'distribution':distribution})
+            'distribution':distribution, 'back_link':back_link})
         else:
             form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
@@ -719,6 +725,7 @@ def servicetax_register(request):
             heducationnotpaid
             request_status = request_notify()
             month = calendar.month_name[int(month)]
+            back_link=reverse('librehatti.reports.register.servicetax_register')
             return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
             'year':year, 'total':total, 'surcharge_list':surcharge_list,\
@@ -817,6 +824,7 @@ def main_register(request):
                     temp_list = []
             month_name = calendar.month_name[int(month)]
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.main_register')
             return render(request,'reports/main_register_result.html',\
             {'request':request_status, 'distribution':distribution,\
              'result':result,'month':month_name,'year':year})
@@ -900,6 +908,7 @@ def proforma_register(request):
                 material_list = ''
                 name = ''
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.proforma_register')
             return render(request,'reports/proforma_register.html',\
             {'result':result, 'request':request_status,\
             'surcharge_values':surcharge_values})
@@ -961,6 +970,7 @@ def non_payment_register(request):
                 temp = []
                 address = ''
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.non_payment_register')
             return render(request,'reports/non_payment_register.html',\
             {'result':result, 'request':request_status})
         else:
@@ -1007,8 +1017,7 @@ def client_register(request):
                         name = temp_value['buyer__first_name']\
                         + temp_value['buyer__last_name']
                     else:
-                        name =\
-                        + temp_value['buyer__customer__title']
+                        name = temp_value['buyer__customer__title']
                     temp_list.append(name)
                     temp_list.append(\
                         temp_value['buyer__customer__address__street_address'])
@@ -1030,6 +1039,7 @@ def client_register(request):
                     result.append(temp_list)
                     temp_list = []
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.client_register')
             return render(request,'reports/client_register_result.html',\
             {'request':request_status,\
              'result':result})
@@ -1084,6 +1094,7 @@ def lab_report(request):
                 = (start_date,end_date),item__category=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.lab_report')
             return render(request, 'reports/lab_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
@@ -1144,7 +1155,7 @@ def suspense_register(request):
                 temp_list.append(value['purchase_order__date_time'])
                 if value['purchase_order__buyer__first_name']:
                     name = value['purchase_order__buyer__first_name'] + ' ' +\
-                    value['buyer__last_name']
+                    value['purchase_order__buyer__last_name']
                 else:
                     name = value['purchase_order__buyer__customer__title']
                 temp_list.append(name)
@@ -1183,6 +1194,7 @@ def suspense_register(request):
                 result.append(temp_list)
                 previous_order = value['purchase_order']
             request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.suspense_register')
             return render(request,'reports/suspense_register.html',\
             {'request':request_status, 'result':result})
         else:
