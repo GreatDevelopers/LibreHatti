@@ -120,7 +120,7 @@ def add_distance(request):
                 session_id = value['id']
         session = FinancialSession.objects.get(pk=session_id)
         voucher = VoucherId.objects.values('voucher_no').\
-            filter(purchase_order=purchase_order_id)
+            filter(purchase_order=purchase_order_id).distinct()
         order = PurchaseOrder.objects.get(pk=purchase_order_id)
         for voucher_no in voucher:
             suspense = SuspenseOrder(voucher=voucher_no['voucher_no'],
