@@ -313,16 +313,10 @@ def voucher_print(request):
     session = request.GET['session']
     purchase_order_id = request.GET['purchase_order']
     flag = 0
-    voucherid = VoucherId.objects.values('voucher_no').\
-    filter(purchase_order = purchase_order_id)
-    for value in voucherid:
-        try:
-            suspense_order = SuspenseOrder.objects.\
-            get(voucher = value['voucher_no'],\
-             purchase_order = purchase_order_id)
-            flag = 1
-        except:
-            continue
+    suspense_order = SuspenseOrder.objects.filter(voucher = number,
+        purchase_order = purchase_order_id)
+    if suspense_order:
+        flag = 1
     calculatedistribution = CalculateDistribution.objects.\
     values('college_income_calculated', 'admin_charges_calculated',\
     'consultancy_asset', 'development_fund', 'total').\
