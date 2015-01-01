@@ -54,10 +54,28 @@ $(document).ready(function(){
             $.ajax({
                 url: request_url,
                 datatype:'json',
-                success: function(data){  
+                success: function(data){
+                    if (data == '0'){
+                        BootstrapDialog.show({
+                    title: '<b>Error</b>',
+                    message: "No Distribution is added for selected category.<br>Please add it before you proceed",
+
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-ok',
+                        cssClass: 'btn btn-success',
+                        label: ' Ok',
+                        action: function(dialogItself){
+                            dialogItself.close();
+                        }
+                    }]
+                });
+                    }
+                    else{
                     $.each(JSON.parse(data), function(key, value){
                      $('.item').append('<option value="' + key + '">' + value +'</option>').html();
+
                  });
+                }
                 }
             })
         });
