@@ -17,7 +17,9 @@ from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
 
-from librehatti.voucher.models import VoucherId, CalculateDistribution
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import CalculateDistribution
+from librehatti.voucher.models import CategoryDistributionType
 from librehatti.voucher.models import FinancialSession
 
 from django.core.urlresolvers import reverse
@@ -83,11 +85,15 @@ This view allows filtering of item according to sub category of item.
 @login_required
 def select_item(request):
     cat_id = request.GET['cat_id']
-    products = Product.objects.filter(category = cat_id)
-    product_dict = {}
-    for product in products:
-        product_dict[product.id] = product.name
-    return HttpResponse(simplejson.dumps(product_dict))
+    try:
+        distrubtion = CategoryDistributionType.objects.get(category_id = cat_id)
+        products = Product.objects.filter(category = cat_id)
+        product_dict = {}
+        for product in products:
+            product_dict[product.id] = product.name
+        return HttpResponse(simplejson.dumps(product_dict))
+    except:
+        return HttpResponse('0')
 
 """
 This view allows filtering labs according to selected work.
