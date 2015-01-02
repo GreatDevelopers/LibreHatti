@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render
 
-from django.db.models import Sum
+from django.db.models import Sum, Max
 
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
@@ -17,7 +17,9 @@ from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
 
-from librehatti.voucher.models import VoucherId, CalculateDistribution
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import CalculateDistribution
+from librehatti.voucher.models import CategoryDistributionType
 from librehatti.voucher.models import FinancialSession
 
 from django.core.urlresolvers import reverse
@@ -83,11 +85,15 @@ This view allows filtering of item according to sub category of item.
 @login_required
 def select_item(request):
     cat_id = request.GET['cat_id']
-    products = Product.objects.filter(category = cat_id)
-    product_dict = {}
-    for product in products:
-        product_dict[product.id] = product.name
-    return HttpResponse(simplejson.dumps(product_dict))
+    try:
+        distrubtion = CategoryDistributionType.objects.get(category_id = cat_id)
+        products = Product.objects.filter(category = cat_id)
+        product_dict = {}
+        for product in products:
+            product_dict[product.id] = product.name
+        return HttpResponse(simplejson.dumps(product_dict))
+    except:
+        return HttpResponse('0')
 
 """
 This view allows filtering labs according to selected work.
@@ -279,3 +285,67 @@ def price_per_unit(request):
         return HttpResponse(product['price_per_unit'])
     else:
         return HttpResponse('fail')
+
+
+@login_required
+def nonpaymentorderofsession(request):
+    old_post = request.session.get('old_post')
+    nonpaymentorder_id = request.session.get('nonpaymentorder_id')
+    try:
+        nonpayobject = NonPaymentOrderOfSession.objects.values(
+            'non_payment_order_of_session').\
+        get(non_payment_order=nonpaymentorder_id)
+        non_pay_order_id = nonpayobject['non_payment_order_of_session']
+    except:
+        non_pay_order = NonPaymentOrder.objects.values('date', 'id').\
+        get(id=nonpaymentorder_id)
+        nonpaymentorderobj=NonPaymentOrder.objects.get(id=nonpaymentorder_id)
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= non_pay_order['date'] <= end_date:
+                session_id = value['id']
+        session = FinancialSession.objects.get(id = session_id)
+        max_id = NonPaymentOrderOfSession.objects.all().aggregate(Max('id'))
+        non_pay_order_id = 0
+        if max_id['id__max'] == None:
+            non_pay_order_id = 1
+            obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                non_payment_order_of_session=1, session=session)
+            obj.save()
+        else:
+            nonpayobj= NonPaymentOrderOfSession.objects.values(
+                'non_payment_order_of_session', 'session').get(id = max_id['id__max'])
+            if nonpayobj['session'] == session_id:
+                non_pay_order_id = nonpayobj['non_payment_order_of_session'] + 1
+                obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                    non_payment_order_of_session=non_pay_order_id,
+                    session=session)
+                obj.save()
+            else:
+                non_pay_order_id = 1
+                obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                    non_payment_order_of_session=1, session=session)
+                obj.save()
+    request.session['old_post'] = old_post
+    request.session['nonpaymentorder_id'] = nonpaymentorder_id
+    return HttpResponseRedirect(\
+        reverse("librehatti.catalog.views.nonpaymentordersuccess"))
+
+
+@login_required
+def nonpaymentordersuccess(request):
+    old_post = request.session.get('old_post')
+    nonpaymentorder_id = request.session.get('nonpaymentorder_id')
+    details = NonPaymentOrder.objects.values('buyer__first_name',
+        'buyer__last_name','buyer__customer__address__street_address',
+        'buyer__customer__title','buyer__customer__address__city').\
+    filter(id=nonpaymentorder_id)[0]
+    nonpayobject = NonPaymentOrderOfSession.objects.values(
+            'non_payment_order_of_session').\
+    get(non_payment_order=nonpaymentorder_id)
+    non_pay_order_id = nonpayobject['non_payment_order_of_session']
+    return render(request, 'catalog/nonpaymentsuccess.html', {'data':old_post,
+        'details':details, 'order_id':non_pay_order_id})
