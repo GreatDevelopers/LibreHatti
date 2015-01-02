@@ -25,14 +25,14 @@ from django.contrib.auth.decorators import login_required
 from librehatti.catalog.request_change import request_notify
 
 """
-This function calculates the session id and then initialise or increment 
+This function calculates the session id and then initialise or increment
 voucher number according to the previous purchase order's session id
 """
 @login_required
 def voucher_generate(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
-    
+
     purchase_order = PurchaseOrder.objects.values('id','date_time').\
     get(id = purchase_order_id)
     purchase_order_id = purchase_order['id']
@@ -335,7 +335,7 @@ def voucher_print(request):
     category_name = voucherid['purchased_item__item__category__name']
     lab_id = voucherid['purchased_item__item__category__parent__parent']
     emp = Staff.objects.values('name','position__position').filter(lab=lab_id).\
-    order_by('position__rank')
+    order_by('position__rank','-seniority_credits')
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
     'tds','buyer__customer__title','buyer__customer__company').\
