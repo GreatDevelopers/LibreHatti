@@ -56,6 +56,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=50)
     daily_ta_da = models.IntegerField(blank=True)
     position = models.ForeignKey(StaffPosition)
+    seniority_credits = models.IntegerField()
     lab = models.ForeignKey(Category)
     email =models.EmailField(blank=True)
 
