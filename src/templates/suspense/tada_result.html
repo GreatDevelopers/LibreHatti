@@ -1,4 +1,5 @@
 {% extends 'bill_base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,22 +7,22 @@
     {% block title%}
     <title>TA/DA bill</title>
     {% endblock %}
+    {% load set_var %}
 </head>
 <body>
     {% block content %}
     <div class = "container">
-        <h1>T.A./D.A  FORM FOR CONSULTANCY WORK</h1>
+        <h2>T.A/D.A  Form For Consultancy Work</h2>
     </div>
         <div class="voucher-no">{% for a in purchase_order_object%}
         <b>Name of the Department/Client:</b> {{ a.buyer_id__first_name }} {{ a.buyer_id__last_name }}
         {% endfor %}
         <div style = "text-align:right; float:right">
-            {% for a in purchase_order_id %}
-            <b>Vide Receipt No.</b>:{{ a }}
-            {% endfor %}
+            <b>Vide Receipt No.</b>:{{ purchase_order_id }}
         </div>
     </div>
     <div class="date"><b>Amount claimed from Department/Client:</b> &#8377;{{tada.tada_amount}}
+        <br>
         <div style = "text-align:right; float:right">
             <b>Date:</b> {{ tada.date_of_generation }}
         </div>
@@ -76,14 +77,14 @@
                 {% endfor %}
                 <tr>
                     <td colspan = "13"><center><b>Total</b></center></td>
-                <td><b>{{ total}}</b></td>
+                <td><b>{{ tada_amount }}</b></td>
                 <td></td>
                 </tr>
             </tbody>
         </table>
-        <div id="transportfooter">TA.DA Bill have been entered on page...... of TA/DA & Other Charges register. Head other charges
+        <div id="transportfooter">T.A/D.A Bill have been entered on page...... of T.A/D.A & Other Charges register. Head other charges
             <div id="transportbill">Dean T&C</div>
-            <div>Passed for payment for &#8377; {{ total }}/-</div>
+            <div>Passed for payment for &#8377; {{ tada_amount }}/-</div>
             <div>({{ words }}only).</div>
         </div>
         <div class='footertable'>
@@ -91,7 +92,7 @@
                 <tr>
                     <td>Dean T&amp;C</td>
                     <td>Supdt. Accounts</td>
-                    <td>DEAN Testing and Consultancy</td>
+                    <td>Director</td>
                 </tr>
             </table>
         </div>
