@@ -335,7 +335,7 @@ def voucher_print(request):
     category_name = voucherid['purchased_item__item__category__name']
     lab_id = voucherid['purchased_item__item__category__parent__parent']
     emp = Staff.objects.values('name','position__position').filter(lab=lab_id).\
-    order_by('position__rank','-seniority_credits')
+    filter(always_included=1).order_by('position__rank','-seniority_credits')
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
     'tds','buyer__customer__title','buyer__customer__company').\
