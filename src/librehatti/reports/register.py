@@ -21,6 +21,7 @@ from librehatti.catalog.models import Category
 from librehatti.catalog.models import TaxesApplied
 from librehatti.catalog.models import Surcharge
 from librehatti.catalog.models import NonPaymentOrder
+from librehatti.catalog.models import NonPaymentOrderOfSession
 from librehatti.catalog.models import ModeOfPayment
 
 from librehatti.suspense.models import SuspenseOrder
@@ -934,7 +935,7 @@ def non_payment_register(request):
         if form.is_valid():
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
-            non_payment_order = NonPaymentOrder.objects.values(\
+            non_payment_order = NonPaymentOrder.objects.values('id',\
                 'buyer__first_name', 'buyer__last_name', 'date',\
                 'buyer__customer__title', 'buyer__customer__address__pin',\
                 'buyer__customer__address__street_address',\
@@ -945,6 +946,10 @@ def non_payment_register(request):
             temp = []
             result = []
             for order in non_payment_order:
+                nonpaymentorderofsession = NonPaymentOrderOfSession.objects.\
+                values('non_payment_order_of_session').\
+                get(non_payment_order=order['id'])
+                temp.append(nonpaymentorderofsession['non_payment_order_of_session'])
                 temp.append(order['date'])
                 if order['buyer__first_name']:
                     name = order['buyer__first_name'] + ' ' +\

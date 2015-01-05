@@ -14,6 +14,7 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Surcharge
 from librehatti.catalog.models import HeaderFooter
+from librehatti.catalog.models import SpecialCategories
 from librehatti.catalog.request_change import request_notify
 
 from librehatti.suspense.models import SuspenseClearance
@@ -56,6 +57,16 @@ def add_distance(request):
     parents = []
     field_work = []
     suspense = 0
+    generate_voucher = 1
+    first_item = PurchasedItem.objects.values('item__category__id').\
+    filter(purchase_order=purchase_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('voucher').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['voucher'] == False:
+            generate_voucher = 0
     for id in range(0,10):
         try:
             items.append(old_post['purchaseditem_set-' + str(id) + '-item'])
@@ -67,13 +78,15 @@ def add_distance(request):
               'item__category__parent__name','id').filter(item=item).\
               filter(purchase_order=purchase_order_id))
     for parent in parents:
+        if generate_voucher == 0:
+            break
         for category in parent:
             value = category['item__category__parent__name']
             key = category['id']
             if value.split(':')[1].upper() == 'FIELD WORK' or \
                 value.split(':')[1].upper() == ' FIELD WORK':
                 field_work.append(key)
-    if field_work:
+    if field_work and generate_voucher == 1:
         if request.method == 'POST':
             request.session['old_post'] = old_post
             request.session['purchase_order_id'] = purchase_order_id
@@ -107,7 +120,7 @@ def add_distance(request):
                     suspense_obj.save()
             return render(request,'suspense/add_distance.html',{
                 'voucher':voucher, 'purchase_order_id': purchase_order_id})
-    elif old_post['mode_of_payment'] != '1':
+    elif old_post['mode_of_payment'] != '1' and generate_voucher == 1:
         purchase_order = PurchaseOrder.objects.values('date_time').\
             get(id=purchase_order_id)
         purchase_order_date = purchase_order['date_time']
