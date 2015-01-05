@@ -19,6 +19,11 @@
     <div class="list-results">
         <h2>Voucher</h2>
         <div class="shrinked-table">
+        {% if message != 'Voucher' %}
+        <div class="alert alert-danger">
+            <center>{{ message }}</center>
+        </div>
+        {% else %}
          <table border="1px">
             <tr>
                 <th>Purchase Order</th> 
@@ -42,6 +47,7 @@
             {% endfor %}
             {% endif %}
         </table>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

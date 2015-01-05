@@ -20,7 +20,7 @@
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
-                    <th>S.No.</th>
+                    <th>Order No.</th>
                     <th>Dated</th>
                     <th>Name</th>
                     <th>Address</th>
@@ -31,14 +31,14 @@
                 </tr>
                 {% for value in result %}
                 <tr>
-                    <td>{{ forloop.counter}}</td>
-                    <td>{{ value.0 }}</td>
+                    <td><center>{{ value.0 }}</center></td>
                     <td>{{ value.1 }}</td>
                     <td>{{ value.2 }}</td>
                     <td>{{ value.3 }}</td>
                     <td>{{ value.4 }}</td>
                     <td>{{ value.5 }}</td>
                     <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
                 </tr>
                 {% endfor %}
        </table>

@@ -12,39 +12,39 @@
 <body>
     {% block content %}
     <div class = "bill-left">
-        <div><span id ="highlight">STC No: </span>{{ stc_no.stc_no }} </div>
-        <div><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }} </div>
+        <span id ="highlight">STC No: </span>{{ stc_no.stc_no }}
+        <span id = "dated"><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }}</span>
     </div>
     <div class="container">
         <h2>Proforma Bill</h2>
     </div>
     <div class = "bill-left">
-        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date }}</span></div>
+        <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{quoted_order_id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date|date:"d M, Y" }}</span></div>
         <p> To </p>
-        <p> {{purchase_order.delivery_address}} </p>
-        <p>
+        <div>
         {% if buyer.buyer__first_name %}
         {{buyer.buyer__first_name}} {{buyer.buyer__last_name}}
         {% else %}
         {{buyer.buyer__customer__title}}
-        {% endif %}
-        , {{address.address__street_address}}, {{address.address__city}}
+        {% endif %},</div>
+        <div>{{address.address__street_address}}, </div>
+        <div>{{address.address__city}}
             {% if address.address__pin != 'None' and address.address__pin != '' %}
-            -{{address.address__pin}},
-            {% endif %}
-            , {{address.address__province}}</p>
+            -{{address.address__pin}}
+            {% endif %},</div>
+        <div>{{address.address__province}}</div>
         {% if buyer_name.company %}
-        <p>Agency: {{buyer_name.company}}</p>
+        <div><b>Agency:</b> {{buyer_name.company}}</div>
         {% endif %}
-            <div><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.reference_date}}</div>
-            <div><span id ="highlight"> Site: </span>{{site.delivery_address}}</div>
+            <p><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.reference_date}}</p>
+            <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
         </div>
         <table class="data" border="1px">
             <tr>
-                <th>Charges For Following</th>
-                <th>Description</th>
-                <th>Per</th>
-                <th>Total</th>
+                <th>Item/Services</th>
+                <th>Quantity/Unit</th>
+                <th>Rate &#8377;</th>
+                <th>Total &#8377;</th>
             </tr>
             <tr>
                 {% for bill_values in bill_values %}

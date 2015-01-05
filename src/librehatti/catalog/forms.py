@@ -8,6 +8,7 @@ from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import PurchaseOrder, ModeOfPayment
 from librehatti.catalog.models import TaxesApplied
+from librehatti.catalog.models import SpecialCategories
 
 from librehatti.voucher.models import FinancialSession
 
@@ -55,7 +56,8 @@ class ItemSelectForm(forms.ModelForm):
 
     item = forms.ModelChoiceField\
     (queryset = Product.objects.all(), label = _ITEM)
-    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',))
+    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',),
+        ('3', 'Other Services',))
     type = forms.ChoiceField(choices=CHOICES, label = _TYPE)
     price_per_unit = forms.IntegerField()
 
@@ -90,3 +92,14 @@ class ChangeRequestForm(forms.Form):
        super(ChangeRequestForm, self).__init__(*args, **kwargs)
        self.fields['purchase_order'].widget.attrs={'class':'form-control'}
        self.fields['session'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+
+class SpecialCategoriesForm(forms.ModelForm):
+
+    class Meta:
+        model = SpecialCategories
+        exclude = ()
+
+    category = forms.ModelChoiceField(queryset=Category.objects.\
+            filter(parent__parent__parent__isnull=True).\
+            filter(parent__isnull=False).filter(parent__parent__isnull=False))

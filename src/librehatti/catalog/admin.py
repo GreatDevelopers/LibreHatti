@@ -11,6 +11,7 @@ from django.contrib.auth.admin import *
 from django.contrib.admin.models import LogEntry
 
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
+from librehatti.catalog.forms import SpecialCategoriesForm
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.core.urlresolvers import reverse
@@ -160,6 +161,12 @@ class NonPaymentOrderAdmin(AjaxSelectAdmin):
         return HttpResponseRedirect(reverse\
             ("librehatti.catalog.views.nonpaymentorderofsession"))
 
+
+class SpecialCategoriesAdmin(admin.ModelAdmin):
+    model = SpecialCategories
+    form = SpecialCategoriesForm
+    list_display = ['category', 'voucher', 'tax']
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
@@ -167,3 +174,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(NonPaymentOrder, NonPaymentOrderAdmin)
 admin.site.register(Unit)
+admin.site.register(SpecialCategories, SpecialCategoriesAdmin)

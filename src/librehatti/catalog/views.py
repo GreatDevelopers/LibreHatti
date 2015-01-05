@@ -102,10 +102,11 @@ This view allows filtering labs according to selected work.
 def select_type(request):
     type_id = request.GET['type_id']
     if type_id == '1':
-        work = 'Lab Work'
+        categories = Category.objects.filter(Q(name__icontains='Lab Work'))
+    elif type_id == '2':
+        categories = Category.objects.filter(Q(name__icontains='Field Work'))
     else:
-        work = 'Field Work'
-    categories = Category.objects.filter(Q(name__icontains=work))
+        categories = Category.objects.filter(parent__name='Other Services')
     category_dict = {}
     for category in categories:
         category_dict[category.id] = category.name.split(':')[0]
@@ -120,6 +121,16 @@ and save those values in database.
 def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
+    generate_tax = 1
+    first_item = PurchasedItem.objects.values('item__category__id').\
+    filter(purchase_order=purchase_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('tax').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['tax'] == False:
+            generate_tax = 0
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
     purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').\
     get(id=purchase_order_id)
@@ -145,15 +156,20 @@ def bill_cal(request):
         surcharge_id = value['id']
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
-        if surcharge_tax == 1:
+        if surcharge_tax == 1 and generate_tax == 1:
             taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = TaxesApplied(purchase_order = purchase_order,
             surcharge = surcharge_obj, tax = taxes)
             taxes_applied.save()
-    taxes_applied_obj = TaxesApplied.objects.\
-    filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
-    tax_total = taxes_applied_obj['tax__sum']
+    taxes_applied_temp = TaxesApplied.objects.\
+    filter(purchase_order=purchase_order_id)
+    if taxes_applied_temp:
+        taxes_applied_obj = TaxesApplied.objects.\
+        filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
+        tax_total = taxes_applied_obj['tax__sum']
+    else:
+        tax_total = 0
     grand_total = price_total + tax_total + delivery_charges
     amount_received = grand_total - purchase_order_obj['tds']
     bill = Bill(purchase_order = purchase_order, total_cost = price_total,

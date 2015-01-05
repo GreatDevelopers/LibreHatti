@@ -290,3 +290,9 @@ class NonPaymentOrderOfSession(models.Model):
     non_payment_order_of_session = models.IntegerField()
     from librehatti.voucher.models import FinancialSession
     session = models.ForeignKey(FinancialSession)
+
+
+class SpecialCategories(models.Model):
+    category = models.ForeignKey(Category)
+    voucher = models.BooleanField(default=False)
+    tax = models.BooleanField(default=False)
