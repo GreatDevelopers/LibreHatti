@@ -6,6 +6,9 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.request_change import request_notify
 
+from librehatti.bills.models import QuotedOrderofSession
+from librehatti.bills.models import QuotedItem
+
 from django.contrib.auth.decorators import login_required
 
 from librehatti.voucher.models import VoucherId
@@ -21,9 +24,12 @@ def history(request):
         'purchase_order_of_session','purchase_order__mode_of_payment__method',\
         'purchase_order__date_time').\
         filter(purchase_order__buyer__id=user_id)
+    proformas = QuotedOrderofSession.objects.values('quoted_order',\
+        'quoted_order_session', 'quoted_order__date_time').\
+        filter(quoted_order__buyer__id=user_id)
     request_status = request_notify()
     return render(request,'reports/purchase_history.html',\
-        {'purchases':purchases,'request':request_status})
+        {'purchases':purchases,'proformas':proformas,'request':request_status})
 
 @login_required
 def details(request):
@@ -36,3 +42,16 @@ def details(request):
     request_status = request_notify()
     return render(request,'reports/history_details.html',\
         {'purchases':purchases,'order_id':order_id,'request':request_status})
+
+
+@login_required
+def proforma_details(request):
+    """
+    displays the details of the purchase of the client
+    """
+    
+    order_id = request.GET['order_id']
+    quotes = QuotedItem.objects.filter(quoted_order__id=order_id)
+    request_status = request_notify()
+    return render(request,'reports/proforma_details.html',\
+        {'quotes':quotes,'order_id':order_id,'request':request_status})

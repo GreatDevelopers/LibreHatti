@@ -98,7 +98,9 @@ $(document).ready(function(){
              </header>
          </div>
          <div class="back">
+            {% if back_link %}
              <a href={{back_link}}><img width="40px" src="{% static 'icons/Previous-128.png' %}"</a>
+            {% endif %}
          </div>
          <div class ="account">
             <nav id="primary_nav_wrap">
