@@ -28,7 +28,7 @@
         <tr>
             <tr>
                 <td>
-                	Charges for Testing/Checking/Designing
+                	Charges for Testing/Checking/Designs
                 </td>
                 <td id='total'>
                   {{bill.totalplusdelivery}}
@@ -36,7 +36,7 @@
           </tr>
           {% for value in details %}
           <td>
-            {{ value.surcharge__tax_name}} @ {{ value.surcharge__value }}
+            {{ value.surcharge__tax_name}} @ {{ value.surcharge__value }}%
         </td>
         <td id='total'>
            {{ value.tax }}

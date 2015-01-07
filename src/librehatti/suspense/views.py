@@ -299,19 +299,19 @@ def with_transport(request):
     lab_staff_name_list = []
     for lab_staff_value in lab_staff_list:
         lab_temp = []
-        lab_staff_obj = Staff.objects.values('name', 'position').\
+        lab_staff_obj = Staff.objects.values('name', 'position__position').\
         filter(code=lab_staff_value)[0]
         lab_temp.append(lab_staff_obj['name'])
-        lab_temp.append(lab_staff_obj['position'])
+        lab_temp.append(lab_staff_obj['position__position'])
         lab_staff_name_list.append(lab_temp)
     field_staff_list = suspenseclearance['field_testing_staff'].split(',')
     field_staff_name_list = []
     for field_staff_value in field_staff_list:
         field_temp = []
-        field_staff_obj = Staff.objects.values('name','position').\
+        field_staff_obj = Staff.objects.values('name','position__position').\
         filter(code=field_staff_value)[0]
         field_temp.append(field_staff_obj['name'])
-        field_temp.append(field_staff_obj['position'])
+        field_temp.append(field_staff_obj['position__position'])
         field_staff_name_list.append(field_temp)
     ta_da_total = tada_amount
     voucherid = VoucherId.objects.values('ratio', 'purchase_order_of_session',\
