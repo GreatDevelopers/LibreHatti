@@ -152,10 +152,6 @@ class SearchResult(View):
                             value)
                     for temp_result in obj:
                         self.temp.append(temp_result)
-                # if self.temp[-1] in buyer_id:
-                #     pass
-                # else:
-                #     buyer_id.append(self.temp[-1])
                 self.results.append(self.temp)
         if 'Order' in request.GET:
             if 'suspense' in request.GET:
