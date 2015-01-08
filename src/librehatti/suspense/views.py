@@ -427,6 +427,16 @@ def quoted_add_distance(request):
     parents = []
     field_work = []
     suspense = 0
+    generate_voucher = 1
+    first_item = QuotedItem.objects.values('item__category__id').\
+    filter(quoted_order=quoted_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('voucher').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['voucher'] == False:
+            generate_voucher = 0
     for id in range(0,10):
         try:
             items.append(old_post['quoteditem_set-' + str(id) + '-item'])
@@ -438,13 +448,15 @@ def quoted_add_distance(request):
               'item__category__parent__name','id').filter(item=item).\
               filter(quoted_order=quoted_order_id))
     for parent in parents:
+        if generate_voucher == 0:
+            break
         for category in parent:
             value = category['item__category__parent__name']
             key = category['id']
             if value.split(':')[1].upper() == 'FIELD WORK' or \
                 value.split(':')[1].upper() == ' FIELD WORK':
                 field_work.append(key)
-    if field_work:
+    if field_work and generate_voucher == 1:
         if request.method == 'POST':
             request.session['old_post'] = old_post
             request.session['quoted_order_id'] = quoted_order_id
