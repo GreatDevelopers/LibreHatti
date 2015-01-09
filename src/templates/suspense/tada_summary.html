@@ -65,6 +65,21 @@
                 </tr>
             </tbody>
         </table>
+                 <div class='order-success-options'>
+    <table>
+       <tr>
+           <td></td>
+           <form id="myForm" action="{% url 'librehatti.suspense.views.tada_bill' %}" method="post">
+           {% csrf_token %}
+           <td><input type="submit" class="btn btn-info btn-large" value="Generate Bill" name='button1' id='button1' /></td>
+             <input type="hidden" value="{{ session }}" name="session" />
+             <input type="hidden" value="{{ voucher }}" name="voucher" />
+           </form>
+           <td></td>
+       </tr>
+           </table>
+       </div>
+
    </div>
    {% endblock %}
 </body>
