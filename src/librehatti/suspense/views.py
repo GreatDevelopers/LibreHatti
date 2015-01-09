@@ -719,7 +719,8 @@ def tada_result(request):
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
                 'list_staff':list_staff, 'words':num2eng(int(tada_total)),\
-                'total':tada_total, 'request':request_status})
+                'total':tada_total, 'request':request_status,'session':session,\
+                'voucher':voucher})
         else:    
             session = request.POST['session']
             voucher = request.POST['voucher_no']
@@ -926,3 +927,104 @@ def summary_page(request):
     content = get_template('suspense/summary.html')
     html_content = content.render(temp)
     return HttpResponse(html_content)
+
+
+'''
+This view generate the transport bill
+'''
+def transport_bill(request):
+    if request.method == 'POST':
+        session = request.POST['session']
+        voucher = request.POST['voucher']
+        transport_object = Transport.objects.\
+        filter(session_id = session,voucher_no = voucher).\
+        values('vehicle_id__vehicle_no','kilometer',\
+        'rate','date_of_generation','date','total')
+        list_of_kilometer = []
+        list_of_date = []
+        total_list = []
+        for value in transport_object:
+            vehicle = value['vehicle_id__vehicle_no']
+            rate = int(value['rate'])
+            date_of_generation = value['date_of_generation']
+            kilometer = str(value['kilometer'])[1:-1].encode("ascii",'ignore')
+            kilometer_var = kilometer.split(',')
+            for temp_var in kilometer_var:
+                temp_value = temp_var.replace("u'","")
+                temp_value = temp_value.replace("'","")
+                list_of_kilometer.append(temp_value)
+            date  = str(value['date'])[1:-1]
+            date_var = date.split(',')
+            for temp_var in date_var:
+                temp_value = temp_var.replace("u'","")
+                temp_value = temp_value.replace("'","")
+                list_of_date.append(temp_value)
+            distance = 0
+            for temp_var in list_of_kilometer:
+                total = rate * int(temp_var)
+                total_list.append(int(total))
+            total_amount = value['total']
+        zip_data = zip(list_of_date,list_of_kilometer,total_list)
+        header = HeaderFooter.objects.values('header').get(is_active=True)
+        request_status = request_notify()   
+        return render(request, 'suspense/transport_bill.html',
+               {'words':num2eng(total_amount), 'total':total, 'rate':rate,\
+               'date':date, "voucherid":voucher,\
+               'total_amount':total_amount,'zip_data':zip_data,\
+               'date_of_generation':date_of_generation,\
+               'vehicle':vehicle,'request':request_status,'header':header,\
+               })
+
+
+'''
+This view generate the T.A/D.A bill
+'''
+def tada_bill(request):
+    if request.method == 'POST':
+        session = request.POST['session']
+        #return HttpResponse(session)
+        voucher = request.POST['voucher']
+        tada_object = TaDa.objects.values\
+        ('date_of_generation','departure_time_from_tcc',\
+        'departure_time_from_site','arrival_time_at_tcc',\
+        'arrival_time_at_site','tada_amount','start_test_date','end_test_date',\
+        'source_site','testing_site','testing_staff').\
+        get(voucher_no=voucher, session = session)
+        start_test_date = tada_object['start_test_date']
+        tada_amount = tada_object['tada_amount']
+        end_test_date = tada_object['end_test_date']
+        testing_staff = tada_object['testing_staff']
+        testing_staff_list = testing_staff.split(',')
+        list_staff = []
+        if start_test_date == end_test_date:
+            days = 1
+        else:
+            no_of_days = (end_test_date - start_test_date).days
+            days = no_of_days + 1
+        for testing_staff_var in testing_staff_list:
+            testing_staff_details = Staff.objects.filter(\
+                code=testing_staff_var).values('name','daily_ta_da')
+            for tada_val in testing_staff_details:
+                tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
+            list_staff.append(testing_staff_details)
+
+    voucher_obj = VoucherId.objects.values('purchase_order_of_session').\
+    get(session=session,voucher_no=voucher)
+    #return HttpResponse(voucher_obj)
+    purchase_order_var = 0
+    purchase_order_var = voucher_obj['purchase_order_of_session']
+    #return HttpResponse(purchase_order_var)
+    purchase_order_object = PurchaseOrder.objects.\
+    filter(voucherid__purchase_order_of_session = purchase_order_var).values(\
+        'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title')
+    #return HttpResponse(purchase_order_object)
+    header = HeaderFooter.objects.values('header').get(is_active=True)
+    #footer = HeaderFooter.objects.values('footer').get(is_active=True)
+    request_status = request_notify()   
+    return render(request, 'suspense/tada_result.html',{\
+    'purchase_order_object':purchase_order_object,
+    'tada':tada_object, 'purchase_order_id':purchase_order_var,\
+     'words':num2eng(int(tada_amount)),'tada_amount':tada_amount,\
+     'request':request_status,'session':session,\
+    'voucher':voucher,'list_staff':list_staff,'header':header,\
+    })    

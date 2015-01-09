@@ -33,7 +33,7 @@ text-align: justify;
 
 .logo{
 	height: 125px;
-	margin-top: -185px;
+	margin-top: -195px;
 	margin-bottom: 100px;
 }
 
@@ -95,6 +95,14 @@ table th{
     position: relative;
 }
 
+.tadafootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
+    width: 50%;
+    position: relative;
+}
+
 .footertable table td{
 	font-weight: bold;
 	padding-top: 5px;
@@ -138,15 +146,18 @@ table th{
 	width:70%;
 }
 
-#transportbill{
+#tadabill{
 	text-align:right;
 	margin-top: 40px;
+	margin-right: 14%;
 }
 
 #transportfooter{
+	text-align: center;
 	padding-top:25px;
 	margin-left: auto;
-	margin-right: auto; 
+	margin-right: auto;
+	margin-top: 2%; 
 	width:100%
 }
 
@@ -183,4 +194,19 @@ table th{
 .vouchertable{
 	float: right;
 	width: 43%;
+}
+
+#transportbill{
+	text-align:right;
+	margin-top: 60px;
+	margin-right: 1%;
+}
+
+#transportbase{
+	text-align: justify;
+    margin-top: 6%;
+}
+
+#tadafield{
+	text-align: left;
 }
