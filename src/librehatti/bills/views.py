@@ -9,6 +9,7 @@ from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import Surcharge
+from librehatti.catalog.models import SpecialCategories
 from librehatti.catalog.request_change import request_notify
 
 from librehatti.bills.models import QuotedTaxesApplied
@@ -46,6 +47,16 @@ and save those values in database.
 def quoted_bill_cal(request):
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
+    generate_tax = 1
+    first_item = QuotedItem.objects.values('item__category__id').\
+    filter(quoted_order=quoted_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('tax').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['tax'] == False:
+            generate_tax = 0
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
     quoted_order_obj = QuotedOrder.objects.values('total_discount').\
     get(id=quoted_order_id)
@@ -71,15 +82,20 @@ def quoted_bill_cal(request):
         surcharge_id = value['id']
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
-        if surcharge_tax == 1:
+        if surcharge_tax == 1 and generate_tax == 1:
             taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = QuotedTaxesApplied(quoted_order=quoted_order,
             surcharge=surcharge_obj, tax=taxes)
             taxes_applied.save()
-    taxes_applied_obj = QuotedTaxesApplied.objects.\
-    filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
-    tax_total = taxes_applied_obj['tax__sum']
+    taxes_applied_temp = QuotedTaxesApplied.objects.\
+    filter(quoted_order=quoted_order_id)
+    if taxes_applied_temp:
+        taxes_applied_obj = QuotedTaxesApplied.objects.\
+        filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
+        tax_total = taxes_applied_obj['tax__sum']
+    else:
+        tax_total = 0
     grand_total = price_total + tax_total + delivery_charges
     amount_received = grand_total
     bill = QuotedBill(quoted_order=quoted_order, total_cost=price_total,
