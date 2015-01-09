@@ -11,6 +11,7 @@ from django.contrib.auth.admin import *
 from django.contrib.admin.models import LogEntry
 
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
+from librehatti.catalog.forms import SpecialCategoriesForm
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.core.urlresolvers import reverse
@@ -148,6 +149,24 @@ class NonPaymentOrderAdmin(AjaxSelectAdmin):
     form = BuyerForm
     list_display = ['reference','reference_date', 'date', 'delivery_address', 'item_type']
 
+    def response_add(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['nonpaymentorder_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
+    def response_change(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['purchase_order_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
+
+class SpecialCategoriesAdmin(admin.ModelAdmin):
+    model = SpecialCategories
+    form = SpecialCategoriesForm
+    list_display = ['category', 'voucher', 'tax']
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
 admin.site.register(PurchaseOrder, PurchaseOrderAdmin)
@@ -155,3 +174,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(NonPaymentOrder, NonPaymentOrderAdmin)
 admin.site.register(Unit)
+admin.site.register(SpecialCategories, SpecialCategoriesAdmin)

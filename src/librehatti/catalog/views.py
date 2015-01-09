@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render
 
-from django.db.models import Sum
+from django.db.models import Sum, Max
 
 from librehatti.catalog.models import Category
 from librehatti.catalog.models import Product
@@ -17,7 +17,9 @@ from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder
 
-from librehatti.voucher.models import VoucherId, CalculateDistribution
+from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import CalculateDistribution
+from librehatti.voucher.models import CategoryDistributionType
 from librehatti.voucher.models import FinancialSession
 
 from django.core.urlresolvers import reverse
@@ -83,11 +85,15 @@ This view allows filtering of item according to sub category of item.
 @login_required
 def select_item(request):
     cat_id = request.GET['cat_id']
-    products = Product.objects.filter(category = cat_id)
-    product_dict = {}
-    for product in products:
-        product_dict[product.id] = product.name
-    return HttpResponse(simplejson.dumps(product_dict))
+    try:
+        distrubtion = CategoryDistributionType.objects.get(category_id = cat_id)
+        products = Product.objects.filter(category = cat_id)
+        product_dict = {}
+        for product in products:
+            product_dict[product.id] = product.name
+        return HttpResponse(simplejson.dumps(product_dict))
+    except:
+        return HttpResponse('0')
 
 """
 This view allows filtering labs according to selected work.
@@ -96,10 +102,11 @@ This view allows filtering labs according to selected work.
 def select_type(request):
     type_id = request.GET['type_id']
     if type_id == '1':
-        work = 'Lab Work'
+        categories = Category.objects.filter(Q(name__icontains='Lab Work'))
+    elif type_id == '2':
+        categories = Category.objects.filter(Q(name__icontains='Field Work'))
     else:
-        work = 'Field Work'
-    categories = Category.objects.filter(Q(name__icontains=work))
+        categories = Category.objects.filter(parent__name='Other Services')
     category_dict = {}
     for category in categories:
         category_dict[category.id] = category.name.split(':')[0]
@@ -114,6 +121,16 @@ and save those values in database.
 def bill_cal(request):
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
+    generate_tax = 1
+    first_item = PurchasedItem.objects.values('item__category__id').\
+    filter(purchase_order=purchase_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('tax').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['tax'] == False:
+            generate_tax = 0
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
     purchase_order_obj = PurchaseOrder.objects.values('total_discount','tds').\
     get(id=purchase_order_id)
@@ -139,15 +156,20 @@ def bill_cal(request):
         surcharge_id = value['id']
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
-        if surcharge_tax == 1:
+        if surcharge_tax == 1 and generate_tax == 1:
             taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = TaxesApplied(purchase_order = purchase_order,
             surcharge = surcharge_obj, tax = taxes)
             taxes_applied.save()
-    taxes_applied_obj = TaxesApplied.objects.\
-    filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
-    tax_total = taxes_applied_obj['tax__sum']
+    taxes_applied_temp = TaxesApplied.objects.\
+    filter(purchase_order=purchase_order_id)
+    if taxes_applied_temp:
+        taxes_applied_obj = TaxesApplied.objects.\
+        filter(purchase_order=purchase_order_id).aggregate(Sum('tax'))
+        tax_total = taxes_applied_obj['tax__sum']
+    else:
+        tax_total = 0
     grand_total = price_total + tax_total + delivery_charges
     amount_received = grand_total - purchase_order_obj['tds']
     bill = Bill(purchase_order = purchase_order, total_cost = price_total,
@@ -279,3 +301,67 @@ def price_per_unit(request):
         return HttpResponse(product['price_per_unit'])
     else:
         return HttpResponse('fail')
+
+
+@login_required
+def nonpaymentorderofsession(request):
+    old_post = request.session.get('old_post')
+    nonpaymentorder_id = request.session.get('nonpaymentorder_id')
+    try:
+        nonpayobject = NonPaymentOrderOfSession.objects.values(
+            'non_payment_order_of_session').\
+        get(non_payment_order=nonpaymentorder_id)
+        non_pay_order_id = nonpayobject['non_payment_order_of_session']
+    except:
+        non_pay_order = NonPaymentOrder.objects.values('date', 'id').\
+        get(id=nonpaymentorder_id)
+        nonpaymentorderobj=NonPaymentOrder.objects.get(id=nonpaymentorder_id)
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= non_pay_order['date'] <= end_date:
+                session_id = value['id']
+        session = FinancialSession.objects.get(id = session_id)
+        max_id = NonPaymentOrderOfSession.objects.all().aggregate(Max('id'))
+        non_pay_order_id = 0
+        if max_id['id__max'] == None:
+            non_pay_order_id = 1
+            obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                non_payment_order_of_session=1, session=session)
+            obj.save()
+        else:
+            nonpayobj= NonPaymentOrderOfSession.objects.values(
+                'non_payment_order_of_session', 'session').get(id = max_id['id__max'])
+            if nonpayobj['session'] == session_id:
+                non_pay_order_id = nonpayobj['non_payment_order_of_session'] + 1
+                obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                    non_payment_order_of_session=non_pay_order_id,
+                    session=session)
+                obj.save()
+            else:
+                non_pay_order_id = 1
+                obj = NonPaymentOrderOfSession(non_payment_order=nonpaymentorderobj,
+                    non_payment_order_of_session=1, session=session)
+                obj.save()
+    request.session['old_post'] = old_post
+    request.session['nonpaymentorder_id'] = nonpaymentorder_id
+    return HttpResponseRedirect(\
+        reverse("librehatti.catalog.views.nonpaymentordersuccess"))
+
+
+@login_required
+def nonpaymentordersuccess(request):
+    old_post = request.session.get('old_post')
+    nonpaymentorder_id = request.session.get('nonpaymentorder_id')
+    details = NonPaymentOrder.objects.values('buyer__first_name',
+        'buyer__last_name','buyer__customer__address__street_address',
+        'buyer__customer__title','buyer__customer__address__city').\
+    filter(id=nonpaymentorder_id)[0]
+    nonpayobject = NonPaymentOrderOfSession.objects.values(
+            'non_payment_order_of_session').\
+    get(non_payment_order=nonpaymentorder_id)
+    non_pay_order_id = nonpayobject['non_payment_order_of_session']
+    return render(request, 'catalog/nonpaymentsuccess.html', {'data':old_post,
+        'details':details, 'order_id':non_pay_order_id})

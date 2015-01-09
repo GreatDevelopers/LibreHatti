@@ -1,0 +1,47 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% block title %}
+   <title>Order added</title>
+   {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='order-success'>
+   <p class='success-message'>Order added <span class='green'>
+      Successfully</span></p>
+      <table>
+      <tr>
+           <th>Non Payment Order Id:</th>
+           <td>{{order_id}}</td>
+       </tr>
+       <tr>
+          <th>Client:</th>
+          <td>{{details.buyer__first_name}}&nbsp;{{details.buyer__last_name}}
+           &nbsp;{{details.buyer__customer__title}}</td>
+       </tr>
+       <tr>
+           <th>Address:</th>
+           <td>{{details.buyer__customer__address__street_address}}&nbsp;
+              {{details.buyer__customer__address__city}}</td>
+          </tr>
+          <tr>
+           <th>Letter:</th>
+           <td>No. {{data.reference}} dated {{data.reference_date}}</td>
+       </tr>
+       <tr>
+           <th>Site:</th>
+           <td>{{data.delivery_address}}</td>
+       </tr>
+       <tr>
+           <th>Material:</th>
+           <td>{{data.item_type}}</td>
+       </tr>
+   </table>
+   </div>
+   {% endblock %}
+</body>
+</html>

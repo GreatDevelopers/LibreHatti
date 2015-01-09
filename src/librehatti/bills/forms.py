@@ -52,7 +52,8 @@ class ItemSelectForm(forms.ModelForm):
 
     item = forms.ModelChoiceField\
     (queryset = Product.objects.all(), label = _ITEM)
-    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',))
+    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',),
+        ('3', 'Other Services',))
     type = forms.ChoiceField(choices=CHOICES, label = _TYPE)
     price_per_unit = forms.IntegerField()
 

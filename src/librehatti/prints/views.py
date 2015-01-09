@@ -153,6 +153,8 @@ def bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
+    if taxes_applied_obj['id__count'] == 0:
+        tax_count = tax_count + 1
     buyer = purchase_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').get(user=buyer)
@@ -436,6 +438,8 @@ def quoted_bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
+    if taxes_applied_obj['id__count'] == 0:
+        tax_count = tax_count + 1
     buyer = quoted_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
     'address__city', 'address__pin', 'address__province').get(user=buyer)

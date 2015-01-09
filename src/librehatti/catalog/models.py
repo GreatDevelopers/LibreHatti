@@ -283,3 +283,16 @@ class NonPaymentOrder(models.Model):
     item_type = models.CharField(max_length = 200)
     def __unicode__(self):
         return '%s' % (self.id)
+
+
+class NonPaymentOrderOfSession(models.Model):
+    non_payment_order = models.ForeignKey(NonPaymentOrder)
+    non_payment_order_of_session = models.IntegerField()
+    from librehatti.voucher.models import FinancialSession
+    session = models.ForeignKey(FinancialSession)
+
+
+class SpecialCategories(models.Model):
+    category = models.ForeignKey(Category)
+    voucher = models.BooleanField(default=False)
+    tax = models.BooleanField(default=False)

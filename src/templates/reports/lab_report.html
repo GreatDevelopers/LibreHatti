@@ -37,7 +37,7 @@
       {% for val in purchase_item %}
       <tr>
         <td>{{ forloop.counter }}</td>
-        <td> {{val.purchase_order_id}}</td>
+        <td> {{val.voucherid__purchase_order_of_session}}</td>
         <td> {{val.purchase_order__date_time}}</td>
         <td> 
         {% if val.purchase_order__buyer__first_name != '' %}
