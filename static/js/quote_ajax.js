@@ -5,7 +5,7 @@ $(document).ready(function(){
     $('.parent_category').attr('disabled', 'disabled');
     $('.item').attr('disabled', 'disabled');
     
-    $('.type').click(function(){
+    $('body').on('change','select.type',function(){
         parent_category_id = this.id.split("-")[1]
         $('#id_quoteditem_set-' + parent_category_id +'-parent_category').empty();
         $('#id_quoteditem_set-' + parent_category_id +'-parent_category').removeAttr('disabled');
@@ -24,7 +24,7 @@ $(document).ready(function(){
         });
     })
 
-    $('.parent_category').click(function(){
+    $('body').on('click','select.parent_category',function(){
         sub_category_id = this.id.split("-")[1]
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').empty();
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').removeAttr('disabled');
@@ -43,7 +43,7 @@ $(document).ready(function(){
         });
     })
     
-    $('.sub_category').click(function(){
+    $('body').on('click','select.sub_category',function(){
         item_id = this.id.split("-")[1]
         $('#id_quoteditem_set-'+ item_id + '-item').empty();
         $('#id_quoteditem_set-'+ item_id + '-item').removeAttr('disabled');
