@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('.price_per_unit').attr('readonly', 'readonly');
-    $('.item').click(function(){
+    $('body').on('.item').click(function(){
         field_id = this.id.split("-")[1]
         item_id = $(this).val();
         reverse('librehatti.catalog.views.price_per_unit', function(url) {
