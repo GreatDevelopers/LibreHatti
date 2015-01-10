@@ -25,7 +25,7 @@ class QuotedItemInline(admin.StackedInline):
     form = ItemSelectForm
     fields = ['type', 'parent_category', 'sub_category','item',\
     'price_per_unit','qty']
-    extra = 30
+    extra = 2
 
 
 """
