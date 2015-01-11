@@ -270,7 +270,7 @@ def change_request(request):
                 filter(purchase_order_of_session=purchase_order_of_session)[0]
             session_data = FinancialSession.objects.values(\
                 'session_start_date','session_end_date').get(id=session)
-            messages = "Purchase Order" + " : " + purchase_order_of_session +\
+            messages = "Order" + " : " + purchase_order_of_session +\
             " and Session" + " : " + str(session_data['session_start_date']) +\
             ":" + str(session_data['session_end_date'])
             request_status = request_notify()    
