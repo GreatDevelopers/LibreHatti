@@ -40,7 +40,6 @@ are filtered in dropdown.
 class ItemSelectForm(forms.ModelForm):
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/ajax.js',
             'js/price_per_unit.js'
         )
@@ -80,7 +79,6 @@ class BuyerForm(forms.ModelForm):
     class Media:
         js = (
             'js/hide_add_buyer.js',
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/cheque_dd_date.js',
             )
 

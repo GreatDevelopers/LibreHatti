@@ -25,7 +25,6 @@ class BuyerForm(forms.ModelForm):
     class Media:
         js = (
             'js/hide_add_buyer.js',
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/cheque_dd_date.js',
             )
 
@@ -36,7 +35,6 @@ This form lets user to select item after categories are filtered in dropdown.
 class ItemSelectForm(forms.ModelForm):
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/quote_ajax.js',
             'js/quoted_price_per_unit.js',
         )
