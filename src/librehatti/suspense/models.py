@@ -12,6 +12,9 @@ import simplejson
 
 
 class SuspenseOrder(models.Model):
+    """
+    Stores order with over head costs.
+    """
     voucher = models.IntegerField()
     purchase_order = models.ForeignKey(PurchaseOrder)
     session_id = models.ForeignKey(FinancialSession)
@@ -22,6 +25,9 @@ class SuspenseOrder(models.Model):
 
 
 class SuspenseClearance(models.Model):
+    """
+    Stores clearance of suspense orders.
+    """
     session = models.ForeignKey(FinancialSession)
     voucher_no = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True)
@@ -36,6 +42,9 @@ class SuspenseClearance(models.Model):
 
 
 class Department(models.Model):
+    """
+    Stores department.
+    """
     title = models.CharField(max_length=50)
     address = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, blank=True)
@@ -44,6 +53,9 @@ class Department(models.Model):
         return self.title
 
 class StaffPosition(models.Model):
+    """
+    Stores position of staff.
+    """
     position = models.CharField(max_length=50)
     rank = models.IntegerField()
 
@@ -51,6 +63,9 @@ class StaffPosition(models.Model):
         return self.position
 
 class Staff(models.Model):
+    """
+    Stores staff and map it with position.
+    """
     department = models.ForeignKey(Department)
     code = models.CharField(max_length=5)
     name = models.CharField(max_length=50)
@@ -69,6 +84,9 @@ class Staff(models.Model):
 
 
 class TaDa(models.Model):
+    """
+    Model to store transport and daily allowances.
+    """
     date_of_generation = models.DateField(default=datetime.date.today)
     voucher_no = models.IntegerField()
     session = models.IntegerField()
@@ -87,6 +105,9 @@ class TaDa(models.Model):
 
 
 class QuotedSuspenseOrder(models.Model):
+    """
+    Stores Quoted suspense order.
+    """
     quoted_order = models.ForeignKey('bills.QuotedOrder')
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
@@ -95,6 +116,9 @@ class QuotedSuspenseOrder(models.Model):
 
 
 class Vehicle(models.Model):
+    """
+    Stores vehicle details.
+    """
     vehicle_id = models.CharField(max_length=20)
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
@@ -103,6 +127,9 @@ class Vehicle(models.Model):
 
 
 class Transport(models.Model):
+    """
+    Stores Tranportation deiials.
+    """
     vehicle = models.ForeignKey(Vehicle)
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)

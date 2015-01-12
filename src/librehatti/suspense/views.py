@@ -51,6 +51,14 @@ from django.template import Context
 
 @login_required
 def add_distance(request):
+    """
+    Handles add suspense order. It also decide whether order suspense or not.
+    argument: Http Request
+    return: Check for type of order and redirects accordingly.
+        Types of Order:
+            1.Main
+            2.Suspense 
+    """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     items = []
@@ -152,6 +160,12 @@ def add_distance(request):
 
 @login_required
 def clearance_search(request):
+    """
+    Handles clrearance search.
+    argument: Http Request
+    returns: Objects for entered session and order.
+    It also render form for Clearance.
+    """
     if request.method == 'POST':
         sessiondata = SessionSelectForm(request.POST)
         if sessiondata.is_valid():
@@ -194,6 +208,11 @@ def clearance_search(request):
 
 @login_required
 def clearance_result(request):
+    """
+    Handles result of clearance search.
+    argument: Http Request
+    returns: Success page with required values.
+    """
     if request.method == 'POST':
         form = Clearance_form(request.POST)
         if form.is_valid():
@@ -270,6 +289,11 @@ def clearance_result(request):
 
 @login_required
 def with_transport(request):
+    """
+    Handles bills with transport.
+    argument: Http Request
+    returns: Render bill without transport.
+    """
     number = request.GET['voucher_no']
     session = request.GET['session']
     financialsession = FinancialSession.objects.values('id').\
@@ -354,6 +378,11 @@ def with_transport(request):
 
 @login_required
 def other_charges(request):
+    """
+    Handles other charges of bills.
+    argument: Http Request
+    returns: render detail page of other charges.
+    """
     number = request.GET['voucher_no']
     session = request.GET['session']
     financialsession = FinancialSession.objects.values('id').\
@@ -405,12 +434,20 @@ def other_charges(request):
 
 @login_required
 def suspense(request):
-        form = SuspenseForm()   
-        return render(request,'suspense/form.html',{'form':form})
+    """
+    argument: Http Request
+    returns: render SuspenseForm.
+    """
+    form = SuspenseForm()   
+    return render(request,'suspense/form.html',{'form':form})
 
 
 @login_required
 def save_charges(request):
+    """
+    Saves estimated charges for suspense order.
+    argument: Http Request
+    """
     if request.method=='GET':
         option=request.GET['Purchase_order']
         charges=request.GET['distance']
@@ -421,6 +458,11 @@ def save_charges(request):
 
 @login_required
 def quoted_add_distance(request):
+    """
+    Handles estimated distance for quoted order.
+    argument: Http Request
+    returns: check type of quoted order and redirects accordingly.
+    """
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
     items = []
@@ -474,6 +516,11 @@ def quoted_add_distance(request):
 
 @login_required
 def quoted_save_distance(request):
+    """
+    Saves estimated distance for quoted order.
+    argument: Http Request
+    returns:None
+    """
     quoted_order_id = request.GET['quoted_order_id']
     distance = request.GET['distance']
     quoted_order = QuotedOrder.objects.get(pk=quoted_order_id)
@@ -488,11 +535,12 @@ def quoted_save_distance(request):
     return HttpResponse('')
 
 
-"""
-This view is used to 
-"""
 @login_required
 def save_distance(request):
+    """
+    Saves distance for general order.
+    argument: Http Request
+    """
     voucher_no = request.GET['voucher']
     distance = request.GET['distance']
     purchase_order_id = request.GET['order']
@@ -522,16 +570,23 @@ def save_distance(request):
 
 @login_required
 def transport(request):
+    """
+    Transportation Forms.
+    argument: Http Request
+    returns: Render transportation form.
+    """
     form = TransportForm1()
     temp = {'TransportForm':form}
     return render (request, 'suspense/transportform.html', temp)
 
 
-"""
-This view is used to render the Transport Bill 
-"""
 @login_required
 def sessionselect(request):
+    """
+    Session selection method.
+    argument: Http Request
+    returns: Render Transport Form with values of selected order.
+    """
     if request.method == 'POST':
         form = SessionSelectForm(request.POST)
         if form.is_valid():
@@ -571,11 +626,13 @@ def sessionselect(request):
         return render(request, 'voucher/sessionselect.html', temp)
 
 
-"""
-This view is used to generate the Transport Bill 
-"""
 @login_required
 def transportbill(request):
+    """
+    This view is used to generate the Transport Bill 
+    argument: Http Request
+    returns: Render Transport Bill.
+    """
     if request.method == 'POST':
         form = TransportForm1(request.POST)
         if form.is_valid():
@@ -659,11 +716,14 @@ def transportbill(request):
         return render(request, 'voucher/sessionselect.html', temp)
 
 
-"""
-This view is used to generate TADA bill
-"""
 @login_required
 def tada_result(request):
+    """
+    This view is used to generate TADA bill
+    argument: Http Request 
+    returns: Render TA/DA Form for selected order if order is valid. If order 
+    is not valid, it returns error on same page.
+    """
     if request.method == 'POST':
         form = TaDaForm(request.POST)
         if form.is_valid():
@@ -760,12 +820,13 @@ def tada_result(request):
         return HttpResponseRedirect(\
             reverse('librehatti.suspense.views.tada_order_session'))
 
-
-"""
-This view is used to render the Allowance 
-"""
 @login_required
 def tada_order_session(request):
+    """
+    This view is used to render the Allowance form.
+    argument: Http Request
+    returns: Render Session Select form.
+    """
     if request.method == 'POST':
         form = SessionSelectForm(request.POST)
         if form.is_valid():
@@ -804,54 +865,56 @@ def tada_order_session(request):
             'form':form,'request':request_status})
 
 
-"""
-This view is used to fetch and display the data required to mark the
-suspense order as cleared 
-"""
 @login_required
 def mark_clear(request):
-        suspense_obj = SuspenseOrder.objects.filter().\
-        values('voucher','session_id')
-        suspense_cleared = SuspenseOrder.objects.filter().values(\
-            'voucher','session_id','is_cleared')
-        list_clearance = []
-        list_user = []
-        list_details = []
-        for suspense_var in suspense_obj:
-            SuspenseClearance_object = SuspenseClearance.objects.\
-            filter(session = suspense_var['session_id']).\
-            filter(voucher_no=suspense_var['voucher']).values('session',\
-                'voucher_no', 'lab_testing_staff','field_testing_staff',\
-                'test_date','clear_date')
-            if SuspenseClearance_object:
-                list_clearance.append(SuspenseClearance_object)
-        for temp_var in list_clearance:
-            for voucher_var in temp_var:
-                voucher_object = VoucherId.objects.\
-                filter(voucher_no=voucher_var['voucher_no']).\
-                filter(session_id=voucher_var['session']).\
-                values('purchase_order__buyer__first_name',\
-                    'purchase_order__buyer__last_name',\
-                    'purchase_order__buyer__customer__address__street_address',\
-                    'purchase_order__buyer__customer__address__city',\
-                    'purchase_order__buyer__customer__address__province')
-                if voucher_object:
-                    list_user.append(voucher_object)
-        list_user_clr = zip (list_user,list_clearance)
-        for suspense_var,voucher_var in list_user_clr:
-            final_list = zip(suspense_var,voucher_var)
-            list_details.append(final_list)    
-        request_status = request_notify()
-        return render(request, 'suspense/mark_suspense_clear.html', {
-            'listed':list_details, 'suspense_cleared':suspense_cleared,\
-            'request':request_status})
+    """
+    This view is used to fetch and display the data required to mark the
+    suspense order as cleared.
+    returns: render page with list of suspense voucher with their status and options.
+    """
+    suspense_obj = SuspenseOrder.objects.filter().\
+    values('voucher','session_id')
+    suspense_cleared = SuspenseOrder.objects.filter().values(\
+        'voucher','session_id','is_cleared')
+    list_clearance = []
+    list_user = []
+    list_details = []
+    for suspense_var in suspense_obj:
+        SuspenseClearance_object = SuspenseClearance.objects.\
+        filter(session = suspense_var['session_id']).\
+        filter(voucher_no=suspense_var['voucher']).values('session',\
+            'voucher_no', 'lab_testing_staff','field_testing_staff',\
+            'test_date','clear_date')
+        if SuspenseClearance_object:
+            list_clearance.append(SuspenseClearance_object)
+    for temp_var in list_clearance:
+        for voucher_var in temp_var:
+            voucher_object = VoucherId.objects.\
+            filter(voucher_no=voucher_var['voucher_no']).\
+            filter(session_id=voucher_var['session']).\
+            values('purchase_order__buyer__first_name',\
+                'purchase_order__buyer__last_name',\
+                'purchase_order__buyer__customer__address__street_address',\
+                'purchase_order__buyer__customer__address__city',\
+                'purchase_order__buyer__customer__address__province')
+            if voucher_object:
+                list_user.append(voucher_object)
+    list_user_clr = zip (list_user,list_clearance)
+    for suspense_var,voucher_var in list_user_clr:
+        final_list = zip(suspense_var,voucher_var)
+        list_details.append(final_list)    
+    request_status = request_notify()
+    return render(request, 'suspense/mark_suspense_clear.html', {
+        'listed':list_details, 'suspense_cleared':suspense_cleared,\
+        'request':request_status})
 
 
-"""
-This view updates the status of given order as cleared
-"""
 @login_required
 def mark_status(request):
+    """
+    This view updates the status of given order as cleared.
+    argument: Http Request
+    """
     voucher = request.GET.get('voucher_no')
     session = request.GET.get('session')
     try:
@@ -913,6 +976,11 @@ def mark_status(request):
 
 @login_required
 def clearance_options(request):
+    """
+    Clearance options.
+    argument: Http Request
+    returns: Render page with clearance options.
+    """
     voucher_no = request.GET.get('voucher_no')
     session_id = request.GET.get('session')
     financialsession = FinancialSession.objects.values('session_start_date',\
@@ -937,6 +1005,9 @@ def clearance_options(request):
         'request':request_status, 'with_transport':with_transport})
 
 def summary_page(request):
+    """
+    View to handle summary page.
+    """
     session_id = request.GET['session']
     voucher_no = request.GET['voucher_no']
     tada = TaDa.objects.values('tada_amount','start_test_date','end_test_date',
@@ -954,10 +1025,12 @@ def summary_page(request):
     return HttpResponse(html_content)
 
 
-'''
-This view generate the transport bill
-'''
 def transport_bill(request):
+    """
+    This view generate the transport bill
+    Argument: Http Request.
+    returns: Render transport bill fo selected bill.
+    """
     if request.method == 'POST':
         session = request.POST['session']
         voucher = request.POST['voucher']
@@ -1001,10 +1074,12 @@ def transport_bill(request):
                })
 
 
-'''
-This view generate the T.A/D.A bill
-'''
 def tada_bill(request):
+    """
+    This view generate the T.A/D.A bill.
+    argument: Http Request
+    return: Render TA/DA bill for selected order.
+    """
     if request.method == 'POST':
         session = request.POST['session']
         #return HttpResponse(session)
@@ -1052,4 +1127,4 @@ def tada_bill(request):
      'words':num2eng(int(tada_amount)),'tada_amount':tada_amount,\
      'request':request_status,'session':session,\
     'voucher':voucher,'list_staff':list_staff,'header':header,\
-    })    
+    })

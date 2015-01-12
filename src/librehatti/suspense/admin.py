@@ -17,6 +17,9 @@ admin.site.register(Transport)
 admin.site.register(Vehicle)
 
 class SuspenseOrderAdmin(admin.ModelAdmin):
+    """
+    Admin classes for Suspense Order.
+    """
     exclude = ('is_active',)
     list_display = ['id', 'buyer', 'delivery_address', 'date_time','is_active']
     model = SuspenseOrder
@@ -39,6 +42,9 @@ class SuspenseOrderAdmin(admin.ModelAdmin):
 
 
 class StaffAdmin(admin.ModelAdmin):
+    """
+    Admin class for staff handling.
+    """
     form = StaffForm
     model = Staff
     list_filter = ['department','position','lab']
@@ -48,6 +54,9 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 class StaffPositionAdmin(admin.ModelAdmin):
+    """
+    Admin section for handling of position of staff.
+    """
     model = StaffPosition
     list_display = ['position', 'rank']
 

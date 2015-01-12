@@ -16,6 +16,9 @@ from librehatti.config import _TYPE
 
 
 class BuyerForm(forms.ModelForm):
+    """
+    Buyer form for quoted order.
+    """
     buyer = make_ajax_field(QuotedOrder, 'buyer', 'buyer')
 
     class Meta:
@@ -29,10 +32,10 @@ class BuyerForm(forms.ModelForm):
             )
 
 
-"""
-This form lets user to select item after categories are filtered in dropdown.
-"""
 class ItemSelectForm(forms.ModelForm):
+    """
+    This form lets user to select item after categories are filtered in dropdown.
+    """
     class Media:
         js = (
             'js/quote_ajax.js',
@@ -67,6 +70,9 @@ class ItemSelectForm(forms.ModelForm):
 
 
 class SelectNoteForm(forms.Form):
+    """
+    Form for selection of note line while adding note line.
+    """
     quoted_order = forms.CharField(widget=forms.\
         TextInput(attrs={'readonly':'readonly'}))
     note_line = forms.ModelMultipleChoiceField(widget=forms.\
