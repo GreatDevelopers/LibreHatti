@@ -22,6 +22,9 @@ from django.core.urlresolvers import reverse
 
 
 class NoteLine(models.Model):
+    """
+    Model to handle storage of note line.
+    """
     note = models.CharField(max_length=400)
     is_permanent = models.BooleanField(default=False)
 
@@ -33,6 +36,9 @@ class NoteLine(models.Model):
 
 
 class QuotedOrder(models.Model):
+    """
+    Handles ORM of quoted order.
+    """
     buyer = models.ForeignKey(User,verbose_name=_BUYER)
     is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
@@ -50,6 +56,10 @@ class QuotedOrder(models.Model):
 
 
 class QuotedItem(models.Model):
+    """
+    Model to handle mapping of quoted items with quited order.
+    It also handles mapping of quoted items with products.
+    """
     quoted_order = models.ForeignKey(QuotedOrder)
     price_per_unit = models.IntegerField()
     qty = models.IntegerField(verbose_name=_QTY)
@@ -65,12 +75,18 @@ class QuotedItem(models.Model):
 
 
 class QuotedOrderofSession(models.Model):
+    """
+    Handles financial session management of quoted order.
+    """
     quoted_order = models.ForeignKey(QuotedOrder)
     quoted_order_session = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
 
 
 class QuotedTaxesApplied(models.Model):
+    """
+    Handles taxes applied on qouted order.
+    """
     quoted_order = models.ForeignKey(QuotedOrder)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
@@ -79,6 +95,9 @@ class QuotedTaxesApplied(models.Model):
 
 
 class QuotedBill(models.Model):
+    """
+    Handles bills of quoted order.
+    """
     quoted_order = models.ForeignKey(QuotedOrder)
     delivery_charges = models.IntegerField()
     total_cost = models.IntegerField()
@@ -89,5 +108,8 @@ class QuotedBill(models.Model):
 
 
 class QuotedOrderNote(models.Model):
+    """
+    Maps quoted order with note lines.
+    """
     quoted_order = models.ForeignKey(QuotedOrder)
     note = models.CharField(max_length=400)

@@ -39,12 +39,14 @@ from django.core.urlresolvers import reverse
 from librehatti.voucher.models import FinancialSession
 
 
-"""
-This view calculate taxes on quoted order, bill data
-and save those values in database.
-"""
 @login_required
 def quoted_bill_cal(request):
+    """
+    This view calculate taxes on quoted order, bill data
+    and save those values in database.
+    argument: Http request
+    returns: Redirects to select option page after calculatations. 
+    """
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
     generate_tax = 1
@@ -110,6 +112,11 @@ def quoted_bill_cal(request):
 
 @login_required
 def quoted_order_added_success(request):
+    """
+    View to hadle success of addition of quoted order.
+    argument: Http request
+    returns: Render success page after adding quoted order.
+    """
     quoted_order_id = request.session.get('quoted_order_id')
     details = QuotedOrder.objects.values('buyer__first_name',\
         'buyer__last_name', 'buyer__customer__address__street_address',\
@@ -121,6 +128,11 @@ def quoted_order_added_success(request):
 
 @login_required
 def select_note(request):
+    """
+    View to handle selection of extra notes while adding quoted order.
+    argument: Http Request.
+    returns: Render form for selection of note form.
+    """
     quoted_order_id = request.session.get('quoted_order_id')
     form = SelectNoteForm(initial={'quoted_order':quoted_order_id})
     request_status = request_notify()
@@ -130,6 +142,11 @@ def select_note(request):
 
 @login_required
 def select_note_save(request):
+    """
+    View to hanle saving of selected note in quoted order.
+    argument: Http Request
+    returns: Redirects to success page after selection of note line.
+    """
     if request.method == 'POST':
         form = SelectNoteForm(request.POST)
         if form.is_valid():
@@ -157,6 +174,10 @@ def select_note_save(request):
 
 @login_required
 def new_note_line(request):
+    """
+    It hanles addition of new condition line.
+    argument: Http Request
+    """
     note_line = request.GET['note_line']
     obj = NoteLine(note=note_line)
     obj.save()
@@ -165,6 +186,10 @@ def new_note_line(request):
 
 @login_required
 def delete_note(request):
+    """
+    It handles deletion of condition line.
+    argument: Http Request.
+    """
     delete_note = request.GET['delete_note']
     delete_note_id = delete_note.split(',')
     for id in delete_note_id:
@@ -174,6 +199,11 @@ def delete_note(request):
 
 @login_required
 def quoted_order_of_session(request):
+    """
+    It handles financial sessions for quoted order.
+    argument: Http Request
+    returns: Redirects to function for adding quoted add distance.
+    """
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
