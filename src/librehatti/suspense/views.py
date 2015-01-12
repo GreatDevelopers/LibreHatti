@@ -91,9 +91,13 @@ def add_distance(request):
         for category in parent:
             value = category['item__category__parent__name']
             key = category['id']
-            if value.split(':')[1].upper() == 'FIELD WORK' or \
-                value.split(':')[1].upper() == ' FIELD WORK':
-                field_work.append(key)
+            temp_val = value.split(':')
+            try:
+                if temp_val[1].upper() == 'FIELD WORK' or \
+                    temp_val[1].upper() == ' FIELD WORK':
+                    field_work.append(key)
+            except:
+                pass
     if field_work and generate_voucher == 1:
         if request.method == 'POST':
             request.session['old_post'] = old_post

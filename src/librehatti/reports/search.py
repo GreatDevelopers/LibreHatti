@@ -203,6 +203,8 @@ class SearchResult(View):
         Converting data from dict to list form so that it can be render 
         easily.
         Calling template to be rendered.
+        Argument:Http Request
+        Return:Render Search Result
         """
         generated_data_list = []
         for data in self.details:

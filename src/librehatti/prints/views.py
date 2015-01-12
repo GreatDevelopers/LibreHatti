@@ -47,9 +47,11 @@ from librehatti.config import _YOUR_LETTER_No
 @login_required
 def bill(request):
     """
-    It generates a Bill for the user which lists all the items,
+    It generates a bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
+    Argument:Http Request
+    Return:Render Bill
     """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.filter(id=id)
@@ -189,6 +191,8 @@ def suspense_bill(request):
     It generates a Suspense Bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
+    Argument:Http Request
+    Return:Render Suspense Bill
     """
     id = request.GET['order_id']
     voucherid = VoucherId.objects.filter(purchase_order=id).\
@@ -288,9 +292,11 @@ def suspense_bill(request):
 @login_required
 def tax(request):
     """
-    It generates a tax details bill for the user which lists all the taxes,
+    It generates a tax details for the user which lists all the taxes,
     their applied tax value , calculated tax and generates the total of the
     applied taxes.
+    Argument:Http Request
+    Return:Render Tax Details
     """
     id = request.GET['order_id']
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
@@ -313,6 +319,8 @@ def tax(request):
 def receipt(request):
     """
     It generates a Receipt.
+    Argument:Http Request
+    Return:Render Receipt
     """
     id = request.GET['order_id']
     voucherid = VoucherId.objects.values('purchase_order_of_session').\
@@ -341,6 +349,13 @@ def receipt(request):
 
 @login_required
 def quoted_bill(request):
+    """
+    It generates a proforma bill for the user which lists all the items,
+    their quantity , subtotal and then adds it to the surcharges
+    and generates the Grand total.
+    Argument:Http Request
+    Return:Render Proforma Bill
+    """
     quoted_order_id = request.GET['quoted_order_id']
     quoted_order = QuotedOrder.objects.filter(id=quoted_order_id)
     quoted_item = QuotedItem.objects.filter(quoted_order=quoted_order_id).\

@@ -8,6 +8,11 @@ from librehatti.config import _PARENT_CATEGORY
 from librehatti.config import _SUB_CATEGORY
 
 class AssignDistributionForm(forms.ModelForm):
+    """
+    This form lets user to select material after parent categories
+    are filtered in dropdown and then distribution type of that material
+    can be added.
+    """
     
     class Media:
         js = (
