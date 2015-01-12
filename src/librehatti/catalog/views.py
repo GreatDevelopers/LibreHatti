@@ -36,6 +36,8 @@ def index(request):
     """
     It lists all the products and the user can select any product
     and can add them to the cart.
+    Argument: Http Request
+    Return: Render index.html
     """
     """error = {}
     categorylist = Category.objects.all()
@@ -57,12 +59,15 @@ def index(request):
     return render(request,'index.html',{'request':request_status})
 
 
-"""
-This view allows filtering of sub category according to parent
-category of item.
-"""
+
 @login_required
 def select_sub_category(request):
+    """
+    This view allows filtering of sub category according to parent
+    category of item.
+    Argument: Http Request
+    Return: Filtered sub categories
+    """
     parent_category = request.GET['cat_id']
     sub_categories = Category.objects.filter(parent=parent_category)
     sub_category_dict = {}
@@ -71,19 +76,24 @@ def select_sub_category(request):
     return HttpResponse(simplejson.dumps(sub_category_dict))
 
 
-'''
-This function reverse looks up the urls for the AJAX Requests
-'''
 def jsreverse(request):
+    """
+    This function reverse looks up the urls for the AJAX Requests
+    Argument: Http Request
+    Return: Dunamic Url
+    """
     string_to_reverse = request.GET['string'];
     return HttpResponse(reverse(string_to_reverse))
 
 
-"""
-This view allows filtering of item according to sub category of item.
-"""
+
 @login_required
 def select_item(request):
+    """
+    This view allows filtering of item according to sub category of item.
+    Argument: Http Request
+    Return: Filtered Products
+    """
     cat_id = request.GET['cat_id']
     try:
         distrubtion = CategoryDistributionType.objects.get(category_id = cat_id)
@@ -95,11 +105,14 @@ def select_item(request):
     except:
         return HttpResponse('0')
 
-"""
-This view allows filtering labs according to selected work.
-"""
+
 @login_required
 def select_type(request):
+    """
+    This view allows filtering labs according to selected work.
+    Argument: Http Request
+    Return: Filtered Labs
+    """
     type_id = request.GET['type_id']
     if type_id == '1':
         categories = Category.objects.filter(Q(name__icontains='Lab Work'))
@@ -113,12 +126,14 @@ def select_type(request):
     return HttpResponse(simplejson.dumps(category_dict))         
 
 
-"""
-This view calculate taxes on purchased order, bill data
-and save those values in database.
-"""
 @login_required
 def bill_cal(request):
+    """
+    This view calculate taxes on purchased order, bill data
+    and save those values in database.
+    Argument: Http Request
+    Return: Redirect to Order Success Page
+    """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     generate_tax = 1
@@ -185,6 +200,11 @@ def bill_cal(request):
 
 @login_required
 def list_products(request):
+    """
+    This view lists products for viewing purpose
+    Argument: Http Request
+    Return: Render catalog page
+    """ 
     all_products = Product.objects.all()
     all_categories=Category.objects.all().order_by('name')
     products_dict = { }
@@ -204,6 +224,9 @@ def list_products(request):
 
 @login_required
 def previous_value(request):
+    """
+
+    """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     Bill.objects.filter(purchase_order=purchase_order_id).delete()
@@ -224,6 +247,11 @@ def previous_value(request):
 
 @login_required
 def order_added_success(request):
+    """
+    This view displays Success message after order is successfully added
+    Argument: Http Request
+    Return: Render order_added_success.html
+    """
     order_id = request.session.get('purchase_order_id')
     details = PurchaseOrder.objects.values('buyer__first_name',\
         'buyer__last_name','buyer__customer__address__street_address',\
@@ -242,6 +270,11 @@ def order_added_success(request):
 
 @login_required
 def change_request(request):
+    """
+    This view enables the user to add a change request or view a change request put by him
+    Argument: Http Request
+    Return: Render change_form.html
+    """
     if request.method == 'POST':
         sessiondata = ChangeRequestForm(request.POST)
         purchase_order_of_session = sessiondata.data['purchase_order']
@@ -295,6 +328,11 @@ def change_request(request):
 
 @login_required
 def price_per_unit(request):
+    """
+    This view displays the price of a single unit of a product
+    Argument: Http Request
+    Return: Price Per Unit
+    """
     item_id = request.GET['item_id']
     product = Product.objects.values('price_per_unit').get(id=item_id)
     if product['price_per_unit'] is not None:
@@ -305,6 +343,11 @@ def price_per_unit(request):
 
 @login_required
 def nonpaymentorderofsession(request):
+    """
+    This view enables the user to add a non payment order
+    Argument: Http Request
+    Return: Redirect to nonpaymentordersuccess view
+    """
     old_post = request.session.get('old_post')
     nonpaymentorder_id = request.session.get('nonpaymentorder_id')
     try:
@@ -353,6 +396,11 @@ def nonpaymentorderofsession(request):
 
 @login_required
 def nonpaymentordersuccess(request):
+    """
+    This view displays success if a non payment order is added successfully
+    Argument: Http Request
+    Return: Render nonpaymentsuccess.html
+    """
     old_post = request.session.get('old_post')
     nonpaymentorder_id = request.session.get('nonpaymentorder_id')
     details = NonPaymentOrder.objects.values('buyer__first_name',

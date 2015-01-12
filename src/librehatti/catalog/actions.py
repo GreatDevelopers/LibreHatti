@@ -8,10 +8,13 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 
-"""
-Function to mark orders as active.
-"""
+
 def mark_active(modeladmin, request, queryset):
+    """
+    Function to mark orders as active.
+    Argument: request
+    Return: Activates an order
+    """
     rows_updated = queryset.update(is_active = True)
     if rows_updated == 1:
         message_bit = "1 order is "
@@ -25,10 +28,12 @@ def mark_active(modeladmin, request, queryset):
         object_repr = "Order Activated",change_message="")
 
 
-"""
-Function to mark orders as inactive/cancelled.
-"""
 def mark_inactive(modeladmin, request, queryset):
+    """
+    Function to mark orders as inactive/cac`.
+    Argument: request
+    Return: Deactivates an order
+    """
     rows_updated = queryset.update(is_active = False)
     if rows_updated == 1:
         message_bit = "1 order is "

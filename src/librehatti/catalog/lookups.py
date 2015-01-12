@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 from ajax_select import LookupChannel
 
 class BuyerLookup(LookupChannel):
-
+    """
+    This class suggests user names (AJAX Effect) while filling client name for a purchase order
+    """
     model = User
 
     def get_query(self, q, request):

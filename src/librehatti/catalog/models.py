@@ -29,10 +29,11 @@ from librehatti.config import _QTY
 from librehatti.config import _REFERENCE
 from librehatti.config import _REFERENCE_DATE
 
-"""
-This class defines the name of category and parent category of product
-"""
+
 class mCategory(models.Model):
+    """
+    This class defines the name of category and parent category of product
+    """
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True)
 
@@ -44,12 +45,19 @@ class mCategory(models.Model):
 
 
 class Unit(models.Model):
+    """
+    This class defines a unit variable for Categories
+    """
     unit = models.CharField(max_length=100)
     def __unicode__(self):
         return '%s' % (self.unit)
 
 
 class Category(MPTTModel):
+    """
+    This class defines the name of category, its parent and unit of each category
+    the organisation deals with
+    """
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', null=True, blank=True, \
         related_name="children")
@@ -62,11 +70,11 @@ class Category(MPTTModel):
         return '%s' % self.name
 
 
-"""
-This class defines the name of product, category, price of eact item of
-that product and the organisation with which user deals
-"""
 class Product(models.Model):
+    """
+    This class defines the name of product, category, price of eact item of
+    that product and the organisation with which user deals
+    """
     name = models.CharField(max_length=100)
     category = mptt.fields.TreeForeignKey(Category, related_name="products")
     price_per_unit = models.IntegerField(blank=True,null=True)
@@ -75,10 +83,10 @@ class Product(models.Model):
         return self.name
 
 
-"""
-This class defines the features of product
-"""
 class Attributes(models.Model):
+    """
+    This class defines the features of product
+    """
     name = models.CharField(max_length=200)
     is_number = models.BooleanField(default = True)
     is_string = models.BooleanField(default = False)
@@ -90,11 +98,11 @@ class Attributes(models.Model):
         return self.name
 
 
-"""
-This class defines the details about user, its organisation, along with
-total discount and payment of job, and mode of payment
-"""
 class ModeOfPayment(models.Model):
+    """
+    This class defines the details about user, its organisation, along with
+    total discount and payment of job, and mode of payment
+    """
     method = models.CharField(max_length=25)
 
     class Meta:
@@ -104,11 +112,12 @@ class ModeOfPayment(models.Model):
         return self.method
 
 
-"""
-This class defines the type of taxes, value, validation of taxes
-mentioning the startdate and end date
-"""
 class Surcharge(models.Model):
+
+    """
+    This class defines the type of taxes, value, validation of taxes
+    mentioning the startdate and end date
+    """
     tax_name = models.CharField(max_length=200)
     value = models.FloatField()
     taxes_included = models.BooleanField(default = False)
@@ -120,6 +129,9 @@ class Surcharge(models.Model):
 
 
 class PurchaseOrder(models.Model):
+    """
+    This class defines members for orders to placed by users
+    """
     buyer = models.ForeignKey(User,verbose_name= _BUYER)
     is_debit = models.BooleanField(default = False, verbose_name = _IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
@@ -163,6 +175,9 @@ class PurchaseOrder(models.Model):
 
 
 class PurchasedItem(models.Model):
+    """
+    This class defines members for items purchased in a purchase order
+    """
     purchase_order = models.ForeignKey(PurchaseOrder)
     price_per_unit = models.IntegerField()
     qty = models.IntegerField(verbose_name = _QTY)
@@ -184,20 +199,21 @@ class PurchasedItem(models.Model):
         verbose_name_plural = _PURCHASED_ITEMS
 
 
-"""
-This class defines the features, value of product
-"""
 class Catalog(models.Model):
+    """
+    This class defines the features, value of product
+    """
     attribute = models.ForeignKey(Attributes)
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product)
     def __unicode__(self):
         return self.attribute.name
 
-"""
-This class defines the taxes applied on the purchase order
-"""
+
 class TaxesApplied(models.Model):
+    """
+    This class defines the taxes applied on the purchase order
+    """
     purchase_order = models.ForeignKey(PurchaseOrder)
     surcharge = models.ForeignKey(Surcharge)
     tax = models.IntegerField()
@@ -205,10 +221,10 @@ class TaxesApplied(models.Model):
         return "%s" % (self.surcharge)
 
 
-"""
-This class defines the grand total of the purchase order
-"""
 class Bill(models.Model):
+    """
+    This class defines the grand total of the purchase order
+    """
     purchase_order = models.ForeignKey(PurchaseOrder)
     delivery_charges = models.IntegerField()
     total_cost = models.IntegerField()
@@ -219,6 +235,10 @@ class Bill(models.Model):
 
 
 class HeaderFooter(models.Model):
+    """
+    This class is used to add, edit or delete Header and Footer to be 
+    used for Bills in the organisation
+    """
     header = HTMLField()
     footer = HTMLField()
     is_active = models.BooleanField(default = False)
@@ -249,6 +269,10 @@ class SurchargePaid(models.Model):
 
 
 class ChangeRequest(models.Model):
+    """
+    This class defines members which enables the user to select a purchase order
+    to request a change in the Bill Amount
+    """
     purchase_order_of_session = models.IntegerField()
     from librehatti.voucher.models import FinancialSession
     session = models.ForeignKey(FinancialSession)
@@ -260,6 +284,9 @@ class ChangeRequest(models.Model):
 
 
 class RequestSurchargeChange(models.Model):
+    """
+    This class defines members for requesting the change in a Bill
+    """
     change_request = models.ForeignKey(ChangeRequest)
     surcharge = models.ForeignKey(TaxesApplied)
     previous_value = models.IntegerField()
@@ -267,6 +294,9 @@ class RequestSurchargeChange(models.Model):
 
 
 class RequestStatus(models.Model):
+    """
+    This class defines members to specify status of the chnage request
+    """
     change_request = models.ForeignKey(ChangeRequest)
     confirmed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
@@ -274,6 +304,10 @@ class RequestStatus(models.Model):
 
 
 class NonPaymentOrder(models.Model):
+    """
+    This class defines members for the purchase orders to be completed in 
+    future but the date is not determined
+    """
     buyer = models.ForeignKey(User,verbose_name= _BUYER)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
@@ -286,6 +320,10 @@ class NonPaymentOrder(models.Model):
 
 
 class NonPaymentOrderOfSession(models.Model):
+    """
+    This class defines members for Non Payment order of a 
+    particular session
+    """
     non_payment_order = models.ForeignKey(NonPaymentOrder)
     non_payment_order_of_session = models.IntegerField()
     from librehatti.voucher.models import FinancialSession
@@ -293,6 +331,10 @@ class NonPaymentOrderOfSession(models.Model):
 
 
 class SpecialCategories(models.Model):
+    """
+    This class defines members for special categories where no tax is applied
+    and voucher is not generated
+    """
     category = models.ForeignKey(Category)
     voucher = models.BooleanField(default=False)
     tax = models.BooleanField(default=False)
