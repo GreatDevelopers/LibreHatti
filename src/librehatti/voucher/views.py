@@ -25,12 +25,15 @@ from django.contrib.auth.decorators import login_required
 
 from librehatti.catalog.request_change import request_notify
 
-"""
-This function calculates the session id and then initialise or increment
-voucher number according to the previous purchase order's session id
-"""
+
 @login_required
 def voucher_generate(request):
+    """
+    This function calculates the session id and then initialise or increment
+    voucher number according to the previous purchase order's session id
+    Argument:Http Request
+    Return:Response Redirect to add distance function
+    """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
     generate_voucher = 1
@@ -326,6 +329,12 @@ def voucher_generate(request):
 
 @login_required
 def voucher_show(request):
+    """
+    This function shows the number of vouchers generated for a particular 
+    order
+    Argument:Http Request
+    Return:Render Voucher Show
+    """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.get(id=id)
     voucher_no_list = []
@@ -352,6 +361,11 @@ def voucher_show(request):
 
 @login_required
 def voucher_print(request):
+    """
+    This function displays a particular voucher
+    Argument:Http Request
+    Return:Render Voucher 
+    """
     number = request.GET['voucher_no']
     session = request.GET['session']
     purchase_order_id = request.GET['purchase_order']
@@ -368,7 +382,8 @@ def voucher_print(request):
     voucherid = VoucherId.objects.values('purchase_order', 'ratio',\
     'college_income', 'admin_charges', 'distribution__name',\
     'purchased_item__item__category__name',\
-    'purchased_item__item__category__parent__parent').\
+    'purchased_item__item__category__parent__parent',
+    'purchased_item__item__category__parent').\
     filter(voucher_no = number, session = session)[0]
     purchase_order = voucherid['purchase_order']
     distribution = voucherid['distribution__name']
@@ -377,8 +392,15 @@ def voucher_print(request):
     admin_charges = voucherid['admin_charges']
     category_name = voucherid['purchased_item__item__category__name']
     lab_id = voucherid['purchased_item__item__category__parent__parent']
+    lab_id_level_down = voucherid['purchased_item__item__category__parent']
     emp = Staff.objects.values('name','position__position').filter(lab=lab_id).\
     filter(always_included=1).order_by('position__rank','-seniority_credits')
+    if emp:
+        pass
+    else:
+        emp = Staff.objects.values('name','position__position').filter(
+            lab=lab_id_level_down).filter(always_included=1).order_by(
+            'position__rank','-seniority_credits')
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
     'tds','buyer__customer__title','buyer__customer__company').\

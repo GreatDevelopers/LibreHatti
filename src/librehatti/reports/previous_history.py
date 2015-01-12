@@ -17,6 +17,8 @@ from librehatti.voucher.models import VoucherId
 def history(request):
     """
     displays the purchase history of the client
+    Argument:Http Request
+    Return:Render Purchase History
     """
     
     user_id = request.GET['user_id']
@@ -35,6 +37,8 @@ def history(request):
 def details(request):
     """
     displays the details of the purchase of the client
+    Argument:Http Request
+    Return:Render Order Details
     """
     
     order_id = request.GET['order_id']
@@ -47,7 +51,9 @@ def details(request):
 @login_required
 def proforma_details(request):
     """
-    displays the details of the purchase of the client
+    displays the details of the proforma order of the client
+    Argument:Http Request
+    Return:Render Proforma Details
     """
     
     order_id = request.GET['order_id']

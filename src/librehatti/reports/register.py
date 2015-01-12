@@ -47,6 +47,8 @@ from django.contrib.auth.decorators import login_required
 def daily_report_result(request):
     """
     This view is used to display the daily report registers
+    Argument:Http Request
+    Return:Render Daily Report Register
     """
     if request.method == 'POST':
         form = DailyReportForm(request.POST)
@@ -134,6 +136,8 @@ def consultancy_funds_report(request):
     It generates the report which lists all
     the Consultancy Funds for the Material
     selected and the in the entered Time Span.
+    Argument:Http Request
+    Return:Render Consultancy Funds Register
     """
     if request.method == 'POST':
         form = ConsultancyFunds(request.POST)
@@ -205,6 +209,8 @@ def consultancy_funds_report(request):
 def tds_report_result(request):
     """
     This view is used to display the TDS report registers
+    Argument:Http Request
+    Return:Render TDS Report Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -329,6 +335,8 @@ def tds_report_result(request):
 def payment_register(request):
     """
     This view is used to display the payment registers
+    Argument:Http Request
+    Return:Render Payment Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -467,6 +475,8 @@ def payment_register(request):
 def suspense_clearance_register(request):
     """
     This view is used to display the suspense clearance registers
+    Argument:Http Request
+    Return:Render Suspense Clearance Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -618,6 +628,8 @@ def suspense_clearance_register(request):
 def servicetax_register(request):
     """
     This view is used to display the servicetax_register registers
+    Argument:Http Request
+    Return:Render Service Tax Register
     """
     if request.method == 'POST':
         form = MonthYearForm(request.POST)
@@ -742,6 +754,8 @@ def servicetax_register(request):
 def main_register(request):
     """
     This view is used to display the Main register
+    Argument:Http Request
+    Return:Render Main Register
     """
     if request.method == 'POST':
         form = MonthYearForm(request.POST)
@@ -833,6 +847,8 @@ def main_register(request):
 def proforma_register(request):
     """
     This view is used to display the proforma registers
+    Argument:Http Request
+    Return:Render Proforma Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -920,6 +936,8 @@ def proforma_register(request):
 def non_payment_register(request):
     """
     This view is used to display the non payment registers
+    Argument:Http Request
+    Return:Render Non-Payment Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -984,6 +1002,8 @@ def non_payment_register(request):
 def client_register(request):
     """
     This view is used to display the client register
+    Argument:Http Request
+    Return:Render Client Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -1054,6 +1074,8 @@ def client_register(request):
 def lab_report(request):
     """
     This view is used to display the lab reports
+    Argument:Http Request
+    Return:Render Lab Report
     """
     if request.method == 'POST':
         form = ConsultancyFunds(request.POST)
@@ -1113,6 +1135,8 @@ def lab_report(request):
 def suspense_register(request):
     """
     This view is used to display the suspense registers
+    Argument:Http Request
+    Return:Render Suspense Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)

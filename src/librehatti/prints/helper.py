@@ -1,6 +1,11 @@
 #To convert digits into words
  
 def num2eng(n):
+    """
+    This function converts numerals into words.
+    argument:number
+    return:words
+    """
     words = ''
     units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 
              'Eight', 'Nine','Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
