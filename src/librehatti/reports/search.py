@@ -216,7 +216,7 @@ class SearchResult(View):
         suspense_flag = 0
         if 'proforma' in request.GET:
             flag=1
-        if 'suspense' in request.GET:
+        if 'Client' not in request.GET:
             voucherid = VoucherId.objects.values('purchase_order').\
             filter(purchase_order_of_session=self.title)[0]
             suspense = SuspenseOrder.objects.filter(purchase_order=voucherid['purchase_order'])

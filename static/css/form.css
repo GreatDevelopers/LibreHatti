@@ -1,9 +1,13 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
 
 .form-heading{
 	color: #135375;
 	font-size: 25px;
-	font-family: 'Open Sans', 'sans-serif';
+	font-family: 'Open Sans Fonts', 'sans-serif';
 	text-align: center;
 	margin-top: 25px;
 }
