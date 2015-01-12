@@ -22,22 +22,20 @@ from librehatti.config import _ITEM
 from librehatti.config import _TYPE
 
 
-"""
-This form allows user to fill the category name of product
-"""
 class AddCategory(forms.Form):
     """
-    used by catalog views to specify name and different categories used.
+    This form allows user to fill the category name of product
     """
     category_name = forms.CharField(max_length=256)
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
 
 
-"""
-This form lets user to select item after categories
-are filtered in dropdown.
-"""
+
 class ItemSelectForm(forms.ModelForm):
+    """
+    This form lets user to select item after categories
+    are filtered in dropdown.
+    """
     class Media:
         js = (
             'js/ajax.js',
@@ -68,8 +66,11 @@ class ItemSelectForm(forms.ModelForm):
          self.fields['item'].widget.attrs={'class': 'item'}
          self.fields['price_per_unit'].widget.attrs={'class': 'price_per_unit'}
 
-
 class BuyerForm(forms.ModelForm):
+
+    """
+    This form enables the admin to select a user for a purchase purchase_order
+    """
     buyer = make_ajax_field(PurchaseOrder, 'buyer', 'buyer')
 
     class Meta:
@@ -84,6 +85,9 @@ class BuyerForm(forms.ModelForm):
 
 
 class ChangeRequestForm(forms.Form):
+    """
+    This form enables the user to select a purchase order to request a change in the Bill Amount
+    """
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
     purchase_order = forms.CharField(max_length=10)
     def __init__(self, *args, **kwargs):
@@ -94,6 +98,9 @@ class ChangeRequestForm(forms.Form):
 
 class SpecialCategoriesForm(forms.ModelForm):
 
+    """
+    This form is used to add special categories by Admin
+    """
     class Meta:
         model = SpecialCategories
         exclude = ()
