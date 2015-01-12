@@ -1,5 +1,9 @@
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
 
 body{
 	background-color:#00000;
@@ -38,7 +42,7 @@ a:hover{
 }
 
 .list-results{
-	font-family:'Open Sans', 'sans-serif';
+	font-family:'Open Sans Fonts', 'sans-serif';
 	margin-top: 30px;
 }
 
