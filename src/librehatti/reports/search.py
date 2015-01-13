@@ -216,12 +216,16 @@ class SearchResult(View):
         suspense_flag = 0
         if 'proforma' in request.GET:
             flag=1
-        if 'Client' not in request.GET:
-            voucherid = VoucherId.objects.values('purchase_order').\
-            filter(purchase_order_of_session=self.title)[0]
-            suspense = SuspenseOrder.objects.filter(purchase_order=voucherid['purchase_order'])
-            if suspense:
-                suspense_flag = 1
+        if 'Client' not in request.GET and 'proforma' not in request.GET:
+            try:
+                voucherid = VoucherId.objects.values('purchase_order').\
+                filter(purchase_order_of_session=self.title)[0]
+                suspense = SuspenseOrder.objects.filter(
+                    purchase_order=voucherid['purchase_order'])
+                if suspense:
+                    suspense_flag = 1
+            except:
+                pass
         request_status = request_notify()    
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
