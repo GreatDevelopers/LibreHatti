@@ -82,7 +82,7 @@ class PurchasedItemInline(admin.StackedInline):
     form = ItemSelectForm
     model = PurchasedItem
     fields = ['type','parent_category', 'sub_category', 'item','price_per_unit', 'qty', ]
-    extra = 30
+    extra = 3
 
 
 class PurchaseOrderAdmin(AjaxSelectAdmin):
