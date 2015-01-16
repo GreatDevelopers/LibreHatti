@@ -131,7 +131,7 @@ class TransportForm1(forms.Form):
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
     Date_of_generation = forms.DateField(initial = datetime.date.today)
     kilometer = forms.CharField()
-    date = forms.DateField()
+    date = forms.DateField(label="Date of visit")
     def __init__(self, *args, **kwargs):
         super(TransportForm1, self).__init__(*args, **kwargs)
         self.fields['Date_of_generation'].widget.attrs={'class':'form-control'}
