@@ -23,6 +23,8 @@ from librehatti.suspense.models import Transport
 from librehatti.suspense.models import QuotedSuspenseOrder
 from librehatti.suspense.models import Vehicle
 from librehatti.suspense.models import Staff
+from librehatti.suspense.models import TransportBillOfSession
+from librehatti.suspense.models import SuspenseClearedRegister
 from librehatti.suspense.forms import Clearance_form
 from librehatti.suspense.forms import SuspenseForm
 from librehatti.suspense.forms import QuotedSuspenseForm
@@ -325,22 +327,24 @@ def with_transport(request):
     boring_charge_internal = suspenseclearance['boring_charge_internal']
     lab_staff_list = suspenseclearance['lab_testing_staff'].split(',')
     lab_staff_name_list = []
-    for lab_staff_value in lab_staff_list:
-        lab_temp = []
-        lab_staff_obj = Staff.objects.values('name', 'position__position').\
-        filter(code=lab_staff_value)[0]
-        lab_temp.append(lab_staff_obj['name'])
-        lab_temp.append(lab_staff_obj['position__position'])
-        lab_staff_name_list.append(lab_temp)
+    if lab_staff_list[0]:
+        for lab_staff_value in lab_staff_list:
+            lab_temp = []
+            lab_staff_obj = Staff.objects.values('name', 'position__position').\
+            filter(code=lab_staff_value)[0]
+            lab_temp.append(lab_staff_obj['name'])
+            lab_temp.append(lab_staff_obj['position__position'])
+            lab_staff_name_list.append(lab_temp)
     field_staff_list = suspenseclearance['field_testing_staff'].split(',')
     field_staff_name_list = []
-    for field_staff_value in field_staff_list:
-        field_temp = []
-        field_staff_obj = Staff.objects.values('name','position__position').\
-        filter(code=field_staff_value)[0]
-        field_temp.append(field_staff_obj['name'])
-        field_temp.append(field_staff_obj['position__position'])
-        field_staff_name_list.append(field_temp)
+    if field_staff_list[0]:
+        for field_staff_value in field_staff_list:
+            field_temp = []
+            field_staff_obj = Staff.objects.values('name','position__position').\
+            filter(code=field_staff_value)[0]
+            field_temp.append(field_staff_obj['name'])
+            field_temp.append(field_staff_obj['position__position'])
+            field_staff_name_list.append(field_temp)
     ta_da_total = tada_amount
     voucherid = VoucherId.objects.values('ratio', 'purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
@@ -362,7 +366,13 @@ def with_transport(request):
     total = calculate_distribution['total'] + othercharge + ta_da_total +\
     suspenseclearance['work_charge'] + boring_charge_internal
     total_in_words = num2eng(total)
-    rowspan = 9
+    rowspan = 6
+    if ta_da_total != 0:
+        rowspan = rowspan + 1
+    if othercharge != 0:
+        rowspan = rowspan + 1
+    if suspenseclearance['boring_charge_internal'] != 0:
+        rowspan = rowspan + 1
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
@@ -395,9 +405,13 @@ def other_charges(request):
         transport = Transport.objects.values('id','date_of_generation','total').\
         get(voucher_no=number, session=financialsession['id'])
         transport_total = transport['total']
+        transportbillno = TransportBillOfSession.objects.values(
+            'transportbillofsession').get(transport__voucher_no=number,
+            transport__session=session)
     except:
         transport_total = 0
         transport = 0
+        transportbillno = 0
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'boring_charge_internal', 'boring_charge_external', 'labour_charge',\
     'car_taxi_charge', 'field_testing_staff', 'lab_testing_staff',\
@@ -433,7 +447,8 @@ def other_charges(request):
                 'boring_charges':suspenseclearance['boring_charge_external'],\
                 'total':total, 'other_charges':other_charges,\
                 'transport':transport, 'complete_total':complete_total,\
-                'transplusother':transplusother})
+                'transplusother':transplusother, 
+                'transportbillno':transportbillno})
 
 
 @login_required
@@ -645,6 +660,8 @@ def transportbill(request):
                     reverse("librehatti.suspense.views.sessionselect"))
             session = FinancialSession.objects.\
             get(id=request.POST['session'])
+            session_id = FinancialSession.objects.values('id').\
+            get(id=request.POST['session'])
             voucher = request.POST['voucher']
             date_of_generation = request.POST['Date_of_generation']
             vehicle = Vehicle.objects.get(id=request.POST['Vehicle'])
@@ -675,6 +692,32 @@ def transportbill(request):
                     date=date, rate=rate, voucher_no=voucher,\
                     session=session)
                     obj.save()
+                    transport_obj = Transport.objects.filter(voucher_no=voucher,
+                        session=session)[0]
+                    max_id = TransportBillOfSession.objects.all().aggregate(
+                        Max('id'))
+                    if max_id['id__max'] == None:
+                        temp_obj = TransportBillOfSession(
+                            transport=transport_obj, session=session,
+                            transportbillofsession=1)
+                        temp_obj.save()
+                    else:
+                        transportbillofsession_obj = TransportBillOfSession.\
+                        objects.values('transportbillofsession', 'session').\
+                        get(id=max_id['id__max'])
+                        if transportbillofsession_obj['session'] ==\
+                        session_id['id']:
+                            temp_obj = TransportBillOfSession(
+                                transport=transport_obj, session=session,
+                                transportbillofsession=
+                                transportbillofsession_obj[
+                                'transportbillofsession']+1)
+                            temp_obj.save()
+                        else:
+                            temp_obj = TransportBillOfSession(
+                                transport=transport_obj, session=session,
+                                transportbillofsession=1)
+                            temp_obj.save()
             except:
                 pass 
             temp = Transport.objects.filter(voucher_no=voucher).values()
@@ -975,6 +1018,34 @@ def mark_status(request):
     update(work_charge=work_charge)
     suspense_order_obj = SuspenseOrder.objects.filter(voucher=voucher).\
     filter(session_id=session).update(is_cleared='1')
+    if SuspenseClearedRegister.objects.filter(voucher_no=voucher).exists():
+        pass
+    else:
+        financialsession = FinancialSession.objects.get(id=session)
+        session_id = FinancialSession.objects.values('id').get(id=session)
+        max_id = SuspenseClearedRegister.objects.all().aggregate(
+            Max('id'))
+        if max_id['id__max'] == None:
+            temp_obj = SuspenseClearedRegister(
+                suspenseclearednumber=1, session=financialsession,
+                voucher_no=voucher)
+            temp_obj.save()
+        else:
+            suspenseclearednumber_obj = SuspenseClearedRegister.\
+            objects.values('suspenseclearednumber', 'session').\
+            get(id=max_id['id__max'])
+            if suspenseclearednumber_obj['session'] == session_id['id']:
+                temp_obj = SuspenseClearedRegister(
+                    session=financialsession, voucher_no=voucher,
+                    suspenseclearednumber=suspenseclearednumber_obj[\
+                    'suspenseclearednumber']+1)
+                temp_obj.save()
+            else:
+                temp_obj = SuspenseClearedRegister(
+                suspenseclearednumber=1, session=financialsession,
+                voucher_no=voucher)
+                temp_obj.save()
+
     return HttpResponse("")
 
 
@@ -1038,6 +1109,9 @@ def transport_bill(request):
     if request.method == 'POST':
         session = request.POST['session']
         voucher = request.POST['voucher']
+        bill_no = TransportBillOfSession.objects.values(
+            'transportbillofsession').get(transport__voucher_no=voucher,
+            transport__session=session)
         transport_object = Transport.objects.\
         filter(session_id = session,voucher_no = voucher).\
         values('vehicle_id__vehicle_no','kilometer',\
@@ -1071,7 +1145,7 @@ def transport_bill(request):
         request_status = request_notify()   
         return render(request, 'suspense/transport_bill.html',
                {'words':num2eng(total_amount), 'total':total, 'rate':rate,\
-               'date':date, "voucherid":voucher,\
+               'date':date, "bill_no":bill_no,\
                'total_amount':total_amount,'zip_data':zip_data,\
                'date_of_generation':date_of_generation,\
                'vehicle':vehicle,'request':request_status,'header':header,\
