@@ -366,7 +366,13 @@ def with_transport(request):
     total = calculate_distribution['total'] + othercharge + ta_da_total +\
     suspenseclearance['work_charge'] + boring_charge_internal
     total_in_words = num2eng(total)
-    rowspan = 9
+    rowspan = 6
+    if ta_da_total != 0:
+        rowspan = rowspan + 1
+    if othercharge != 0:
+        rowspan = rowspan + 1
+    if suspenseclearance['boring_charge_internal'] != 0:
+        rowspan = rowspan + 1
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\

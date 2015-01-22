@@ -72,18 +72,24 @@
                     <td>Work Charges(CONSULTANCY)</td>
                     <td  id = "pos-right">{{ suspense_clearance.work_charge }}</td>
                 </tr>
+                {% if ta_da != 0 %}
                 <tr>
                     <td>T.A/D.A Staff </td>
                     <td  id = "pos-right">{{ ta_da }}</td>
                 </tr>
+                {% endif %}
+                {% if othercharge != 0 %}
                 <tr>
                     <td>Other Charges </td>
                     <td  id = "pos-right">{{othercharge}}</td>
                 </tr>
+                {% endif %}
+                {% if suspense_clearance.boring_charge_internal != 0 %}
                 <tr>
                     <td>Boring Charges (Internal) </td>
                     <td  id = "pos-right">{{ suspense_clearance.boring_charge_internal }}</td>
                 </tr>
+                {% endif %}
                 <tr>
                     <td><b>TOTAL</b></td>
                     <td  id = "pos-right"><b>{{total}}</b></td>
