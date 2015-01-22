@@ -490,6 +490,8 @@ def suspense_clearance_register(request):
         if form.is_valid():
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
+            suspenseclearance = SuspenseClearance.objects.values('voucher_no').\
+            filter(clear_date__range=(start_date,end_date))
             suspenseorder = SuspenseOrder.objects.values('voucher',\
                 'session_id', 'purchase_order', 'purchase_order__date_time',\
                 'purchase_order__buyer__first_name',\
@@ -500,7 +502,7 @@ def suspense_clearance_register(request):
                 'purchase_order__buyer__customer__address__pin',\
                 'purchase_order__buyer__customer__address__province').\
             filter(is_cleared=1,\
-            purchase_order__date_time__range=(start_date,end_date))
+            voucher__in=suspenseclearance)
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             result = []

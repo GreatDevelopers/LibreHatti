@@ -35,9 +35,9 @@ class SuspenseClearance(models.Model):
     car_taxi_charge = models.IntegerField(blank=True, null=True)
     boring_charge_external = models.IntegerField(blank=True, null=True)
     boring_charge_internal = models.IntegerField(blank=True, null=True)
-    lab_testing_staff = models.CharField(max_length=200)
-    field_testing_staff = models.CharField(max_length=200)
-    test_date = models.CharField(max_length=600)
+    lab_testing_staff = models.CharField(max_length=200, blank=True, null=True)
+    field_testing_staff = models.CharField(max_length=200,blank=True,null=True)
+    test_date = models.CharField(max_length=600, blank=True, null=True)
     clear_date = models.DateField(default=datetime.date.today)
 
 
@@ -158,3 +158,15 @@ class Transport(models.Model):
 
     def __unicode__(self):
         return '%s' % (self.vehicle)
+
+
+class TransportBillOfSession(models.Model):
+    transport = models.ForeignKey(Transport)
+    transportbillofsession = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+
+
+class SuspenseClearedRegister(models.Model):
+    suspenseclearednumber = models.IntegerField()
+    voucher_no = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
