@@ -71,7 +71,7 @@ def daily_report_result(request):
                     'buyer__last_name',\
                     'buyer__customer__address__pin',\
                     'buyer__customer__user__customer__address__street_address',\
-                    'buyer__customer__user__customer__address__city',\
+                    'buyer__customer__user__customer__address__district',\
                     'buyer__customer__title').distinct()
             else:
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=\
@@ -83,7 +83,7 @@ def daily_report_result(request):
                      'buyer__last_name',\
                      'buyer__customer__address__pin',\
                      'buyer__customer__user__customer__address__street_address',\
-                     'buyer__customer__user__customer__address__city',\
+                     'buyer__customer__user__customer__address__district',\
                      'buyer__customer__title').distinct()
             temp_list = []
             result = []
@@ -101,7 +101,7 @@ def daily_report_result(request):
                 temp_list.append(\
                     temp_value['buyer__customer__user__customer__address__street_address'])
                 temp_list.append(\
-                    temp_value['buyer__customer__user__customer__address__city'])
+                    temp_value['buyer__customer__user__customer__address__district'])
                 temp_list.append(temp_value['bill__grand_total'])
                 result.append(temp_list)
                 temp_list = []
@@ -158,7 +158,7 @@ def consultancy_funds_report(request):
             'purchase_order__buyer__last_name',\
             'purchase_order__buyer__customer__address__pin',\
             'purchase_order__buyer__customer__address__street_address',\
-            'purchase_order__buyer__customer__address__city',\
+            'purchase_order__buyer__customer__address__district',\
             'purchase_order__buyer__customer__address__province',\
             'purchase_order__buyer__customer__title',\
             'purchased_item__item__category').distinct()
@@ -177,7 +177,7 @@ def consultancy_funds_report(request):
                 temp_list.append(\
                     temp_value['purchase_order__buyer__customer__address__street_address'])
                 temp_list.append(\
-                    temp_value['purchase_order__buyer__customer__address__city'])
+                    temp_value['purchase_order__buyer__customer__address__district'])
                 consultancy_var = CalculateDistribution.objects.\
                 values('consultancy_asset').get(voucher_no=
                     temp_value['voucher_no'],session_id=temp_value['session_id'])
@@ -250,7 +250,7 @@ def tds_report_result(request):
             'purchase_order__buyer__customer__title',\
             'purchase_order__buyer__customer__telephone',\
             'purchase_order__buyer__customer__address__street_address',\
-            'purchase_order__buyer__customer__address__city',
+            'purchase_order__buyer__customer__address__district',
             'purchase_order__buyer__customer__address__pin',
             'totalplusdelivery','purchase_order__tds','amount_received'\
             ,'grand_total'\
@@ -281,7 +281,7 @@ def tds_report_result(request):
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__address__street_address'])
                 temp_list.append(temp_value[\
-                'purchase_order__buyer__customer__address__city'])
+                'purchase_order__buyer__customer__address__district'])
                 temp_list.append(\
                     temp_value['purchase_order__buyer__customer__telephone'])
                 temp_list.append(temp_value['totalplusdelivery'])
@@ -373,7 +373,7 @@ def payment_register(request):
             'purchase_order__buyer__last_name',\
             'purchase_order__buyer__customer__title',\
             'purchase_order__buyer__customer__address__street_address',\
-            'purchase_order__buyer__customer__address__city',
+            'purchase_order__buyer__customer__address__district',
             'purchase_order__buyer__customer__address__pin',
             'totalplusdelivery','purchase_order__tds','amount_received'\
             ,'purchase_order__buyer__customer__user__email',\
@@ -404,7 +404,7 @@ def payment_register(request):
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__address__street_address'])
                 temp_list.append(temp_value[\
-                'purchase_order__buyer__customer__address__city'])
+                'purchase_order__buyer__customer__address__district'])
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__company'])
 
@@ -498,7 +498,7 @@ def suspense_clearance_register(request):
                 'purchase_order__buyer__last_name',\
                 'purchase_order__buyer__customer__title',\
                 'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__city',\
+                'purchase_order__buyer__customer__address__district',\
                 'purchase_order__buyer__customer__address__pin',\
                 'purchase_order__buyer__customer__address__province').\
             filter(is_cleared=1,\
@@ -525,7 +525,7 @@ def suspense_clearance_register(request):
                         'purchase_order__buyer__customer__address__street_address']\
                         + ', ' + \
                         suspense[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'purchase_order__buyer__customer__address__district']\
                         + ', ' + \
                         suspense[\
                         'purchase_order__buyer__customer__address__province']
@@ -537,7 +537,7 @@ def suspense_clearance_register(request):
                         'purchase_order__buyer__customer__address__street_address']\
                         + ', ' + \
                         suspense[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'purchase_order__buyer__customer__address__district']\
                         + ', ' + \
                         suspense[\
                         'purchase_order__buyer__customer__address__province']
@@ -551,7 +551,7 @@ def suspense_clearance_register(request):
                         'purchase_order__buyer__customer__address__street_address']\
                         + ', ' + \
                         suspense[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'purchase_order__buyer__customer__address__district']\
                         + ', ' + \
                         suspense[\
                         'purchase_order__buyer__customer__address__province']
@@ -563,7 +563,7 @@ def suspense_clearance_register(request):
                         'purchase_order__buyer__customer__address__street_address']\
                         + ', ' + \
                         suspense[\
-                        'purchase_order__buyer__customer__address__city']\
+                        'purchase_order__buyer__customer__address__district']\
                         + ', ' + \
                         suspense[\
                         'purchase_order__buyer__customer__address__province']
@@ -667,7 +667,7 @@ def servicetax_register(request):
                 'buyer__first_name', 'buyer__last_name',\
                 'buyer__customer__title',\
                 'buyer__customer__address__street_address',\
-                'buyer__customer__address__city',\
+                'buyer__customer__address__district',\
                 'buyer__customer__address__pin',\
                 'buyer__customer__address__province').\
             filter(id__in=taxesapplied_obj)
@@ -688,7 +688,7 @@ def servicetax_register(request):
                     'buyer__customer__address__street_address']\
                     + ', ' + \
                     value[\
-                    'buyer__customer__address__city']\
+                    'buyer__customer__address__district']\
                     + ', ' + \
                     value[\
                     'buyer__customer__address__province']
@@ -700,7 +700,7 @@ def servicetax_register(request):
                     'buyer__customer__address__street_address']\
                     + ', ' + \
                     value[\
-                    'buyer__customer__address__city']\
+                    'buyer__customer__address__district']\
                     + ', ' + \
                     value[\
                     'buyer__customer__address__province']
@@ -788,7 +788,7 @@ def main_register(request):
                 'buyer__customer__address__pin',\
                 'buyer__customer__title',\
                 'buyer__customer__address__street_address',\
-                'buyer__customer__address__city',\
+                'buyer__customer__address__district',\
                 'buyer__customer__address__province',\
                 ).exclude(id__in = suspense_order).distinct()
             distribution = Distribution.objects.values('college_income',\
@@ -814,7 +814,7 @@ def main_register(request):
                         'buyer__customer__address__street_address']\
                         + ', ' + \
                         temp_value[\
-                        'buyer__customer__address__city']\
+                        'buyer__customer__address__district']\
                         + ', ' + \
                         temp_value[\
                         'buyer__customer__address__province'])
@@ -890,7 +890,7 @@ def proforma_register(request):
                 'buyer__first_name', 'buyer__last_name',\
                 'buyer__customer__title',\
                 'buyer__customer__address__street_address',\
-                'buyer__customer__address__city',\
+                'buyer__customer__address__district',\
                 'buyer__customer__company', 'buyer__customer__telephone',\
                 'buyer__email', 'quotedbill__totalplusdelivery',\
                 'quotedbill__grand_total', 'delivery_address').filter(\
@@ -915,7 +915,7 @@ def proforma_register(request):
                     name = order['buyer__customer__title']
                 temp.append(name)
                 temp.append(order['buyer__customer__address__street_address'])
-                temp.append(order['buyer__customer__address__city'])
+                temp.append(order['buyer__customer__address__district'])
                 temp.append(order['buyer__customer__company'])
                 quoteditem = QuotedItem.objects.values('item__category__name',\
                     'item__category__id').\
@@ -975,7 +975,7 @@ def non_payment_register(request):
                 'buyer__first_name', 'buyer__last_name', 'date',\
                 'buyer__customer__title', 'buyer__customer__address__pin',\
                 'buyer__customer__address__street_address',\
-                'buyer__customer__address__city',\
+                'buyer__customer__address__district',\
                 'buyer__customer__address__province', 'reference',\
                 'reference_date', 'item_type', 'delivery_address').filter(\
                 date__range=(start_date,end_date))
@@ -995,11 +995,11 @@ def non_payment_register(request):
                 temp.append(name)
                 if order['buyer__customer__address__pin'] == 'None':
                     address = order['buyer__customer__address__street_address']\
-                    + ', ' + order['buyer__customer__address__city'] + ', ' +\
+                    + ', ' + order['buyer__customer__address__district'] + ', ' +\
                     order['buyer__customer__address__province']
                 else:
                     address = order['buyer__customer__address__street_address']\
-                    + ', ' + order['buyer__customer__address__city'] + ', ' +\
+                    + ', ' + order['buyer__customer__address__district'] + ', ' +\
                     order['buyer__customer__address__pin'] + ', ' +\
                     order['buyer__customer__address__province']
                 temp.append(address)
@@ -1045,7 +1045,7 @@ def client_register(request):
                 'buyer__last_name',\
                 'buyer__customer__address__pin',\
                 'buyer__customer__address__street_address',\
-                'buyer__customer__address__city',\
+                'buyer__customer__address__district',\
                 'buyer__customer__address__province',\
                 'buyer__customer__telephone',\
                 'buyer__customer__user__email',\
@@ -1067,7 +1067,7 @@ def client_register(request):
                     temp_list.append(\
                         temp_value['buyer__customer__company'])
                     temp_list.append(\
-                        temp_value['buyer__customer__address__city'])
+                        temp_value['buyer__customer__address__district'])
                     temp_list.append(\
                         temp_value['buyer__customer__address__pin'])
                     temp_list.append(\
@@ -1127,7 +1127,7 @@ def lab_report(request):
                 'purchase_order__buyer__customer__title',
                 'purchase_order__buyer__customer__company',
                 'purchase_order__buyer__customer__address__street_address',
-                'purchase_order__buyer__customer__address__city',
+                'purchase_order__buyer__customer__address__district',
                 'purchase_order__buyer__customer__address__pin',
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__buyer__email','purchase_order__delivery_address',\
@@ -1176,7 +1176,7 @@ def suspense_register(request):
                 'purchase_order__buyer__last_name',
                 'purchase_order__buyer__customer__title',
                 'purchase_order__buyer__customer__address__street_address',
-                'purchase_order__buyer__customer__address__city',
+                'purchase_order__buyer__customer__address__district',
                 'purchase_order__buyer__customer__address__pin',
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__bill__total_cost', 'purchase_order__date_time',
@@ -1220,13 +1220,13 @@ def suspense_register(request):
                 if value['purchase_order__buyer__customer__address__pin'] != 'None':
                     address = ', ' + \
                     value['purchase_order__buyer__customer__address__street_address'] +\
-                    ', ' + value['purchase_order__buyer__customer__address__city'] +\
+                    ', ' + value['purchase_order__buyer__customer__address__district'] +\
                     '-' + value['purchase_order__buyer__customer__address__pin'] +\
                     ', ' + value['purchase_order__buyer__customer__address__province']
                 else:
                     address = ', ' + \
                     value['purchase_order__buyer__customer__address__street_address'] + \
-                    ', ' + value['purchase_order__buyer__customer__address__city'] +\
+                    ', ' + value['purchase_order__buyer__customer__address__district'] +\
                     ', ' + value['purchase_order__buyer__customer__address__province']
                 temp_list.append(address)
                 temp_list.append(voucherid['purchased_item__item_id__category__name'])
@@ -1312,7 +1312,7 @@ def registered_users(request):
                 'first_name', 'last_name', 'email', 'customer__telephone',
                 'customer__title', 'customer__company', 'date_joined',
                 'customer__address__street_address', 'customer__address__pin',
-                'customer__address__city', 'customer__address__province',
+                'customer__address__district', 'customer__address__province',
                 'customer__org_type__type_desc')
             result = []
             for value in user:
@@ -1325,7 +1325,7 @@ def registered_users(request):
                 temp_list.append(name)
                 temp_list.append(value['customer__address__street_address'])
                 temp_list.append(value['customer__company'])
-                temp_list.append(value['customer__address__city'])
+                temp_list.append(value['customer__address__district'])
                 temp_list.append(value['customer__address__pin'])
                 temp_list.append(value['customer__address__province'])
                 temp_list.append(value['email'])
@@ -1340,7 +1340,7 @@ def registered_users(request):
             user = User.objects.values('first_name', 'last_name', 'email',
                 'customer__telephone', 'customer__title', 'customer__company',
                 'customer__address__street_address', 'customer__address__pin',
-                'customer__address__city', 'customer__address__province',
+                'customer__address__district', 'customer__address__province',
                 'customer__org_type__type_desc', 'date_joined')
             result = []
             for value in user:
@@ -1353,7 +1353,7 @@ def registered_users(request):
                 temp_list.append(name)
                 temp_list.append(value['customer__address__street_address'])
                 temp_list.append(value['customer__company'])
-                temp_list.append(value['customer__address__city'])
+                temp_list.append(value['customer__address__district'])
                 temp_list.append(value['customer__address__pin'])
                 temp_list.append(value['customer__address__province'])
                 temp_list.append(value['email'])

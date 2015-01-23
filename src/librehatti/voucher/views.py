@@ -406,7 +406,7 @@ def voucher_print(request):
     'tds','buyer__customer__title','buyer__customer__company').\
     get(id = purchase_order)
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').\
+    'address__district', 'address__pin', 'address__province').\
     get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time']
     bill = Bill.objects.values('delivery_charges','total_cost',\

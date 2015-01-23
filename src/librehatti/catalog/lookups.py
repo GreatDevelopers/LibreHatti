@@ -19,7 +19,7 @@ class BuyerLookup(LookupChannel):
                 Q(first_name__icontains=value) \
                 | Q(last_name__icontains=value) \
                 |Q(customer__address__street_address__icontains=value)\
-                |Q(customer__address__city__icontains=value)\
+                |Q(customer__address__district__icontains=value)\
                 |Q(customer__address__province__icontains=value)
                 |Q(customer__title__icontains=value))
         return user[0:15]
@@ -33,9 +33,9 @@ class BuyerLookup(LookupChannel):
     def format_item_display(self, obj):
         result = User.objects.values('first_name','last_name',
             'customer__title','customer__address__street_address',
-            'customer__address__city').filter(id = obj.id)[0]
+            'customer__address__district').filter(id = obj.id)[0]
         return "<b>Name or Title:</b> %s <br> <b>Address:</b> %s <br> %s \
         <hr>" %((result['first_name'] + ' ' + result['last_name'] + ' ' + \
             result['customer__title']), \
             (result['customer__address__street_address']), \
-            (result['customer__address__city']))
+            (result['customer__address__district']))

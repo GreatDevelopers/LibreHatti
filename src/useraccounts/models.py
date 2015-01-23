@@ -20,7 +20,7 @@ describes the address details of the admin organisation
 """
 class Address(models.Model):
     street_address = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
     pin = models.CharField(max_length=10, blank=True, null=True)
     province = models.CharField(max_length=100)
     nationality = models.CharField(max_length=100, default=_COUNTRY)
@@ -29,7 +29,7 @@ class Address(models.Model):
         verbose_name_plural = "Addresses"
 
     def __unicode__(self):
-        return self.street_address + ',' + self.city
+        return self.street_address + ',' + self.district
 
 
 """

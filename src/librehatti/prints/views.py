@@ -159,7 +159,7 @@ def bill(request):
         tax_count = tax_count + 1
     buyer = purchase_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
@@ -264,7 +264,7 @@ def suspense_bill(request):
     filter(purchase_order=id).aggregate(Count('id'))
     buyer = purchase_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
@@ -335,7 +335,7 @@ def receipt(request):
         'buyer__first_name', 'buyer__last_name','buyer__customer__title').\
     get(id = id)
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').\
+    'address__district', 'address__pin', 'address__province').\
     get(user = purchase_order['buyer'])
     purchased_item = PurchasedItem.objects.values('item__category__name').\
     filter(purchase_order=id).distinct()
@@ -457,7 +457,7 @@ def quoted_bill(request):
         tax_count = tax_count + 1
     buyer = quoted_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = quoted_order_obj['organisation']
     date = quoted_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)

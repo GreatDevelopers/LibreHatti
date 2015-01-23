@@ -27,7 +27,7 @@
         {{buyer.buyer__customer__title}}
         {% endif %},</div>
         <div>{{address.address__street_address}}, </div>
-        <div>{{address.address__city}}
+        <div>{{address.address__district}}
             {% if address.address__pin != 'None' and address.address__pin != '' %}
             -{{address.address__pin}}
             {% endif %},</div>

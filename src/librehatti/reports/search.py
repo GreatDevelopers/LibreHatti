@@ -34,7 +34,7 @@ class SearchResult(View):
         self.purchase_order_id='enable'
         self.result_fields = []
         self.list_dict = {'First Name':'first_name', 'Last Name':'last_name', 
-            'City':'customer__address__city',
+            'district':'customer__address__district',
             'Street Address':'customer__address__street_address',
             'Phone':'customer__telephone',
             'Joining Date':'customer__date_joined',
@@ -61,11 +61,11 @@ class SearchResult(View):
             self.selected_fields_client.append('First Name')
             self.selected_fields_client.append('Last Name')
             self.selected_fields_client.append('Title')
-            self.selected_fields_client.append('City')
+            self.selected_fields_client.append('district')
         if 'Order' in request.GET and not self.selected_fields_order:
             self.selected_fields_client.append('First Name')
             self.selected_fields_client.append('Last Name')
-            self.selected_fields_client.append('City')
+            self.selected_fields_client.append('district')
             self.selected_fields_order.append('Debit')
             if 'proforma' not in request.GET:
                 self.selected_fields_order.append('Mode Of Payment')
@@ -81,7 +81,7 @@ class SearchResult(View):
         if 'Order' in request.GET and 'proforma' not in request.GET:
             self.list_dict = {'First Name':'purchase_order__buyer__first_name',
             'Last Name':'purchase_order__buyer__last_name', 
-            'City':'purchase_order__buyer__customer__address__city',
+            'district':'purchase_order__buyer__customer__address__district',
             'Phone':'purchase_order__buyer__customer__telephone',
             'Joining Date':'purchase_order__buyer__customer__date_joined',
             'Company':'purchase_order__buyer__customer__company',
@@ -97,7 +97,7 @@ class SearchResult(View):
         elif 'Order' in request.GET and 'proforma' in request.GET:
             self.list_dict = {'First Name':'quoted_order__buyer__first_name',
             'Last Name':'quoted_order__buyer__last_name', 
-            'City':'quoted_order__buyer__customer__address__city',
+            'district':'quoted_order__buyer__customer__address__district',
             'Phone':'quoted_order__buyer__customer__telephone',
             'Joining Date':'quoted_order__buyer__customer__date_joined',
             'Company':'quoted_order__buyer__customer__company',

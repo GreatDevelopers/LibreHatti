@@ -120,7 +120,7 @@ def quoted_order_added_success(request):
     quoted_order_id = request.session.get('quoted_order_id')
     details = QuotedOrder.objects.values('buyer__first_name',\
         'buyer__last_name', 'buyer__customer__address__street_address',\
-        'buyer__customer__title', 'buyer__customer__address__city').\
+        'buyer__customer__title', 'buyer__customer__address__district').\
     filter(id=quoted_order_id)[0]
     return render(request, 'bills/quoted_success.html', {'details':details,
         'quoted_order_id':quoted_order_id})

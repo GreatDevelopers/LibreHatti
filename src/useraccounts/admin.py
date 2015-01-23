@@ -59,6 +59,6 @@ class CustomUserAdd(UserAdmin):
     
     def address(self,instance):
         return "%s" % (instance.customer.address.street_address + ' ' + \
-            instance.customer.address.city)
+            instance.customer.address.district)
 
 admin.site.register(User,CustomUserAdd)

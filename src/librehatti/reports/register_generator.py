@@ -45,7 +45,7 @@ class GenerateRegister(View):
         self.result_fields = []
         self.list_dict = {'First Name':'buyer__first_name',
             'Last Name':'buyer__last_name',
-            'City':'buyer__customer__address__city',
+            'district':'buyer__customer__address__district',
             'Phone':'buyer__customer__telephone',
             'joining date':'buyer__customer__date_joined',
             'Company':'buyer__customer__company',
@@ -218,10 +218,10 @@ class GenerateRegister(View):
             return self.fetch_values(request)
         else:
             self.fields_list = ['first_name','last_name', 
-                'customer__address__street_address', 'customer__address__city',
+                'customer__address__street_address', 'customer__address__district',
                 'customer__address__province']
             self.selected_fields_client = ['First Name','Last Name',
-                'Street Address','City','Province']
+                'Street Address','district','Province']
             return self.fetch_values(request)
 
     def get(self,request):
