@@ -247,7 +247,7 @@ def suspense_bill(request):
                 except:
                     pass
         list.append(item_names)
-        list.append(total)
+        list.append(int(total))
         bill_values.append(list)
     taxes_applied = TaxesApplied.objects.\
     filter(purchase_order=id).values('surcharge', 'tax')
