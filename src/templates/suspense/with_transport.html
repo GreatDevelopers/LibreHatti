@@ -41,7 +41,7 @@
     {% endif %}
        , {{address.purchase_order__buyer__customer__address__province}}</div>
         <div>Vide Bill No. GNDEC/TCC/B/{{purchase_order}} dated {{order_date}}</div>
-        on account of Vide Receipt No. {{purchase_order}} dated {{order_date}}
+        on account of {{address.purchased_item__item__category__name}}, Vide Receipt No. {{purchase_order}} dated {{order_date}}
         <div>Nature of Consultancy : {{ distribution }},  Ratio {{ ratio }} </div>
         <div id = "pos-left">
             <table border='1px'>

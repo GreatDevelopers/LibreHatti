@@ -355,7 +355,8 @@ def with_transport(request):
     'purchase_order__buyer__customer__address__province','college_income',\
     'admin_charges', 'purchase_order__cheque_dd_number',\
     'purchase_order__cheque_dd_date','purchase_order__mode_of_payment__method',\
-    'purchase_order__buyer__customer__title').filter(voucher_no=number,\
+    'purchase_order__buyer__customer__title',
+    'purchased_item__item__category__name').filter(voucher_no=number,\
     session=financialsession['id'])[0]
     distribution = Distribution.objects.values('name').\
     get(ratio=voucherid['ratio'])

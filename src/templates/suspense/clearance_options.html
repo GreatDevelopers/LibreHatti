@@ -51,7 +51,7 @@
 
            <form id="myForm" action="{% url 'librehatti.suspense.views.transport_bill' %}" method="post">
            {% csrf_token %}
-           <td><input type="submit" class="btn btn-info btn-large" value="Generate Bill"/></td>
+           <td><input type="submit" class="btn btn-info btn-large" value="Transport Bill"/></td>
              <input type="hidden" value="{{ session_id }}" name="session" />
              <input type="hidden" value="{{ voucher_no }}" name="voucher" />
            </td>
