@@ -790,7 +790,8 @@ def main_register(request):
                 'buyer__customer__address__street_address',\
                 'buyer__customer__address__city',\
                 'buyer__customer__address__province',\
-                ).exclude(id__in = suspense_order).distinct()
+                ).exclude(id__in = suspense_order).\
+            exclude(voucherid__is_special=1).distinct()
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             temp_list = []
