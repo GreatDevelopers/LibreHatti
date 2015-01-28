@@ -4,7 +4,7 @@ It includes the choices used in forms.
 
 CLIENT_FIELD_CHOICES = ( ('First Name', 'First Name'), ('Last Name', 'Last Name'),
     ('Title','Title'), ('Street Address','Street Address'),
-    ('City', 'City'), ('Phone', 'Phone'),('Company', 'Company'),
+    ('district', 'district'), ('Phone', 'Phone'),('Company', 'Company'),
     )
 
 

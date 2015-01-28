@@ -23,7 +23,7 @@ class LetterData(models.Model):
     """Model for data required for letter generation"""
     name = models.CharField(max_length=500)
     street_address = models.CharField(max_length=500)
-    city = models.CharField(max_length=500)
+    district = models.CharField(max_length=500)
     pin = models.CharField(max_length=10, blank=True, null=True)
     province = models.CharField(max_length=500)
     contact_person = models.CharField(max_length=200)

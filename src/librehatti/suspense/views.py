@@ -350,7 +350,7 @@ def with_transport(request):
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
     'purchase_order__buyer__last_name', 'purchase_order__mode_of_payment',\
     'purchase_order__buyer__customer__address__street_address',\
-    'purchase_order__buyer__customer__address__city',\
+    'purchase_order__buyer__customer__address__district',\
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province','college_income',\
     'admin_charges', 'purchase_order__cheque_dd_number',\
@@ -427,7 +427,7 @@ def other_charges(request):
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
     'purchase_order__buyer__last_name',\
     'purchase_order__buyer__customer__address__street_address',\
-    'purchase_order__buyer__customer__address__city',\
+    'purchase_order__buyer__customer__address__district',\
     'purchase_order__buyer__customer__address__pin',\
     'purchase_order__buyer__customer__address__province',\
     'purchase_order__buyer__customer__title').filter(voucher_no=number,\
@@ -943,7 +943,7 @@ def mark_clear(request):
             values('purchase_order__buyer__first_name',\
                 'purchase_order__buyer__last_name',\
                 'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__city',\
+                'purchase_order__buyer__customer__address__district',\
                 'purchase_order__buyer__customer__address__province')
             if voucher_object:
                 list_user.append(voucher_object)
@@ -1070,7 +1070,7 @@ def clearance_options(request):
         with_transport = 1
     details = PurchaseOrder.objects.values('buyer__first_name',\
         'buyer__last_name','buyer__customer__address__street_address',\
-        'buyer__customer__title','buyer__customer__address__city',\
+        'buyer__customer__title','buyer__customer__address__district',\
         'mode_of_payment__method','cheque_dd_number',\
         'cheque_dd_date').filter(id=voucherid['purchase_order'])[0]
     request_status = request_notify()

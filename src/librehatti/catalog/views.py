@@ -255,7 +255,7 @@ def order_added_success(request):
     order_id = request.session.get('purchase_order_id')
     details = PurchaseOrder.objects.values('buyer__first_name',\
         'buyer__last_name','buyer__customer__address__street_address',\
-        'buyer__customer__title','buyer__customer__address__city',\
+        'buyer__customer__title','buyer__customer__address__district',\
         'mode_of_payment__method','cheque_dd_number',\
         'cheque_dd_date').filter(id=order_id)[0]
     suspense_flag = 0
@@ -296,7 +296,7 @@ def change_request(request):
                 'purchase_order__buyer__last_name',
                 'purchase_order__buyer__customer__address__street_address',\
                 'purchase_order__buyer__customer__title',
-                'purchase_order__buyer__customer__address__city',\
+                'purchase_order__buyer__customer__address__district',\
                 'purchase_order__mode_of_payment__method',
                 'purchase_order__cheque_dd_number',\
                 'purchase_order__cheque_dd_date').\
@@ -405,7 +405,7 @@ def nonpaymentordersuccess(request):
     nonpaymentorder_id = request.session.get('nonpaymentorder_id')
     details = NonPaymentOrder.objects.values('buyer__first_name',
         'buyer__last_name','buyer__customer__address__street_address',
-        'buyer__customer__title','buyer__customer__address__city').\
+        'buyer__customer__title','buyer__customer__address__district').\
     filter(id=nonpaymentorder_id)[0]
     nonpayobject = NonPaymentOrderOfSession.objects.values(
             'non_payment_order_of_session').\

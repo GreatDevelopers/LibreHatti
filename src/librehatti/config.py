@@ -21,7 +21,7 @@ _ADMIN_GROUP = 'group name'
 """Account Information"""
 _ACCOUNT_HOLDER = 'ACCOUNT HOLDER'
 _NAME_OF_BANK = 'Bank Name'
-_BRANCH = 'City'
+_BRANCH = 'district'
 _ONLINE_ACCOUNT = 'Online Account No.'
 _IFSC_CODE = 'IFSC Code No.'
 
