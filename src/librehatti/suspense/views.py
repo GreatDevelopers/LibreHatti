@@ -368,6 +368,8 @@ def with_transport(request):
     suspenseclearance['work_charge'] + boring_charge_internal
     total_in_words = num2eng(total)
     rowspan = 6
+    if suspenseclearance['work_charge'] == 0:
+        rowspan = rowspan - 1
     if ta_da_total != 0:
         rowspan = rowspan + 1
     if othercharge != 0:
@@ -416,7 +418,7 @@ def other_charges(request):
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'boring_charge_internal', 'boring_charge_external', 'labour_charge',\
     'car_taxi_charge', 'field_testing_staff', 'lab_testing_staff',\
-    'clear_date').get(voucher_no=number, session=financialsession['id'])
+    'clear_date', 'test_date').get(voucher_no=number, session=financialsession['id'])
     try:
         tada = TaDa.objects.values('tada_amount').get(voucher_no=number,\
             session=financialsession['id'])
@@ -449,7 +451,8 @@ def other_charges(request):
                 'total':total, 'other_charges':other_charges,\
                 'transport':transport, 'complete_total':complete_total,\
                 'transplusother':transplusother, 
-                'transportbillno':transportbillno})
+                'transportbillno':transportbillno,
+                'test_date':suspenseclearance['test_date']})
 
 
 @login_required
@@ -999,8 +1002,14 @@ def mark_status(request):
     distribution_total = suspense_total - boring_charge_internal -\
     other_charges - tada_amount
     voucherid = VoucherId.objects.values('ratio', 'college_income',\
-        'admin_charges').filter(voucher_no=voucher, session_id=session)[0]
-    work_charge = round((2 * distribution_total) / 100)
+        'admin_charges', 'purchased_item__item__category__parent__name').\
+    filter(voucher_no=voucher, session_id=session)[0]
+    temp_val = voucherid['purchased_item__item__category__parent__name'].split(':')
+    if temp_val[1].upper() == 'FIELD WORK' or \
+        temp_val[1].upper() == ' FIELD WORK':
+        work_charge = round((2 * distribution_total) / 100)
+    else:
+        work_charge = 0
     college_income = round((voucherid['college_income'] * distribution_total) / 100)
     admin_charges = round((voucherid['admin_charges'] * distribution_total) / 100)
     remain_cost = distribution_total - work_charge - college_income -\

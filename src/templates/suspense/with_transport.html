@@ -68,10 +68,12 @@
                     <td>DEV. FUND (CONSULTANCY) </td>
                     <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
                 </tr>
+                {% if suspense_clearance.work_charge != 0 %}
                 <tr>
                     <td>Work Charges(CONSULTANCY)</td>
                     <td  id = "pos-right">{{ suspense_clearance.work_charge }}</td>
                 </tr>
+                {% endif %}
                 {% if ta_da != 0 %}
                 <tr>
                     <td>T.A/D.A Staff </td>
