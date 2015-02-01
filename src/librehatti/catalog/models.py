@@ -75,7 +75,7 @@ class Product(models.Model):
     This class defines the name of product, category, price of eact item of
     that product and the organisation with which user deals
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=500)
     category = mptt.fields.TreeForeignKey(Category, related_name="products")
     price_per_unit = models.IntegerField(blank=True,null=True)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations')
