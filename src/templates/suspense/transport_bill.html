@@ -19,8 +19,18 @@
 
     <div style="clear: both">
     </div>
+    {% for value in client_address %}
+    <p><span id ="highlight"> To : </span >{{ value.purchase_order__buyer__first_name }}
+    {{ value.purchase_order__buyer__last_name }}
+    {{ value.purchase_order__buyer__customer__title }}
+    {{ value.purchase_order__buyer__customer__address__street_address }}
+    {{ value.purchase_order__buyer__customer__address__district }}
+     </span>
+    </p>
     <p><span id ="highlight"> Vehicle No. </span >{{ vehicle}} </span>
     </p>
+
+    {% endfor %}
     <div id = "transport_content">
         <table border="1" align="center">
             <tr>
@@ -56,7 +66,7 @@
         <div id="transportbill">Dean Testing and Consultancy</div>
         <br>
     <div id = "transportfooter">Passed for payment for &#8377; {{ total_amount }}/- (Rupees {{ words }} only)</div>
-    <div class='footertable'>
+    <div class='transportfootertable'>
         <table>
             <tr>
                 <td>Dean T&amp;C</td>
