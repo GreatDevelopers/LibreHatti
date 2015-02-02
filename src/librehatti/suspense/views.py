@@ -1151,6 +1151,13 @@ def transport_bill(request):
                 total_list.append(int(total))
             total_amount = value['total']
         zip_data = zip(list_of_date,list_of_kilometer,total_list)
+        client_address = VoucherId.objects.\
+        filter(session_id = session,voucher_no = voucher).\
+        values('purchase_order__buyer__customer__address__street_address',\
+            'purchase_order__buyer__first_name',\
+            'purchase_order__buyer__last_name',\
+            'purchase_order__buyer__customer__title',\
+            'purchase_order__buyer__customer__address__district')
         header = HeaderFooter.objects.values('header').get(is_active=True)
         request_status = request_notify()   
         return render(request, 'suspense/transport_bill.html',
@@ -1159,7 +1166,7 @@ def transport_bill(request):
                'total_amount':total_amount,'zip_data':zip_data,\
                'date_of_generation':date_of_generation,\
                'vehicle':vehicle,'request':request_status,'header':header,\
-               })
+               'client_address':client_address})
 
 
 def tada_bill(request):

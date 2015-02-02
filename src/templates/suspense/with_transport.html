@@ -98,6 +98,7 @@
                 </tr>
             </table>
         </div>
+        {% if field_staff %}
         <div class="testingfieldstaff">
             <table border='1px'>
                 <tr>
@@ -115,6 +116,8 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
+        {% if lab_staff %}
         <div class="testinglabstaff">
             <table border='1px'>
                 <tr>
@@ -132,6 +135,7 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
         <div style="clear:both;">
         </div>
         <div class="position">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE.</div>

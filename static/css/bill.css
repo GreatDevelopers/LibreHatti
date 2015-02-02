@@ -98,6 +98,15 @@ table th{
     width: 95%;
     position: relative;
 }
+.transportfootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 110px;
+    width: 70%;
+    text-align: center;
+    position: relative;
+}
+
 
 .tadafootertable{
     margin-left: auto;
@@ -108,10 +117,11 @@ table th{
 }
 
 .footertable table td{
+    text-align: center;
 	font-weight: bold;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	width: 25%;
+	width: 20%;
 }
 
 .footer1{
