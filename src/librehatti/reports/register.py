@@ -1187,7 +1187,7 @@ def suspense_register(request):
                 'purchase_order__mode_of_payment__method',
                 'purchase_order__cheque_dd_number', 'purchase_order',
                 'purchase_order__cheque_dd_date', 'distance_estimated').\
-                order_by('purchase_order__date_time')
+                order_by('purchase_order__date_time','voucher')
             rate = Surcharge.objects.values('value').get(tax_name='Transportation')
             result = []
             previous_order = 0

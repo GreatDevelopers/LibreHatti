@@ -174,9 +174,15 @@ def bill_cal(request):
         if surcharge_tax == 1 and generate_tax == 1:
             taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
-            taxes_applied = TaxesApplied(purchase_order = purchase_order,
-            surcharge = surcharge_obj, tax = taxes)
-            taxes_applied.save()
+            taxes_applied_var = TaxesApplied.objects.filter(
+                purchase_order = purchase_order, surcharge = surcharge_obj,
+                tax = taxes)
+            if taxes_applied_var:
+                pass
+            else:
+                taxes_applied = TaxesApplied(purchase_order = purchase_order,
+                surcharge = surcharge_obj, tax = taxes)
+                taxes_applied.save()
     taxes_applied_temp = TaxesApplied.objects.\
     filter(purchase_order=purchase_order_id)
     if taxes_applied_temp:
@@ -187,11 +193,15 @@ def bill_cal(request):
         tax_total = 0
     grand_total = price_total + tax_total + delivery_charges
     amount_received = grand_total - purchase_order_obj['tds']
-    bill = Bill(purchase_order = purchase_order, total_cost = price_total,
-    total_tax = tax_total, grand_total = grand_total,
-    delivery_charges = delivery_charges, amount_received = amount_received,
-    totalplusdelivery=totalplusdelivery)
-    bill.save()
+    bill_obj = Bill.objects.filter(purchase_order=purchase_order)
+    if bill_obj:
+        pass
+    else:
+        bill = Bill(purchase_order = purchase_order, total_cost = price_total,
+        total_tax = tax_total, grand_total = grand_total,
+        delivery_charges = delivery_charges, amount_received = amount_received,
+        totalplusdelivery=totalplusdelivery)
+        bill.save()
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
     return HttpResponseRedirect(reverse\
