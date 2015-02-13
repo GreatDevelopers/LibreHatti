@@ -1157,7 +1157,7 @@ def transport_bill(request):
             'purchase_order__buyer__first_name',\
             'purchase_order__buyer__last_name',\
             'purchase_order__buyer__customer__title',\
-            'purchase_order__buyer__customer__address__district')
+            'purchase_order__buyer__customer__address__district')[0]
         header = HeaderFooter.objects.values('header').get(is_active=True)
         request_status = request_notify()   
         return render(request, 'suspense/transport_bill.html',
@@ -1211,7 +1211,9 @@ def tada_bill(request):
     #return HttpResponse(purchase_order_var)
     purchase_order_object = PurchaseOrder.objects.\
     filter(voucherid__purchase_order_of_session = purchase_order_var).values(\
-        'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title')
+        'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title',
+        'buyer__customer__address__district', 'buyer__customer__address__street_address',
+        'buyer__customer__address__pin', 'buyer__customer__address__province')
     #return HttpResponse(purchase_order_object)
     header = HeaderFooter.objects.values('header').get(is_active=True)
     #footer = HeaderFooter.objects.values('footer').get(is_active=True)
