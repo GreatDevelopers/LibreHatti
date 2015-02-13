@@ -19,18 +19,16 @@
 
     <div style="clear: both">
     </div>
-    {% for value in client_address %}
-    <p><span id ="highlight"> To : </span >{{ value.purchase_order__buyer__first_name }}
-    {{ value.purchase_order__buyer__last_name }}
-    {{ value.purchase_order__buyer__customer__title }}
-    {{ value.purchase_order__buyer__customer__address__street_address }}
-    {{ value.purchase_order__buyer__customer__address__district }}
+    <p><span id ="highlight"> To : </span >{{ client_address.purchase_order__buyer__first_name }}
+    {{ client_address.purchase_order__buyer__last_name }}
+    {{ client_address.purchase_order__buyer__customer__title }}
+    {{ client_address.purchase_order__buyer__customer__address__street_address }}
+    {{ client_address.purchase_order__buyer__customer__address__district }}
      </span>
     </p>
     <p><span id ="highlight"> Vehicle No. </span >{{ vehicle}} </span>
     </p>
 
-    {% endfor %}
     <div id = "transport_content">
         <table border="1" align="center">
             <tr>

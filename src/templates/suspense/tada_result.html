@@ -15,11 +15,15 @@
     <div class="voucher-no">{% for value in purchase_order_object%}
     <b>Name of the Department/Client:</b> 
         {% if value.buyer_id__first_name %}
-        {{value.buyer_id__first_name}} {{value.buyer_id__last_name}}
+        {{value.buyer_id__first_name}} {{value.buyer_id__last_name}},
         {% else %}
-        {{value.buyer__customer__title}}
+        {{value.buyer__customer__title}},
         {% endif %}
-
+        {{value.buyer__customer__address__street_address}}, {{value.buyer__customer__address__district}},
+        {% if value.buyer__customer__address__pin %}
+        {{value.buyer__customer__address__pin}},
+        {% endif %}
+        {{value.buyer__customer__address__province}}.
     {% endfor %}
     <div style = "text-align:right; float:right">
         <b>Vide Receipt No.</b>:{{ purchase_order_id }}
