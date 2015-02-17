@@ -4,8 +4,7 @@ from librehatti.programmeletter.models import TeamName
 from librehatti.programmeletter.models import StaffInTeam
 from librehatti.programmeletter.models import LetterData
 
-from librehatti.programmeletter.forms import StaffInTeamForm
-from librehatti.programmeletter.forms import TeamNameForm
+from librehatti.programmeletter.forms import *
 
 from ajax_select.admin import AjaxSelectAdmin
 
@@ -27,7 +26,8 @@ class TeamNameAdmin(AjaxSelectAdmin):
     model = TeamName
 
 
-class LetterDataAdmin(admin.ModelAdmin):
+class LetterDataAdmin(AjaxSelectAdmin):
+    form = LetterDataForm
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['letterdata_id'] = obj.id

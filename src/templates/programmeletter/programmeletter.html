@@ -11,14 +11,14 @@
     {% block content %}
     <div>No. TCC/T/ <span id = "dated">Dated: {{ vehicle.letter_date }}</span></div>
     <p>To</p>
-    <div>{{data.name}},</div>
-    <div>{{data.street_address}},</div>
-    <div>{{data.city}}
-    {% if data.pin != 'None' and data.pin != '' %}
-    -{{data.pin}}
+    <div>{{buyer.first_name}} {{buyer.last_name}},</div>
+    <div>{{address.street_address}},</div>
+    <div>{{address.city}}
+    {% if address.pin != 'None' and address.pin != '' %}
+    -{{address.pin}}
     {% endif %},</div>
-    <div>{{data.province}}.</div>
-    <p>Sub: {{data.letter_subject}}</p>
+    <div>{{address.province}}.</div>
+    <p>Sub: {{address.letter_subject}}</p>
     <p>Sir,</p>
     <p>The {{vehicle.team_name__team_name}}</p>
     <ol>

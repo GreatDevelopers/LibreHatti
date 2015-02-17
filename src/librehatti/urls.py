@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^save_fields', 'librehatti.reports.views.save_fields'),
     url(r'^list_saved_registers', 'librehatti.reports.views.list_saved_registers'),
     url(r'daily_result', 'librehatti.reports.register.daily_report_result', name='daily_report_result'),
+    url(r'^Test_Reports_data/', 'librehatti.Test_Reports.views.Test_Reports_data', name='Test_Reports'),
+    url(r'^Reports/', 'librehatti.Test_Reports.views.Reports',name='Reports'),
     url(r'consultancy_funds_report', 'librehatti.reports.register.consultancy_funds_report', name='consultancy_funds_report'),    
     url(r'tds_report', 'librehatti.reports.register.tds_report_result', name='tds_report_result'),    
     url(r'payment_report', 'librehatti.reports.register.payment_register', name='payment_register'),
@@ -47,5 +49,6 @@ urlpatterns = patterns('',
     url(r'^receipt/', 'librehatti.prints.views.receipt'),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^programmeletter/', 'librehatti.programmeletter.views.programmeletter'),
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

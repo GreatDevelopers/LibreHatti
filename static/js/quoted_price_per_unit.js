@@ -5,6 +5,7 @@ $(document).ready(function(){
         item_id = $(this).val();
         reverse('librehatti.catalog.views.price_per_unit', function(url) {
             var request_url = url + "/?item_id=" + item_id;
+                alert(request_url);
             $.ajax({
                 url: request_url,
                 success: function(data){
