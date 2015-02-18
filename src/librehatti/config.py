@@ -29,11 +29,11 @@ _IFSC_CODE = 'IFSC Code No.'
 _REFERENCE = 'Letter No.'
 _REFERENCE_DATE = 'Letter Date'
 _YOUR_LETTER_No = 'Your letter No.'
-_CUBE_TEST = 'Cube Test'
+_CUBE_TEST = 'Cube Dated'
 """TEST REPORTS"""
 
 _DATE = 'DATE'
 _STARTING_DATE = "starting date"
 _STRENGTH = "strength"
-_TEST_DATE = "Test Date"
+_TEST_DATE = "Date of Testing"
 

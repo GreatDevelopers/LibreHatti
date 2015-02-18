@@ -43,6 +43,7 @@ def Reports(request):
     data_session = request.session.get('data')
     report_get_id = Test_Reports.objects.values('id','mix').get(Session_id = data_session['Session'], Voucher = data_session['Voucher']) 
     count = 1
+    report_content='' 
     filename = "trial_copy.tex"
     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial.tex'))
     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial_copy.tex'))
@@ -50,28 +51,29 @@ def Reports(request):
         r = request.POST['header']
     else:
         return render(request,"Test_Reports/index.html",{'r':''})
-
+ 
     for des in  Test_Report_Descriptions.objects.filter(report_id_id = report_get_id['id']):
-            report_content=''
             if report_get_id['mix'] == 1:
                 report_content += str(count) +"&"+des.Description+"&"+unicode(des.Start_Date)+"&"+des.mix+"&"+des.Strength+"\\"+"\\"+"\hline"
                 if request.POST['header'] == 'yes':
                     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial.tex'))
                     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial_copy.tex'))
+                    filename = "trial_copy.pdf"
                 else:
                     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/my_latex_tamplate.tex'))
                     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/my_latex_tamplate_copy.tex'))
+                    filename = "my_latex_tamplate_copy.pdf"
                 
-
             else:
                 report_content += str(count)+"&"+des.Description+"&"+unicode(des.Start_Date)+"&"+des.Strength+"\\"+"\\"+"\hline"
                 if request.POST['header'] == 'no':                                                    
                     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/my_tamplate_without_mix.tex'))
                     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/my_tamplate_without_mix_copy.tex'))
+                    filename = "my_tamplate_without_mix_copy.pdf"
                 else:                                
                     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial_without_mix.tex'))
                     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial_without_mix_copy.tex'))
-
+                    filename = "trial_without_mix_copy.pdf"
 
     count += 1               
     if r == 'yes':
@@ -87,8 +89,8 @@ def Reports(request):
 								 	'address3': data_session['City'].replace('&','\&'),
 									'sub': data_session['Subject'].replace('&','\&'),
 									'ref_no': data_session['Refernce_no'],
-									'ref_date': data_session['Refernce_Date'],
-									'start_date': data_session['Refernce_Date'],
+									'ref_date': data_session['Refernce_Date'].replace('-','/'),
+									'start_date': data_session['Refernce_Date'].replace('-','/'),
                                     'table': report_content,    
 									}))
         os.close(texfile)
@@ -106,10 +108,10 @@ def Reports(request):
 								 	'address3': data_session['City'].replace('&','\&'),
 									'sub': data_session['Subject'].replace('&','\&'),
 									'ref_no': data_session['Refernce_no'],
-									'ref_date': data_session['Refernce_Date'],
-									'start_date': data_session['Refernce_Date'],
+									'ref_date': data_session['Refernce_Date'].replace('-','/'),
+									'start_date': data_session['Refernce_Date'].replace('-','/'),
                                     'table': report_content,    
 									}))
         os.close(texfile)
         call(['sh',os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/shell.sh'))])   
-    return render(request,"Test_Reports/index.html",{'r':report_content})
+    return render(request,"Test_Reports/index.html",{'r':'/'+filename,'res': request.POST['header']})
