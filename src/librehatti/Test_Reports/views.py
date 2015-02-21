@@ -62,8 +62,11 @@ def Reports(request):
     report_get_id = Test_Reports.objects.values('id','mix').get(Session_id=data_session['Session'], Voucher = data_session['Voucher']) 
     count = 1
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
     report_content='' 
 =======
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
     report_content = '' 
 
     date_format = data_session['Refernce_Date'].split("-")
@@ -71,7 +74,10 @@ def Reports(request):
     date_format_for_test = data_session['Testing_Date'].split("-")
     date_format_new_for_test = date_format_for_test[2] + "/" + date_format_for_test[1] + "/" + date_format_for_test[0]
 
+<<<<<<< HEAD
+=======
 >>>>>>> Please check
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
     filename = "trial_copy.tex"
     texfilename = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial.tex'))
     texfilename_copy = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/trial_copy.tex'))
@@ -83,11 +89,17 @@ def Reports(request):
     for des in  Test_Report_Descriptions.objects.filter(report_id_id = report_get_id['id']):
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
 
             date_format_for_start = unicode(des.Start_Date).split("-")
             date_format_new_for_start = date_format_for_start[2] + "/" + date_format_for_start[1] + "/" + date_format_for_start[0]
             
+<<<<<<< HEAD
+=======
 >>>>>>> Please check
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
             if report_get_id['mix'] == 1:
                 report_content += str(count) + "&" + des.Description + "&" + date_format_new_for_start + "&" + des.mix + "&" + des.Strength + "\\" + "\\" + "\hline"
                 if request.POST['header'] == 'yes':
@@ -128,12 +140,19 @@ def Reports(request):
 									'ref_date': data_session['Refernce_Date'].replace('-','/'),
 									'start_date': data_session['Refernce_Date'].replace('-','/'),
                                     'table': report_content,    
+<<<<<<< HEAD
+									'test_date': date_format_new,
+									'ref_date': date_format_new_for_test,
+									'start_date': date_format_new_for_test,
+                                    'table': report_content,    
+=======
 =======
 									'test_date': date_format_new,
 									'ref_date': date_format_new_for_test,
 									'start_date': date_format_new_for_test,
                                                                         'table': report_content,    
 >>>>>>> Please check
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
 									}))
         os.close(texfile)
         call(['sh',os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/shell.sh'))])  
@@ -155,13 +174,25 @@ def Reports(request):
 									'ref_date': data_session['Refernce_Date'].replace('-','/'),
 									'start_date': data_session['Refernce_Date'].replace('-','/'),
                                     'table': report_content,    
+<<<<<<< HEAD
+									'test_date': date_format_new,
+									'ref_date': date_format_new_for_test,
+									'start_date': date_format_new_for_test,
+                                    'table': report_content,    
+=======
 =======
 									'test_date': date_format_new,
 									'ref_date': date_format_new_for_test,
 									'start_date': date_format_new_for_test,
                                                                         'table': report_content,    
 >>>>>>> Please check
+>>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
 									}))
         os.close(texfile)
         call(['sh',os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'templates/Test_Reports/shell.sh'))])   
     return render(request,"Test_Reports/index.html",{'r':'/'+filename,'res': request.POST['header']})
+
+@login_required
+def Soil_building(request):
+
+    return render(request,"Test_Reports/soil.html",{})

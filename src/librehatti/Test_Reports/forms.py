@@ -50,4 +50,21 @@ class Test_Reports_Des(forms.ModelForm):
         self.fields['Strength'].widget.attrs = {'class':'strength'}
         self.fields['mix'].widget.attrs = {'class':'mix'}
 
+class Soil_building_Des(forms.ModelForm):
+
+
+    class Media:
+        js = (
+            'js/hide_add_buyer.js',
+            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+            'js/Test_Reports.js',
+             )
+    
+    def __init__(self,  *args, **kwargs):
+        super(Soil_building_Des, self).__init__(*args, **kwargs)
+        self.fields['Dt'].widget.attrs = {'class':'Dt'}
+        self.fields['Ob_Pr'].widget.attrs = {'class':'Ob_Pr'}
+        self.fields['Corr_F'].widget.attrs = {'class':'Corr_F'}
+        self.fields['Ob_N_V'].widget.attrs = {'class':'Ob_N_V'}
+        self.fields['Corr_N_V'].widget.attrs = {'class':'Corr_N_V'}
 

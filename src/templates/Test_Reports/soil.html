@@ -9,24 +9,10 @@
     {% block content %}
     <form method="POST" action='{% url 'Reports' %}' >
         {% csrf_token %}
-{{date}}
-<table>
-<tr>
-<td>With Header<input type='radio' name='header' placeholder='header' value='yes'></td>
-<td>Without Header<input type='radio' name='header' placeholder='withoutheader' value='no'></td>
-</tr>
-<tr>
-<td><input type='submit' value='Report' class="btn btn-info btn-large"></td>
-</tr>
-<tr>
-<td>
 {% if res == 'yes' or res == 'no' %}
 <a href={% static 'Download' %}{{r}}>Download</a>
 {% endif %}
-</td>
-</tr>
 
-</table>    </form>
     {% endblock %}
 </body>
 </html>
