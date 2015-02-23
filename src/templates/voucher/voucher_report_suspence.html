@@ -30,13 +30,17 @@
     {% else %}
     {{buyer.buyer__customer__title}}
     {% endif %}
-    , {{address.address__street_address}}, {{address.address__city}}, 
+    , {{address.address__street_address}}, {{address.address__district}}, 
     {% if address.address__pin != 'None' and address.address__pin != '' %}
      {{address.address__pin}},
      {% endif %} 
      {{address.address__province}} {% if buyer_name.company %}
       Agency: {{buyer.buyer__customer__company}}
-        {% endif %} by {{method}}, on account of {{material}}.
+        {% endif %} by {{method}} 
+      {% if method_id != 1 and method_id != 4 %}
+      No. {{method_number}} dated {{method_date}}
+      {% endif %}
+      , on account of {{material}}.
 
     This amount is kept in suspence till clearance. <br/><br/>
     <div class="receipt-detail">Receipt No. {{job}}   </div>

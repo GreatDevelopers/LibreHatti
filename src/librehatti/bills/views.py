@@ -9,6 +9,7 @@ from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import Surcharge
+from librehatti.catalog.models import SpecialCategories
 from librehatti.catalog.request_change import request_notify
 
 from librehatti.bills.models import QuotedTaxesApplied
@@ -38,14 +39,26 @@ from django.core.urlresolvers import reverse
 from librehatti.voucher.models import FinancialSession
 
 
-"""
-This view calculate taxes on quoted order, bill data
-and save those values in database.
-"""
 @login_required
 def quoted_bill_cal(request):
+    """
+    This view calculate taxes on quoted order, bill data
+    and save those values in database.
+    argument: Http request
+    returns: Redirects to select option page after calculatations. 
+    """
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
+    generate_tax = 1
+    first_item = QuotedItem.objects.values('item__category__id').\
+    filter(quoted_order=quoted_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('tax').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['tax'] == False:
+            generate_tax = 0
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
     quoted_order_obj = QuotedOrder.objects.values('total_discount').\
     get(id=quoted_order_id)
@@ -71,15 +84,20 @@ def quoted_bill_cal(request):
         surcharge_id = value['id']
         surcharge_value = value['value']
         surcharge_tax = value['taxes_included']
-        if surcharge_tax == 1:
+        if surcharge_tax == 1 and generate_tax == 1:
             taxes = round((totalplusdelivery * surcharge_value)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = QuotedTaxesApplied(quoted_order=quoted_order,
             surcharge=surcharge_obj, tax=taxes)
             taxes_applied.save()
-    taxes_applied_obj = QuotedTaxesApplied.objects.\
-    filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
-    tax_total = taxes_applied_obj['tax__sum']
+    taxes_applied_temp = QuotedTaxesApplied.objects.\
+    filter(quoted_order=quoted_order_id)
+    if taxes_applied_temp:
+        taxes_applied_obj = QuotedTaxesApplied.objects.\
+        filter(quoted_order=quoted_order_id).aggregate(Sum('tax'))
+        tax_total = taxes_applied_obj['tax__sum']
+    else:
+        tax_total = 0
     grand_total = price_total + tax_total + delivery_charges
     amount_received = grand_total
     bill = QuotedBill(quoted_order=quoted_order, total_cost=price_total,
@@ -94,10 +112,15 @@ def quoted_bill_cal(request):
 
 @login_required
 def quoted_order_added_success(request):
+    """
+    View to hadle success of addition of quoted order.
+    argument: Http request
+    returns: Render success page after adding quoted order.
+    """
     quoted_order_id = request.session.get('quoted_order_id')
     details = QuotedOrder.objects.values('buyer__first_name',\
         'buyer__last_name', 'buyer__customer__address__street_address',\
-        'buyer__customer__title', 'buyer__customer__address__city').\
+        'buyer__customer__title', 'buyer__customer__address__district').\
     filter(id=quoted_order_id)[0]
     return render(request, 'bills/quoted_success.html', {'details':details,
         'quoted_order_id':quoted_order_id})
@@ -105,6 +128,11 @@ def quoted_order_added_success(request):
 
 @login_required
 def select_note(request):
+    """
+    View to handle selection of extra notes while adding quoted order.
+    argument: Http Request.
+    returns: Render form for selection of note form.
+    """
     quoted_order_id = request.session.get('quoted_order_id')
     form = SelectNoteForm(initial={'quoted_order':quoted_order_id})
     request_status = request_notify()
@@ -114,6 +142,11 @@ def select_note(request):
 
 @login_required
 def select_note_save(request):
+    """
+    View to hanle saving of selected note in quoted order.
+    argument: Http Request
+    returns: Redirects to success page after selection of note line.
+    """
     if request.method == 'POST':
         form = SelectNoteForm(request.POST)
         if form.is_valid():
@@ -141,6 +174,10 @@ def select_note_save(request):
 
 @login_required
 def new_note_line(request):
+    """
+    It hanles addition of new condition line.
+    argument: Http Request
+    """
     note_line = request.GET['note_line']
     obj = NoteLine(note=note_line)
     obj.save()
@@ -149,6 +186,10 @@ def new_note_line(request):
 
 @login_required
 def delete_note(request):
+    """
+    It handles deletion of condition line.
+    argument: Http Request.
+    """
     delete_note = request.GET['delete_note']
     delete_note_id = delete_note.split(',')
     for id in delete_note_id:
@@ -158,6 +199,11 @@ def delete_note(request):
 
 @login_required
 def quoted_order_of_session(request):
+    """
+    It handles financial sessions for quoted order.
+    argument: Http Request
+    returns: Redirects to function for adding quoted add distance.
+    """
     old_post = request.session.get('old_post')
     quoted_order_id = request.session.get('quoted_order_id')
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)

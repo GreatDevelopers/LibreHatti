@@ -10,32 +10,42 @@
 <body>
     {% block content %}
     <div class = "container">
-        <h1>T.A./D.A  FORM FOR CONSULTANCY WORK</h1>
+        <h2>T.A./D.A  Form For Consultancy Work</h2>
     </div>
-        <div class="voucher-no">{% for a in purchase_order_object%}
-        <b>Name of the Department/Client:</b> {{ a.buyer_id__first_name }} {{ a.buyer_id__last_name }}
-        {% endfor %}
-        <div style = "text-align:right; float:right">
-            {% for a in purchase_order_id %}
-            <b>Vide Receipt No.</b>:{{ a }}
-            {% endfor %}
-        </div>
+    <div class="voucher-no">{% for value in purchase_order_object%}
+    <b>Name of the Department/Client:</b> 
+        {% if value.buyer_id__first_name %}
+        {{value.buyer_id__first_name}} {{value.buyer_id__last_name}},
+        {% else %}
+        {{value.buyer__customer__title}},
+        {% endif %}
+        {{value.buyer__customer__address__street_address}}, {{value.buyer__customer__address__district}},
+        {% if value.buyer__customer__address__pin %}
+        {{value.buyer__customer__address__pin}},
+        {% endif %}
+        {{value.buyer__customer__address__province}}.
+    {% endfor %}
+    <div style = "text-align:right; float:right">
+        <b>Vide Receipt No.</b>:{{ purchase_order_id }}
     </div>
-    <div class="date"><b>Amount claimed from Department/Client:</b> &#8377;{{tada.tada_amount}}
+    </div>
+    <br>
+    <div class="date"><b>Amount claimed from Department/Client:</b> &#8377;{{tada.tada_amount}}/-
         <div style = "text-align:right; float:right">
             <b>Date:</b> {{ tada.date_of_generation }}
         </div>
     </div>
-        <table style="width:100%" border = "1px">
+    <br>
+        <table style="width:100%" border = "1px" >
             <thead>
-                <tr>
-                    <th rowspan = "2">Name</th>
-                    <th colspan = "3">Departure(up)</th>
-                    <th colspan = "3">Arrival(up)</th>
-                    <th colspan = "3">Departure(down)</th>
-                    <th colspan = "3">Arrival(down)</th>
-                    <th rowspan = "2">D.A.</th>
-                    <th rowspan = "2">Signature</th>
+                <tr >
+                    <th rowspan = "2" id = "transport_content">Name</th>
+                    <th colspan = "3" id = "transport_content">Departure(up)</th>
+                    <th colspan = "3" id = "transport_content">Arrival(up)</th>
+                    <th colspan = "3" id = "transport_content">Departure(down)</th>
+                    <th colspan = "3" id = "transport_content">Arrival(down)</th>
+                    <th rowspan = "2" id = "transport_content">D.A.</th>
+                    <th rowspan = "2" id = "transport_content">Signature</th>
                 </tr>
                 <tr>
                     <th>Date</th>
@@ -56,17 +66,17 @@
                 {% for temp_var in list_staff%}
                 {% for daily_tada in temp_var%}
                 <tr>
-                    <td>{{daily_tada.name }}</td>
-                    <td>{{tada.start_test_date}}</td>
+                    <td id = "tadafield">{{daily_tada.name }}</td>
+                    <td id = "tadafield">{{tada.start_test_date}}</td>
                     <td>{{tada.departure_time_from_tcc}}</td>
                     <td>{{tada.source_site }}</td>
-                    <td>{{tada.start_test_date}}</td>
+                    <td id = "tadafield">{{tada.start_test_date}}</td>
                     <td>{{tada.arrival_time_at_site}}</td>
                     <td>{{tada.testing_site}}</td>
-                    <td>{{tada.end_test_date}}</td>
+                    <td id = "tadafield">{{tada.end_test_date}}</td>
                     <td>{{tada.departure_time_from_site}}</td>
                     <td>{{tada.testing_site}}</td>
-                    <td>{{tada.end_test_date}}</td>
+                    <td id = "tadafield">{{tada.end_test_date}}</td>
                     <td>{{tada.arrival_time_at_tcc}}</td>
                     <td>{{tada.source_site}}</td>
                     <td>{{daily_tada.daily_ta_da}}</td>
@@ -75,23 +85,24 @@
                 {% endfor %}
                 {% endfor %}
                 <tr>
-                    <td colspan = "13"><center><b>Total</b></center></td>
-                <td><b>{{ total}}</b></td>
+                    <td colspan = "13"><center><b>Total &#8377; </b></center></td>
+                <td><b>{{ tada_amount}}</b></td>
                 <td></td>
                 </tr>
             </tbody>
         </table>
-        <div id="transportfooter">TA.DA Bill have been entered on page...... of TA/DA & Other Charges register. Head other charges
-            <div id="transportbill">Dean T&C</div>
-            <div>Passed for payment for &#8377; {{ total }}/-</div>
-            <div>({{ words }}only).</div>
+        <div id="transportfooter">T.A/D.A Bill have been entered on page...... of T.A/D.A & Other Charges register. Head other charges
         </div>
-        <div class='footertable'>
+                <div id="tadabill">Dean Testing and Consultancy</div>
+            <div id = "transportfooter">Passed for payment for &#8377; {{ tada_amount }}/-
+            ({{ words }}only).</div>
+
+        <div class='tadafootertable'>
             <table>
                 <tr>
                     <td>Dean T&amp;C</td>
                     <td>Supdt. Accounts</td>
-                    <td>DEAN Testing and Consultancy</td>
+                    <td>Director</td>
                 </tr>
             </table>
         </div>

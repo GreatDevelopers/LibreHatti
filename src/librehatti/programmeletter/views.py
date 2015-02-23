@@ -20,6 +20,12 @@ import simplejson
 
 @login_required
 def programmeletter(request):
+    """
+    This view generates the programme letter after filling the required data
+    for letter.
+    Argument:Http Request
+    Return:Render Letter
+    """
     old_post = request.session.get('old_post')
     letterdata_id = request.session.get('letterdata_id')
     letterdata = LetterData.objects.values('team_name', 'team_name__team_name',

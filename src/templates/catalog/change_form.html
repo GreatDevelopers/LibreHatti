@@ -12,7 +12,7 @@
   {% block content %}
   {% if messages %}
                 <div class="alert alert-success">
-                    <h4>{{ messages }}</h4> 
+                    <p>{{ messages }}</p> 
                 </div>
                 {% endif %}
   <div class='change_request'>
@@ -25,7 +25,7 @@
        <tr>
            <th>Address:</th>
            <td>{{details.purchase_order__buyer__customer__address__street_address}}&nbsp;
-              {{details.purchase_order__buyer__customer__address__city}}</td>
+              {{details.purchase_order__buyer__customer__address__district}}</td>
           </tr>
           <tr>
            <th>Mode Of Payment:</th>

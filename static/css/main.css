@@ -1,4 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
 
 *{
 	margin: 0px;
@@ -21,7 +25,7 @@ body{
 }
 
 .primary-branding{
-	font-family:'Open Sans', 'sans-serif';
+	font-family:'Open Sans Fonts', 'sans-serif';
 	font-size: 36px;
 	font-weight:700;
 	text-align: center;
@@ -40,7 +44,7 @@ body{
 	list-style-type: none;
 	margin-top: 100px;
 	margin-left: -44px;
-	width: 126%;
+	width: 120%;
 }
 
 .panel-item{
@@ -64,7 +68,7 @@ body{
 	width:60px;
 
 	text-align:center;
-	font-family: 'Open Sans', 'sans-serif';
+	font-family: 'Open Sans Fonts', 'sans-serif';
 	font-weight: 300;
 	font-size: 14px;
 	color: #135375;
@@ -200,6 +204,7 @@ margin-right: auto;
 }
 
 .change_request{
-	width: 200%;
-	margin-left: -170px;
+	width: 120%;
+margin-left: auto;
+margin-right: auto;
 }

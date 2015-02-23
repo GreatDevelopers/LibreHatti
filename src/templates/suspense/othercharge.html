@@ -25,7 +25,7 @@
     </div>
     <div style="clear:both;">
         </div>
-    <div>A sum of &#8377;{{complete_total}}/- (TA/DA staff &#8377;{{ta_da}}, Other charges &#8377;{{transplusother}}/- has been deposited by:-
+    <div>A sum of &#8377; {{complete_total}}/- (TA/DA staff &#8377; {{ta_da}}, Other charges &#8377; {{transplusother}}/- has been deposited by:-
     </div>
     <div>
     {% if address.purchase_order__buyer__first_name %}
@@ -33,13 +33,13 @@
     {% else %}
     {{address.purchase_order__buyer__customer__title}}
     {% endif %}
-    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}}
+    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__district}}
     {% if address.purchase_order__buyer__customer__address__pin != 'None' and address.purchase_order__buyer__customer__address__pin != '' %}
     , {{address.purchase_order__buyer__customer__address__pin}}
     {% endif %}
        , {{address.purchase_order__buyer__customer__address__province}}</div>
-        <div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide letter no.________dated________</div>
-        <div>A sum of &#8377;{{total}}/- was spent for testing on as detailed below.</div>
+        <div>Vide receipt no. {{purchase_order}} dated {{order_date}} and was transferred vide S.C. no.________dated________</div>
+        <div>A sum of &#8377; {{total}}/- was spent for testing on {{test_date}} as detailed below.</div>
         <br>
         <div id = "othercharges">
             <table border='1px'>
@@ -67,9 +67,9 @@
         </div>
         <div class="position">
         {% if transport != 0 %}
-        The Transport Bill No. {{transport.id}} dated {{transport.date_of_generation}} for &#8377;{{transport.total}}/- is attached. The sum of &#8377;{{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
+        The Transport Bill No. {{transportbillno.transportbillofsession}} dated {{transport.date_of_generation}} for &#8377; {{transport.total}}/- is attached. The sum of &#8377; {{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
         {% endif %}
-        The sum of &#8377;{{ta_da}}/- spent  by Dean Testing & Consultancy may Please be paid to him</div>
+        The sum of &#8377; {{total}}/- spent  by Dean Testing & Consultancy may Please be paid to him</div>
         <div class = "footer1">DEAN Testing and Consultancy
         </div>
         {% endblock %}

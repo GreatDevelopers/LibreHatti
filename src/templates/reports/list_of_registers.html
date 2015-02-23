@@ -7,6 +7,13 @@
   {% block title %}
     <title>Register Index</title>
   {% endblock %}
+  {% block extrajs %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('.back').hide();
+});
+</script>
+  {% endblock %}
 </head>
 <body>
   {% block content %}
@@ -74,10 +81,10 @@
               Main Register
            </a></td>
            </tr>
-           <tr><td>Proforma Register</td>
+           <tr><td>Proforma Bill Register</td>
            <td><a href =
               '{% url "librehatti.reports.register.proforma_register"%}'>
-              Proforma Register
+              Proforma Bill Register
            </a></td>
            </tr>
            <tr><td>Non-Payment Register</td>
@@ -105,6 +112,13 @@
            <td><a href =
               '{% url "librehatti.reports.register.suspense_register"%}'>
               Suspense Register
+           </a></td>
+           </tr>
+           <tr>
+          <td>Registered Users</td>
+           <td><a href =
+              '{% url "librehatti.reports.register.registered_users"%}'>
+              Registered Users
            </a></td>
            </tr>
        </table>

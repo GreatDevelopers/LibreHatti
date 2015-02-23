@@ -11,7 +11,7 @@
     <div class="container">
         <h2 >Transport Bill</h2>
     </div>
-        <div class="voucher-no"><b>Bill No:</b> {{ voucherid }}
+        <div class="voucher-no"><b>Bill No:</b> {{ bill_no.transportbillofsession }}
         <div style = "text-align:right; float:right">
             <b>Dated:</b> {{ date_of_generation }}
         </div>
@@ -19,15 +19,23 @@
 
     <div style="clear: both">
     </div>
+    <p><span id ="highlight"> To : </span >{{ client_address.purchase_order__buyer__first_name }}
+    {{ client_address.purchase_order__buyer__last_name }}
+    {{ client_address.purchase_order__buyer__customer__title }}
+    {{ client_address.purchase_order__buyer__customer__address__street_address }}
+    {{ client_address.purchase_order__buyer__customer__address__district }}
+     </span>
+    </p>
     <p><span id ="highlight"> Vehicle No. </span >{{ vehicle}} </span>
     </p>
+
     <div id = "transport_content">
         <table border="1" align="center">
             <tr>
-                <th>Date of Use</th>
-                <th>No of Kms</th>
-                <th>Rate</th>
-                <th>Amount</th>
+                <th id = "transport_content">Date of Use</th>
+                <th id = "transport_content">No of Kms</th>
+                <th id = "transport_content">Rate &#8377;</th>
+                <th id = "total">Amount &#8377;</th>
             </tr>
             {% for date,km,amount in zip_data %}
             <tr>
@@ -37,31 +45,31 @@
                 <td>
                     {{ km }}
                 </td>
-                <td>
+                <td >
                     {{ rate }}
                 </td>
-                <td>
+                <td id = "total">
                     {{ amount }}
                 </td>
             </tr>
             {% endfor %}
             <tr>
                 <td colspan = "3"><center><b>Total &#8377;</b></center></td>
-                <td> {{ total_amount }}</td>
+                <td id = "total"> {{ total_amount }}</td>
             </tr>
         </table>
     </div>
-    <div id="transportbill"><b>Dean Testing and Consultancy</b></div>
-    <div id="transportfooter">TA.DA Bill have been entered on page...... of TA/DA & Other Charges register. Head other charges
+    
+    <div id="transportbase">T.A/D.A Bill have been entered on page..... of T.A/D.A & Other Charges register. Head other charges</div>
         <div id="transportbill">Dean Testing and Consultancy</div>
         <br>
-    <div>Passed for payment for &#8377; {{ total_amount }}/- (Rupees {{ words }} only)</div>
-    <div class='footertable'>
+    <div id = "transportfooter">Passed for payment for &#8377; {{ total_amount }}/- (Rupees {{ words }} only)</div>
+    <div class='transportfootertable'>
         <table>
             <tr>
                 <td>Dean T&amp;C</td>
                 <td>Supdt. Accounts</td>
-                <td id="total">Director</td>
+                <td>Director</td>
             </tr>
         </table>
     </div>

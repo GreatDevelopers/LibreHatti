@@ -18,6 +18,9 @@ import datetime
 
 
 class Clearance_form(ModelForm):
+    """
+    Form for clearance of order.
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -56,10 +59,16 @@ class QuotedSuspenseForm(ModelForm):
 
 
 class TaDaSearch(forms.Form):
+    """
+    Form for TaDa search.
+    """
     ref_no = forms.ModelChoiceField(queryset= SuspenseOrder.objects.all())
 
 
 class TaDaForm(ModelForm):
+    """
+    Transport and dialy allowance form.
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -84,7 +93,9 @@ class TaDaForm(ModelForm):
 
 
 class StaffForm(forms.ModelForm):
-
+    """
+    Form for adding staff.
+    """
     class Meta:
         model = Staff
         exclude = []
@@ -97,6 +108,9 @@ class StaffForm(forms.ModelForm):
 
 
 class SessionSelectForm(forms.Form):
+    """
+    Form for selection of sessions.
+    """
     required_css_class = 'required'
     error_css_class = 'error'
     
@@ -109,12 +123,15 @@ class SessionSelectForm(forms.Form):
 
 
 class TransportForm1(forms.Form):
+    """
+    Transport form.
+    """
     required_css_class = 'required'
     error_css_class = 'error'
     Vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all())
     Date_of_generation = forms.DateField(initial = datetime.date.today)
     kilometer = forms.CharField()
-    date = forms.DateField()
+    date = forms.DateField(label="Date of visit")
     def __init__(self, *args, **kwargs):
         super(TransportForm1, self).__init__(*args, **kwargs)
         self.fields['Date_of_generation'].widget.attrs={'class':'form-control'}

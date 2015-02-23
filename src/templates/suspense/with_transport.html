@@ -12,7 +12,7 @@
     <br>
     <div class="voucher-no">Voucher : ________
         <div style = "text-align:right; float:right">
-            Main/Mat.No: {{ purchase_order }}
+            Receipt/S.C.No: {{ purchase_order }}
         </div>
     </div>
     <div class="date">Dated : ________
@@ -22,26 +22,25 @@
     </div>
     <div class="designation">Director,</div>
     Received a sum of &#8377; {{total}}/- ( Rupees {{total_in_words}} only ) 
-    <br><br>
-    Vide 
+    vide 
     {% if payment.purchase_order__mode_of_payment != 1 and payment.purchase_order__mode_of_payment != 4 %}
     {{payment.purchase_order__mode_of_payment__method}} No. {{payment.purchase_order__cheque_dd_number}} dated:{{payment.purchase_order__cheque_dd_date}}
     {% else %}
     {{payment.purchase_order__mode_of_payment__method}}
     {% endif %}
-    <div>From : 
+    from 
     {% if address.purchase_order__buyer__first_name %}
     {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}
     {% else %}
     {{address.purchase_order__buyer__customer__title}}
     {% endif %}
-    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__city}} 
+    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__district}} 
     {% if address.purchase_order__buyer__customer__address__pin != 'None' and address.purchase_order__buyer__customer__address__pin != '' %}
     , {{address.purchase_order__buyer__customer__address__pin}}
     {% endif %}
-       , {{address.purchase_order__buyer__customer__address__province}}</div>
-        <div>Vide Bill No. GNDEC/TCC/B/{{purchase_order}} dated {{order_date}}</div>
-        on account of Vide Receipt No. {{purchase_order}} dated {{order_date}}
+       , {{address.purchase_order__buyer__customer__address__province}}
+        vide Bill No. GNDEC/TCC/B/{{purchase_order}} dated {{order_date}}
+        on account of {{address.purchased_item__item__category__name}}, vide Receipt No. {{purchase_order}} dated {{order_date}}
         <div>Nature of Consultancy : {{ distribution }},  Ratio {{ ratio }} </div>
         <div id = "pos-left">
             <table border='1px'>
@@ -68,28 +67,37 @@
                     <td>DEV. FUND (CONSULTANCY) </td>
                     <td  id = "pos-right">{{ calculate_distribution.development_fund }}</td>
                 </tr>
+                {% if suspense_clearance.work_charge != 0 %}
                 <tr>
                     <td>Work Charges(CONSULTANCY)</td>
                     <td  id = "pos-right">{{ suspense_clearance.work_charge }}</td>
                 </tr>
+                {% endif %}
+                {% if ta_da != 0 %}
                 <tr>
                     <td>T.A/D.A Staff </td>
                     <td  id = "pos-right">{{ ta_da }}</td>
                 </tr>
+                {% endif %}
+                {% if othercharge != 0 %}
                 <tr>
                     <td>Other Charges </td>
                     <td  id = "pos-right">{{othercharge}}</td>
                 </tr>
+                {% endif %}
+                {% if suspense_clearance.boring_charge_internal != 0 %}
                 <tr>
                     <td>Boring Charges (Internal) </td>
                     <td  id = "pos-right">{{ suspense_clearance.boring_charge_internal }}</td>
                 </tr>
+                {% endif %}
                 <tr>
                     <td><b>TOTAL</b></td>
                     <td  id = "pos-right"><b>{{total}}</b></td>
                 </tr>
             </table>
         </div>
+        {% if field_staff %}
         <div class="testingfieldstaff">
             <table border='1px'>
                 <tr>
@@ -107,6 +115,8 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
+        {% if lab_staff %}
         <div class="testinglabstaff">
             <table border='1px'>
                 <tr>
@@ -124,6 +134,7 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
         <div style="clear:both;">
         </div>
         <div class="position">THE WORK HAS BEEN EXECUTED BY THE PERSONS MENTIONED ABOVE.</div>
