@@ -14,9 +14,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',
-        'USER': 'db_user',
-        'PASSWORD': 'db_password',
+        'NAME': 'librehatti',
+        'USER': 'root',
+        'PASSWORD': 'sofat',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -53,7 +53,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/path/to/LibreHatti/static',
+    '/home/sofat/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
@@ -110,9 +110,10 @@ INSTALLED_APPS = (
     'librehatti.reports',
     'librehatti.voucher',
     'librehatti.programmeletter',
+    'librehatti.Test_Reports',
 )
 
-SUIT_CONFIG = {
+SUIT_CONFIG = { 
     'ADMIN_NAME': 'LibreHatti',
     'MENU_ICONS': {
         'sites': 'icon-leaf',

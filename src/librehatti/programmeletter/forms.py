@@ -3,7 +3,7 @@ Forms of programmeletter are ..
 """
 from django import forms
 
-from librehatti.programmeletter.models import TeamName
+from librehatti.programmeletter.models import *
 from librehatti.programmeletter.models import StaffInTeam
 
 from librehatti.catalog.models import Category
@@ -26,10 +26,18 @@ class StaffInTeamForm(forms.ModelForm):
 
 
 class TeamNameForm(forms.ModelForm):
-    """
-    Form for adding team for field work.
-    """
     team_name = forms.CharField()
     def __init__(self, *args, **kwargs):
          super(TeamNameForm, self).__init__(*args, **kwargs)
          self.fields['team_name'].widget.attrs={'class':'form-control'}
+
+class LetterDataForm(forms.ModelForm):
+    buyer = make_ajax_field(LetterData  , 'buyer', 'buyer')
+    class Meta:
+        model = LetterData
+    
+    class Media:
+        js = (
+            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+            'js/ajax.js',
+            )
