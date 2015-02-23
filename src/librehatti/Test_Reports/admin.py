@@ -30,10 +30,7 @@ class Test_Reports_Admin(admin.ModelAdmin):
     inlines = [Test_Reports_Inline]
     model = Test_Reports
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 9e59700a373c425546646cde5ccfdb30bdec395a
     def response_add(self, request, obj, post_url_continue=None):
         request.session['data'] = request.POST
         return HttpResponseRedirect(reverse('librehatti.Test_Reports.views.Reports'))
