@@ -1,0 +1,354 @@
+\documentclass{soil12}
+ \pagesettings
+\title{
+{{title}}
+}
+
+
+\begin{document}
+\maketitle
+\clearpage
+
+\heading{GURU NANAK DEV ENGINEERING COLLEGE, LUDHIANA}
+{Accredited by NBA (AICTE), New Delhi (ISO 9001:2000 Certified)}
+{Testing \& Consultancy Cell }
+{tcc@gndec.ac.in }
+{0161-2491193}
+\sethead{List of Faculty/Experts}
+\listdata{Geotechnical}{Dr. J.N.Jha, Ph.D\\
+Prof. Kulbir Singh Gill,M.E\\
+Dr. B.S.Walia, Ph.D.\\
+Prof. Harjinder Singh, M.E\\
+Prof. Gurdeepak Singh, M.Tech.\\
+}
+\listdata{Structure}{Dr. Harpal Singh, Ph.D\\
+Dr. Hardeep Singh Rai, Ph.D\\
+Prof. Harvinder Singh, M.Tech\\
+Dr. Jagbir Singh, Ph.D.\\
+Prof. Kanwarjit Singh Bedi, M.Tech.\\
+Prof. Parshant Garg, M.Tech\\
+Prof. Harpreet Kaur, M.Tech.\\
+Prof. Inderpreet Kaur, M.Tech.
+}
+
+\listdata{Highway}{Prof. Kulbir Singh Gill, M.E\\}
+\listdata{Material Testing}{Dr. Jagbir Singh, Ph.D.\\
+Prof. Kanwarjit Singh Bedi, M.Tech.\\
+}
+
+\listdata{Material Testing}{Dr. Jagbir Singh, Ph.D.\\
+Prof. Kanwarjit Singh Bedi, M.Tech.\\
+}
+
+\listdata{Survey}{Dr. B.S.Walia, Ph.D.\\
+}
+
+\listdata{Chemical Testing}{Dr. R.P.Singh, Ph.D.\\
+}
+
+\listdata{Environmental Engg}{Prof. Puneet Pal Singh, M.E\\
+}
+\clearpage
+\reportheading{SOIL INVESTIGATION REPORT}
+\begin{enumerate}
+\item{
+\reportdetail{Date of Testing}{
+{{dateoftest}}
+}
+}
+\item{\reportdetail{Type of Structure}{
+{{strtype}}
+}
+  }
+\item{\reportdetail{Site location}{Latitude :
+{{lati}}
+ Longitude : {{logitude}}
+}}
+\item{\reportdetail{Tested in Presence of}{
+{{p1}},
+{{p2}}
+}}
+\item{\reportdetail{Report Submitted to}{
+{{s1}},
+{{s2}}
+}}
+\item{\reportdetail{Report Prepared by}{Dr. J. N. Jha\\
+Prof. Kulbir Singh Gill\\
+ Dr. B. S. Walia}}
+\end{enumerate}
+\clearpage
+\section{Introduction}
+The soil investigation for the proposed Construction of {{sitename}} had been taken up on request of {{s1}}, {{s2}}. The field soil investigation as per requirements was carried out on {{dateoftest}} by testing team of this institution in the presence of {{p1}} \& {{p2}}, Superwiser of the concerned department.\par
+The purpose of this soil investigation was to determine the nature of the subsoil stratum and the safe net
+allowable bearing capacity of the soil.
+
+\section{Field Soil Investigation}
+{{bore}} bore holes were tested in the field Standard Penetration Test (S.P.T) was carried out at the proposed
+site as per I.S.Code 2131-1981 in the soil deposits at the foundation level and at an interval of 1.5 m or at
+the location where change of soil strata takes place during field testing. The samples of the soil both
+disturbed and tube samples were collected at different depths and were properly sealed in air-tight plastic
+bags after labelling them carefully to maintain the natural moisture content.
+\section{Laboratory Testing}
+As per I.S. Code 6403-1981, the least of the following shall be taken as safe net allowable bearing
+capacity of the soil.
+\begin{enumerate}
+\item{The safe net allowable bearing capacity from shear considerations is obtained by dividing net
+ultimate bearing capacity by a suitable factor of safety.}
+\item{The safe net allowable bearing pressure that can be imposed on the base of the foundation
+without the settlement exceeding a permissible value is calculated either from settlement
+analysis or from the Standard Penetration Test Values(N)whichever is applicable depending
+upon the nature of sub soil strata.}
+\end{enumerate}
+\section{Water Table}
+The underground (i.e. sub-soil) water was {{watertable}}  at the time of field soil investigation.
+\section{Proposed Substructure}
+The substructures i.e. foundations of the proposed {{strtype}} may be taken as wall footing and isolated
+column foundation. The least soil properties have been taken for calculating the bearing capacity of
+soil for the following types of foundations.
+\begin{enumerate}
+\item{\large{\textbf{Wall Foundation}}}\\
+\wallfound{
+{{walldt}}
+ m}
+{
+{{wallb}}
+ m}
+\item{\large{\textbf{Column Foundation}}}\\
+\colfound{
+{{coldf}}
+ m}
+{
+{{coll}}
+ m}
+{
+{{colb}}
+ m}
+{
+{{coll}}
+ m}
+{
+{{colb}}
+ m}
+\end{enumerate}
+The data obtained from the field soil investigation and the laboratory tests have been used in the
+preparation of this report.
+\section{Bearing Capacity Calculations}
+\subsection{Bearing Capacity Based on Shear Considerations}
+(As per I.S.Code - 6403:1981)
+\subsection{Wall Foundation}
+\wallfound{
+{{walldt}}
+ m}
+{
+{{wallb}}
+ m}
+
+The least soil properties at the foundation level i.e. at {{walldt}} m depth are:\\
+\soilproperty{
+{{gamawall}}
+}
+{
+{{wallc}}
+}
+{
+{{wallphay}}
+}
+{
+{{wallphayfe}}
+}
+
+Bearing Capacity factors are:\\
+\bearingcapacity{
+{{wallnc}}
+}
+{ 
+{{wallnq}}
+}
+{
+{{wallny}}
+}
+Shape factors are:\\
+\shapefactor{
+{{wallsc}}
+}
+{
+{{wallsq}}
+}
+{
+{{wallsy}}
+}
+Depth factors are:\\    
+\depth{
+{{walldc}}
+}
+{
+{{walldqdy}}
+}
+Water table correction factor, w' = {{wallw}}
+
+Ultimate net bearing capacity, $q_u$' = 0.67 x {{wallc}} x {{wallnc}} x {{wallsc}} x {{walldc}} + {{gamawall}} x {{walldt}} x(1 -{{wallnq}}) x {{wallsc}} x {{walldqdy}} +0.5 x {{gamawall}} x {{wallb}} x {{wallny}} x {{wallsc}} x {{walldqdy}} x {{wallw}}\\
+= {{wallpeq}} = {{walltotal}}kN/$m^2$ \\	
+Safe net allowable bearing capacity = $q_u'$/2.5 = {{walltotal}}/2.5 = {{wallt2}}kN/$m^2$
+\subsection{Column Foundation}
+\colfound{
+{{coldf}}
+ m}
+{
+{{coll}}
+ m}
+{
+{{colb}}
+ m}
+{
+{{coll}}
+ m}
+{
+{{colb}}
+ m}
+The least soil properties at the foundation level i.e. at {{coldf}} m depth are: \\
+\soilproperty{
+{{gamawall}}
+}
+{
+{{wallc}}
+}
+{
+{{wallphay}}
+}
+{
+{{wallphayfe}}
+}
+Bearing Capacity factors are:\\
+\bearingcapacity{
+{{wallnc}}
+}
+{
+{{wallnq}}
+}
+{
+{{wallny}}
+}
+Shape factors are:\\
+\shapefactor{
+{{colsc}}
+}
+{
+{{colsq}}
+}
+{
+{{colsy}}
+}
+Depth factors are:
+\depth{
+{{coldc}}
+}
+{
+{{coldqdy}}
+}
+Water table correction factor, w' = {{wallw}} \\
+Ultimate net bearing capacity, $q_u'$ = 0.67 x {{wallc}} x {{wallnc}} x {{colsc}} x {{coldc}} + {{gamawall}} x {{coldf}} x(1 -{{wallnq}}) x {{colsq}} x {{coldqdy}} 
++0.5 x {{gamawall}} x {{coll}} x {{coldqdy}} x {{wallw}} 
+= {{colpeg}} = {{coltotal}}kN/$m^2$ \\ Safe net allowable bearing capacity = q\textsubscript{u} '/2.5 = {{coltable}}/2.5 = {{colt2}}kN/$m^2$
+\section{Bearing Capacity Based on Standard Penetration Test Value}
+
+\begin{center}
+The result of concrete cubes sent by you tested on 29.10.11 are as under:
+\end{center}
+\hspace{1.1cm}
+\begin{tabularx}{\textwidth}{|*{6}{l|}}
+\hline
+ \multicolumn{1}{|m{1cm}|}{Sr No.} &\multicolumn{1}{m{2cm}|}{Depth(m)} &\multicolumn{1}{m{2.5cm}|}{Overburden pressure (kN/m\textsuperscript{2})}
+&\multicolumn{1}{m{2cm}|}{Correction Factor} &\multicolumn{1}{m{2cm}|}{Observesd Value of N} &\multicolumn{1}{m{2.9cm}|}{Corrected Value of N}\\
+\hline
+{{table}}
+\end{tabularx}
+
+\begin{enumerate}
+\item{\standardvalue{
+{{walldt}}
+}
+{
+{{wallb}}
+}
+{
+{{wallb}}
+}
+{
+{{wallnv}}
+}
+{
+{{walls}}
+}
+{
+{{wallw}}
+}
+{
+{{wallvalue}}
+}
+{
+{{wallnetv}}
+}
+{
+{{wallgv}}
+}
+}
+\item{
+\standardvalue{
+{{coldf}}
+}
+{
+{{colb}}
+}
+{
+{{colb}}
+}
+{
+{{colnv}}
+}
+{
+{{walls}}
+}
+{
+{{wallw}}
+}
+{
+{{colvalue}}
+}
+{
+{{colnetv}}
+}
+{
+{{colgv}}
+}}
+\end{enumerate}
+\clearpage
+\section{Remarks:}
+\begin{enumerate}
+\item{The bore hole logs showing the nature of subsoil stratum alongwith standard
+penetration test values(N) at different depths and soil properties from laboratory test
+results are attached.}
+\item{The safe \textbf{net} allowable bearing capacity for wall foundation {{wallb}} m wide at a depth of
+{{walldf}} m from the existing surface is {{wallnetv}} kN/$m^2$}
+\item{The safe \textbf{gross} allowable bearing capacity for wall foundation {{wallb}} m wide at a depth of
+{{walldt}} m from the existing surface is {{wallnetv}} kN/$m^2$}
+\item{The safe net allowable bearing capacity for column foundation of size {{coll}} m x{{colb}} m at a
+depth of {{coldf}} m from the existing surface is {{colnetv}} kN/$m^2$}
+\item{The safe gross allowable bearing capacity for column foundation of size {{coll}} m x{{colb}} m
+at a depth of {{coldf}} m from the existing surface is {{colgv}} kN/$m^2$}
+\item{The sub-soil water was encountered at a depth {{watertable}} m investigation. at the time of field soil}
+
+\end{enumerate}
+
+
+
+\footer{(Dr. B. S. Walia)\\
+Associate Professor\\
+Civil Engg. Department}{(Prof. Kulbir Singh Gill)\\
+Associate Professor\\
+Civil Engg. Department}
+
+\footer{(Dr. J. N. Jha)\\
+H.O.D., Civil Engg. Department}{(Dr. H. S. Rai)\\
+Dean Testing \& Consultancy
+    }
+\end{document}
