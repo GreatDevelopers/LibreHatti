@@ -21,7 +21,7 @@ _ADMIN_GROUP = 'group name'
 """Account Information"""
 _ACCOUNT_HOLDER = 'ACCOUNT HOLDER'
 _NAME_OF_BANK = 'Bank Name'
-_BRANCH = 'district'
+_BRANCH = 'City'
 _ONLINE_ACCOUNT = 'Online Account No.'
 _IFSC_CODE = 'IFSC Code No.'
 
@@ -29,3 +29,11 @@ _IFSC_CODE = 'IFSC Code No.'
 _REFERENCE = 'Letter No.'
 _REFERENCE_DATE = 'Letter Date'
 _YOUR_LETTER_No = 'Your letter No.'
+_CUBE_TEST = 'Cube Dated'
+"""TEST REPORTS"""
+
+_DATE = 'DATE'
+_STARTING_DATE = "starting date"
+_STRENGTH = "strength"
+_TEST_DATE = "Date of Testing"
+
