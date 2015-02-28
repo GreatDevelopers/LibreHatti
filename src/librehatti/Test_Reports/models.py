@@ -1,27 +1,15 @@
 from django.db import models
-
 import useraccounts
-
 from librehatti.catalog.models import Product
-
 from librehatti.catalog.models import ModeOfPayment
-
 from librehatti.catalog.models import Surcharge
-
 from librehatti.bills.models import *
-
 from django.contrib.auth.models import User
-
 from librehatti.config import _REFERENCE_DATE
-
 from librehatti.config import _CUBE_TEST
-
 from librehatti.config import _TEST_DATE
-
 from librehatti.voucher.models import FinancialSession
-
 from django.core.urlresolvers import reverse
-
 
 class Test_Reports(models.Model):
     Session = models.ForeignKey(FinancialSession)
@@ -35,10 +23,8 @@ class Test_Reports(models.Model):
     Refernce_Date = models.DateField(verbose_name=_REFERENCE_DATE)
     Testing_Date = models.DateField(verbose_name=_TEST_DATE)
 
-
     def __unicode__(self):
 	return unicode(self.Voucher)
-
 
 class Test_Report_Descriptions(models.Model):
     report_id = models.ForeignKey(Test_Reports)
@@ -46,7 +32,6 @@ class Test_Report_Descriptions(models.Model):
     Description = models.CharField(max_length=200)
     Strength = models.CharField(max_length=20)
     mix = models.CharField(max_length=200, null=True, blank=True)
-
 
     def __unicode__(self):
         return unicode(self.report_id)
@@ -109,11 +94,9 @@ class Soil_building(models.Model):
         return '%s' % (self.Voucher) + ' - ' '%s' % (self.Date_of_Testing)
 
 class Soil_building_des(models.Model):
-    report_id = models.ForeignKey(Soil_building)
+    soil_building_report_id = models.ForeignKey(Soil_building)
     Dt = models.CharField(max_length = 200, null=True, blank=True)
     Ob_Pr = models.CharField(max_length = 200, null=True, blank=True)
     Corr_F = models.CharField(max_length = 200, null=True, blank=True)
     Ob_N_V  =   models.CharField(max_length = 200, null=True, blank=True)
     Corr_N_V = models.CharField(max_length = 200, null=True, blank=True)
-    
-

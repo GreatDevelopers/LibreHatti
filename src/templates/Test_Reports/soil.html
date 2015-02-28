@@ -9,9 +9,7 @@
     {% block content %}
     <form method="POST" action='{% url 'Reports' %}' >
         {% csrf_token %}
-{% if res == 'yes' or res == 'no' %}
 <a href={% static 'Download' %}{{r}}>Download</a>
-{% endif %}
 
     {% endblock %}
 </body>

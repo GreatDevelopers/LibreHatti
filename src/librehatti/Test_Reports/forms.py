@@ -1,28 +1,16 @@
 from django import forms
-
 from librehatti.Test_Reports.models import Test_Reports
-
 from librehatti.bills.models import *
-
 from librehatti.catalog.models import ModeOfPayment, Category, Product
-
 from librehatti.catalog.models import PurchaseOrder
-
 import itertools
-
 from ajax_select import make_ajax_field
-
 from librehatti.config import _PARENT_CATEGORY
-
 from librehatti.config import _SUB_CATEGORY
-
 from librehatti.config import _ITEM
-
 from librehatti.config import _TYPE
 
-
 class Test_Reports_Form(forms.ModelForm):
-
 
     class Meta:
 	model = Test_Reports
@@ -32,10 +20,8 @@ class Test_Reports_Form(forms.ModelForm):
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/Test_Reports.js',
              )
-
-    
+ 
 class Test_Reports_Des(forms.ModelForm):
-
 
     class Media:
         js = (
@@ -52,7 +38,6 @@ class Test_Reports_Des(forms.ModelForm):
 
 class Soil_building_Des(forms.ModelForm):
 
-
     class Media:
         js = (
             'js/hide_add_buyer.js',
@@ -67,4 +52,3 @@ class Soil_building_Des(forms.ModelForm):
         self.fields['Corr_F'].widget.attrs = {'class':'Corr_F'}
         self.fields['Ob_N_V'].widget.attrs = {'class':'Ob_N_V'}
         self.fields['Corr_N_V'].widget.attrs = {'class':'Corr_N_V'}
-
