@@ -1195,3 +1195,52 @@ def suspense_register(request):
         request_status = request_notify()
         return render(request,'reports/suspense_form.html', \
         {'form':form, 'request':request_status})
+
+@login_required
+def tada(request):
+    form = DateRangeSelectionForm()
+    if request.method == 'POST':
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        purchase_order = PurchaseOrder.objects.filter( \
+            date_time__range = (start_date,end_date)).values('id')
+        result = []
+        list_item = []   
+        total = 0    
+        count = 1 
+        for order in purchase_order:    
+            voucherid = VoucherId.objects.filter(id = order['id']).values('voucher_no')
+            for voucher_id in voucherid:
+                amount = SuspenseClearance.objects.filter(voucher_no = voucher_id['voucher_no']). \
+                    values('work_charge','labour_charge','car_taxi_charge', \
+                    'boring_charge_external','clear_date','id')
+                list_item.append(voucher_id['voucher_no'])                
+                for amount_all in amount:
+                    list_item.append(amount_all['work_charge'])
+                    list_item.append(amount_all['labour_charge'])
+                    list_item.append(amount_all['car_taxi_charge'])
+                    list_item.append(amount_all['boring_charge_external'])
+                    list_item.append(unicode(amount_all['clear_date']))
+                    tada_amount = TaDa.objects.filter(voucher_no =  \
+                        voucher_id['voucher_no']).values('tada_amount')
+                    for tada_all in tada_amount:
+                        total = int(amount_all['work_charge'])+ \
+                            int(amount_all['labour_charge'])+\
+                        int(amount_all['car_taxi_charge']) + \
+                            int(amount_all['boring_charge_external'])+\
+                        int(tada_all['tada_amount'])    
+                        list_item.append(total)                           
+                        list_item.append(tada_all['tada_amount'])
+                    total = int(amount_all['work_charge'])+int(amount_all['labour_charge'])+\
+                    int(amount_all['car_taxi_charge']) +int(amount_all['boring_charge_external'])                           
+                    list_item.append(total)                           
+                    result.append(list_item)
+                list_item = []
+        count +=1        
+        return render(request,'reports/tada.html', \
+            {'result':result})
+            
+    return render(request,'reports/tada_register_form.html', \
+        {'form' :form})
+
+
