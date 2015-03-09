@@ -22,7 +22,7 @@ from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
 from librehatti.suspense.models import QuotedSuspenseOrder
 from librehatti.suspense.models import Vehicle
-from librehatti.suspense.models import Staff
+from librehatti.suspense.models import Staff, CarTaxiAdvance
 from librehatti.suspense.models import TransportBillOfSession
 from librehatti.suspense.models import SuspenseClearedRegister
 from librehatti.suspense.forms import Clearance_form
@@ -32,6 +32,7 @@ from librehatti.suspense.forms import TaDaForm
 from librehatti.suspense.forms import TaDaSearch
 from librehatti.suspense.forms import SessionSelectForm
 from librehatti.suspense.forms import TransportForm1
+from librehatti.suspense.forms import CarTaxiAdvance_form
 
 from librehatti.prints.helper import num2eng
 
@@ -441,18 +442,41 @@ def other_charges(request):
     complete_total = total + transport_total
     transplusother = other_charges + transport_total
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    return render(request,'suspense/othercharge.html', {'header':header,\
-                'voucher_no':number, 'date':suspenseclearance['clear_date'],\
-                'suspense_clearance':suspenseclearance,\
-                'purchase_order':voucherid['purchase_order_of_session'],\
-                'order_date':voucherid['purchase_order__date_time'],\
-                'address':voucherid, 'ta_da':ta_da_total,\
-                'boring_charges':suspenseclearance['boring_charge_external'],\
-                'total':total, 'other_charges':other_charges,\
-                'transport':transport, 'complete_total':complete_total,\
-                'transplusother':transplusother, 
-                'transportbillno':transportbillno,
-                'test_date':suspenseclearance['test_date']})
+    car_taxi_advance_obj = CarTaxiAdvance.objects.filter(voucher_no=number,
+        session=session)
+    if car_taxi_advance_obj:
+        car_taxi_advance = CarTaxiAdvance.objects.values('spent', 'advance',
+            'balance', 'receipt_no').get(voucher_no=number,
+            session=session)
+        receipt_dated = VoucherId.objects.values('purchase_order__date_time').filter(
+            purchase_order_of_session=car_taxi_advance['receipt_no'])[0]
+        return render(request,'suspense/othercharge.html', {'header':header,\
+                    'voucher_no':number, 'date':suspenseclearance['clear_date'],\
+                    'suspense_clearance':suspenseclearance,\
+                    'purchase_order':voucherid['purchase_order_of_session'],\
+                    'order_date':voucherid['purchase_order__date_time'],\
+                    'address':voucherid, 'ta_da':ta_da_total,\
+                    'boring_charges':suspenseclearance['boring_charge_external'],\
+                    'total':total, 'other_charges':other_charges,\
+                    'transport':transport, 'complete_total':complete_total,\
+                    'transplusother':transplusother, 
+                    'transportbillno':transportbillno,
+                    'test_date':suspenseclearance['test_date'],
+                    'receipt_dated':receipt_dated,
+                    'car_taxi_advance':car_taxi_advance})
+    else:
+        return render(request,'suspense/othercharge.html', {'header':header,\
+                    'voucher_no':number, 'date':suspenseclearance['clear_date'],\
+                    'suspense_clearance':suspenseclearance,\
+                    'purchase_order':voucherid['purchase_order_of_session'],\
+                    'order_date':voucherid['purchase_order__date_time'],\
+                    'address':voucherid, 'ta_da':ta_da_total,\
+                    'boring_charges':suspenseclearance['boring_charge_external'],\
+                    'total':total, 'other_charges':other_charges,\
+                    'transport':transport, 'complete_total':complete_total,\
+                    'transplusother':transplusother, 
+                    'transportbillno':transportbillno,
+                    'test_date':suspenseclearance['test_date']})
 
 
 @login_required
@@ -1005,10 +1029,13 @@ def mark_status(request):
         'admin_charges', 'purchased_item__item__category__parent__name').\
     filter(voucher_no=voucher, session_id=session)[0]
     temp_val = voucherid['purchased_item__item__category__parent__name'].split(':')
-    if temp_val[1].upper() == 'FIELD WORK' or \
-        temp_val[1].upper() == ' FIELD WORK':
-        work_charge = round((2 * distribution_total) / 100)
-    else:
+    try:
+        if temp_val[1].upper() == 'FIELD WORK' or \
+            temp_val[1].upper() == ' FIELD WORK':
+            work_charge = round((2 * distribution_total) / 100)
+        else:
+            work_charge = 0
+    except:
         work_charge = 0
     college_income = round((voucherid['college_income'] * distribution_total) / 100)
     admin_charges = round((voucherid['admin_charges'] * distribution_total) / 100)
@@ -1225,3 +1252,72 @@ def tada_bill(request):
      'request':request_status,'session':session,\
     'voucher':voucher,'list_staff':list_staff,'header':header,\
     })
+
+
+def car_taxi_advance_form(request):
+    if request.method == 'POST':
+        sessiondata = SessionSelectForm(request.POST)
+        if sessiondata.is_valid():
+            voucher = sessiondata.data['voucher']
+            session = sessiondata.data['session']
+            object = SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values()
+            if object:
+                form = CarTaxiAdvance_form(initial={'voucher_no':voucher,\
+                'session':session})
+                car_taxi_advance = 'enable'
+                request_status = request_notify()
+                return render(request, 'suspense/car_taxi_advance_form.html', \
+                    {'form':form, 'request':request_status,
+                    'car_taxi_advance':car_taxi_advance}) 
+            else:
+                form = SessionSelectForm()
+                errors = "No such voucher number in selected session"
+                request_status = request_notify()
+                temp = {"form":form , "message":errors,\
+                'request':request_status}
+                return render(request, 'suspense/car_taxi_advance_form.html', temp)
+        else:
+            form = SessionSelectForm(request.POST)
+            request_status = request_notify()
+            return render(request, 'suspense/car_taxi_advance_form.html',\
+                {'form':form, 'request':request_status})
+    else:
+        form = SessionSelectForm()
+        request_status = request_notify()
+        return render(request, 'suspense/car_taxi_advance_form.html',\
+            {'form':form, 'request':request_status})
+
+
+def car_taxi_advance(request):
+    if request.method == 'POST':
+        car_taxi_advance_form = CarTaxiAdvance_form(request.POST)
+        if car_taxi_advance_form.is_valid():
+            voucher = car_taxi_advance_form.data['voucher_no']
+            session = car_taxi_advance_form.data['session']
+            spent = car_taxi_advance_form.data['spent']
+            advance = car_taxi_advance_form.data['advance']
+            receipt = car_taxi_advance_form.data['receipt_no']
+            balance = int(advance) - int(spent)
+            session_obj = FinancialSession.objects.get(pk=session)
+            car_taxi_advance_obj = CarTaxiAdvance.objects.filter(
+                voucher_no=voucher, session=session)
+            if car_taxi_advance_obj:
+                CarTaxiAdvance.objects.filter(voucher_no=voucher, session=session).\
+                update(balance=balance ,spent=spent, advance=advance, receipt_no=receipt)
+            else:
+                obj = CarTaxiAdvance(voucher_no=voucher, session=session_obj,
+                    balance=balance ,spent=spent, advance=advance,
+                    receipt_no=receipt)
+                obj.save()
+            request_status = request_notify()
+            return render(request, 'suspense/car_taxi_advance_success.html',\
+                {'request':request_status})
+        else:
+            form = CarTaxiAdvance_form(request.POST)
+            request_status = request_notify()
+            return render(request, 'suspense/car_taxi_advance_form.html',\
+                {'form':form, 'request':request_status})
+    else:
+        return HttpResponseRedirect(\
+            reverse("librehatti.suspense.views.car_taxi_advance_form"))

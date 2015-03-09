@@ -66,6 +66,9 @@
             </table>
         </div>
         <div class="position">
+        {% if car_taxi_advance %}
+        &#8377; {{car_taxi_advance.spent}}/- spent against advance &#8377; {{car_taxi_advance.advance}}/- the balance amount &#8377; {{car_taxi_advance.balance}}/- deposit within cashier vide receipt No. {{car_taxi_advance.receipt_no}} dated {{receipt_dated.purchase_order__date_time}}
+        {% endif %}
         {% if transport != 0 %}
         The Transport Bill No. {{transportbillno.transportbillofsession}} dated {{transport.date_of_generation}} for &#8377; {{transport.total}}/- is attached. The sum of &#8377; {{transport.total}}/- may be transferred from other charges to Consultancy Transport Fund.
         {% endif %}

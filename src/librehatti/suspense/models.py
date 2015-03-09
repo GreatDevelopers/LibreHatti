@@ -170,3 +170,12 @@ class SuspenseClearedRegister(models.Model):
     suspenseclearednumber = models.IntegerField()
     voucher_no = models.IntegerField()
     session = models.ForeignKey(FinancialSession)
+
+
+class CarTaxiAdvance(models.Model):
+    voucher_no = models.IntegerField()
+    session = models.ForeignKey(FinancialSession)
+    spent = models.IntegerField()
+    advance = models.IntegerField()
+    balance = models.IntegerField()
+    receipt_no = models.IntegerField()
