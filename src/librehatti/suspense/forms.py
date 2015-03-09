@@ -5,6 +5,7 @@ from models import TaDa
 from models import Staff
 from models import SuspenseOrder
 from models import QuotedSuspenseOrder
+from models import CarTaxiAdvance
 
 from librehatti.catalog.models import Category
 
@@ -138,3 +139,23 @@ class TransportForm1(forms.Form):
         self.fields['kilometer'].widget.attrs={'class':'form-control'}
         self.fields['date'].widget.attrs={'class':'form-control'}
         self.fields['Vehicle'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+
+class CarTaxiAdvance_form(ModelForm):
+    """
+    Form for clearance of order.
+    """
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    class Meta:
+        model = CarTaxiAdvance
+        exclude = ('balance',)
+        widgets = {'session': forms.HiddenInput(),\
+        'voucher_no': forms.HiddenInput()}
+    
+    def __init__(self, *args, **kwargs):
+        super(CarTaxiAdvance_form, self).__init__(*args, **kwargs)
+        self.fields['spent'].widget.attrs={'class':'form-control'}
+        self.fields['advance'].widget.attrs={'class':'form-control'}
+        self.fields['receipt_no'].widget.attrs={'class':'form-control'}
