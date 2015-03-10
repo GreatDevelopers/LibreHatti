@@ -48,7 +48,7 @@ class StaffAdmin(admin.ModelAdmin):
     form = StaffForm
     model = Staff
     list_filter = ['department','position','lab']
-    list_display = ['name', 'department', 'position',
+    list_display = ['code','name', 'department', 'position',
         'seniority_credits','always_included','daily_ta_da', 'lab']
     list_per_page = 20
     search_fields = ['name']
