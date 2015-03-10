@@ -844,33 +844,22 @@ def tada_result(request):
                     tada_total = tada_value['daily_ta_da'] + tada_total
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
                 session_id=session).update(is_cleared=0)
-            if TaDa.objects.filter(voucher_no=voucher).\
-            filter(session=session).exists():
-                TaDa.objects.filter(voucher_no=voucher).\
-                update(voucher_no=voucher, session=session,\
-                departure_time_from_tcc=departure_time_from_tcc,\
-                arrival_time_at_site=arrival_time_at_site,\
-                departure_time_from_site=departure_time_from_site,\
-                arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_total, start_test_date=start_test_date,\
-                end_test_date=end_test_date, source_site=source_site,\
-                testing_site=testing_site , testing_staff=testing_staff,)
-
-            else:
-                obj = TaDa(voucher_no=voucher, session=session,\
-                departure_time_from_tcc=departure_time_from_tcc,\
-                arrival_time_at_site=arrival_time_at_site,\
-                departure_time_from_site=departure_time_from_site,\
-                arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_total, start_test_date=start_test_date,\
-                end_test_date=end_test_date, source_site=source_site,\
-                testing_site=testing_site , testing_staff=testing_staff )
-                obj.save()
+            obj = TaDa(voucher_no=voucher, session=session,\
+            departure_time_from_tcc=departure_time_from_tcc,\
+            arrival_time_at_site=arrival_time_at_site,\
+            departure_time_from_site=departure_time_from_site,\
+            arrival_time_at_tcc=arrival_time_at_tcc,\
+            tada_amount=tada_total, start_test_date=start_test_date,\
+            end_test_date=end_test_date, source_site=source_site,\
+            testing_site=testing_site , testing_staff=testing_staff )
+            obj.save()
+            recent_tada = TaDa.objects.values_list('id',flat=True).filter(voucher_no=voucher).\
+                order_by('-id')[0]
             tada_obj = TaDa.objects.values('departure_time_from_tcc',\
                 'arrival_time_at_site', 'departure_time_from_site',\
                 'arrival_time_at_tcc', 'tada_amount', 'start_test_date',\
                 'end_test_date', 'source_site', 'testing_site',\
-                'date_of_generation').get(voucher_no=voucher)
+                'date_of_generation').get(id=recent_tada)
             tada_amount_in_words = tada_total
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
@@ -891,9 +880,29 @@ def tada_result(request):
             request_status = request_notify()
             return render(request, 'suspense/form.html',{
                 'form':form,'message':message,'request':request_status})
+
     else:
-        return HttpResponseRedirect(\
-            reverse('librehatti.suspense.views.tada_order_session'))
+        if request.GET['voucher_no']:
+            session = request.GET['session']
+            voucher = request.GET['voucher_no']
+            object = SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values()
+            if object:
+                form = TaDaForm(initial={'voucher_no':voucher,\
+                    'session': session})
+                tada = 'enable'
+                session_data = FinancialSession.objects.values(\
+                    'session_start_date','session_end_date').get(id=session)
+                messages = " Voucher" + " : " + voucher + " and Session" + " : " +\
+                str(session_data['session_start_date']) + ":" +\
+                str(session_data['session_end_date'])
+                request_status = request_notify()
+                return render(request, 'suspense/form.html', \
+                {'form':form, 'tada':tada, 'messages':messages,\
+                'request':request_status})
+        else:
+            return HttpResponseRedirect(\
+                reverse('librehatti.suspense.views.tada_order_session'))
 
 @login_required
 def tada_order_session(request):
@@ -1015,9 +1024,11 @@ def mark_status(request):
     suspenseclearance['boring_charge_external']
     boring_charge_internal = suspenseclearance['boring_charge_internal']
     try:
-        tada = TaDa.objects.values('tada_amount').get(voucher_no=voucher,\
+        tada = TaDa.objects.values_list('tada_amount',flat=True).filter(voucher_no=voucher,\
             session=session)
-        tada_amount = tada['tada_amount']
+        tada_amount = 0
+        for value in tada:
+            tada_amount = tada_amount + value
     except:
         tada_amount = 0
     calculate_distribution = VoucherTotal.objects.values('total').\
@@ -1120,17 +1131,22 @@ def summary_page(request):
     """
     View to handle summary page.
     """
-    session_id = request.GET['session']
-    voucher_no = request.GET['voucher_no']
-    tada = TaDa.objects.values('tada_amount','start_test_date','end_test_date',
-        'testing_site','testing_staff').filter(voucher_no = voucher_no).\
-        filter(session=session_id)[0]
-    transport = Transport.objects.values('rate','total').filter(voucher_no=voucher_no).\
-        filter(session=session_id)[0]
+    session = request.GET['session']
+    voucher = request.GET['voucher_no']
+    try:
+        tada = TaDa.objects.values_list('tada_amount',flat=True).filter(voucher_no=voucher,\
+            session=session)
+        tada_amount = 0
+        for value in tada:
+            tada_amount = tada_amount + value
+    except:
+        tada_amount = 0
+    transport = Transport.objects.values('rate','total').filter(voucher_no=voucher).\
+        filter(session=session)[0]
     distance_travelled = transport['total'] / transport['rate']
-    other_charges = SuspenseClearance.objects.filter(voucher_no = voucher_no).\
-        filter(session=session_id).values()[0]
-    temp = Context({'tada':tada,'distance_travelled':distance_travelled,
+    other_charges = SuspenseClearance.objects.filter(voucher_no = voucher).\
+        filter(session=session).values()[0]
+    temp = Context({'tada':tada_amount,'distance_travelled':distance_travelled,
         'other_charge':other_charges,'rate':transport['rate']})
     content = get_template('suspense/summary.html')
     html_content = content.render(temp)
@@ -1196,61 +1212,61 @@ def transport_bill(request):
                'client_address':client_address})
 
 
+def tada_bill_list(request):
+    session = request.POST['session']
+    voucher = request.POST['voucher']
+    tada = TaDa.objects.values('id','tada_amount','start_test_date',
+        'end_test_date').filter(voucher_no=voucher).filter(session=session)
+    return render(request, 'suspense/tada_bill_list.html',{'tada':tada})
 def tada_bill(request):
     """
     This view generate the T.A/D.A bill.
     argument: Http Request
     return: Render TA/DA bill for selected order.
     """
-    if request.method == 'POST':
-        session = request.POST['session']
-        #return HttpResponse(session)
-        voucher = request.POST['voucher']
-        tada_object = TaDa.objects.values\
-        ('date_of_generation','departure_time_from_tcc',\
-        'departure_time_from_site','arrival_time_at_tcc',\
-        'arrival_time_at_site','tada_amount','start_test_date','end_test_date',\
-        'source_site','testing_site','testing_staff').\
-        get(voucher_no=voucher, session = session)
-        start_test_date = tada_object['start_test_date']
-        tada_amount = tada_object['tada_amount']
-        end_test_date = tada_object['end_test_date']
-        testing_staff = tada_object['testing_staff']
-        testing_staff_list = testing_staff.split(',')
-        list_staff = []
-        if start_test_date == end_test_date:
-            days = 1
-        else:
-            no_of_days = (end_test_date - start_test_date).days
-            days = no_of_days + 1
-        for testing_staff_var in testing_staff_list:
-            testing_staff_details = Staff.objects.filter(\
-                code=testing_staff_var).values('name','daily_ta_da')
-            for tada_val in testing_staff_details:
-                tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
-            list_staff.append(testing_staff_details)
+    tada_id = request.GET['tada_id']
+    tada_obj = TaDa.objects.get(id=tada_id)
+    tada_object = TaDa.objects.values\
+    ('date_of_generation','departure_time_from_tcc',\
+    'departure_time_from_site','arrival_time_at_tcc',\
+    'arrival_time_at_site','tada_amount','start_test_date','end_test_date',\
+    'source_site','testing_site','testing_staff').\
+    get(id=tada_id)
+    start_test_date = tada_object['start_test_date']
+    tada_amount = tada_object['tada_amount']
+    end_test_date = tada_object['end_test_date']
+    testing_staff = tada_object['testing_staff']
+    testing_staff_list = testing_staff.split(',')
+    list_staff = []
+    if start_test_date == end_test_date:
+        days = 1
+    else:
+        no_of_days = (end_test_date - start_test_date).days
+        days = no_of_days + 1
+    for testing_staff_var in testing_staff_list:
+        testing_staff_details = Staff.objects.filter(\
+            code=testing_staff_var).values('name','daily_ta_da')
+        for tada_val in testing_staff_details:
+            tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
+        list_staff.append(testing_staff_details)
 
     voucher_obj = VoucherId.objects.values('purchase_order_of_session').\
-    get(session=session,voucher_no=voucher)
-    #return HttpResponse(voucher_obj)
+    get(session=tada_obj.session,voucher_no=tada_obj.voucher_no)
     purchase_order_var = 0
     purchase_order_var = voucher_obj['purchase_order_of_session']
-    #return HttpResponse(purchase_order_var)
     purchase_order_object = PurchaseOrder.objects.\
     filter(voucherid__purchase_order_of_session = purchase_order_var).values(\
         'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title',
         'buyer__customer__address__district', 'buyer__customer__address__street_address',
         'buyer__customer__address__pin', 'buyer__customer__address__province')
-    #return HttpResponse(purchase_order_object)
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    #footer = HeaderFooter.objects.values('footer').get(is_active=True)
     request_status = request_notify()   
     return render(request, 'suspense/tada_result.html',{\
     'purchase_order_object':purchase_order_object,
     'tada':tada_object, 'purchase_order_id':purchase_order_var,\
      'words':num2eng(int(tada_amount)),'tada_amount':tada_amount,\
-     'request':request_status,'session':session,\
-    'voucher':voucher,'list_staff':list_staff,'header':header,\
+     'request':request_status,'session':tada_obj.session,\
+    'voucher':tada_obj.voucher_no,'list_staff':list_staff,'header':header,\
     })
 
 
