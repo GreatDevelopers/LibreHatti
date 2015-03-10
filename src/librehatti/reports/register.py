@@ -30,7 +30,7 @@ from librehatti.suspense.models import TaDa
 from librehatti.suspense.models import SuspenseClearance
 
 from librehatti.voucher.models import CalculateDistribution
-from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import VoucherId, VoucherTotal
 from librehatti.voucher.models import Distribution
 
 from librehatti.bills.models import QuotedOrder
@@ -1232,7 +1232,7 @@ def suspense_register(request):
                     ', ' + value['purchase_order__buyer__customer__address__province']
                 temp_list.append(address)
                 temp_list.append(voucherid['purchased_item__item_id__category__name'])
-                caldistribute = CalculateDistribution.objects.values('total').\
+                caldistribute = VoucherTotal.objects.values('total').\
                 filter(voucher_no=value['voucher'], session_id=value['session_id'])[0]
                 temp_list.append(caldistribute['total'])
                 amount = amount + caldistribute['total']
