@@ -421,12 +421,12 @@ def other_charges(request):
     'boring_charge_internal', 'boring_charge_external', 'labour_charge',\
     'car_taxi_charge', 'field_testing_staff', 'lab_testing_staff',\
     'clear_date', 'test_date').get(voucher_no=number, session=financialsession['id'])
-    try:
-        tada = TaDa.objects.values('tada_amount').get(voucher_no=number,\
-            session=financialsession['id'])
-        ta_da_total = tada['tada_amount']
-    except:
-        ta_da_total = 0
+
+    tada = TaDa.objects.values_list('tada_amount',flat=True).filter(voucher_no=number,\
+        session=financialsession['id'])
+    ta_da_total = 0
+    for value in tada:
+        ta_da_total = ta_da_total + value
     voucherid = VoucherId.objects.values('ratio','purchase_order_of_session',\
     'purchase_order__date_time', 'purchase_order__buyer__first_name',\
     'purchase_order__buyer__last_name',\
