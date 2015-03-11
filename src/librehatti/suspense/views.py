@@ -311,12 +311,13 @@ def with_transport(request):
         transport_total = transport['total']
     except:
         transport_total = 0
-    try:
-        tada = TaDa.objects.values('tada_amount').get(voucher_no=number,\
-            session=financialsession['id'])
-        tada_amount = tada['tada_amount']
-    except:
-        tada_amount = 0
+
+    tada = TaDa.objects.values_list('tada_amount',flat=True).filter(voucher_no=number,\
+        session=financialsession['id'])
+    tada_amount = 0
+    for value in tada:
+        tada_amount = tada_amount + value
+
     suspenseclearance = SuspenseClearance.objects.values('work_charge',\
     'labour_charge', 'car_taxi_charge', 'boring_charge_internal',\
     'boring_charge_external', 'lab_testing_staff', 'field_testing_staff',\
