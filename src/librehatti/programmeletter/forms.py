@@ -40,4 +40,5 @@ class LetterDataForm(forms.ModelForm):
         js = (
             'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/ajax.js',
+            'js/price_per_unit.js',
             )

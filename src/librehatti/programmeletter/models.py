@@ -36,4 +36,5 @@ class LetterData(models.Model):
     time = models.TimeField()
     vehicle = models.ForeignKey(Vehicle, default=1)
     def __unicode__(self):
-        return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' % (self.team_name)
+        return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' \
+         % (self.team_name)
