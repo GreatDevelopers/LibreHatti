@@ -5,6 +5,8 @@ from search_choices import CLIENT_ORDER_CHOICES
 from search_choices import CONSTRAINT_CHOICES
 from search_choices import MONTH_CHOICES
 
+from useraccounts.models import *
+
 import datetime
 
 import itertools
@@ -15,6 +17,7 @@ from librehatti.catalog.models import Category
 
 from librehatti.config import _PARENT_CATEGORY
 from librehatti.config import _SUB_CATEGORY
+from librehatti.config import _ORG_TYPE
 
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
@@ -158,3 +161,14 @@ class PaidTaxesForm(forms.Form):
         self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_higher_education_tax'].widget.attrs={\
         'class':'form-control'}
+
+class OrgType(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    parent_category = forms.ModelChoiceField(queryset=OrganisationType.objects. \
+        all(),label=_ORG_TYPE)
+    
+    def __init__(self, *args, **kwargs):
+        super(OrgType, self).__init__(*args, **kwargs)
+        self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}

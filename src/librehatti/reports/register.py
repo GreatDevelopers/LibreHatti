@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from librehatti.reports.forms import DailyReportForm
+from librehatti.reports.forms import OrgType
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
 from librehatti.reports.forms import MonthYearForm
@@ -1354,3 +1355,49 @@ def tada_member(request):
             staff = []
         return render(request,'reports/tada_member.html', \
         {'data':result,'gtotal':grandetotal})
+
+def org_form(request):
+    form = OrgType()
+    date = DateRangeSelectionForm()  
+    return render(request,'reports/org_form.html', \
+        {'form':form,'date':date})  
+    
+def org_charges(request):
+    if request.method == "POST":
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        result = []
+        total = 0
+        name = ""
+        address = ""
+        sum_total = []
+        list_item = []
+        for customer_details in Customer.objects.filter(org_type_id =  \
+            request.POST['parent_category']).values('user_id','address_id'):
+            for username in User.objects.filter(id =customer_details['user_id']).\
+            values('first_name','last_name'):
+                name = username['first_name']+" "+ username['last_name']
+            for user_address in Address.objects.filter(id =  \
+                customer_details['user_id']).values('street_address','city'):
+                address = user_address['street_address']+ "," + \
+                user_address['city']
+            for order in PurchaseOrder.objects.filter(buyer_id =  \
+                customer_details['user_id'], date_time__range = (start_date, \
+                    end_date)).values('id','date_time'):
+                for voucher in VoucherId.objects.filter(purchase_order_id = \
+                    order['id']).values('voucher_no','purchase_order_of_session',\
+                    'purchase_order_id'):
+                    for bill_details in Bill.objects.filter(purchase_order_id = \
+                        order['id']).values('grand_total'):
+                        list_item.append(name)
+                        list_item.append(address)
+                        list_item.append(voucher['voucher_no'])
+                        list_item.append(voucher['purchase_order_of_session'])
+                        list_item.append(order['date_time'])
+                        list_item.append(bill_details['grand_total'])
+                        total = total + bill_details['grand_total']
+                result.append(list_item)
+                list_item = []
+        sum_total.append(total)
+        return render(request,'reports/org_charges.html', \
+            {'result':result,'sum':sum_total})  
