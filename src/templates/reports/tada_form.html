@@ -11,7 +11,7 @@
 </head>
 <body>
   {% block content %}
-  <form  method="POST"  action='{% url 'librehatti.reports.register.org_charges' %}' >
+  <form  method="POST"  action='{% url 'librehatti.reports.register.tada_register' %}' >
     <div class="form-group">
         {% csrf_token %}
         <table class="form_class">
