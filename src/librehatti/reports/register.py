@@ -1342,7 +1342,7 @@ def tada_member(request):
                         staff_member.append(team_details['daily_ta_da'])
                         staff_member.append(team_details['code'])
                         total = total + team_details['daily_ta_da']
-                grandetotal = grandetotal + total
+                    grandetotal = grandetotal + total
                 staff.append(staff_member)
                 staff_member = []
 
@@ -1400,4 +1400,4 @@ def org_charges(request):
                 list_item = []
         sum_total.append(total)
         return render(request,'reports/org_charges.html', \
-            {'result':result,'sum':sum_total})  
+            {'result':result,'sum':sum_total})
