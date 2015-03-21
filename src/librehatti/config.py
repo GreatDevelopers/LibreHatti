@@ -24,6 +24,9 @@ _NAME_OF_BANK = 'Bank Name'
 _BRANCH = 'City'
 _ONLINE_ACCOUNT = 'Online Account No.'
 _IFSC_CODE = 'IFSC Code No.'
+_ORG_TYPE = "Organisation"
+_CUBE_TEST = "Cube Test"
+_TEST_DATE ="Date of testing"
 
 """Reference"""
 _REFERENCE = 'Letter No.'
