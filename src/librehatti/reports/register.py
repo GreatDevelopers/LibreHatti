@@ -3,10 +3,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from librehatti.reports.forms import DailyReportForm
+from librehatti.reports.forms import OrgType
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
 from librehatti.reports.forms import MonthYearForm
 from librehatti.reports.forms import PaidTaxesForm
+
+from useraccounts.models import *
+from django.contrib.auth.models import User
 
 from datetime import datetime
 import calendar
@@ -22,6 +26,7 @@ from librehatti.catalog.models import NonPaymentOrder
 from librehatti.catalog.models import ModeOfPayment
 
 from librehatti.suspense.models import SuspenseOrder
+from librehatti.suspense.models import Staff
 from librehatti.suspense.models import Transport
 from librehatti.suspense.models import TaDa
 from librehatti.suspense.models import SuspenseClearance
@@ -1195,3 +1200,204 @@ def suspense_register(request):
         request_status = request_notify()
         return render(request,'reports/suspense_form.html', \
         {'form':form, 'request':request_status})
+
+def tada_form(request):
+    form = DateRangeSelectionForm()  
+    return render(request,'reports/tada_form.html', \
+        {'form':form})
+
+def tada_register(request):
+    if request.method == "POST":
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        result = []
+        date = 0
+        list_item = []
+        total = 0
+        for order in PurchaseOrder.objects.filter(date_time__range = \
+            (start_date,end_date)).values('id','buyer_id'):
+            for voucher in VoucherId.objects.filter(purchase_order_id \
+                = order['id']).values('voucher_no',\
+                'purchase_order_of_session'):                
+                list_item.append(voucher['voucher_no'])
+                list_item.append(voucher['purchase_order_of_session'])                
+                for username in  User.objects.filter(id = \
+                    order['buyer_id']).\
+                values('first_name','last_name'):
+                    list_item.append(username['first_name']+","+ \
+                        username['last_name'])
+                for username in  Address.objects.filter(id = \
+                    order['buyer_id']).values('street_address','city'):                    
+                    list_item.append(username['street_address']+" " \
+                        +username['city'])
+                for suspense in SuspenseClearance.objects.filter(voucher_no\
+                     = voucher['voucher_no']).values('labour_charge',\
+                     'car_taxi_charge','boring_charge_internal',\
+                     'clear_date'):
+                    list_item.append(suspense['labour_charge'])
+                    list_item.append(suspense['car_taxi_charge'])
+                    list_item.append(suspense['boring_charge_internal'])
+                    list_item.append(suspense['clear_date'])
+                    for suspensetada in TaDa.objects.filter(voucher_no \
+                     = voucher['voucher_no']).values('tada_amount'):
+                        date = suspensetada['tada_amount']
+                        total += total+ suspensetada['tada_amount']
+                    list_item.append(date)
+                    total += suspense['labour_charge'] + \
+                    suspense['car_taxi_charge'] + \
+                    suspense['boring_charge_internal']
+                    list_item.append(total)
+                    result.append(list_item)
+                total = 0
+                list_item = []
+        return render(request,'reports/tada_register.html', \
+        {'data':result})
+
+def tada_staff(request):
+    form = DateRangeSelectionForm()  
+    return render(request,'reports/tada_staff.html', \
+        {'form':form})  
+
+def tadastaffregister(request):
+    if request.method == "POST":
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        result = []
+        date = 0
+        staff_member = []
+        staff = []
+        list_item = []
+        total = 0
+        for team in SuspenseClearance.objects.filter(clear_date__range =\
+         (start_date,end_date)).values('field_testing_staff','voucher_no',\
+         'clear_date'):
+            date = team['voucher_no']
+            list_item.append(team['voucher_no'])
+            for order_id in VoucherId.objects.filter(voucher_no =  \
+                team['voucher_no']).values('purchase_order_of_session', \
+                'purchase_order_id'):
+                list_item.append(order_id['purchase_order_of_session'])
+                for order in PurchaseOrder.objects.filter(id =  \
+                    order_id['purchase_order_id']).values('buyer_id'):
+                    for user_name in User.objects.filter(id = \
+                        order['buyer_id']).values('first_name','last_name'):
+                        list_item.append(user_name['first_name']+","+ \
+                            user_name['last_name'])
+                    for username in  Address.objects.filter(id = \
+                        order['buyer_id']).values('street_address','city'):                    
+                        list_item.append(username['street_address']+" " \
+                        +username['city'])
+            for team_member in team['field_testing_staff'].split(","):
+                for team_details in Staff.objects.filter(code =  \
+                    team_member).values('name','daily_ta_da','code'):
+                    staff_member.append(team_details['name'])
+                    staff_member.append(team_details['daily_ta_da'])
+                    staff_member.append(team_details['code'])
+                    total = total + team_details['daily_ta_da']
+                staff.append(staff_member)
+                staff_member = []
+            list_item.append(team['clear_date'])
+            list_item.append(staff)
+            result.append(list_item)
+            list_item.append(total)
+            total = 0
+            list_item = []
+            staff = []
+        return render(request,'reports/tada_staff_register.html', \
+        {'data':result})
+
+def tada_member(request):
+    if request.method == "GET":
+        result = []
+        date = 0
+        staff_member = []
+        staff = []
+        grandetotal = 0
+        list_item = []
+        total = 0
+        for team in SuspenseClearance.objects.all().values( \
+            'field_testing_staff','voucher_no',\
+         'clear_date'):
+            date = team['voucher_no']
+            list_item.append(team['voucher_no'])
+            for order_id in VoucherId.objects.filter(voucher_no =  \
+                team['voucher_no']).values('purchase_order_of_session', \
+                'purchase_order_id'):
+                list_item.append(order_id['purchase_order_of_session'])
+                for order in PurchaseOrder.objects.filter(id =  \
+                    order_id['purchase_order_id']).values('buyer_id'):
+                    for user_name in User.objects.filter(id = \
+                        order['buyer_id']).values('first_name','last_name'):
+                        list_item.append(user_name['first_name']+","+ \
+                            user_name['last_name'])
+                    for username in  Address.objects.filter(id = \
+                        order['buyer_id']).values('street_address','city'):                    
+                        list_item.append(username['street_address']+" " \
+                        +username['city'])
+            for team_member in team['field_testing_staff'].split(","):
+                if team_member == request.GET['id']:    
+                    for team_details in Staff.objects.filter(code =  \
+                        team_member).values('name','daily_ta_da','code'):
+                        staff_member.append(team_details['name'])
+                        staff_member.append(team_details['daily_ta_da'])
+                        staff_member.append(team_details['code'])
+                        total = total + team_details['daily_ta_da']
+                grandetotal = grandetotal + total
+                staff.append(staff_member)
+                staff_member = []
+
+            list_item.append(team['clear_date'])
+            list_item.append(staff)
+            result.append(list_item)
+            list_item.append(total)
+            total = 0
+            list_item = []
+            staff = []
+        return render(request,'reports/tada_member.html', \
+        {'data':result,'gtotal':grandetotal})
+
+def org_form(request):
+    form = OrgType()
+    date = DateRangeSelectionForm()  
+    return render(request,'reports/org_form.html', \
+        {'form':form,'date':date})  
+    
+def org_charges(request):
+    if request.method == "POST":
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        result = []
+        total = 0
+        name = ""
+        address = ""
+        sum_total = []
+        list_item = []
+        for customer_details in Customer.objects.filter(org_type_id =  \
+            request.POST['parent_category']).values('user_id','address_id'):
+            for username in User.objects.filter(id =customer_details['user_id']).\
+            values('first_name','last_name'):
+                name = username['first_name']+" "+ username['last_name']
+            for user_address in Address.objects.filter(id =  \
+                customer_details['user_id']).values('street_address','city'):
+                address = user_address['street_address']+ "," + \
+                user_address['city']
+            for order in PurchaseOrder.objects.filter(buyer_id =  \
+                customer_details['user_id'], date_time__range = (start_date, \
+                    end_date)).values('id','date_time'):
+                for voucher in VoucherId.objects.filter(purchase_order_id = \
+                    order['id']).values('voucher_no','purchase_order_of_session',\
+                    'purchase_order_id'):
+                    for bill_details in Bill.objects.filter(purchase_order_id = \
+                        order['id']).values('grand_total'):
+                        list_item.append(name)
+                        list_item.append(address)
+                        list_item.append(voucher['voucher_no'])
+                        list_item.append(voucher['purchase_order_of_session'])
+                        list_item.append(order['date_time'])
+                        list_item.append(bill_details['grand_total'])
+                        total = total + bill_details['grand_total']
+                result.append(list_item)
+                list_item = []
+        sum_total.append(total)
+        return render(request,'reports/org_charges.html', \
+            {'result':result,'sum':sum_total})  
