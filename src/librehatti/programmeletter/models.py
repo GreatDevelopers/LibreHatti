@@ -1,4 +1,8 @@
 from django.db import models
+import useraccounts
+
+from django.contrib.auth.models import User
+from librehatti.config import _BUYER
 
 from librehatti.suspense.models import Staff
 from librehatti.suspense.models import Vehicle
@@ -21,11 +25,7 @@ class StaffInTeam(models.Model):
 
 class LetterData(models.Model):
     """Model for data required for letter generation"""
-    name = models.CharField(max_length=500)
-    street_address = models.CharField(max_length=500)
-    city = models.CharField(max_length=500)
-    pin = models.CharField(max_length=10, blank=True, null=True)
-    province = models.CharField(max_length=500)
+    buyer = models.ForeignKey(User,verbose_name= _BUYER)
     contact_person = models.CharField(max_length=200)
     contact_number = models.IntegerField()
     letter_subject = models.CharField(max_length=500)
@@ -36,4 +36,5 @@ class LetterData(models.Model):
     time = models.TimeField()
     vehicle = models.ForeignKey(Vehicle, default=1)
     def __unicode__(self):
-        return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' % (self.team_name)
+        return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' \
+         % (self.team_name)
