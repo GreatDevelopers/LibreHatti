@@ -168,3 +168,19 @@ class PaidTaxesForm(forms.Form):
         self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_higher_education_tax'].widget.attrs={\
         'class':'form-control'}
+
+
+class LabReportForm(forms.Form):
+    """
+    displays form for Consultancy Funds
+    """
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    parent_category = forms.ModelChoiceField(queryset=Category.objects.\
+    filter(parent__parent__isnull=True).filter(parent__isnull=False),\
+    label=_PARENT_CATEGORY)
+
+    def __init__(self, *args, **kwargs):
+        super(LabReportForm, self).__init__(*args, **kwargs)
+        self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}

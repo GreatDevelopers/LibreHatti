@@ -8,7 +8,7 @@ from librehatti.reports.forms import DailyReportForm
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
 from librehatti.reports.forms import MonthYearForm
-from librehatti.reports.forms import PaidTaxesForm
+from librehatti.reports.forms import PaidTaxesForm, LabReportForm
 
 from datetime import datetime
 import calendar
@@ -1099,7 +1099,7 @@ def client_register(request):
 
 
 @login_required
-def lab_report(request):
+def material_report(request):
     """
     This view is used to display the lab reports
     Argument:Http Request
@@ -1140,8 +1140,8 @@ def lab_report(request):
                 = (start_date,end_date),item__category=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.lab_report')
-            return render(request, 'reports/lab_report.html', {'purchase_item':
+            back_link=reverse('librehatti.reports.register.material_report')
+            return render(request, 'reports/material_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
                           'request':request_status, 'back_link':back_link})
@@ -1149,13 +1149,13 @@ def lab_report(request):
             form = ConsultancyFunds(request.POST)
             date_form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
-            return render(request,'reports/lab_report_form.html', \
+            return render(request,'reports/material_report_form.html', \
             {'form':form,'date_form':date_form,'request':request_status})
     else:
         form = ConsultancyFunds()
         request_status = request_notify()
         date_form = DateRangeSelectionForm()
-        return render(request,'reports/lab_report_form.html', \
+        return render(request,'reports/material_report_form.html', \
         {'form':form,'date_form':date_form,'request':request_status})
 
 
@@ -1371,3 +1371,64 @@ def registered_users(request):
         request_status = request_notify()
         return render(request,'reports/registeredusers_form.html', \
         {'form':form, 'request':request_status})
+
+
+@login_required
+def lab_report(request):
+    """
+    This view is used to display the lab reports
+    Argument:Http Request
+    Return:Render Lab Report
+    """
+    if request.method == 'POST':
+        form = LabReportForm(request.POST)
+        date_form = DateRangeSelectionForm(request.POST)
+        if form.is_valid() and date_form.is_valid():
+            category = request.POST['parent_category']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            if start_date > end_date:
+                error_type = "Date range error"
+                error = "Start date cannot be greater than end date"
+                request_status = request_notify()
+                temp = {'type':error_type, 'message':error}
+                return render(request, 'error_page.html', temp)
+
+            purchase_item = PurchasedItem.objects.\
+            filter(purchase_order__date_time__range=(start_date, end_date),\
+                item__category__parent=category).values(\
+                'purchase_order_id', 'purchase_order__date_time', 'price',
+                'purchase_order__buyer__first_name',
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__title',
+                'purchase_order__buyer__customer__company',
+                'purchase_order__buyer__customer__address__street_address',
+                'purchase_order__buyer__customer__address__district',
+                'purchase_order__buyer__customer__address__pin',
+                'purchase_order__buyer__customer__address__province',
+                'purchase_order__buyer__email','purchase_order__delivery_address',\
+                'purchase_order__buyer__customer__telephone',
+                'voucherid__purchase_order_of_session')
+            category_name = Category.objects.values('name').filter(id=category)
+
+            total = PurchasedItem.objects.filter(purchase_order__date_time__range
+                = (start_date,end_date),item__category__parent=category).\
+                aggregate(Sum('price')).get('price__sum', 0.00)
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.lab_report')
+            return render(request, 'reports/lab_report.html', {'purchase_item':
+                           purchase_item,'start_date':start_date, 'end_date':end_date,
+                          'total_cost':total, 'category_name':category_name,\
+                          'request':request_status, 'back_link':back_link})
+        else:
+            form = LabReportForm(request.POST)
+            date_form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/lab_report_form.html', \
+            {'form':form,'date_form':date_form,'request':request_status})
+    else:
+        form = LabReportForm()
+        request_status = request_notify()
+        date_form = DateRangeSelectionForm()
+        return render(request,'reports/lab_report_form.html', \
+        {'form':form,'date_form':date_form,'request':request_status})
