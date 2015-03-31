@@ -37,6 +37,8 @@ class VoucherId(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder)
     purchased_item = models.ForeignKey(PurchasedItem)
     voucher_no = models.IntegerField()
+    receipt_no_of_session = models.IntegerField(null=True)
+    receipt_date = models.DateField(null=True)
     purchase_order_of_session = models.IntegerField()
     purchased_item_of_session = models.IntegerField()
     session = models.ForeignKey(FinancialSession)

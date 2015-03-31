@@ -263,11 +263,15 @@ def order_added_success(request):
     Return: Render order_added_success.html
     """
     order_id = request.session.get('purchase_order_id')
-    details = PurchaseOrder.objects.values('buyer__first_name',\
-        'buyer__last_name','buyer__customer__address__street_address',\
-        'buyer__customer__title','buyer__customer__address__district',\
-        'mode_of_payment__method','cheque_dd_number',\
-        'cheque_dd_date').filter(id=order_id)[0]
+    details = VoucherId.objects.values('purchase_order__buyer__first_name',\
+        'purchase_order__buyer__last_name',
+        'purchase_order__buyer__customer__address__street_address',\
+        'purchase_order__buyer__customer__title',
+        'purchase_order__buyer__customer__address__district',\
+        'purchase_order__mode_of_payment__method',
+        'purchase_order__cheque_dd_number',\
+        'purchase_order__cheque_dd_date',
+        'receipt_no_of_session').filter(purchase_order=order_id)[0]
     suspense_flag = 0
     suspense = SuspenseOrder.objects.filter(purchase_order=order_id)
     if suspense:

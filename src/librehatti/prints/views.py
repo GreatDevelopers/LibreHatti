@@ -23,7 +23,7 @@ from useraccounts.models import Address
 from librehatti.prints.helper import num2eng
 
 from librehatti.voucher.models import CalculateDistribution
-from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import VoucherId, FinancialSession
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import QuotedSuspenseOrder
@@ -43,6 +43,7 @@ from librehatti.config import _ONLINE_ACCOUNT
 from librehatti.config import _IFSC_CODE
 from librehatti.config import _YOUR_LETTER_No
 
+from django.db.models import Max
 
 @login_required
 def bill(request):
@@ -323,7 +324,36 @@ def receipt(request):
     Return:Render Receipt
     """
     id = request.GET['order_id']
-    voucherid = VoucherId.objects.values('purchase_order_of_session').\
+    voucherid_temp = VoucherId.objects.values('receipt_no_of_session').filter(
+        purchase_order=id)[0]
+    if not voucherid_temp['receipt_no_of_session']:
+        today_date = datetime.date.today()
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= today_date <= end_date:
+                session_id = value['id']
+        max_receipt_no = VoucherId.objects.filter(session=session_id).aggregate(Max('receipt_no_of_session'))
+        if max_receipt_no['receipt_no_of_session__max']:
+            voucherid_obj = VoucherId.objects.values('receipt_no_of_session',
+                'session', 'purchase_order__date_time').filter(
+                receipt_no_of_session=max_receipt_no['receipt_no_of_session__max'])[0]
+            voucherid_obj2 = VoucherId.objects.values('receipt_no_of_session',
+                'session', 'purchase_order__date_time').filter(purchase_order=id)[0]
+            if voucherid_obj['session'] == voucherid_obj2['session']:
+                VoucherId.objects.filter(purchase_order=id).update(
+                    receipt_no_of_session=max_receipt_no['receipt_no_of_session__max']+1,
+                    receipt_date=today_date)
+            else:
+                VoucherId.objects.filter(purchase_order=id).update(
+                    receipt_no_of_session=1,receipt_date=today_date)
+        else:
+            VoucherId.objects.filter(purchase_order=id).update(
+                receipt_no_of_session=1,receipt_date=today_date)
+    voucherid = VoucherId.objects.values('purchase_order_of_session',
+        'receipt_no_of_session').\
     filter(purchase_order=id)[0]
     bill = Bill.objects.values('amount_received').get(purchase_order=id)
     purchase_order = PurchaseOrder.objects.values('buyer', 'date_time',\
@@ -341,7 +371,7 @@ def receipt(request):
     filter(purchase_order=id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'prints/receipt.html', {\
-        'receiptno': voucherid['purchase_order_of_session'],\
+        'receiptno': voucherid['receipt_no_of_session'],\
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
         'method': purchase_order, 'buyer':customer_obj,\
         'material':purchased_item, 'header':header})
