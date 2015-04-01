@@ -372,7 +372,8 @@ def receipt(request):
     filter(purchase_order=id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'prints/receipt.html', {\
-        'receiptno': voucherid['receipt_no_of_session'],\
+        'receiptno': voucherid['receipt_no_of_session'],
+        'order_no':voucherid['purchase_order_of_session'],
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
         'method': purchase_order, 'buyer':customer_obj,\
         'material':purchased_item, 'header':header})
