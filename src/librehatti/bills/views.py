@@ -67,7 +67,7 @@ def quoted_bill_cal(request):
     total = quoted_item['price__sum']
     price_total = total - quoted_order_obj['total_discount']
     totalplusdelivery = price_total
-    surcharge = Surcharge.objects.values('id', 'value', 'taxes_included')
+    surcharge = Surcharge.objects.values('id', 'value', 'taxes_included', 'tax_name')
     delivery_rate = Surcharge.objects.values('value').\
     filter(tax_name='Transportation')
     distance = QuotedSuspenseOrder.objects.\
@@ -82,13 +82,14 @@ def quoted_bill_cal(request):
 
     for value in surcharge:
         surcharge_id = value['id']
-        surcharge_value = value['value']
+        surcharge_val = value['value']
         surcharge_tax = value['taxes_included']
         if surcharge_tax == 1 and generate_tax == 1:
-            taxes = round((totalplusdelivery * surcharge_value)/100)
+            taxes = round((totalplusdelivery * surcharge_val)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied = QuotedTaxesApplied(quoted_order=quoted_order,
-            surcharge=surcharge_obj, tax=taxes)
+            surcharge=surcharge_obj, tax=taxes, surcharge_name = value['tax_name'],
+                surcharge_value = value['value'])
             taxes_applied.save()
     taxes_applied_temp = QuotedTaxesApplied.objects.\
     filter(quoted_order=quoted_order_id)

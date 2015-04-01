@@ -118,10 +118,10 @@ def bill(request):
         list.append(total)
         bill_values.append(list)
     taxes_applied = TaxesApplied.objects.\
-    filter(purchase_order=purchase_order).values('surcharge', 'tax')
+    filter(purchase_order=purchase_order).values('surcharge', 'tax',
+        'surcharge_name', 'surcharge_value')
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order=purchase_order).aggregate(Count('id'))
-    surcharge = Surcharge.objects.values('id', 'tax_name', 'value')
     bill = Bill.objects.values('total_cost', 'totalplusdelivery',\
         'grand_total', 'delivery_charges').get(purchase_order=id)
     total_cost = bill['total_cost']
@@ -177,7 +177,7 @@ def bill(request):
         'id':voucherid['purchase_order_of_session'], 'ref':purchase_order_obj,\
         'date':date, 'purchase_order':purchase_order, 'address':address,\
         'total_cost':total_cost, 'grand_cost':grand_total,\
-        'taxes_applied':taxes_applied, 'surcharge':surcharge,\
+        'taxes_applied':taxes_applied,\
         'buyer':purchase_order_obj, 'buyer_name':customer_obj,\
         'site':purchase_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
@@ -301,7 +301,8 @@ def tax(request):
     """
     id = request.GET['order_id']
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
-        'surcharge__value', 'tax', 'purchase_order__date_time').\
+        'surcharge__value', 'tax', 'purchase_order__date_time',
+        'surcharge_name', 'surcharge_value').\
     filter(purchase_order=id)
     bill = Bill.objects.values('totalplusdelivery','total_tax',\
         'purchase_order__date_time').get(purchase_order=id)
@@ -449,10 +450,10 @@ def quoted_bill(request):
         list.append(total)
         bill_values.append(list)
     taxes_applied = QuotedTaxesApplied.objects.\
-    filter(quoted_order=quoted_order).values('surcharge', 'tax')
+    filter(quoted_order=quoted_order).values('surcharge', 'tax', 'surcharge_name',
+        'surcharge_value')
     taxes_applied_obj = QuotedTaxesApplied.objects.\
     filter(quoted_order=quoted_order).aggregate(Count('id'))
-    surcharge = Surcharge.objects.values('id', 'tax_name', 'value')
     bill = QuotedBill.objects.values('total_cost', 'grand_total',\
         'delivery_charges', 'totalplusdelivery').get(quoted_order=quoted_order_id)
     total_cost = bill['total_cost']
@@ -511,7 +512,7 @@ def quoted_bill(request):
         'ref':quoted_order_obj, 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost, 'grand_cost':grand_total,\
-        'taxes_applied': taxes_applied, 'surcharge':surcharge,\
+        'taxes_applied': taxes_applied,\
         'buyer':quoted_order_obj, 'buyer_name':customer_obj,\
         'site': quoted_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
