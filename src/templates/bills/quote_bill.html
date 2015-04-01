@@ -104,11 +104,7 @@
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}
-                {% for surcharge in surcharge %}
-                {% if surcharge.id == taxesapplied.surcharge %}
-                <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
-                {% endif %}
-                {% endfor %}
+                <td> {{ taxesapplied.surcharge_name }} @ {{ taxesapplied.surcharge_value }} % </td>
                 <td id="total">  {{taxesapplied.tax }} </td>
             </tr>
             {% endfor %}
