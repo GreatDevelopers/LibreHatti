@@ -87,6 +87,8 @@ class QuotedTaxesApplied(models.Model):
     """
     quoted_order = models.ForeignKey(QuotedOrder)
     surcharge = models.ForeignKey(Surcharge)
+    surcharge_name = models.CharField(max_length=500)
+    surcharge_value = models.FloatField()
     tax = models.IntegerField()
     def __unicode__(self):
         return "%s" % (self.surcharge)

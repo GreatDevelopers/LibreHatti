@@ -216,6 +216,8 @@ class TaxesApplied(models.Model):
     """
     purchase_order = models.ForeignKey(PurchaseOrder)
     surcharge = models.ForeignKey(Surcharge)
+    surcharge_name = models.CharField(max_length=500)
+    surcharge_value = models.FloatField()
     tax = models.IntegerField()
     def __unicode__(self):
         return "%s" % (self.surcharge)

@@ -154,7 +154,7 @@ def bill_cal(request):
     total = purchase_item['price__sum']
     price_total = total - purchase_order_obj['total_discount']
     totalplusdelivery = price_total
-    surcharge = Surcharge.objects.values('id','value','taxes_included')
+    surcharge = Surcharge.objects.values('id','value','taxes_included','tax_name')
     delivery_rate = Surcharge.objects.values('value').\
     filter(tax_name = 'Transportation')
     distance = SuspenseOrder.objects.filter\
@@ -169,19 +169,21 @@ def bill_cal(request):
 
     for value in surcharge:
         surcharge_id = value['id']
-        surcharge_value = value['value']
+        surcharge_val = value['value']
         surcharge_tax = value['taxes_included']
         if surcharge_tax == 1 and generate_tax == 1:
-            taxes = round((totalplusdelivery * surcharge_value)/100)
+            taxes = round((totalplusdelivery * surcharge_val)/100)
             surcharge_obj = Surcharge.objects.get(id=surcharge_id)
             taxes_applied_var = TaxesApplied.objects.filter(
                 purchase_order = purchase_order, surcharge = surcharge_obj,
-                tax = taxes)
+                tax = taxes, surcharge_name = value['tax_name'],
+                surcharge_value = value['value'])
             if taxes_applied_var:
                 pass
             else:
                 taxes_applied = TaxesApplied(purchase_order = purchase_order,
-                surcharge = surcharge_obj, tax = taxes)
+                surcharge = surcharge_obj, tax = taxes, surcharge_name = value['tax_name'],
+                surcharge_value = value['value'])
                 taxes_applied.save()
     taxes_applied_temp = TaxesApplied.objects.\
     filter(purchase_order=purchase_order_id)
