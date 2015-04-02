@@ -53,7 +53,7 @@ class GenerateRegister(View):
             'item':'item__name','Discount':'total_discount',
             'Debit':'is_debit', 'total price':'price',
             'TDS': 'tds', 'Total With Taxes': 'bill__grand_total', 
-            'Order Id':'id', 'Total Without Taxes': 'bill__total_cost',
+            'Order Id':'voucherid__purchase_order_of_session', 'Total Without Taxes': 'bill__total_cost',
             'Order Date': 'date_time',
             'Street Address': 'buyer__customer__address__street_address'
         }
@@ -176,6 +176,15 @@ class GenerateRegister(View):
                 str(monthrange(int(self.year),int(self.month))[1])
             self.details = self.client_details.filter(
                 date_time__range = (month_start, month_end))
+        except:
+            pass
+
+        try:
+            if 'gt' in request.GET.getlist('additional_constraints'):
+                gt_amount=request.GET['amount_greater_than']
+                self.details = self.client_details.filter(
+                bill__total_cost__gt = gt_amount)
+
         except:
             pass
         try:
