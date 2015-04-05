@@ -1259,7 +1259,7 @@ def tada_bill(request):
     filter(voucherid__purchase_order_of_session = purchase_order_var).values(\
         'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title',
         'buyer__customer__address__district', 'buyer__customer__address__street_address',
-        'buyer__customer__address__pin', 'buyer__customer__address__province')
+        'buyer__customer__address__pin', 'buyer__customer__address__province')[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     request_status = request_notify()   
     return render(request, 'suspense/tada_result.html',{\

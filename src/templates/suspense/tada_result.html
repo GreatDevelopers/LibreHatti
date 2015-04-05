@@ -12,19 +12,18 @@
     <div class = "container">
         <h2>T.A./D.A  Form For Consultancy Work</h2>
     </div>
-    <div class="voucher-no">{% for value in purchase_order_object%}
+    <div class="voucher-no">
     <b>Name of the Department/Client:</b> 
-        {% if value.buyer_id__first_name %}
-        {{value.buyer_id__first_name}} {{value.buyer_id__last_name}},
+        {% if purchase_order_object.buyer_id__first_name %}
+        {{purchase_order_object.buyer_id__first_name}} {{purchase_order_object.buyer_id__last_name}},
         {% else %}
-        {{value.buyer__customer__title}},
+        {{purchase_order_object.buyer__customer__title}},
         {% endif %}
-        {{value.buyer__customer__address__street_address}}, {{value.buyer__customer__address__district}},
-        {% if value.buyer__customer__address__pin %}
-        {{value.buyer__customer__address__pin}},
+        {{purchase_order_object.buyer__customer__address__street_address}}, {{purchase_order_object.buyer__customer__address__district}},
+        {% if purchase_order_object.buyer__customer__address__pin %}
+        {{purchase_order_object.buyer__customer__address__pin}},
         {% endif %}
-        {{value.buyer__customer__address__province}}.
-    {% endfor %}
+        {{purchase_order_object.buyer__customer__address__province}}.
     <div style = "text-align:right; float:right">
         <b>Vide Receipt No.</b>:{{ purchase_order_id }}
     </div>
