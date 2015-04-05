@@ -340,7 +340,8 @@ def receipt(request):
         if max_receipt_no['receipt_no_of_session__max']:
             voucherid_obj = VoucherId.objects.values('receipt_no_of_session',
                 'session', 'purchase_order__date_time').filter(
-                receipt_no_of_session=max_receipt_no['receipt_no_of_session__max'])[0]
+                receipt_no_of_session=max_receipt_no['receipt_no_of_session__max'],
+                session_id=session_id)[0]
             voucherid_obj2 = VoucherId.objects.values('receipt_no_of_session',
                 'session', 'purchase_order__date_time').filter(purchase_order=id)[0]
             if voucherid_obj['session'] == voucherid_obj2['session']:
