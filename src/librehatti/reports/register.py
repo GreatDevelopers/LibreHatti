@@ -65,26 +65,28 @@ def daily_report_result(request):
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=\
                     (start_date,end_date)).filter(mode_of_payment__method=\
                     'Cash').values('date_time',\
-                    'bill__grand_total',\
+                    'bill__amount_received',\
                     'voucherid__purchase_order_of_session',\
                     'buyer__first_name',\
                     'buyer__last_name',\
                     'buyer__customer__address__pin',\
                     'buyer__customer__user__customer__address__street_address',\
                     'buyer__customer__user__customer__address__district',\
-                    'buyer__customer__title').distinct()
+                    'buyer__customer__title').distinct().order_by('date_time',
+                    'voucherid__receipt_no_of_session')
             else:
                 purchase_order = PurchaseOrder.objects.filter(date_time__range=\
                      (start_date,end_date)).exclude(mode_of_payment__method=\
                      'Cash').values('date_time',\
-                     'bill__grand_total',\
+                     'bill__amount_received',\
                      'voucherid__purchase_order_of_session',\
                      'buyer__first_name',\
                      'buyer__last_name',\
                      'buyer__customer__address__pin',\
                      'buyer__customer__user__customer__address__street_address',\
                      'buyer__customer__user__customer__address__district',\
-                     'buyer__customer__title').distinct()
+                     'buyer__customer__title').distinct().order_by('date_time',
+                    'voucherid__receipt_no_of_session')
             temp_list = []
             result = []
             for temp_value in purchase_order:
@@ -102,13 +104,13 @@ def daily_report_result(request):
                     temp_value['buyer__customer__user__customer__address__street_address'])
                 temp_list.append(\
                     temp_value['buyer__customer__user__customer__address__district'])
-                temp_list.append(temp_value['bill__grand_total'])
+                temp_list.append(temp_value['bill__amount_received'])
                 result.append(temp_list)
                 temp_list = []
 
             sum = 0
             for temp_var in purchase_order:
-                sum = sum + temp_var['bill__grand_total']
+                sum = sum + temp_var['bill__amount_received']
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
@@ -670,7 +672,7 @@ def servicetax_register(request):
                 'buyer__customer__address__district',\
                 'buyer__customer__address__pin',\
                 'buyer__customer__address__province').\
-            filter(id__in=taxesapplied_obj)
+            filter(id__in=taxesapplied_obj).order_by('date_time', 'voucherid__receipt_no_of_session')
             temp = []
             result = []
             i=0
@@ -791,7 +793,8 @@ def main_register(request):
                 'buyer__customer__address__district',\
                 'buyer__customer__address__province',\
                 ).exclude(id__in = suspense_order).\
-            exclude(voucherid__is_special=1).distinct()
+            exclude(voucherid__is_special=1).distinct().order_by('date_time',\
+                'voucherid__receipt_no_of_session')
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             temp_list = []
@@ -821,7 +824,8 @@ def main_register(request):
                         'buyer__customer__address__province'])
                 material = VoucherId.objects.\
                 values('purchased_item__item_id__category__name').\
-                filter(voucher_no = temp_value['voucherid__voucher_no']).distinct()
+                filter(voucher_no = temp_value['voucherid__voucher_no'],
+                    session_id = temp_value['voucherid__session']).distinct()
                 for value in material:
                     temp_list.append(\
                         value['purchased_item__item_id__category__name'])
