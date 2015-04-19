@@ -1214,42 +1214,39 @@ def tada_register(request):
         date = 0
         list_item = []
         total = 0
-        for order in PurchaseOrder.objects.filter(date_time__range = \
-            (start_date,end_date)).values('id','buyer_id'):
-            for voucher in VoucherId.objects.filter(purchase_order_id \
-                = order['id']).values('voucher_no',\
-                'purchase_order_of_session'):                
-                list_item.append(voucher['voucher_no'])
-                list_item.append(voucher['purchase_order_of_session'])                
-                for username in  User.objects.filter(id = \
-                    order['buyer_id']).\
-                values('first_name','last_name'):
-                    list_item.append(username['first_name']+","+ \
+        for tada in TaDa.objects.filter(start_test_date__range=(start_date, \
+            end_date)).values('voucher_no','tada_amount'):
+            list_item.append(tada['voucher_no'])
+            for voucher in VoucherId.objects.filter(voucher_no = \
+                tada['voucher_no']).values('purchase_order_of_session', \
+                'purchase_order_id'):
+                list_item.append(voucher['purchase_order_of_session'])
+                for order in PurchaseOrder.objects.filter(id =  \
+                    voucher['purchase_order_id']).values('buyer_id'):
+                    for username in  User.objects.filter(id = \
+                    order['buyer_id']).values('first_name','last_name'):
+                        list_item.append(username['first_name']+","+ \
                         username['last_name'])
-                for username in  Address.objects.filter(id = \
-                    order['buyer_id']).values('street_address','city'):                    
-                    list_item.append(username['street_address']+" " \
-                        +username['city'])
-                for suspense in SuspenseClearance.objects.filter(voucher_no\
-                     = voucher['voucher_no']).values('labour_charge',\
+                    for username in  Address.objects.filter(id = \
+                    order['buyer_id']).values('street_address','district'):                    
+                        list_item.append(username['street_address']+" " \
+                        +username['district'])
+                    for suspense in SuspenseClearance.objects.filter(voucher_no\
+                     = tada['voucher_no']).values('labour_charge',\
                      'car_taxi_charge','boring_charge_internal',\
-                     'clear_date'):
-                    list_item.append(suspense['labour_charge'])
-                    list_item.append(suspense['car_taxi_charge'])
-                    list_item.append(suspense['boring_charge_internal'])
-                    list_item.append(suspense['clear_date'])
-                    for suspensetada in TaDa.objects.filter(voucher_no \
-                     = voucher['voucher_no']).values('tada_amount'):
-                        date = suspensetada['tada_amount']
-                        total += total+ suspensetada['tada_amount']
-                    list_item.append(date)
-                    total += suspense['labour_charge'] + \
-                    suspense['car_taxi_charge'] + \
-                    suspense['boring_charge_internal']
-                    list_item.append(total)
-                    result.append(list_item)
-                total = 0
-                list_item = []
+                     'clear_date','work_charge'):
+                        list_item.append(suspense['labour_charge'])
+                        list_item.append(suspense['car_taxi_charge'])
+                        list_item.append(suspense['boring_charge_internal'])
+                        list_item.append(suspense['clear_date'])
+                        list_item.append(suspense['work_charge'])
+                        list_item.append(tada['tada_amount'])
+                        total = tada['tada_amount'] + suspense['labour_charge'] + \
+                        suspense['car_taxi_charge'] + \
+                        suspense['boring_charge_internal'] + suspense['work_charge']
+                        list_item.append(total)
+                result.append(list_item)
+            list_item = []
         return render(request,'reports/tada_register.html', \
         {'data':result})
 
@@ -1269,8 +1266,8 @@ def tadastaffregister(request):
         list_item = []
         total = 0
         for team in SuspenseClearance.objects.filter(clear_date__range =\
-         (start_date,end_date)).values('field_testing_staff','voucher_no',\
-         'clear_date'):
+         (start_date,end_date)).exclude(field_testing_staff =""). \
+         values('field_testing_staff','voucher_no','clear_date'):
             date = team['voucher_no']
             list_item.append(team['voucher_no'])
             for order_id in VoucherId.objects.filter(voucher_no =  \
@@ -1284,9 +1281,9 @@ def tadastaffregister(request):
                         list_item.append(user_name['first_name']+","+ \
                             user_name['last_name'])
                     for username in  Address.objects.filter(id = \
-                        order['buyer_id']).values('street_address','city'):                    
+                        order['buyer_id']).values('street_address','district'):                    
                         list_item.append(username['street_address']+" " \
-                        +username['city'])
+                        +username['district'])
             for team_member in team['field_testing_staff'].split(","):
                 for team_details in Staff.objects.filter(code =  \
                     team_member).values('name','daily_ta_da','code'):
@@ -1315,9 +1312,8 @@ def tada_member(request):
         grandetotal = 0
         list_item = []
         total = 0
-        for team in SuspenseClearance.objects.all().values( \
-            'field_testing_staff','voucher_no',\
-         'clear_date'):
+        for team in SuspenseClearance.objects.all().exclude(field_testing_staff =""). \
+        values('field_testing_staff','voucher_no','clear_date'):
             date = team['voucher_no']
             list_item.append(team['voucher_no'])
             for order_id in VoucherId.objects.filter(voucher_no =  \
@@ -1331,9 +1327,9 @@ def tada_member(request):
                         list_item.append(user_name['first_name']+","+ \
                             user_name['last_name'])
                     for username in  Address.objects.filter(id = \
-                        order['buyer_id']).values('street_address','city'):                    
+                        order['buyer_id']).values('street_address','district'):                    
                         list_item.append(username['street_address']+" " \
-                        +username['city'])
+                        +username['district'])
             for team_member in team['field_testing_staff'].split(","):
                 if team_member == request.GET['id']:    
                     for team_details in Staff.objects.filter(code =  \
@@ -1345,7 +1341,6 @@ def tada_member(request):
                     grandetotal = grandetotal + total
                 staff.append(staff_member)
                 staff_member = []
-
             list_item.append(team['clear_date'])
             list_item.append(staff)
             result.append(list_item)
@@ -1355,6 +1350,7 @@ def tada_member(request):
             staff = []
         return render(request,'reports/tada_member.html', \
         {'data':result,'gtotal':grandetotal})
+
 
 def org_form(request):
     form = OrgType()
@@ -1378,9 +1374,9 @@ def org_charges(request):
             values('first_name','last_name'):
                 name = username['first_name']+" "+ username['last_name']
             for user_address in Address.objects.filter(id =  \
-                customer_details['user_id']).values('street_address','city'):
+                customer_details['user_id']).values('street_address','district'):
                 address = user_address['street_address']+ "," + \
-                user_address['city']
+                user_address['district']
             for order in PurchaseOrder.objects.filter(buyer_id =  \
                 customer_details['user_id'], date_time__range = (start_date, \
                     end_date)).values('id','date_time'):

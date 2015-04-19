@@ -18,6 +18,7 @@
             </div>
     <h2><center>TaDa and Other Charges</center></h2>
     <div class='daily-report-list'>
+    {{data}}
         <table border="1px">
                 <tr>
                     <th>S.No.</th>
@@ -38,12 +39,12 @@
                     <td align="right">
                         <table border="1px">
                         {% for data in value.5 %}
-                        <tr><td><a href='{% url 'librehatti.reports.register.tada_member' %}?id={{data.2}}'>{{data.0}}</a></td><td>{{data.1}}</td>
+                        <tr><td><a href='{% url 'librehatti.reports.register.tada_member'%}?id={{data.2}}'>{{data.0}}</a></td><td>{{data.1}}</td>
                         {%endfor%}
                         </table>
 
                     </td>
-                    <td align="right">{{ value.6 }}</td>
+                    <td align="right">{{ value.7 }}</td>
                 
                 </tr>
 
