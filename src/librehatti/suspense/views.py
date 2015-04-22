@@ -1252,7 +1252,7 @@ def tada_bill(request):
         list_staff.append(testing_staff_details)
 
     voucher_obj = VoucherId.objects.values('purchase_order_of_session').\
-    get(session=tada_obj.session,voucher_no=tada_obj.voucher_no)
+    filter(session=tada_obj.session,voucher_no=tada_obj.voucher_no)[0]
     purchase_order_var = 0
     purchase_order_var = voucher_obj['purchase_order_of_session']
     purchase_order_object = PurchaseOrder.objects.\
