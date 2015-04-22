@@ -1,16 +1,12 @@
-"""
-It includes the choices used in forms.
-"""
-
 CLIENT_FIELD_CHOICES = ( ('First Name', 'First Name'), ('Last Name', 'Last Name'),
-    ('Title','Title'), ('Street Address','Street Address'),
-    ('district', 'district'), ('Phone', 'Phone'),('Company', 'Company'),
+    ('Street Address','Street Address'),
+    ('City', 'City'), ('Phone', 'Phone'),('Company', 'Company'),
     )
 
 
 CLIENT_ORDER_CHOICES= ( ('Order Date', 'Order Date'),('Discount', 'Discount'), 
     ('Debit', 'Debit'), ('Total Without Taxes', 'Total Amount without Taxes'),
-    ('Total With Taxes', 'Total Amount with Taxes')
+    ('TDS','TDS'),('Total With Taxes', 'Total Amount with Taxes')
     )
 
 

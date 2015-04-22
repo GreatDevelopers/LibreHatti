@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 {% block title %}
-    <title>Proforma Bill Register</title>
+    <title>Proforma Register</title>
 {% endblock %}
 </head>
 <body>
@@ -16,7 +16,7 @@
                 <input type="button" class="btn btn-info btn-large" 
                 name="" value="Show Printable Version"></a>
             </div>
-    <h2><center>Proforma Bill Register</center></h2>
+    <h2><center>Proforma Register</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
@@ -25,7 +25,7 @@
                     <th>Dated</th>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>District</th>
+                    <th>City</th>
                     <th>Company</th>
                     <th>Material</th>
                     <th>Site</th>
@@ -33,8 +33,8 @@
                     <th>Email Address</th>
                     <th>Charges</th>
                     <th>Service Tax ({{surcharge_values.0}}%)</th>
-                    <th>Education Cess ({{surcharge_values.1}}%)</th>
-                    <th>H.Education Cess ({{surcharge_values.2}}%)</th>
+                    <th>Education Tax ({{surcharge_values.1}}%)</th>
+                    <th>H.Education Tax ({{surcharge_values.2}}%)</th>
                     <th>Net Total</th>
                 </tr>
                 {% for value in result %}

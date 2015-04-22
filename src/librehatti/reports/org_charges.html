@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 {% block title %}
-    <title>Non Payment Register</title>
+    <title>TaDa and Other Charges</title>
 {% endblock %}
 </head>
 <body>
@@ -16,30 +16,36 @@
                 <input type="button" class="btn btn-info btn-large" 
                 name="" value="Show Printable Version"></a>
             </div>
-    <h2><center>Non Payment Register</center></h2>
+    <h2><center>TaDa and Other Charges</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
                     <th>S.No.</th>
-                    <th>Dated</th>
-                    <th>Name</th>
+                    <th>Voucher No.</th>
+                    <th>Receipt No.</th>
                     <th>Address</th>
-                    <th>Letter No.</th>
-                    <th>Letter Dated</th>
-                    <th>Type of Material</th>
-                    <th>Site</th>
+                    <th>Dated</th>
+                    <th>TaDa</th>
+                    <th>Labour Charges</th>
+                    <th>Transport Charges</th>
+                    <th>Boring charges internal</th>
+                    <th>Total</th>
                 </tr>
-                {% for value in result %}
+                {% for value in data %}
                 <tr>
                     <td>{{ forloop.counter}}</td>
                     <td>{{ value.0 }}</td>
                     <td>{{ value.1 }}</td>
-                    <td>{{ value.2 }}</td>
-                    <td>{{ value.3 }}</td>
-                    <td>{{ value.4 }}</td>
-                    <td>{{ value.5 }}</td>
-                    <td>{{ value.6 }}</td>
+                    <td>{{ value.2 }},{{ value.3 }}</td>
+                    <td>{{ value.7 }}</td>
+                    <td align="right">{{ value.8 }}</td>
+                    <td align="right">{{ value.5 }}</td>
+                    <td align="right">{{ value.6 }}</td>
+                    <td align="right">{{ value.4 }}</td>
+                    <td align="right">{{ value.9 }}</td>
+                
                 </tr>
+
                 {% endfor %}
        </table>
    </div>
