@@ -29,7 +29,7 @@ class Address(models.Model):
         verbose_name_plural = "Addresses"
 
     def __unicode__(self):
-        return self.street_address + ',' + self.district
+        return self.street_address + ',' + self.city
 
 
 """
