@@ -70,6 +70,25 @@ class ConsultancyFunds(forms.Form):
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
         self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 
+class lob_report_form(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    parent_category = forms.ModelChoiceField(queryset=Category.objects.\
+    filter(parent__parent__isnull=True).filter(parent__isnull=False),\
+    label=_PARENT_CATEGORY)
+
+    def __init__(self, *args, **kwargs):
+        super(lob_report_form, self).__init__(*args, **kwargs)
+        self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+        #self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+class labs_register(forms.Form):
+    """docstring for labs_register"""
+    def __init__(self, *args,**kwargs):
+        super(labs_register, self).__init__(*args,**kwargs)
+        self.fields['parent_category'].widget.attrs = {'class':'btn btn-default dropdown-toggle'}
+        
 
 """
 displays checkboxes for Client Search

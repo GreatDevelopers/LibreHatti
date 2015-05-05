@@ -1,0 +1,50 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+  {% block title %}
+  <title>Labs Evaluation Report</title>
+{% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class='list-results'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Printable Version"></a>
+            </div>
+    <h2>Labs Evaluation Report</h2>
+    <div class='daily-report-list'>
+    <table  border="1">
+    <p><center><!--{{category_name}}--> From {{start_date}} to {{end_date}} </center></p>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Jobs Done</th>
+                    <th>Amount</th>
+                </tr>
+                {% for val in purchase_item %}
+                <tr>
+               
+                    
+                       <!--<td>{{ forloop.last}}
+                      </td>-->
+                     
+                    
+                  <td>{{category_name}}</td>
+                    <td>{{val.voucherid__purchase_order_of_session}}</td>
+                    <td>{{val.price}}</td>
+                </tr>
+               
+                {% endfor %}
+
+      
+    </table>
+     </div>
+     </div>
+  {% endblock %}
+</body>
+</html>

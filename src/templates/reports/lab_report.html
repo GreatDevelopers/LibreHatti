@@ -28,6 +28,7 @@
         <th> Dated </th>
         <th> Name </th>
         <th>Address</th>
+        <th>Material</th>
         <th> Company </th>
         <th>Site</th>
         <th>Email</th>
@@ -46,13 +47,15 @@
         {{val.purchase_order__buyer__customer__title}} 
         {% endif %}
         </td>
-        <td>{{val.purchase_order__buyer__customer__company}}</td>
         <td>{{val.purchase_order__buyer__customer__address__street_address}}, {{val.purchase_order__buyer__customer__address__city}}
         {% if val.purchase_order__buyer__customer__address__pin != 'None' and val.purchase_order__buyer__customer__address__pin != '' %}
         , {{val.purchase_order__buyer__customer__address__pin}}
         {% endif %}
         , {{val.purchase_order__buyer__customer__address__province}}
         </td>
+        <td>{{val.item__category__name}}</td>
+        
+        <td>{{val.purchase_order__buyer__customer__company}}</td>
         <td>{{val.purchase_order__delivery_address}}</td>
         <td>{{val.purchase_order__buyer__email}}</td>
         <td>{{val.purchase_order__buyer__customer__telephone}}</td>
