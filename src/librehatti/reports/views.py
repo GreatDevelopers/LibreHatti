@@ -32,8 +32,6 @@ def search_form(request):
     to search_type_code which will be used in template.
 
     It'll raise an exception if anyone give invalid value in 'type'.
-    Argument:Http Request
-    Return:Render Search
     """
     try:
         if request.GET['type'] == 'search':
@@ -68,7 +66,6 @@ def search_form(request):
 def save_fields(request):
     """
     Save generated register.
-    Argument:Http Request
     """
 
     title = request.GET['title']
@@ -90,8 +87,6 @@ def save_fields(request):
 def list_saved_registers(request):
     """
     List saved registers
-    Argument:Http Request
-    Return:Render List of Registers
     """
     local_url = settings.LOCAL_URL
     list_of_registers = SavedRegisters.objects.\
@@ -106,8 +101,6 @@ def list_saved_registers(request):
 def filter_sub_category(request):
     """
     This view filters the sub_category according to the parent_category.
-    Argument:Http Request
-    Return:Http Response
     """
     parent_category = request.GET['parent_id']
     sub_categories = Category.objects.filter(parent=parent_category)
