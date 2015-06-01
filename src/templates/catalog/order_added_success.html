@@ -16,17 +16,17 @@
       <table>
        <tr>
           <th>Client:</th>
-          <td>{{details.buyer__first_name}}&nbsp;{{details.buyer__last_name}}
-           &nbsp;{{details.buyer__customer__title}}</td>
+          <td>{{details.purchase_order__buyer__first_name}}&nbsp;{{details.purchase_order__buyer__last_name}}
+           &nbsp;{{details.purchase_order__buyer__customer__title}}</td>
        </tr>
        <tr>
            <th>Address:</th>
-           <td>{{details.buyer__customer__address__street_address}}&nbsp;
-              {{details.buyer__customer__address__city}}</td>
+           <td>{{details.purchase_order__buyer__customer__address__street_address}}&nbsp;
+              {{details.purchase_order__buyer__customer__address__district}}</td>
           </tr>
           <tr>
            <th>Mode Of Payment:</th>
-           <td>{{details.mode_of_payment__method}}</td>
+           <td>{{details.purchase_order__mode_of_payment__method}}</td>
        </tr>
    </table>
    <div class='order-success-options'>
@@ -35,7 +35,11 @@
            <th colspan='3'><h3>Options</h3></th>
        </tr>
        <tr>
+          {% if details.receipt_no_of_session %}
            <td><a target="_blank" href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
+           {% else %}
+           <td><a target="_blank" href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Confirm"></a></td>
+           {% endif %}
            <td></td>
            <td><a target="_blank" href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
        </tr>

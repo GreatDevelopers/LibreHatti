@@ -11,6 +11,7 @@ from django.contrib.auth.admin import *
 from django.contrib.admin.models import LogEntry
 
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
+from librehatti.catalog.forms import SpecialCategoriesForm
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
 from django.core.urlresolvers import reverse
@@ -27,21 +28,21 @@ admin.site.register(Catalog)
 admin.site.register(Surcharge)
 admin.site.register(ModeOfPayment)
 
-"""
-This action is to create a duplicate record
-"""
 def duplicate_event(modeladmin, request, queryset):
+    """
+    This action is to create a duplicate record
+    """
     for object in queryset:
         object.id = None
         object.save()
 duplicate_event.short_description = "Duplicate selected record"
 
 
-"""
-This class is used to see logs in a detailed format. It is far much
-better than django recent actions widget.
-"""
 class LogEntryAdmin(admin.ModelAdmin):
+    """
+    This class is used to see logs in a detailed format. It is far much
+    better than django recent actions widget.
+    """
     model = LogEntry
     list_display = ['id','user','object_repr','content_type','action_time']
     list_filter = ['action_time']
@@ -49,23 +50,23 @@ class LogEntryAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-"""
-This class is used to add, edit or delete the attribute and value of 
-item along with inheriting the fields of Procduct class i.e. name, 
-category, price_per_unit and organisation with which user deals
-"""
 class CatalogInline(admin.TabularInline):
+    """
+    This class is used to add, edit or delete the attribute and value of 
+    item along with inheriting the fields of Procduct class i.e. name, 
+    category, price_per_unit and organisation with which user deals
+    """
     model = Catalog
     fields = ['attribute', 'value']
     extra = 10
 
 
-"""
-This class is used to add, edit or delete the details of product along  
-with describing the organisation name and its type from where we are
-purchasing or testing
-"""
 class ProductAdmin(admin.ModelAdmin):
+    """
+    This class is used to add, edit or delete the details of product along  
+    with describing the organisation name and its type from where we are
+    purchasing or testing
+    """
     fields = ['name', 'category', 'price_per_unit', 'organisation']
     list_display = ['id', 'name', 'category', 'price_per_unit']
     inlines = [CatalogInline]
@@ -74,23 +75,23 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['category']
     
 
-"""
-This class is used to add, edit or delete the details of item purchased 
-"""
 class PurchasedItemInline(admin.StackedInline):
+    """
+    This class is used to add, edit or delete the details of item purchased 
+    """
     form = ItemSelectForm
     model = PurchasedItem
     fields = ['type','parent_category', 'sub_category', 'item','price_per_unit', 'qty', ]
-    extra = 30
+    extra = 3
 
 
-"""
-This class is used to add, edit or delete the details of items 
-purchased but buyer has not confirmed the items purchased, this class
-inherits the fields of PurchaseOrder derscribing the delivery address of
-buyer , is_debit , total discount , tds and mode of payment
-"""
 class PurchaseOrderAdmin(AjaxSelectAdmin):
+    """
+    This class is used to add, edit or delete the details of items 
+    purchased but buyer has not confirmed the items purchased, this class
+    inherits the fields of PurchaseOrder derscribing the delivery address of
+    buyer , is_debit , total discount , tds and mode of payment
+    """
     form = BuyerForm
     exclude=('is_active',)
     list_display = ['id','buyer_name','delivery_address','date_time','is_active']
@@ -118,6 +119,10 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
 
 
 class HeaderAdmin(admin.ModelAdmin):
+    """
+    This class is used to add, edit or delete Header and Footer to be used
+    for Bills in the organisation
+    """
     Model = HeaderFooter
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name in ('header'):
@@ -137,6 +142,12 @@ class HeaderAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
+
+    """
+    This class is used to add, edit or delete the details of categories along  
+    with describing the organisation name and its type from where we are
+    purchasing or testing
+    """
     list_display = ['id', 'name', 'parent','unit']
     search_fields = ['name']
     actions = [duplicate_event]
@@ -145,8 +156,34 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class NonPaymentOrderAdmin(AjaxSelectAdmin):
+    """
+    Class for adding Non-Payement orders
+    """
     form = BuyerForm
     list_display = ['reference','reference_date', 'date', 'delivery_address', 'item_type']
+
+    def response_add(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['nonpaymentorder_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
+    def response_change(self, request, obj, post_url_continue=None):
+        request.session['old_post'] = request.POST
+        request.session['purchase_order_id'] = obj.id
+        return HttpResponseRedirect(reverse\
+            ("librehatti.catalog.views.nonpaymentorderofsession"))
+
+
+class SpecialCategoriesAdmin(admin.ModelAdmin):
+
+    """
+    This class is for some special categories on which no 
+    taxes are appliable and where no vouchers are generated
+    """ 
+    model = SpecialCategories
+    form = SpecialCategoriesForm
+    list_display = ['category', 'voucher', 'tax']
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(HeaderFooter, HeaderAdmin)
@@ -155,3 +192,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(NonPaymentOrder, NonPaymentOrderAdmin)
 admin.site.register(Unit)
+admin.site.register(SpecialCategories, SpecialCategoriesAdmin)
