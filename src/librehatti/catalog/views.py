@@ -10,6 +10,7 @@ from librehatti.catalog.models import *
 from librehatti.catalog.forms import AddCategory
 from librehatti.catalog.forms import ItemSelectForm
 from librehatti.catalog.forms import ChangeRequestForm
+from librehatti.catalog.forms import ProductListForm
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.request_change import request_notify
 
@@ -217,21 +218,47 @@ def list_products(request):
     Argument: Http Request
     Return: Render catalog page
     """ 
-    all_products = Product.objects.all()
-    all_categories=Category.objects.all().order_by('name')
-    products_dict = { }
-    for one_category in all_categories:
-        if one_category.is_leaf_node():
-            one_category_dict = {}
-            products_list = Product.objects.filter(category=one_category)
-            attributes_dict = { }
-            for one_product in products_list:
-                attributes_list = Catalog.objects.filter(product = one_product)
-                attributes_dict[one_product] = attributes_list
-            one_category_dict[one_category.name] = attributes_dict
-            products_dict[one_category.id] = one_category_dict
-    return render(request,'list_products.html',{'nodes':all_categories, \
-        'products_dict':products_dict})
+    if request.method == 'POST':
+        form = ProductListForm(request.POST)
+        if form.is_valid():
+            select_lab = request.POST['select_lab']
+            root_name = Category.objects.get(id=select_lab)
+            all_products = Product.objects.filter(category__parent__parent=select_lab)
+            work_type = Category.objects.filter(parent=select_lab)
+            category = Category.objects.filter(parent__parent=select_lab)
+            result = []
+            for work in work_type:
+                temp = []
+                temp.append(work.name)
+                work_type_category = Category.objects.filter(parent=work.id)
+                temp.append(work_type_category)
+                products = Product.objects.filter(category__parent__parent=select_lab)
+                temp.append(products)
+                result.append(temp)
+            return render(request,'catalog/list_products.html',{'result':result,
+                'root_name':root_name})
+
+
+            # all_products = Product.objects.filter(category__parent__parent=select_lab)
+            # all_categories=Category.objects.filter().order_by('name')
+            # products_dict = { }
+            # for one_category in all_categories:
+            #     if one_category.is_leaf_node():
+            #         one_category_dict = {}
+            #         products_list = Product.objects.filter(category=one_category)
+            #         attributes_dict = { }
+            #         for one_product in products_list:
+            #             attributes_list = Catalog.objects.filter(product = one_product)
+            #             attributes_dict[one_product] = attributes_list
+            #         one_category_dict[one_category.name] = attributes_dict
+            #         products_dict[one_category.id] = one_category_dict
+            # return render(request,'catalog/list_products.html',{'nodes':all_categories, \
+            #     'products_dict':products_dict})
+    else:
+        form = ProductListForm()
+        request_status = request_notify()
+        return render(request,'catalog/product_list_form.html', \
+        {'form':form,'request':request_status})
 
 
 @login_required
