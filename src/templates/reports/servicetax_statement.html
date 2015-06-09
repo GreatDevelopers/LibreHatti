@@ -27,8 +27,10 @@
                     <th>Name of Parties</th>
                     <th>Charges</th>
                     <th>Service Tax ({{surcharge_list.0}}%)</th>
+                    {% if old_tax %}
                     <th>Education Cess ({{surcharge_list.1}}%)</th>
                     <th>H.Education Cess ({{surcharge_list.2}}%)</th>
+                    {% endif %}
                     <th>Total</th>
                 </tr>
                 {% for value in result %}
@@ -39,17 +41,23 @@
                     <td>{{ value.2 }}</td>
                     <td align= 'right'>{{ value.3 }}</td>
                     <td align= 'right'>{{ value.4 }}</td>
+                    {% if old_tax %}
                     <td align= 'right'>{{ value.5 }}</td>
                     <td align= 'right'>{{ value.6 }}</td>
                     <td align= 'right'>{{ value.7 }}</td>
+                    {% else %}
+                    <td align= 'right'>{{ value.5 }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
                 <tr>
                     <td colspan="4"><b><center>SUM</center></b></td>
                     <td align= 'right'>{{total}}</td>
                     <td align= 'right'>{{service_tax}}</td>
+                    {% if old_tax %}
                     <td align= 'right'>{{education_tax}}</td>
                     <td align= 'right'>{{heducation_tax}}</td>
+                    {% endif %}
                     <td align= 'right'>{{totalplustax}}</td>
                 </tr>
                 <tr>
@@ -63,14 +71,18 @@
             <tr>
                 <td colspan="4"><center>Service Tax Already Paid</center></td>
                 <td align= 'right'>{{service}}</td>
+                {% if old_tax %}
                 <td align= 'right'>{{education}}</td>
                 <td align= 'right'>{{highereducation}}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td colspan="4"></td>
                 <td align= 'right'>{{servicenotpaid}}</td>
+                {% if old_tax %}
                 <td align= 'right'>{{educationnotpaid}}</td>
                 <td align= 'right'>{{heducationnotpaid}}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td colspan="4"><center><b>Total Amount</b></center></td>
