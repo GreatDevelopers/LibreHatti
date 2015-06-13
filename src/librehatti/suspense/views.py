@@ -43,6 +43,8 @@ from librehatti.voucher.models import VoucherId, Distribution
 from librehatti.voucher.models import FinancialSession, CalculateDistribution
 from librehatti.voucher.models import VoucherTotal
 
+from librehatti.reports.forms import DateRangeSelectionForm
+
 from django.contrib.auth.decorators import login_required
 
 import simplejson
@@ -957,41 +959,52 @@ def mark_clear(request):
     suspense order as cleared.
     returns: render page with list of suspense voucher with their status and options.
     """
-    suspense_obj = SuspenseOrder.objects.filter().\
-    values('voucher','session_id')
-    suspense_cleared = SuspenseOrder.objects.filter().values(\
-        'voucher','session_id','is_cleared')
-    list_clearance = []
-    list_user = []
-    list_details = []
-    for suspense_var in suspense_obj:
-        SuspenseClearance_object = SuspenseClearance.objects.\
-        filter(session = suspense_var['session_id']).\
-        filter(voucher_no=suspense_var['voucher']).values('session',\
-            'voucher_no', 'lab_testing_staff','field_testing_staff',\
-            'test_date','clear_date')
-        if SuspenseClearance_object:
-            list_clearance.append(SuspenseClearance_object)
-    for temp_var in list_clearance:
-        for voucher_var in temp_var:
-            voucher_object = VoucherId.objects.\
-            filter(voucher_no=voucher_var['voucher_no']).\
-            filter(session_id=voucher_var['session']).\
-            values('purchase_order__buyer__first_name',\
-                'purchase_order__buyer__last_name',\
-                'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__district',\
-                'purchase_order__buyer__customer__address__province')
-            if voucher_object:
-                list_user.append(voucher_object)
-    list_user_clr = zip (list_user,list_clearance)
-    for suspense_var,voucher_var in list_user_clr:
-        final_list = zip(suspense_var,voucher_var)
-        list_details.append(final_list)    
-    request_status = request_notify()
-    return render(request, 'suspense/mark_suspense_clear.html', {
-        'listed':list_details, 'suspense_cleared':suspense_cleared,\
-        'request':request_status})
+    if request.method == 'POST':
+        date_form = DateRangeSelectionForm(request.POST)
+        if date_form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspense_obj = SuspenseOrder.objects.filter(purchase_order__date_time__range=\
+                    (start_date,end_date)).\
+            values('voucher','session_id')
+            suspense_cleared = SuspenseOrder.objects.filter(purchase_order__date_time__range=\
+                    (start_date,end_date)).values(\
+                'voucher','session_id','is_cleared')
+            list_clearance = []
+            list_user = []
+            list_details = []
+            for suspense_var in suspense_obj:
+                SuspenseClearance_object = SuspenseClearance.objects.\
+                filter(session = suspense_var['session_id']).\
+                filter(voucher_no=suspense_var['voucher']).values('session',\
+                    'voucher_no', 'lab_testing_staff','field_testing_staff',\
+                    'test_date','clear_date')
+                if SuspenseClearance_object:
+                    list_clearance.append(SuspenseClearance_object)
+            for temp_var in list_clearance:
+                for voucher_var in temp_var:
+                    voucher_object = VoucherId.objects.\
+                    filter(voucher_no=voucher_var['voucher_no']).\
+                    filter(session_id=voucher_var['session']).\
+                    values('purchase_order__buyer__first_name',\
+                        'purchase_order__buyer__last_name',\
+                        'purchase_order__buyer__customer__address__street_address',\
+                        'purchase_order__buyer__customer__address__district',\
+                        'purchase_order__buyer__customer__address__province')
+                    if voucher_object:
+                        list_user.append(voucher_object)
+            list_user_clr = zip (list_user,list_clearance)
+            for suspense_var,voucher_var in list_user_clr:
+                final_list = zip(suspense_var,voucher_var)
+                list_details.append(final_list)    
+            request_status = request_notify()
+            return render(request, 'suspense/mark_suspense_clear.html', {
+                'listed':list_details, 'suspense_cleared':suspense_cleared,\
+                'request':request_status})
+
+    else:
+        form = DateRangeSelectionForm()
+        return render(request, 'suspense/form.html',{'form':form})
 
 
 @login_required
