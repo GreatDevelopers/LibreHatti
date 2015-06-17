@@ -108,3 +108,13 @@ class SpecialCategoriesForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.\
             filter(parent__parent__parent__isnull=True).\
             filter(parent__isnull=False).filter(parent__parent__isnull=False))
+
+
+class ProductListForm(forms.Form):
+    """
+    This form lets user to select item after categories
+    are filtered in dropdown.
+    """
+    
+    select_lab = forms.ModelChoiceField\
+    (queryset = Category.objects.filter(parent__isnull=True))

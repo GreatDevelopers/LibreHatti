@@ -674,10 +674,10 @@ def servicetax_register(request):
                 'buyer__customer__address__province').\
             filter(id__in=taxesapplied_obj).order_by('date_time', 'voucherid__receipt_no_of_session').\
             distinct()
-            temp = []
             result = []
             i=0
             for value in purchase_order:
+                temp = []
                 voucherid = VoucherId.objects.values(\
                     'purchase_order_of_session').filter(\
                     purchase_order=value['id'])[0]
@@ -712,22 +712,28 @@ def servicetax_register(request):
                 total = total+value['bill__totalplusdelivery']
                 taxesapplied = TaxesApplied.objects.values('tax').filter(\
                     purchase_order=value['id'])
-                for taxvalue in taxesapplied:
-                    temp.append(taxvalue['tax'])
-                    if i == 0:
+                if int(month) < 6 and int(year) <= 2015:
+                    old_tax=1
+                    for taxvalue in taxesapplied:
+                        temp.append(taxvalue['tax'])
+                        if i == 0:
+                            service_tax = service_tax + taxvalue['tax']
+                            i = i + 1
+                        elif i == 1:
+                            education_tax = education_tax + taxvalue['tax']
+                            i = i + 1
+                        else:
+                            heducation_tax = heducation_tax + taxvalue['tax']
+                            i = 0
+                else:
+                    old_tax=0
+                    for taxvalue in taxesapplied:
+                        temp.append(taxvalue['tax'])
                         service_tax = service_tax + taxvalue['tax']
-                        i = i + 1
-                    elif i == 1:
-                        education_tax = education_tax + taxvalue['tax']
-                        i = i + 1
-                    else:
-                        heducation_tax = heducation_tax + taxvalue['tax']
-                        i = 0
                 temp.append(value['bill__grand_total'])
                 totalplustax = totalplustax +\
                 value['bill__grand_total']
                 result.append(temp)
-                temp = []
                 address = ''
             total_taxes = service_tax + education_tax + heducation_tax
             servicenotpaid = service_tax - service
@@ -747,7 +753,7 @@ def servicetax_register(request):
             'educationnotpaid':educationnotpaid, 'heducationnotpaid':\
             heducationnotpaid, 'total_taxes_not_paid':total_taxes_not_paid,\
             'service':service, 'education':education, 'highereducation':\
-            highereducation, 'back_link':back_link})
+            highereducation, 'back_link':back_link, 'old_tax':old_tax})
         else:
             form = MonthYearForm(request.POST)
             data_form = PaidTaxesForm(request.POST)

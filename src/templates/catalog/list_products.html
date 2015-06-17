@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    {% load staticfiles %}
+    <link href="{% static 'css/product_list.css' %}" media="all" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <div class = "wrapper">
+        <h2 class="parent-category"> {{root_name.name}} </h2>
+        {% for result in result %}
+        <div class="products-list">
+            <h2 class="parent-category"> {{ result.0 }} </h2>
+            {% for category in result.1 %}
+            <h4>{{ category.name }}</h4>
+            <div class="product-container">
+                {% for product in result.2 %}
+                {% if product.category_id == category.id %}
+                <h4 class="product-head"> <span class="product-name"> {{ product.name | safe}} </span>
+                    <span class="product-price">&#8377; {{ product.price_per_unit }}/- </span> </h4>
+                    
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+    </html>
