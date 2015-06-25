@@ -1264,12 +1264,12 @@ def tada_bill(request):
             tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
         list_staff.append(testing_staff_details)
 
-    voucher_obj = VoucherId.objects.values('purchase_order_of_session').\
+    voucher_obj = VoucherId.objects.values('purchase_order_of_session', 'receipt_date').\
     filter(session=tada_obj.session,voucher_no=tada_obj.voucher_no)[0]
     purchase_order_var = 0
     purchase_order_var = voucher_obj['purchase_order_of_session']
     purchase_order_object = PurchaseOrder.objects.\
-    filter(voucherid__purchase_order_of_session = purchase_order_var).values(\
+    filter(voucherid__purchase_order_of_session = purchase_order_var, voucherid__session_id=tada_obj.session).values(\
         'buyer_id__first_name', 'buyer_id__last_name','buyer__customer__title',
         'buyer__customer__address__district', 'buyer__customer__address__street_address',
         'buyer__customer__address__pin', 'buyer__customer__address__province')[0]
@@ -1280,7 +1280,8 @@ def tada_bill(request):
     'tada':tada_object, 'purchase_order_id':purchase_order_var,\
      'words':num2eng(int(tada_amount)),'tada_amount':tada_amount,\
      'request':request_status,'session':tada_obj.session,\
-    'voucher':tada_obj.voucher_no,'list_staff':list_staff,'header':header,\
+    'voucher':tada_obj.voucher_no,'list_staff':list_staff,'header':header,
+    'date':voucher_obj['receipt_date']
     })
 
 
