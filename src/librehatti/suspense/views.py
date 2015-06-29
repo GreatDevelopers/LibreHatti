@@ -847,15 +847,28 @@ def tada_result(request):
                     tada_total = tada_value['daily_ta_da'] + tada_total
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
                 session_id=session).update(is_cleared=0)
-            obj = TaDa(voucher_no=voucher, session=session,\
-            departure_time_from_tcc=departure_time_from_tcc,\
-            arrival_time_at_site=arrival_time_at_site,\
-            departure_time_from_site=departure_time_from_site,\
-            arrival_time_at_tcc=arrival_time_at_tcc,\
-            tada_amount=tada_total, start_test_date=start_test_date,\
-            end_test_date=end_test_date, source_site=source_site,\
-            testing_site=testing_site , testing_staff=testing_staff )
-            obj.save()
+            object = TaDa.objects.filter(session=session, voucher_no=voucher,
+                start_test_date=start_test_date).values()
+            if object:
+                TaDa.objects.filter(session=session, voucher_no=voucher,
+                start_test_date=start_test_date).update(voucher_no=voucher, session=session,\
+                departure_time_from_tcc=departure_time_from_tcc,\
+                arrival_time_at_site=arrival_time_at_site,\
+                departure_time_from_site=departure_time_from_site,\
+                arrival_time_at_tcc=arrival_time_at_tcc,\
+                tada_amount=tada_total, start_test_date=start_test_date,\
+                end_test_date=end_test_date, source_site=source_site,\
+                testing_site=testing_site , testing_staff=testing_staff)
+            else:
+                obj = TaDa(voucher_no=voucher, session=session,\
+                departure_time_from_tcc=departure_time_from_tcc,\
+                arrival_time_at_site=arrival_time_at_site,\
+                departure_time_from_site=departure_time_from_site,\
+                arrival_time_at_tcc=arrival_time_at_tcc,\
+                tada_amount=tada_total, start_test_date=start_test_date,\
+                end_test_date=end_test_date, source_site=source_site,\
+                testing_site=testing_site , testing_staff=testing_staff )
+                obj.save()
             recent_tada = TaDa.objects.values_list('id',flat=True).filter(voucher_no=voucher).\
                 order_by('-id')[0]
             tada_obj = TaDa.objects.values('departure_time_from_tcc',\
