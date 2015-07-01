@@ -256,7 +256,7 @@ def clearance_result(request):
                     boring_charge_internal=boring_charge_internal,\
                     lab_testing_staff=lab_testing_staff,\
                     field_testing_staff=field_testing_staff,\
-                    test_date=test_date)
+                    test_date=test_date, clear_date=clear_date)
             except:
                 obj= SuspenseClearance(session=session, voucher_no=voucher_no,
                      work_charge=0, labour_charge=labour_charge,
@@ -265,7 +265,7 @@ def clearance_result(request):
                      boring_charge_internal=boring_charge_internal,
                      lab_testing_staff=lab_testing_staff,
                      field_testing_staff=field_testing_staff,
-                     test_date=test_date)
+                     test_date=test_date, clear_date=clear_date)
                 obj.save()
             request_status = request_notify()    
             temp = {'session':session,'voucher_no': voucher_no,\
@@ -452,7 +452,7 @@ def other_charges(request):
             'balance', 'receipt_no').get(voucher_no=number,
             session=session)
         receipt_dated = VoucherId.objects.values('purchase_order__date_time').filter(
-            purchase_order_of_session=car_taxi_advance['receipt_no'])[0]
+            receipt_no_of_session=car_taxi_advance['receipt_no'], session_id=session)[0]
         return render(request,'suspense/othercharge.html', {'header':header,\
                     'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                     'suspense_clearance':suspenseclearance,\

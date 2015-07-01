@@ -38,7 +38,7 @@ class SuspenseClearance(models.Model):
     lab_testing_staff = models.CharField(max_length=200, blank=True, null=True)
     field_testing_staff = models.CharField(max_length=200,blank=True,null=True)
     test_date = models.CharField(max_length=600, blank=True, null=True)
-    clear_date = models.DateField(default=datetime.date.today)
+    clear_date = models.DateField()
 
 
 class Department(models.Model):
