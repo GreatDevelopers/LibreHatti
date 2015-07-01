@@ -256,7 +256,7 @@ def clearance_result(request):
                     boring_charge_internal=boring_charge_internal,\
                     lab_testing_staff=lab_testing_staff,\
                     field_testing_staff=field_testing_staff,\
-                    test_date=test_date)
+                    test_date=test_date, clear_date=clear_date)
             except:
                 obj= SuspenseClearance(session=session, voucher_no=voucher_no,
                      work_charge=0, labour_charge=labour_charge,
@@ -265,7 +265,7 @@ def clearance_result(request):
                      boring_charge_internal=boring_charge_internal,
                      lab_testing_staff=lab_testing_staff,
                      field_testing_staff=field_testing_staff,
-                     test_date=test_date)
+                     test_date=test_date, clear_date=clear_date)
                 obj.save()
             request_status = request_notify()    
             temp = {'session':session,'voucher_no': voucher_no,\
