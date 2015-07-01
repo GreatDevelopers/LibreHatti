@@ -452,7 +452,7 @@ def other_charges(request):
             'balance', 'receipt_no').get(voucher_no=number,
             session=session)
         receipt_dated = VoucherId.objects.values('purchase_order__date_time').filter(
-            purchase_order_of_session=car_taxi_advance['receipt_no'])[0]
+            receipt_no_of_session=car_taxi_advance['receipt_no'], session_id=session)[0]
         return render(request,'suspense/othercharge.html', {'header':header,\
                     'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                     'suspense_clearance':suspenseclearance,\
