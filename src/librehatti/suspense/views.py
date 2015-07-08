@@ -449,10 +449,11 @@ def other_charges(request):
         session=session)
     if car_taxi_advance_obj:
         car_taxi_advance = CarTaxiAdvance.objects.values('spent', 'advance',
-            'balance', 'receipt_no').get(voucher_no=number,
+            'balance', 'receipt_no', 'receipt_session').get(voucher_no=number,
             session=session)
         receipt_dated = VoucherId.objects.values('purchase_order__date_time').filter(
-            receipt_no_of_session=car_taxi_advance['receipt_no'], session_id=session)[0]
+            receipt_no_of_session=car_taxi_advance['receipt_no'],
+            session_id=car_taxi_advance['receipt_session'])[0]
         return render(request,'suspense/othercharge.html', {'header':header,\
                     'voucher_no':number, 'date':suspenseclearance['clear_date'],\
                     'suspense_clearance':suspenseclearance,\
@@ -1342,17 +1343,19 @@ def car_taxi_advance(request):
             spent = car_taxi_advance_form.data['spent']
             advance = car_taxi_advance_form.data['advance']
             receipt = car_taxi_advance_form.data['receipt_no']
+            receipt_session = car_taxi_advance_form.data['receipt_session']
             balance = int(advance) - int(spent)
             session_obj = FinancialSession.objects.get(pk=session)
             car_taxi_advance_obj = CarTaxiAdvance.objects.filter(
                 voucher_no=voucher, session=session)
             if car_taxi_advance_obj:
                 CarTaxiAdvance.objects.filter(voucher_no=voucher, session=session).\
-                update(balance=balance ,spent=spent, advance=advance, receipt_no=receipt)
+                update(balance=balance ,spent=spent, advance=advance, receipt_no=receipt,
+                    receipt_session=receipt_session)
             else:
                 obj = CarTaxiAdvance(voucher_no=voucher, session=session_obj,
                     balance=balance ,spent=spent, advance=advance,
-                    receipt_no=receipt)
+                    receipt_no=receipt, receipt_session=receipt_session)
                 obj.save()
             request_status = request_notify()
             return render(request, 'suspense/car_taxi_advance_success.html',\
