@@ -153,9 +153,13 @@ class CarTaxiAdvance_form(ModelForm):
         exclude = ('balance',)
         widgets = {'session': forms.HiddenInput(),\
         'voucher_no': forms.HiddenInput()}
-    
+
+    choices=[ (o.id, str(o)) for o in FinancialSession.objects.all()]
+    receipt_session = forms.ChoiceField(choices)
+
     def __init__(self, *args, **kwargs):
         super(CarTaxiAdvance_form, self).__init__(*args, **kwargs)
         self.fields['spent'].widget.attrs={'class':'form-control'}
         self.fields['advance'].widget.attrs={'class':'form-control'}
         self.fields['receipt_no'].widget.attrs={'class':'form-control'}
+        self.fields['receipt_session'].widget.attrs={'class':'form-control'}

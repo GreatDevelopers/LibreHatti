@@ -179,3 +179,4 @@ class CarTaxiAdvance(models.Model):
     advance = models.IntegerField()
     balance = models.IntegerField()
     receipt_no = models.IntegerField()
+    receipt_session = models.IntegerField()
