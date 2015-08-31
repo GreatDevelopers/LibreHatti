@@ -10,7 +10,7 @@ REQUIREMENTS
     5.python-mysqldb
     6.django 1.7
 
-Installation of Requiremets
+Installation of Requirements
 
 1) Apache2
 
@@ -20,37 +20,37 @@ Run following command in terminal to install
      
 2) mysql-server
 
-Run following commands in terminal
+Run following command in terminal
     
     $ sudo apt-get install mysql-server
     
 3) python2.7
 
-Run following commands in terminal
+Run following command in terminal
     
     $ sudo apt-get install python
     
 4) python-pip
 
-Run following commands in terminal
+Run following command in terminal
     
     $ sudo apt-get install python-pip
 
 5) python-mysqldb
 
-Run following commands in terminal
+Run following command in terminal
     
     $ sudo apt-get install python-mysqldb
 
 6) Python modules
 
-Run following commands in terminal
+Get into the /src directory and run following command in terminal
     
     $ sudo pip install -r requirements.txt
 
 7) Exim4
 
-Run following commands in terminal
+Run following command in terminal
 
     $ sudo apt-get install exim4
 
@@ -59,7 +59,7 @@ and configure it using [this](http://www.jsgrewal.com/2013/06/23/configuring-exi
 
 Steps for Installation of LibreHatti.
 
-1) Fork the repositery [LibreHatti](https://github.com/GreatDevelopers/LibreHatti/) and clone the forked repositery
+1) Fork the repository [LibreHatti](https://github.com/GreatDevelopers/LibreHatti/) and clone the forked repository
     
     $ git clone 'link to your forked repository'
 
@@ -77,7 +77,7 @@ Line No 10 : DATABASES
     USER : Your MySQL username
     PASSWORD : Your MySQl password
     
-Line No 43 : STATICFILES_DIRS
+Line No 43 : STATICFILES_DIRS (Change the path here)
 
 4) Edit config.py accordingly
     
