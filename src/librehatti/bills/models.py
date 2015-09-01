@@ -3,7 +3,6 @@ from django.db import models
 import useraccounts
 
 from librehatti.catalog.models import Product
-from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 
 from django.contrib.auth.models import User
