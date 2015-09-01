@@ -84,7 +84,7 @@ Line No 43 : STATICFILES_DIRS
 5) Goto the project directory and run the following commands.
     
     $ cd src
-    $ python manage.py syncdb
+    $ python manage.py migrate
     $ python manage.py runserver 127.0.0.1:8090
     
 6) Open 'localhost:8090' in your browser.

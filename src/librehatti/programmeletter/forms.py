@@ -35,6 +35,7 @@ class LetterDataForm(forms.ModelForm):
     buyer = make_ajax_field(LetterData  , 'buyer', 'buyer')
     class Meta:
         model = LetterData
+        exclude = ['']
     
     class Media:
         js = (
