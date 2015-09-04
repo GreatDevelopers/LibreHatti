@@ -1,11 +1,11 @@
 {% load i18n %} {% load staticfiles %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">{% lang specifies language code %}
 <head>
     <meta charset="UTF-8">
-    {% block title %}
+    <title>{% block title %}
     {% endblock %}
+    </title>
     {% block extrahead %}
     <script type="text/javascript">
         var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
@@ -18,10 +18,9 @@
             $.get(reverseurl + "?string=" + urlstring, callback);
         }
     </script>
-    {% endblock %}
+    {% endblock extrahead%}
     {% block js %}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
-    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="{% static 'js/registers.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
@@ -78,15 +77,17 @@ $(document).ready(function(){
     })
 });
 </script>
-
-{% endblock %}
+{% endblock js %}
+{% block css}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+{% endblock css %}
 </head>
 <body>
+    {% block content %}
     <div class = "wrapper">
         <div class="white-board">
             <div class ="main-box" id="c-panel"> 
@@ -113,7 +114,7 @@ $(document).ready(function(){
           </ul>
       </nav>
   </div>
-  {% block content %}{% endblock %}
+  {% endblock content %}
 </div>
 </div>
 </body>
