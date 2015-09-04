@@ -1,6 +1,9 @@
 {% load i18n %} {% load staticfiles %}
 <!DOCTYPE html>
-<head><title>Lab Reports</title></head>
+<html lang="en"> {% lang specifies lanuage code %}
+<head>
+    <title>Lab Reports</title>
+</head>
 <body>
 {% block content %}    
 {{header.header | safe}}
@@ -21,10 +24,10 @@
         <td style="border:1px solid black;">{{m.Company}}</td>
         <td style="border:1px solid black;">{{m.Amount}}</td>
     </tr>
-    {%endfor %}
+    {% endfor %}
 </table>
 </body>
-{%endblock content %}
+{% endblock content %}
 </html>
 
 
