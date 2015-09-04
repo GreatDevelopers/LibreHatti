@@ -9,6 +9,7 @@ from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Bill
 from librehatti.catalog.models import HeaderFooter
 from librehatti.catalog.models import TaxesApplied
+from librehatti.catalog.models import SpecialCategories
 
 from useraccounts.models import Address, Customer
 
@@ -24,15 +25,27 @@ from django.contrib.auth.decorators import login_required
 
 from librehatti.catalog.request_change import request_notify
 
-"""
-This function calculates the session id and then initialise or increment 
-voucher number according to the previous purchase order's session id
-"""
+
 @login_required
 def voucher_generate(request):
+    """
+    This function calculates the session id and then initialise or increment
+    voucher number according to the previous purchase order's session id
+    Argument:Http Request
+    Return:Response Redirect to add distance function
+    """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
-    
+    generate_voucher = 1
+    first_item = PurchasedItem.objects.values('item__category__id').\
+    filter(purchase_order=purchase_order_id)[0]
+    category_check = SpecialCategories.objects.filter(category=
+        first_item['item__category__id'])
+    if category_check:
+        specialcategories = SpecialCategories.objects.values('voucher').\
+        filter(category=first_item['item__category__id'])[0]
+        if specialcategories['voucher'] == False:
+            generate_voucher = 0
     purchase_order = PurchaseOrder.objects.values('id','date_time').\
     get(id = purchase_order_id)
     purchase_order_id = purchase_order['id']
@@ -59,8 +72,12 @@ def voucher_generate(request):
     max_id = VoucherId.objects.all().aggregate(Max('id'))
     if max_id['id__max'] == None:
         voucherno = 1
+        is_special_var = 0
         purchaseditemofsession = 1
         for value in purchased_item:
+            if generate_voucher == 0:
+                voucherno = 0
+                is_special_var = 1
             distribution_type = CategoryDistributionType.objects.\
             values('distribution').get(category = purchased_item[item])
             distribution = Distribution.objects.\
@@ -76,7 +93,8 @@ def voucher_generate(request):
             session = session, distribution = distribution_id,\
             ratio = distribution['ratio'],\
             college_income = distribution['college_income'], \
-            admin_charges = distribution['admin_charges'])
+            admin_charges = distribution['admin_charges'],
+            is_special=is_special_var)
             voucherid.save()
             try:
                 purchaseditem = purchased_item[item+1]
@@ -93,6 +111,17 @@ def voucher_generate(request):
         voucherid = VoucherId.objects.values('voucher_no',\
         'purchase_order_of_session', 'purchased_item_of_session',\
         'session').get(id = max_id['id__max'])
+        if voucherid['voucher_no'] == 0:
+            temp_obj = VoucherId.objects.values('id').filter(is_special=0,
+                session=session)
+            if temp_obj:
+                for temp_val in temp_obj:
+                    maxid = temp_val['id']
+                voucherid_temp = VoucherId.objects.values('voucher_no').\
+                get(id=maxid)
+                voucherid['voucher_no'] = voucherid_temp['voucher_no']
+            else:
+                voucherid['voucher_no'] = 0
         pre_purchase_order_session = voucherid['session']
         voucher_no = voucherid['voucher_no']
         purchase_order_of_session = voucherid[\
@@ -101,8 +130,12 @@ def voucher_generate(request):
         'purchased_item_of_session']
         if session_id == pre_purchase_order_session:
             voucherno = voucher_no + 1
+            is_special_var = 0
             purchaseditemofsession = purchased_item_of_session + 1
             for value in purchased_item:
+                if generate_voucher == 0:
+                    voucherno = 0
+                    is_special_var = 1
                 distribution_type = CategoryDistributionType.objects.\
                 values('distribution').get(category = purchased_item[item])
                 distribution = Distribution.objects.\
@@ -119,7 +152,8 @@ def voucher_generate(request):
                 session = session, distribution = distribution_id,\
                 ratio = distribution['ratio'],\
                 college_income = distribution['college_income'],\
-                admin_charges = distribution['admin_charges'])
+                admin_charges = distribution['admin_charges'],
+                is_special=is_special_var)
                 voucherid.save()
                 try:
                     purchaseditem = purchased_item[item+1]
@@ -134,9 +168,13 @@ def voucher_generate(request):
                     continue
         else:
             voucherno = 1
+            is_special_var = 0
             purchaseditemofsession = 1
             purchase_order_of_session = 1
             for value in purchased_item:
+                if generate_voucher == 0:
+                    voucherno = 0
+                    is_special_var = 1
                 distribution_type = CategoryDistributionType.objects.\
                 values('distribution').get(category = purchased_item[item])
                 distribution = Distribution.objects.\
@@ -152,7 +190,8 @@ def voucher_generate(request):
                 session = session, distribution = distribution_id,\
                 ratio = distribution['ratio'],\
                 college_income = distribution['college_income'],\
-                admin_charges = distribution['admin_charges'])
+                admin_charges = distribution['admin_charges'],
+                is_special=is_special_var)
                 voucherid.save()
                 try:
                     p = purchased_item[item+1]
@@ -175,6 +214,8 @@ def voucher_generate(request):
     price = 0
     flag = 0
     for value in voucher_obj:
+        if generate_voucher == 0:
+            break
         purchased_item_obj = PurchasedItem.objects.\
         values('price','item__category').\
         get(purchase_order = purchase_order_id,id = voucher_obj1[i])
@@ -288,10 +329,21 @@ def voucher_generate(request):
 
 @login_required
 def voucher_show(request):
+    """
+    This function shows the number of vouchers generated for a particular 
+    order
+    Argument:Http Request
+    Return:Render Voucher Show
+    """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.get(id=id)
     voucher_no_list = []
     voucher_obj_distinct = []
+    temp_voucherid = VoucherId.objects.values('voucher_no').\
+    filter(purchase_order=purchase_order)[0]
+    message = 'Voucher'
+    if temp_voucherid['voucher_no'] == 0:
+        message = "No voucher to display"
     voucherid = VoucherId.objects.values('purchase_order','purchased_item',\
         'voucher_no', 'session','purchase_order_of_session').\
     filter(purchase_order = purchase_order)
@@ -304,25 +356,24 @@ def voucher_show(request):
     request_status = request_notify()
     return render(request, 'voucher/voucher_show.html', {\
         'voucherid' : voucher_obj_distinct, 'suspense_order':suspense_order,\
-        'request':request_status})
+        'request':request_status, 'message':message})
 
 
 @login_required
 def voucher_print(request):
+    """
+    This function displays a particular voucher
+    Argument:Http Request
+    Return:Render Voucher 
+    """
     number = request.GET['voucher_no']
     session = request.GET['session']
     purchase_order_id = request.GET['purchase_order']
     flag = 0
-    voucherid = VoucherId.objects.values('voucher_no').\
-    filter(purchase_order = purchase_order_id)
-    for value in voucherid:
-        try:
-            suspense_order = SuspenseOrder.objects.\
-            get(voucher = value['voucher_no'],\
-             purchase_order = purchase_order_id)
-            flag = 1
-        except:
-            continue
+    suspense_order = SuspenseOrder.objects.filter(voucher = number,
+        purchase_order = purchase_order_id)
+    if suspense_order:
+        flag = 1
     calculatedistribution = CalculateDistribution.objects.\
     values('college_income_calculated', 'admin_charges_calculated',\
     'consultancy_asset', 'development_fund', 'total').\
@@ -331,7 +382,8 @@ def voucher_print(request):
     voucherid = VoucherId.objects.values('purchase_order', 'ratio',\
     'college_income', 'admin_charges', 'distribution__name',\
     'purchased_item__item__category__name',\
-    'purchased_item__item__category__parent__parent').\
+    'purchased_item__item__category__parent__parent',
+    'purchased_item__item__category__parent').\
     filter(voucher_no = number, session = session)[0]
     purchase_order = voucherid['purchase_order']
     distribution = voucherid['distribution__name']
@@ -340,14 +392,21 @@ def voucher_print(request):
     admin_charges = voucherid['admin_charges']
     category_name = voucherid['purchased_item__item__category__name']
     lab_id = voucherid['purchased_item__item__category__parent__parent']
+    lab_id_level_down = voucherid['purchased_item__item__category__parent']
     emp = Staff.objects.values('name','position__position').filter(lab=lab_id).\
-    order_by('position__rank')
+    filter(always_included=1).order_by('position__rank','-seniority_credits')
+    if emp:
+        pass
+    else:
+        emp = Staff.objects.values('name','position__position').filter(
+            lab=lab_id_level_down).filter(always_included=1).order_by(
+            'position__rank','-seniority_credits')
     purchase_order_obj = PurchaseOrder.objects.\
     values('date_time', 'buyer','buyer__first_name','buyer__last_name',\
     'tds','buyer__customer__title','buyer__customer__company').\
     get(id = purchase_order)
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').\
+    'address__district', 'address__pin', 'address__province').\
     get(user = purchase_order_obj['buyer'])
     date = purchase_order_obj['date_time']
     bill = Bill.objects.values('delivery_charges','total_cost',\
@@ -357,7 +416,9 @@ def voucher_print(request):
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
         'surcharge__value','tax').filter(purchase_order = purchase_order_id)
     voucheridobj = VoucherId.objects.values('purchase_order_of_session',
-        'purchase_order__mode_of_payment__method').\
+        'purchase_order__mode_of_payment__method',
+        'purchase_order__cheque_dd_number','purchase_order__cheque_dd_date',
+        'purchase_order__mode_of_payment').\
     filter(purchase_order=purchase_order_id)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
@@ -378,4 +439,7 @@ def voucher_print(request):
             'job':voucheridobj['purchase_order_of_session'],\
             'tds':purchase_order_obj, 'tax':taxes_applied, 'header': header,\
             'material':category_name, 'buyer': purchase_order_obj,
-            'method':voucheridobj['purchase_order__mode_of_payment__method']})
+            'method':voucheridobj['purchase_order__mode_of_payment__method'],
+            'method_number':voucheridobj['purchase_order__cheque_dd_number'],
+            'method_date':voucheridobj['purchase_order__cheque_dd_date'],
+            'method_id':voucheridobj['purchase_order__mode_of_payment']})

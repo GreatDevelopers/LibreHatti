@@ -7,6 +7,13 @@
   {% block title %}
     <title>Register Index</title>
   {% endblock %}
+  {% block extrajs %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('.back').hide();
+});
+</script>
+  {% endblock %}
 </head>
 <body>
   {% block content %}
@@ -74,10 +81,10 @@
               Main Register
            </a></td>
            </tr>
-           <tr><td>Proforma Register</td>
+           <tr><td>Proforma Bill Register</td>
            <td><a href =
               '{% url "librehatti.reports.register.proforma_register"%}'>
-              Proforma Register
+              Proforma Bill Register
            </a></td>
            </tr>
            <tr><td>Non-Payment Register</td>
@@ -91,6 +98,13 @@
            <td><a href =
               '{% url "librehatti.reports.register.client_register"%}'>
               Client Register
+           </a></td>
+           </tr>
+           <tr>
+          <td>Material Report</td>
+           <td><a href =
+              '{% url "librehatti.reports.register.material_report"%}'>
+              Material Report
            </a></td>
            </tr>
            <tr>
@@ -108,24 +122,12 @@
            </a></td>
            </tr>
            <tr>
-          <td>Tada</td>
+          <td>Registered Users</td>
            <td><a href =
-              '{% url "librehatti.reports.register.tada_form"%}'>
-              Tada And Other Charges
+              '{% url "librehatti.reports.register.registered_users"%}'>
+              Registered Users
            </a></td>
-           </tr>           
-          <td>Tada Staff</td>
-           <td><a href =
-              '{% url "librehatti.reports.register.tada_staff"%}'>
-              Tada Staff Register
-           </a></td>
-           </tr>           
-          <td>Job Register</td>
-           <td><a href =
-              '{% url "librehatti.reports.register.org_form"%}'>
-              Job Register
-           </a></td>
-           </tr>                      
+           </tr>
        </table>
    </div>
 </div>

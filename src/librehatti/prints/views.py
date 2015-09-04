@@ -23,7 +23,7 @@ from useraccounts.models import Address
 from librehatti.prints.helper import num2eng
 
 from librehatti.voucher.models import CalculateDistribution
-from librehatti.voucher.models import VoucherId
+from librehatti.voucher.models import VoucherId, FinancialSession
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import QuotedSuspenseOrder
@@ -43,13 +43,16 @@ from librehatti.config import _ONLINE_ACCOUNT
 from librehatti.config import _IFSC_CODE
 from librehatti.config import _YOUR_LETTER_No
 
+from django.db.models import Max
 
 @login_required
 def bill(request):
     """
-    It generates a Bill for the user which lists all the items,
+    It generates a bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
+    Argument:Http Request
+    Return:Render Bill
     """
     id = request.GET['order_id']
     purchase_order = PurchaseOrder.objects.filter(id=id)
@@ -115,10 +118,10 @@ def bill(request):
         list.append(total)
         bill_values.append(list)
     taxes_applied = TaxesApplied.objects.\
-    filter(purchase_order=purchase_order).values('surcharge', 'tax')
+    filter(purchase_order=purchase_order).values('surcharge', 'tax',
+        'surcharge_name', 'surcharge_value')
     taxes_applied_obj = TaxesApplied.objects.\
     filter(purchase_order=purchase_order).aggregate(Count('id'))
-    surcharge = Surcharge.objects.values('id', 'tax_name', 'value')
     bill = Bill.objects.values('total_cost', 'totalplusdelivery',\
         'grand_total', 'delivery_charges').get(purchase_order=id)
     total_cost = bill['total_cost']
@@ -153,9 +156,11 @@ def bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
+    if taxes_applied_obj['id__count'] == 0:
+        tax_count = tax_count + 1
     buyer = purchase_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
@@ -172,7 +177,7 @@ def bill(request):
         'id':voucherid['purchase_order_of_session'], 'ref':purchase_order_obj,\
         'date':date, 'purchase_order':purchase_order, 'address':address,\
         'total_cost':total_cost, 'grand_cost':grand_total,\
-        'taxes_applied':taxes_applied, 'surcharge':surcharge,\
+        'taxes_applied':taxes_applied,\
         'buyer':purchase_order_obj, 'buyer_name':customer_obj,\
         'site':purchase_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
@@ -187,6 +192,8 @@ def suspense_bill(request):
     It generates a Suspense Bill for the user which lists all the items,
     their quantity , subtotal and then adds it to the surcharges
     and generates the Grand total.
+    Argument:Http Request
+    Return:Render Suspense Bill
     """
     id = request.GET['order_id']
     voucherid = VoucherId.objects.filter(purchase_order=id).\
@@ -241,7 +248,7 @@ def suspense_bill(request):
                 except:
                     pass
         list.append(item_names)
-        list.append(total)
+        list.append(int(total))
         bill_values.append(list)
     taxes_applied = TaxesApplied.objects.\
     filter(purchase_order=id).values('surcharge', 'tax')
@@ -258,7 +265,7 @@ def suspense_bill(request):
     filter(purchase_order=id).aggregate(Count('id'))
     buyer = purchase_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
@@ -286,13 +293,16 @@ def suspense_bill(request):
 @login_required
 def tax(request):
     """
-    It generates a tax details bill for the user which lists all the taxes,
+    It generates a tax details for the user which lists all the taxes,
     their applied tax value , calculated tax and generates the total of the
     applied taxes.
+    Argument:Http Request
+    Return:Render Tax Details
     """
     id = request.GET['order_id']
     taxes_applied = TaxesApplied.objects.values('surcharge__tax_name',\
-        'surcharge__value', 'tax', 'purchase_order__date_time').\
+        'surcharge__value', 'tax', 'purchase_order__date_time',
+        'surcharge_name', 'surcharge_value').\
     filter(purchase_order=id)
     bill = Bill.objects.values('totalplusdelivery','total_tax',\
         'purchase_order__date_time').get(purchase_order=id)
@@ -311,9 +321,41 @@ def tax(request):
 def receipt(request):
     """
     It generates a Receipt.
+    Argument:Http Request
+    Return:Render Receipt
     """
     id = request.GET['order_id']
-    voucherid = VoucherId.objects.values('purchase_order_of_session').\
+    voucherid_temp = VoucherId.objects.values('receipt_no_of_session').filter(
+        purchase_order=id)[0]
+    if not voucherid_temp['receipt_no_of_session']:
+        today_date = datetime.date.today()
+        financialsession = FinancialSession.objects.\
+        values('id','session_start_date','session_end_date')
+        for value in financialsession:
+            start_date = value['session_start_date']
+            end_date = value['session_end_date']
+            if start_date <= today_date <= end_date:
+                session_id = value['id']
+        max_receipt_no = VoucherId.objects.filter(session=session_id).aggregate(Max('receipt_no_of_session'))
+        if max_receipt_no['receipt_no_of_session__max']:
+            voucherid_obj = VoucherId.objects.values('receipt_no_of_session',
+                'session', 'purchase_order__date_time').filter(
+                receipt_no_of_session=max_receipt_no['receipt_no_of_session__max'],
+                session_id=session_id)[0]
+            voucherid_obj2 = VoucherId.objects.values('receipt_no_of_session',
+                'session', 'purchase_order__date_time').filter(purchase_order=id)[0]
+            if voucherid_obj['session'] == voucherid_obj2['session']:
+                VoucherId.objects.filter(purchase_order=id).update(
+                    receipt_no_of_session=max_receipt_no['receipt_no_of_session__max']+1,
+                    receipt_date=today_date)
+            else:
+                VoucherId.objects.filter(purchase_order=id).update(
+                    receipt_no_of_session=1,receipt_date=today_date)
+        else:
+            VoucherId.objects.filter(purchase_order=id).update(
+                receipt_no_of_session=1,receipt_date=today_date)
+    voucherid = VoucherId.objects.values('purchase_order_of_session',
+        'receipt_no_of_session').\
     filter(purchase_order=id)[0]
     bill = Bill.objects.values('amount_received').get(purchase_order=id)
     purchase_order = PurchaseOrder.objects.values('buyer', 'date_time',\
@@ -325,13 +367,14 @@ def receipt(request):
         'buyer__first_name', 'buyer__last_name','buyer__customer__title').\
     get(id = id)
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').\
+    'address__district', 'address__pin', 'address__province').\
     get(user = purchase_order['buyer'])
     purchased_item = PurchasedItem.objects.values('item__category__name').\
     filter(purchase_order=id).distinct()
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request, 'prints/receipt.html', {\
-        'receiptno': voucherid['purchase_order_of_session'],\
+        'receiptno': voucherid['receipt_no_of_session'],
+        'order_no':voucherid['purchase_order_of_session'],
         'date': date, 'cost':bill, 'amount':total_in_words, 'address':address,\
         'method': purchase_order, 'buyer':customer_obj,\
         'material':purchased_item, 'header':header})
@@ -339,6 +382,13 @@ def receipt(request):
 
 @login_required
 def quoted_bill(request):
+    """
+    It generates a proforma bill for the user which lists all the items,
+    their quantity , subtotal and then adds it to the surcharges
+    and generates the Grand total.
+    Argument:Http Request
+    Return:Render Proforma Bill
+    """
     quoted_order_id = request.GET['quoted_order_id']
     quoted_order = QuotedOrder.objects.filter(id=quoted_order_id)
     quoted_item = QuotedItem.objects.filter(quoted_order=quoted_order_id).\
@@ -401,10 +451,10 @@ def quoted_bill(request):
         list.append(total)
         bill_values.append(list)
     taxes_applied = QuotedTaxesApplied.objects.\
-    filter(quoted_order=quoted_order).values('surcharge', 'tax')
+    filter(quoted_order=quoted_order).values('surcharge', 'tax', 'surcharge_name',
+        'surcharge_value')
     taxes_applied_obj = QuotedTaxesApplied.objects.\
     filter(quoted_order=quoted_order).aggregate(Count('id'))
-    surcharge = Surcharge.objects.values('id', 'tax_name', 'value')
     bill = QuotedBill.objects.values('total_cost', 'grand_total',\
         'delivery_charges', 'totalplusdelivery').get(quoted_order=quoted_order_id)
     total_cost = bill['total_cost']
@@ -436,9 +486,11 @@ def quoted_bill(request):
             tax_count = taxes_applied_obj['id__count'] + 2
         else:
             tax_count = taxes_applied_obj['id__count'] + 3
+    if taxes_applied_obj['id__count'] == 0:
+        tax_count = tax_count + 1
     buyer = quoted_order_obj['buyer']
     address = Customer.objects.values('address__street_address',\
-    'address__city', 'address__pin', 'address__province').get(user=buyer)
+    'address__district', 'address__pin', 'address__province').get(user=buyer)
     organisation_id = quoted_order_obj['organisation']
     date = quoted_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
@@ -461,7 +513,7 @@ def quoted_bill(request):
         'ref':quoted_order_obj, 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost, 'grand_cost':grand_total,\
-        'taxes_applied': taxes_applied, 'surcharge':surcharge,\
+        'taxes_applied': taxes_applied,\
         'buyer':quoted_order_obj, 'buyer_name':customer_obj,\
         'site': quoted_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\

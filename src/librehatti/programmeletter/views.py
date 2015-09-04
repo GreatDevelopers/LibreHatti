@@ -22,6 +22,12 @@ import simplejson
 
 @login_required
 def programmeletter(request):
+    """
+    This view generates the programme letter after filling the required data
+    for letter.
+    Argument:Http Request
+    Return:Render Letter
+    """
     old_post = request.session.get('old_post')
     buyer_name = User.objects.values( \
     'first_name','last_name','id').get(id=old_post['buyer'])

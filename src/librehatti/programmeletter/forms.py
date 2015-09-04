@@ -26,6 +26,9 @@ class StaffInTeamForm(forms.ModelForm):
 
 
 class TeamNameForm(forms.ModelForm):
+    """
+    Form for adding team for field work.
+    """
     team_name = forms.CharField()
     def __init__(self, *args, **kwargs):
          super(TeamNameForm, self).__init__(*args, **kwargs)

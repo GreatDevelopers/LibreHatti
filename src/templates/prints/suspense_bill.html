@@ -27,7 +27,7 @@
         {% else %}
         {{buyer.buyer__customer__title}}
         {% endif %}
-        , {{address.address__street_address}}, {{address.address__city}}
+        , {{address.address__street_address}}, {{address.address__district}}
             {% if address.address__pin != 'None' and address.address__pin != '' %}
             -{{address.address__pin}}
             {% endif %}

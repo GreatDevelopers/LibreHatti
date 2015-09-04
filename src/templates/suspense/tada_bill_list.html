@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+<html>
+{% block title %}
+<title>Form</title>
+{% endblock %}
+<body>
+  {% block content %}
+  <div class='daily-report-list'>
+        <table class='list-results' border="1px">
+    <tr>
+      <th>S.No</th>
+      <th>Test Start Date</th>
+      <th>Test End Date</th>
+      <th>TA/DA Amount</th>
+      <th>Options</th>
+    </tr>
+    {% for values in tada %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{values.start_test_date}}</td>
+      <td>{{values.end_test_date}}</td>
+      <td>{{values.tada_amount}}</td>
+      <td><a href="{% url 'librehatti.suspense.views.tada_bill' %}?tada_id={{values.id}}">Bill</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+   {% endblock %}
+ </body>
+ </html>

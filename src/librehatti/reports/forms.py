@@ -5,8 +5,6 @@ from search_choices import CLIENT_ORDER_CHOICES
 from search_choices import CONSTRAINT_CHOICES
 from search_choices import MONTH_CHOICES
 
-from useraccounts.models import *
-
 import datetime
 
 import itertools
@@ -17,16 +15,15 @@ from librehatti.catalog.models import Category
 
 from librehatti.config import _PARENT_CATEGORY
 from librehatti.config import _SUB_CATEGORY
-from librehatti.config import _ORG_TYPE
 
 from librehatti.catalog.models import ModeOfPayment
 from librehatti.catalog.models import Surcharge
 
 
-"""
-A form for date range selection
-"""
 class DateRangeSelectionForm(forms.Form):
+    """
+    A form for date range selection
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -37,10 +34,11 @@ class DateRangeSelectionForm(forms.Form):
         self.fields['start_date'].widget.attrs={'class':'form-control'}
         self.fields['end_date'].widget.attrs={'class':'form-control'}
 
-"""
-displays form for daily register report
-"""
+
 class DailyReportForm(forms.Form):
+    """
+    displays form for daily register report
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -49,10 +47,11 @@ class DailyReportForm(forms.Form):
         super(DailyReportForm, self).__init__(*args, **kwargs)
         self.fields['mode_of_payment'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 
-'''
-displays form for Consultancy Funds
-'''
+
 class ConsultancyFunds(forms.Form):
+    """
+    displays form for Consultancy Funds
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -74,26 +73,28 @@ class ConsultancyFunds(forms.Form):
         self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
 
 
-"""
-displays checkboxes for Client Search
-"""
 class ClientForm(forms.Form):
+    """
+    displays checkboxes for Client Search
+    """
     client_fields = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_FIELD_CHOICES)
 
 
-"""
-displays chechboxes for Order Search
-"""
+
 class OrderForm(forms.Form):
+    """
+    displays chechboxes for Order Search
+    """
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
 
 
-"""
-displays checkboxes for Constraints
-"""
+
 class AddConstraints(forms.Form):
+    """
+    displays checkboxes for Constraints
+    """
 
     additional_constraints = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices= CONSTRAINT_CHOICES)
@@ -135,6 +136,9 @@ class AddConstraints(forms.Form):
 
 
 class MonthYearForm(forms.Form):
+    """
+    A form for month and year selection
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -149,6 +153,9 @@ class MonthYearForm(forms.Form):
 
 
 class PaidTaxesForm(forms.Form):
+    """
+    A form for paid taxes.
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
@@ -162,13 +169,18 @@ class PaidTaxesForm(forms.Form):
         self.fields['paid_higher_education_tax'].widget.attrs={\
         'class':'form-control'}
 
-class OrgType(forms.Form):
+
+class LabReportForm(forms.Form):
+    """
+    displays form for Consultancy Funds
+    """
     required_css_class = 'required'
     error_css_class = 'error'
 
-    parent_category = forms.ModelChoiceField(queryset=OrganisationType.objects. \
-        all(),label=_ORG_TYPE)
-    
+    parent_category = forms.ModelChoiceField(queryset=Category.objects.\
+    filter(parent__parent__isnull=True).filter(parent__isnull=False),\
+    label=_PARENT_CATEGORY)
+
     def __init__(self, *args, **kwargs):
-        super(OrgType, self).__init__(*args, **kwargs)
+        super(LabReportForm, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}

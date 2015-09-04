@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %} {% load staticfiles %} 
+
+<html>
+<head>
+{% block title %}
+<title>Form</title>
+{% endblock %}
+</head>
+<body>
+  {% block content %}
+  <form class="form-horizontal" role="form" method="POST"  action='{% url 'librehatti.catalog.views.list_products' %}' >
+  	<div class="form-group">
+       	{% csrf_token %}
+       		<table class="form_class">
+            {{form.as_table}}
+          </table>
+   	      <input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1'>
+ 	</div>
+</form>
+   {% endblock %}
+ </body>
+ </html>

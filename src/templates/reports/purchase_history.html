@@ -12,6 +12,7 @@
     {% block content %}
     <div class="list-results">
         <h2> Purchase History </h2>
+        {% if purchases %}
         <div  class="search">
             <table border = "1px">
                 <tr>
@@ -32,6 +33,38 @@
                 {% endfor %}
             </table>
         </div>
+        {% else %}
+        <div class="alert alert-danger shrinked-table">
+            <center>No history available</center>
+        </div>
+        {% endif %}
+    </div>
+    <div class="list-results">
+        <h2> Proforma History </h2>
+        {% if proformas %}
+        <div  class="search">
+            <table border = "1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Quoted Order No.</th>
+                    <th>Quoted Order Date</th>
+                    <th>Options</th>
+                </tr>
+                {% for i in proformas %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.quoted_order_session}}</td>
+                    <td>{{i.quoted_order__date_time|date}}</td>
+                    <td><a href = '{% url 'librehatti.reports.previous_history.proforma_details' %}?order_id={{i.quoted_order}}'>View Details</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-danger shrinked-table">
+            <center>No history available</center>
+        </div>
+        {% endif %}
     </div>
     {% endblock %}
 </body>
