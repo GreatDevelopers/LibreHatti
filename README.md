@@ -54,7 +54,7 @@ Run following commands in terminal
 
     $ sudo apt-get install exim4
 
-and configure it using [this](http://www.jsgrewal.com/2013/06/23/configuring-exim4-on-ubuntu/)
+and configure it using [this](https://jasvirsinghgrewal91.wordpress.com/2013/06/23/e-mail-server-exim4/)
 
 
 Steps for Installation of LibreHatti.
