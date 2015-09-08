@@ -1,13 +1,16 @@
+{% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> {% lang speccifies language code %} 
 <head>
 	<meta charset="UTF-8">
-	<title></title>
-    {% load staticfiles %}
+	<title>Product List</title>
+    {% block extracss %}
     <link href="{% static 'css/product_list.css' %}" media="all" rel="stylesheet" type="text/css">
+    {% endblock extracss %}
 </head>
 <body>
-    {% load mptt_tags %}
+{% block content %}	
+  {% load mptt_tags %}
     <div class = "wrapper">
         {% recursetree nodes %}
         <div class="products-list">
@@ -37,5 +40,6 @@
           </div>
           {% endrecursetree %}
       </ul>
+  {% endblock content %}    
   </body>
   </html>

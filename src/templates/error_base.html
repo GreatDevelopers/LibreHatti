@@ -5,9 +5,9 @@
 <head>
   <meta charset="utf-8">
   <title>{% block headtitle %}{% endblock %}</title>
+  {% block css %}  
   <link rel="stylesheet" type="text/css" href="{% static 'suit/bootstrap/css/bootstrap.min.css' %}" media="all"/>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
-
   <style type="text/css">
 
     html, body {
@@ -61,21 +61,20 @@
     .btn {
       margin-top: 40px;
     }
-
-
+     {% endblock css %}
   </style>
-
 </head>
 <body>
-  <div class="distance"></div>
+{% block content %}
   <div class="container">
     <h2 class="pull-right">
       {% block error %}{% trans 'error'|capfirst %}{% endblock %}
     </h2>
     <h1>{% block title %}Error{% endblock %}</h1>
     <div class="content">
-      {% block content %}{% endblock %}
+  {% endblock content %}
       <br>
+      {% block js %}
       <script type="text/javascript">
         if(window.location.href.toString().indexOf('popup') != -1){
           document.write('<a href="javascript:window.close()" class="btn btn-info btn-large">Close window</a> ');
@@ -88,7 +87,8 @@
           {% endif %}
         }
       </script>
+      {% endblock js %}
     </div>
   </div>
-</body>
+  </body>
 </html>

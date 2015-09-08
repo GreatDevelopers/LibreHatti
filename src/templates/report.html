@@ -1,5 +1,11 @@
-<html>
-<head><title>Lab Reports</title></head>
+{% load i18n %} {% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en"> {% lang specifies lanuage code %}
+<head>
+    <title>Lab Reports</title>
+</head>
+<body>
+{% block content %}    
 {{header.header | safe}}
 <table  style="border:1px solid black;border-collapse:collapse;width:1000px">
     <caption>LAB REPORT </caption>
@@ -18,8 +24,10 @@
         <td style="border:1px solid black;">{{m.Company}}</td>
         <td style="border:1px solid black;">{{m.Amount}}</td>
     </tr>
-    {%endfor %}
+    {% endfor %}
 </table>
+</body>
+{% endblock content %}
 </html>
 
 

@@ -1,11 +1,9 @@
 {% load i18n %} {% load staticfiles %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> {% lang specifies language code %}
 <head>
     <meta charset="UTF-8">
-    {% block title %}
-    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
     {% block extrahead %}
     <script type="text/javascript">
         var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
@@ -18,7 +16,7 @@
             $.get(reverseurl + "?string=" + urlstring, callback);
         }
     </script>
-    {% endblock %}
+    {% endblock extrahead %}
     {% block js %}
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'>
     </script>
@@ -155,7 +153,7 @@
 });       
 </script>
 {% endblock js %}
-{% block extrajs %} {% endblock extrajs %}
+{% block extracss %} 
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-timepicker.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -164,18 +162,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/accordion.css' %}">
-{% block extracss %} {% endblock extracss %}
-
+{% endblock extracss %}
 </head>
 <body>
+     {% block content %}  
     <div class = "wrapper">
         <div class="white-board">
             <div class ="main-box" id="c-panel"> 
                 <header class="primary-branding">
                    <a href='/'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
                </header>
-               {% block content %}{% endblock %}
-           </div>
+            </div>
            <div class ="account">
             <nav id="primary_nav_wrap">
                 <ul>
@@ -197,3 +194,6 @@
   </div>
 </div>
 </div>
+ {% endblock content %}
+</body>
+</html>

@@ -1,18 +1,20 @@
 {% load i18n %} {% load staticfiles %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> {% lang specifies lanuage code %}
 <head>
     <meta charset="UTF-8">
-    {% block title %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    {% block css}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
     <style>
         body{
             font-size:1.3em;
         }
     </style>
+    {% endblock css %}
 </head>
 <body>
+ {% block content %}
 <div class='main_header'>
     {{header.header | safe}}
 <hr>
@@ -25,7 +27,6 @@
         {% block content %}{% endblock %}
     </div>
     {{footer.footer | safe}} 
-    {% block extracontent %}
-    {% endblock %}
+   {% endblock %}
 </body>
 </html>
