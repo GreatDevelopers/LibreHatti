@@ -16,7 +16,7 @@
                 <input type="button" class="btn btn-info btn-large" 
                 name="" value="Show Printable Version"></a>
             </div>
-    <h2><center>Suspense Clearance Register</center></h2>
+    <h2><center>Suspense Register</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
@@ -72,6 +72,19 @@
                     <td></td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="6"><center><b>Sum</b></center></td>
+                    <td align="right">{{amount}}</td>
+                    <td align="right">{{transport_total}}</td>
+                    <td align="right">{{amountplustransport}}</td>
+                    <td align="right">{{totalbillamount}}</td>
+                    <td align="right">{{servicetaxtotal}}</td>
+                    <td align="right">{{educationcesstotal}}</td>
+                    <td align="right">{{heducationcesstotal}}</td>
+                    <td align="right">{{grandtotalamount}}</td>
+                    <td align="right">{{totaltds}}</td>
+                    <td align="right">{{totalamountreceived}}</td>
+                </tr>
        </table>
    </div>
 </div>

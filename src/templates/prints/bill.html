@@ -27,7 +27,7 @@
         {{buyer.buyer__customer__title}}
         {% endif %},</div>
         <div>{{address.address__street_address}}, </div>
-        <div>{{address.address__city}}
+        <div>{{address.address__district}}
             {% if address.address__pin != 'None' and address.address__pin != '' %}
             -{{address.address__pin}}
             {% endif %},</div>
@@ -41,7 +41,7 @@
         <table class="data" border="1px">
             <tr>
                 <th>Item/Services</th>
-                <th>Quatity/Unit</th>
+                <th>Quantity/Unit</th>
                 <th>Rate &#8377;</th>
                 <th>Total &#8377;</th>
             </tr>
@@ -103,11 +103,7 @@
             <tr>
                 {% if taxes_applied %}
                 {% for taxesapplied in taxes_applied %}
-                {% for surcharge in surcharge %}
-                {% if surcharge.id == taxesapplied.surcharge %}
-                <td> {{ surcharge.tax_name }} @ {{ surcharge.value }} % </td>
-                {% endif %}
-                {% endfor %}
+                <td> {{ taxesapplied.surcharge_name }} @ {{ taxesapplied.surcharge_value }} % </td>
                 <td id="total">  {{taxesapplied.tax }} </td>
             </tr>
             {% endfor %}

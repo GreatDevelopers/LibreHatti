@@ -33,6 +33,10 @@ from librehatti.config import _ADMIN_GROUP
 
 @login_required
 def request_save(request):
+    """
+    This function saves the new proposed values from the change request form 
+    in the database
+    """
     if request.method == 'POST':
         first_name = request.user.first_name
         last_name = request.user.last_name
@@ -130,6 +134,9 @@ def request_save(request):
             {'form':form,'request':request_status})
 
 def request_notify():
+    """
+    This function notifies the admin that a request is pending for being processed
+    """
     notify = RequestStatus.objects.filter(confirmed=False).\
         filter(cancelled=False)
     if notify:
@@ -144,6 +151,9 @@ def request_notify():
 @user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
     or u.is_superuser, login_url='/catalog/permission_denied/')
 def list_request(request):
+    """
+    This function lists the pending change requests
+    """
     request_list = ChangeRequest.objects.values('id','description')
     final_request_list = []
     for value in request_list:
@@ -166,6 +176,9 @@ def list_request(request):
 @user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
     or u.is_superuser, login_url='/catalog/permission_denied/')
 def view_request(request):
+    """ 
+    This function displays the information of a selected change request
+    """
     request_id = request.GET['id']
     previous_total = ChangeRequest.objects.values('previous_total').\
     filter(id = request_id)[0]
@@ -206,6 +219,9 @@ def view_request(request):
 @user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
     or u.is_superuser, login_url='/catalog/permission_denied/')
 def accept_request(request):
+    """
+    This function enables the admin to accept a change request
+    """
     request_id = request.GET['id']
     today = datetime.now().date()
     user = User.objects.values('first_name','last_name').\
@@ -261,6 +277,9 @@ def accept_request(request):
 @user_passes_test(lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1\
     or u.is_superuser, login_url='/catalog/permission_denied/')
 def reject_request(request):
+    """
+    This function enables the admin to reject a change request
+    """
     request_id = request.GET['id']
     today = datetime.now().date()
     user = User.objects.values('first_name','last_name').\
@@ -315,6 +334,10 @@ def reject_request(request):
 
 @login_required
 def permission_denied(request):
+    """
+    This function displays error when a user other than admin tries to access
+    a thing not permitted to him
+    """
     error_type = "Permission Denied"
     error = "You are not authorised to access it"
     temp = {'type': error_type, 'message':error}

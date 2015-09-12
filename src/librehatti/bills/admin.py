@@ -17,24 +17,25 @@ import itertools
 admin.autodiscover() 
 
 
-"""
-This class is used to add, edit or delete the details of item purchased.
-"""
 class QuotedItemInline(admin.StackedInline):
+    """
+    This class is used to add, edit or delete the details of item purchased.
+    """
     model = QuotedItem
     form = ItemSelectForm
     fields = ['type', 'parent_category', 'sub_category','item',\
     'price_per_unit','qty']
-    extra = 30
+    extra = 2
 
 
-"""
-This class is used to add, edit or delete the details of items 
-purchased but buyer has not confirmed the items purchased, this class
-inherits the fields of PurchaseOrder derscribing the delivery address of
-buyer , is_debit , total discount , tds and mode of payment
-"""
+
 class QuotedOrderAdmin(admin.ModelAdmin):
+    """
+    This class is used to add, edit or delete the details of items 
+    purchased but buyer has not confirmed the items purchased, this class
+    inherits the fields of PurchaseOrder derscribing the delivery address of
+    buyer , is_debit , total discount , tds and mode of payment
+    """
     form = BuyerForm
     exclude = ('is_active',)
     list_display = ['id','buyer_name','delivery_address','date_time',\
@@ -56,6 +57,10 @@ class QuotedOrderAdmin(admin.ModelAdmin):
 
 
 class NoteLineAdmin(admin.ModelAdmin):
+    """
+    Handles admin panel of note line.
+    Admin can delete add. or make note line permanent.
+    """
     Model = NoteLine
 
 

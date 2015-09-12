@@ -16,6 +16,9 @@ from librehatti.config import _TYPE
 
 
 class BuyerForm(forms.ModelForm):
+    """
+    Buyer form for quoted order.
+    """
     buyer = make_ajax_field(QuotedOrder, 'buyer', 'buyer')
 
     class Meta:
@@ -25,18 +28,16 @@ class BuyerForm(forms.ModelForm):
     class Media:
         js = (
             'js/hide_add_buyer.js',
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/cheque_dd_date.js',
             )
 
 
-"""
-This form lets user to select item after categories are filtered in dropdown.
-"""
 class ItemSelectForm(forms.ModelForm):
+    """
+    This form lets user to select item after categories are filtered in dropdown.
+    """
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             'js/quote_ajax.js',
             'js/quoted_price_per_unit.js',
         )
@@ -52,7 +53,8 @@ class ItemSelectForm(forms.ModelForm):
 
     item = forms.ModelChoiceField\
     (queryset = Product.objects.all(), label = _ITEM)
-    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',))
+    CHOICES = (('', '---------',), ('1', 'Lab Work',), ('2', 'Field Work',),
+        ('3', 'Other Services',))
     type = forms.ChoiceField(choices=CHOICES, label = _TYPE)
     price_per_unit = forms.IntegerField()
 
@@ -68,6 +70,9 @@ class ItemSelectForm(forms.ModelForm):
 
 
 class SelectNoteForm(forms.Form):
+    """
+    Form for selection of note line while adding note line.
+    """
     quoted_order = forms.CharField(widget=forms.\
         TextInput(attrs={'readonly':'readonly'}))
     note_line = forms.ModelMultipleChoiceField(widget=forms.\

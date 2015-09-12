@@ -4,7 +4,8 @@ from librehatti.programmeletter.models import TeamName
 from librehatti.programmeletter.models import StaffInTeam
 from librehatti.programmeletter.models import LetterData
 
-from librehatti.programmeletter.forms import *
+from librehatti.programmeletter.forms import StaffInTeamForm
+from librehatti.programmeletter.forms import TeamNameForm
 
 from ajax_select.admin import AjaxSelectAdmin
 
@@ -14,6 +15,9 @@ from django.core.urlresolvers import reverse
 
 
 class StaffInline(admin.StackedInline):
+    """
+    This class is used to add, edit or delete staff.
+    """
     form = StaffInTeamForm
     model = StaffInTeam
     fields = ['staff', ]
@@ -21,13 +25,19 @@ class StaffInline(admin.StackedInline):
 
 
 class TeamNameAdmin(AjaxSelectAdmin):
+    """
+    This class is used to add, edit or delete team for the field work.
+    """
     form = TeamNameForm
     inlines = [StaffInline]
     model = TeamName
 
 
-class LetterDataAdmin(AjaxSelectAdmin):
-    form = LetterDataForm
+class LetterDataAdmin(admin.ModelAdmin):
+    """
+    This class is used to add, edit or delete letter data for generation of
+    programme letter.
+    """
     def response_add(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['letterdata_id'] = obj.id

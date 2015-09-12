@@ -1,9 +1,13 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
 
 body{
 text-align: justify;
 	background-color:#fafafa;
-	font-family: 'Open Sans', 'sans-serif';
+	font-family: 'Open Sans Fonts', 'sans-serif';
 }
 
 .bill-wrapper {
@@ -33,7 +37,7 @@ text-align: justify;
 
 .logo{
 	height: 125px;
-	margin-top: -185px;
+	margin-top: -195px;
 	margin-bottom: 100px;
 }
 
@@ -90,16 +94,34 @@ table th{
 .footertable{
     margin-left: auto;
     margin-right: auto;
-    margin-top: 70px;
+    margin-top: 110px;
     width: 95%;
+    position: relative;
+}
+.transportfootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 110px;
+    width: 70%;
+    text-align: center;
+    position: relative;
+}
+
+
+.tadafootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
+    width: 50%;
     position: relative;
 }
 
 .footertable table td{
+    text-align: center;
 	font-weight: bold;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	width: 25%;
+	width: 20%;
 }
 
 .footer1{
@@ -138,15 +160,18 @@ table th{
 	width:70%;
 }
 
-#transportbill{
+#tadabill{
 	text-align:right;
 	margin-top: 40px;
+	margin-right: 14%;
 }
 
 #transportfooter{
+	text-align: center;
 	padding-top:25px;
 	margin-left: auto;
-	margin-right: auto; 
+	margin-right: auto;
+	margin-top: 2%; 
 	width:100%
 }
 
@@ -183,4 +208,19 @@ table th{
 .vouchertable{
 	float: right;
 	width: 43%;
+}
+
+#transportbill{
+	text-align:right;
+	margin-top: 60px;
+	margin-right: 1%;
+}
+
+#transportbase{
+	text-align: justify;
+    margin-top: 6%;
+}
+
+#tadafield{
+	text-align: left;
 }

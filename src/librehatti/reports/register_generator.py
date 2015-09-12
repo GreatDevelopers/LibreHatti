@@ -45,7 +45,7 @@ class GenerateRegister(View):
         self.result_fields = []
         self.list_dict = {'First Name':'buyer__first_name',
             'Last Name':'buyer__last_name',
-            'City':'buyer__customer__address__city',
+            'district':'buyer__customer__address__district',
             'Phone':'buyer__customer__telephone',
             'joining date':'buyer__customer__date_joined',
             'Company':'buyer__customer__company',
@@ -53,7 +53,7 @@ class GenerateRegister(View):
             'item':'item__name','Discount':'total_discount',
             'Debit':'is_debit', 'total price':'price',
             'TDS': 'tds', 'Total With Taxes': 'bill__grand_total', 
-            'Order Id':'id', 'Total Without Taxes': 'bill__total_cost',
+            'Order Id':'voucherid__purchase_order_of_session', 'Total Without Taxes': 'bill__total_cost',
             'Order Date': 'date_time',
             'Street Address': 'buyer__customer__address__street_address'
         }
@@ -178,6 +178,15 @@ class GenerateRegister(View):
                 date_time__range = (month_start, month_end))
         except:
             pass
+
+        try:
+            if 'gt' in request.GET.getlist('additional_constraints'):
+                gt_amount=request.GET['amount_greater_than']
+                self.details = self.client_details.filter(
+                bill__total_cost__gt = gt_amount)
+
+        except:
+            pass
         try:
             if request.GET['grand_total']:
                 return self.cal_grand_total(request)
@@ -218,10 +227,10 @@ class GenerateRegister(View):
             return self.fetch_values(request)
         else:
             self.fields_list = ['first_name','last_name', 
-                'customer__address__street_address', 'customer__address__city',
+                'customer__address__street_address', 'customer__address__district',
                 'customer__address__province']
             self.selected_fields_client = ['First Name','Last Name',
-                'Street Address','City','Province']
+                'Street Address','district','Province']
             return self.fetch_values(request)
 
     def get(self,request):

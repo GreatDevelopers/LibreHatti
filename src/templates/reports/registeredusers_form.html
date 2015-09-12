@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %} {% load staticfiles %} 
+
 <html>
 <head>
 {% block title %}
@@ -11,13 +12,13 @@
 </head>
 <body>
   {% block content %}
-  <form  method="POST"  action='{% url 'librehatti.reports.register.tada_register' %}' >
+  <form class="form-horizontal" role="form" method="POST"  action='{% url 'librehatti.reports.register.registered_users' %}' >
     <div class="form-group">
         {% csrf_token %}
         <table class="form_class">
           {{form.as_table}}
         </table>
-            <input type="submit" class="btn btn-info btn-large" value="Submit" >
+            <input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1'>
     </div>
 </form>
 {% endblock %}
