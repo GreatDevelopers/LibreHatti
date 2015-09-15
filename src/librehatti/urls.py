@@ -51,4 +51,3 @@ urlpatterns = patterns('',
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^programmeletter/', 'librehatti.programmeletter.views.programmeletter'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
