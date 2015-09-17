@@ -600,22 +600,26 @@ def suspense_clearance_register(request):
                 except:
                     tada_value = 0
                     temp.append(tada_value)
-                suspensecl = SuspenseClearance.objects.values(\
-                    'work_charge', 'labour_charge', 'car_taxi_charge',\
-                    'boring_charge_external', 'boring_charge_internal').get(\
-                    voucher_no=suspense['voucher'],\
-                    session_id=suspense['session_id'])
-                other_charges = suspensecl['labour_charge'] +\
-                suspensecl['car_taxi_charge'] +\
-                suspensecl['boring_charge_external']
-                temp.append(suspensecl['work_charge'])
-                temp.append(other_charges)
-                temp.append(suspensecl['boring_charge_internal'])
-                grand_total = caldistribute['total'] + trans_value + tada_value\
-                + suspensecl['work_charge'] + other_charges +\
-                suspensecl['boring_charge_internal']
-                temp.append(grand_total)
-                result.append(temp)
+                try:
+                    suspensecl = SuspenseClearance.objects.values(\
+                        'work_charge', 'labour_charge', 'car_taxi_charge',\
+                        'boring_charge_external', 'boring_charge_internal').get(\
+                        voucher_no=suspense['voucher'],\
+                        session_id=suspense['session_id'],\
+                        clear_date__range=(start_date,end_date))
+                    other_charges = suspensecl['labour_charge'] +\
+                    suspensecl['car_taxi_charge'] +\
+                    suspensecl['boring_charge_external']
+                    temp.append(suspensecl['work_charge'])
+                    temp.append(other_charges)
+                    temp.append(suspensecl['boring_charge_internal'])
+                    grand_total = caldistribute['total'] + trans_value + tada_value\
+                    + suspensecl['work_charge'] + other_charges +\
+                    suspensecl['boring_charge_internal']
+                    temp.append(grand_total)
+                    result.append(temp)
+                except:
+                    pass
                 temp = []
                 address = ''
             request_status = request_notify()
