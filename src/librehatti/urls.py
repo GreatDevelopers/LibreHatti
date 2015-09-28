@@ -50,4 +50,5 @@ urlpatterns = patterns('',
     url(r'^receipt/', 'librehatti.prints.views.receipt'),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^programmeletter/', 'librehatti.programmeletter.views.programmeletter'),
+    url(r'pending_clearance_register', 'librehatti.reports.register.pending_clearance_register'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
