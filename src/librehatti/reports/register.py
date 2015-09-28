@@ -1447,3 +1447,113 @@ def lab_report(request):
         date_form = DateRangeSelectionForm()
         return render(request,'reports/lab_report_form.html', \
         {'form':form,'date_form':date_form,'request':request_status})
+
+
+@login_required
+def pending_clearance_register(request):
+    """
+    This view is used to display the suspense clearance registers
+    Argument:Http Request
+    Return:Render Suspense Clearance Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspenseorder = SuspenseOrder.objects.values('voucher',\
+                'session_id', 'purchase_order', 'purchase_order__date_time',\
+                'purchase_order__buyer__first_name',\
+                'purchase_order__buyer__last_name',\
+                'purchase_order__buyer__customer__title',\
+                'purchase_order__buyer__customer__address__street_address',\
+                'purchase_order__buyer__customer__address__district',\
+                'purchase_order__buyer__customer__address__pin',\
+                'purchase_order__buyer__customer__address__province').\
+            filter(is_cleared=0, purchase_order__date_time__range=(start_date,end_date))
+            result = []
+            for suspense in suspenseorder:
+                temp = []
+                temp.append(suspense['voucher'])
+                temp.append(suspense['purchase_order__date_time'])
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order_of_session').filter(\
+                    voucher_no=suspense['voucher'],\
+                    session_id=suspense['session_id'])[0]
+                temp.append(voucherid['purchase_order_of_session'])
+                if suspense['purchase_order__buyer__first_name']:
+                    if suspense[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = suspense['purchase_order__buyer__first_name']\
+                        + suspense['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = suspense['purchase_order__buyer__first_name'] +\
+                        suspense['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if suspense[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        suspense['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        suspense['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order__purchaseditem__item__category__name').\
+                filter(voucher_no=suspense['voucher'],\
+                    session_id=suspense['session_id'])[0]
+                temp.append(voucherid[\
+                    'purchase_order__purchaseditem__item__category__name'])
+                result.append(temp)
+                address = ''
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.pending_clearance_register')
+            return render(request,'reports/pending_clearance_result.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/pending_clearance_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/pending_clearance_form.html', \
+        {'form':form,'request':request_status})
