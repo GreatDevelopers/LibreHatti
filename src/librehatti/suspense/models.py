@@ -128,7 +128,7 @@ class Vehicle(models.Model):
 
 class Transport(models.Model):
     """
-    Stores Tranportation deiials.
+    Stores Transportation details.
     """
     vehicle = models.ForeignKey(Vehicle)
     kilometer = models.CharField(max_length=500)
@@ -144,7 +144,7 @@ class Transport(models.Model):
         jsonkilometer = simplejson.loads(self.kilometer)
         total_km = 0;
 
-        #calculate the total kms
+        # calculate the total kms
         for km in jsonkilometer:
             total_km += float(km)
 
