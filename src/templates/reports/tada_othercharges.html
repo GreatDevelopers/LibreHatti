@@ -1,0 +1,55 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block title %}
+    <title>TADA and Other Charges Register</title>
+{% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Printable Version"></a>
+            </div>
+    <h2><center>TADA and Other Charges Register</center></h2>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Clearance Voucher No.</th>
+                    <th>Clear Date</th>
+                    <th>Receipt No.</th>
+                    <th>Receipt Dated</th>
+                    <th>Name and Address</th>
+                    <th>TADA</th>
+                    <th>Boring External</th>
+                    <th>Labour Charges</th>
+                    <th>Transport</th>
+                    <th>Total</th>
+                </tr>
+                {% for value in result %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td>{{ value.3 }}</td>
+                    <td>{{ value.4 }}</td>
+                    <td>{{ value.5 }}</td>
+                    <td>{{ value.6 }}</td>
+                    <td>{{ value.7 }}</td>
+                    <td>{{ value.8 }}</td>
+                    <td>{{ value.9 }}</td>
+                </tr>
+                {% endfor %}
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>

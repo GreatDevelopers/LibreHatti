@@ -1094,7 +1094,7 @@ def mark_status(request):
     update(work_charge=work_charge)
     suspense_order_obj = SuspenseOrder.objects.filter(voucher=voucher).\
     filter(session_id=session).update(is_cleared='1')
-    if SuspenseClearedRegister.objects.filter(voucher_no=voucher).exists():
+    if SuspenseClearedRegister.objects.filter(voucher_no=voucher, session=session).exists():
         pass
     else:
         financialsession = FinancialSession.objects.get(id=session)
@@ -1117,10 +1117,19 @@ def mark_status(request):
                     'suspenseclearednumber']+1)
                 temp_obj.save()
             else:
-                temp_obj = SuspenseClearedRegister(
-                suspenseclearednumber=1, session=financialsession,
-                voucher_no=voucher)
-                temp_obj.save()
+                clearednumber = SuspenseClearedRegister.\
+                objects.filter(session_id=session).\
+                aggregate(Max('suspenseclearednumber'))
+                if clearednumber['suspenseclearednumber__max'] == None:
+                    temp_obj = SuspenseClearedRegister(
+                    suspenseclearednumber=1,\
+                    session=financialsession, voucher_no=voucher)
+                    temp_obj.save()
+                else:
+                    temp_obj = SuspenseClearedRegister(
+                    suspenseclearednumber=clearednumber['suspenseclearednumber']+1,\
+                    session=financialsession, voucher_no=voucher)
+                    temp_obj.save()
 
     return HttpResponse("")
 
