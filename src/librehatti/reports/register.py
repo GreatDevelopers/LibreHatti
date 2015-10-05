@@ -26,8 +26,9 @@ from librehatti.catalog.models import ModeOfPayment
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
-from librehatti.suspense.models import TaDa
+from librehatti.suspense.models import TaDa, Staff
 from librehatti.suspense.models import SuspenseClearance
+from librehatti.suspense.models import SuspenseClearedRegister
 
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId, VoucherTotal
@@ -1452,9 +1453,9 @@ def lab_report(request):
 @login_required
 def pending_clearance_register(request):
     """
-    This view is used to display the suspense clearance registers
+    This view is used to display the suspense pending voucher registers
     Argument:Http Request
-    Return:Render Suspense Clearance Register
+    Return:Render Suspense Pending Voucher Register
     """
     if request.method == 'POST':
         form = DateRangeSelectionForm(request.POST)
@@ -1556,4 +1557,259 @@ def pending_clearance_register(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/pending_clearance_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def tada_register(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspense_cleared = SuspenseClearance.objects.values('voucher_no',
+                'session_id', 'clear_date').filter(
+                clear_date__range=(start_date,end_date))
+            result=[]
+            for voucher in suspense_cleared:
+                temp=[]
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
+                temp.append(voucher['clear_date'])
+                voucherid = VoucherId.objects.values('receipt_no_of_session',
+                    'receipt_date',
+                    'purchase_order__buyer__customer__address__street_address',
+                    'purchase_order__buyer__customer__address__district',
+                    'purchase_order__buyer__customer__address__pin',
+                    'purchase_order__buyer__customer__address__province',
+                    'purchase_order__buyer__customer__title',
+                    'purchase_order__buyer__first_name',
+                    'purchase_order__buyer__last_name').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(voucherid['receipt_no_of_session'])
+                temp.append(voucherid['receipt_date'])
+                address=''
+                if voucherid['purchase_order__buyer__first_name']:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = voucherid['purchase_order__buyer__first_name']\
+                        + voucherid['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = voucherid['purchase_order__buyer__first_name'] +\
+                        voucherid['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                tada_object = TaDa.objects.values('testing_staff').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id'])
+                list_staff = []
+                for staff in tada_object:
+                    testing_staff = staff['testing_staff']
+                    testing_staff_list = testing_staff.split(',')
+                    for testing_staff in testing_staff_list:
+                        testing_staff_details = Staff.objects.filter(\
+                            code=testing_staff).values('name')[0]
+                        list_staff.append(testing_staff_details)
+                temp.append(list_staff)
+                tada_amount = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id']).aggregate(Sum('tada_amount'))
+                temp.append(tada_amount['tada_amount__sum'])
+                result.append(temp)
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.tada_register')
+            return render(request,'reports/tada_register.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/tada_register_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/tada_register_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def tada_othercharges_register(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspense_cleared = SuspenseClearance.objects.values('voucher_no',
+                'session_id', 'clear_date', 'boring_charge_external',
+                'labour_charge').filter(
+                clear_date__range=(start_date,end_date))
+            result=[]
+            for voucher in suspense_cleared:
+                temp=[]
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
+                temp.append(voucher['clear_date'])
+                voucherid = VoucherId.objects.values('receipt_no_of_session',
+                    'receipt_date',
+                    'purchase_order__buyer__customer__address__street_address',
+                    'purchase_order__buyer__customer__address__district',
+                    'purchase_order__buyer__customer__address__pin',
+                    'purchase_order__buyer__customer__address__province',
+                    'purchase_order__buyer__customer__title',
+                    'purchase_order__buyer__first_name',
+                    'purchase_order__buyer__last_name').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(voucherid['receipt_no_of_session'])
+                temp.append(voucherid['receipt_date'])
+                address=''
+                if voucherid['purchase_order__buyer__first_name']:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = voucherid['purchase_order__buyer__first_name']\
+                        + voucherid['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = voucherid['purchase_order__buyer__first_name'] +\
+                        voucherid['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                tada_amount = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id']).aggregate(Sum('tada_amount'))
+                temp.append(tada_amount['tada_amount__sum'])
+                temp.append(voucher['boring_charge_external'])
+                temp.append(voucher['labour_charge'])
+                try:
+                    transport = Transport.objects.values('total').filter(
+                        voucher_no=voucher['voucher_no'],
+                        session_id=voucher['session_id'])[0]
+                    transport_total = transport['total']
+                except:
+                    transport_total = 0
+                temp.append(transport_total)
+                if tada_amount['tada_amount__sum']:
+                    grand_total = int(voucher['boring_charge_external']) +\
+                    int(voucher['labour_charge']) + int(transport_total) +\
+                    int(tada_amount['tada_amount__sum'])
+                else:
+                    grand_total = int(voucher['boring_charge_external']) +\
+                    int(voucher['labour_charge']) + int(transport_total)
+                temp.append(grand_total)
+                result.append(temp)
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.tada_othercharges_register')
+            return render(request,'reports/tada_othercharges.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/tada_othercharges_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/tada_othercharges_form.html', \
         {'form':form,'request':request_status})
