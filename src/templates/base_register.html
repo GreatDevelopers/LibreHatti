@@ -20,8 +20,7 @@
     </script>
     {% endblock %}
     {% block js %}
-    <script src="{% static 'js/jquery.min.js' %}">
-    </script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/registers.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
@@ -79,15 +78,14 @@ $(document).ready(function(){
     })
 });
 </script>
-
-{% endblock %}
-{% block extrajs %}
-{% endblock %}
+{% endblock js %}
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/list_result.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+{% endblock css %}
 </head>
 <body>
     <div class = "wrapper">
@@ -121,8 +119,8 @@ $(document).ready(function(){
           </ul>
       </nav>
   </div>
-  {% block content %}{% endblock %}
-</div>
-</div>
+  </div>
+  </div>
+{% block content %}{% endblock %}
 </body>
 </html>
