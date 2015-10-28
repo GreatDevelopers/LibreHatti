@@ -81,7 +81,7 @@ def jsreverse(request):
     """
     This function reverse looks up the urls for the AJAX Requests
     Argument: Http Request
-    Return: Dunamic Url
+    Return: Dynamic Url
     """
     string_to_reverse = request.GET['string'];
     return HttpResponse(reverse(string_to_reverse))
@@ -264,7 +264,9 @@ def list_products(request):
 @login_required
 def previous_value(request):
     """
-
+    This function generates voucher for purchase_order
+    Argument: Http Request
+    Return: Redirect to voucher_generate
     """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')

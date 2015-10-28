@@ -84,7 +84,7 @@ class ClientForm(forms.Form):
 
 class OrderForm(forms.Form):
     """
-    displays chechboxes for Order Search
+    displays checkboxes for Order Search
     """
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
