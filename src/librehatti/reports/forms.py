@@ -22,7 +22,7 @@ from librehatti.catalog.models import Surcharge
 
 class DateRangeSelectionForm(forms.Form):
     """
-    A form for date range selection
+    A form for date range selection.
     """
     required_css_class = 'required'
     error_css_class = 'error'
@@ -37,7 +37,7 @@ class DateRangeSelectionForm(forms.Form):
 
 class DailyReportForm(forms.Form):
     """
-    displays form for daily register report
+    displays form for daily register report.
     """
     required_css_class = 'required'
     error_css_class = 'error'
@@ -50,7 +50,7 @@ class DailyReportForm(forms.Form):
 
 class ConsultancyFunds(forms.Form):
     """
-    displays form for Consultancy Funds
+    displays form for Consultancy Funds.
     """
     required_css_class = 'required'
     error_css_class = 'error'
@@ -75,7 +75,7 @@ class ConsultancyFunds(forms.Form):
 
 class ClientForm(forms.Form):
     """
-    displays checkboxes for Client Search
+    displays checkboxes for Client Search.
     """
     client_fields = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_FIELD_CHOICES)
@@ -84,7 +84,7 @@ class ClientForm(forms.Form):
 
 class OrderForm(forms.Form):
     """
-    displays chechboxes for Order Search
+    displays checkboxes for Order Search.
     """
     order = forms.MultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, choices=CLIENT_ORDER_CHOICES)
@@ -93,7 +93,7 @@ class OrderForm(forms.Form):
 
 class AddConstraints(forms.Form):
     """
-    displays checkboxes for Constraints
+    displays checkboxes for Constraints.
     """
 
     additional_constraints = forms.MultipleChoiceField(required=False,
@@ -137,7 +137,7 @@ class AddConstraints(forms.Form):
 
 class MonthYearForm(forms.Form):
     """
-    A form for month and year selection
+    A form for month and year selection.
     """
     required_css_class = 'required'
     error_css_class = 'error'
@@ -172,7 +172,7 @@ class PaidTaxesForm(forms.Form):
 
 class LabReportForm(forms.Form):
     """
-    displays form for Consultancy Funds
+    displays form for Consultancy Funds.
     """
     required_css_class = 'required'
     error_css_class = 'error'
