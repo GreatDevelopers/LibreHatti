@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 {% block title %}
-    <title>TaDa and Other Charges</title>
+    <title>Registered Users</title>
 {% endblock %}
 </head>
 <body>
@@ -16,48 +16,40 @@
                 <input type="button" class="btn btn-info btn-large" 
                 name="" value="Show Printable Version"></a>
             </div>
-    <h2><center>TaDa and Other Charges</center></h2>
+    <h2><center>Registered Users</center></h2>
     <div class='daily-report-list'>
         <table border="1px">
                 <tr>
                     <th>S.No.</th>
-                    <th>Voucher No.</th>
-                    <th>Receipt No.</th>
+                    <th>Date Joined</th>
+                    <th>Name</th>
                     <th>Address</th>
-                    <th>Dated</th>
-                    <th>Name of Employee</th>
-                    <th>Total</th>
+                    <th>Company</th>
+                    <th>District</th>
+                    <th>Pin Code</th>
+                    <th>State</th>
+                    <th>Email Address</th>
+                    <th>Contact No.</th>
+                    <th>Organisation</th>
                 </tr>
-                {% for value in data %}
+                {% for value in result %}
                 <tr>
                     <td>{{ forloop.counter}}</td>
                     <td>{{ value.0 }}</td>
                     <td>{{ value.1 }}</td>
-                    <td>{{ value.2 }},{{ value.3 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td>{{ value.3 }}</td>
                     <td>{{ value.4 }}</td>
-                    <td align="right">
-                        <table border="1px">
-                        {% for data in value.5 %}
-                        <tr><td><a href='{% url 'librehatti.reports.register.tada_member' %}?id={{data.2}}'>{{data.0}}</a></td><td>{{data.1}}</td>
-                        {%endfor%}
-                        </table>
-
-                    </td>
+                    <td>{{ value.5 }}</td>
                     <td align="right">{{ value.6 }}</td>
-                
+                    <td align="right">{{ value.7 }}</td>
+                    <td align="right">{{ value.8 }}</td>
+                    <td align="right">{{ value.9 }}</td>
                 </tr>
-
                 {% endfor %}
        </table>
-       <br>
-       <table border="1px">
-           <tr>
-           <td>Total Charges</td><td align="right">{{gtotal}}</td>
-           </tr>
-       </table>
-
    </div>
 </div>
  {% endblock %}
 </body>
-</html>tea
+</html>

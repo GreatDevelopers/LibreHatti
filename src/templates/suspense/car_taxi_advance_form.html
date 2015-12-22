@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% load staticfiles %}
+
+<html>
+<head>
+    {% block title %}
+    <title>Form</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% if car_taxi_advance %}
+    <form method="POST" action={% url 'librehatti.suspense.views.car_taxi_advance' %} >
+        {% else %}
+        <form method="POST" action=''>
+            {% endif %}
+            {% if messages %}
+                <div class="alert alert-success">
+                    {{ messages }} 
+                </div>
+                {% endif %}
+            {% csrf_token %}
+            <table>
+              {% if message %}
+              <div class="alert alert-danger">
+                  {{ message }}
+              </div>
+              {% endif %}
+              {{form.as_table}}
+          </table>
+          <input type="submit" class="btn btn-info btn-large" value="Submit" id="button1">
+      </form>
+      {% endblock %}
+  </body>
+  </html>

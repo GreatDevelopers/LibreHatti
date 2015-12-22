@@ -7,6 +7,10 @@ from librehatti.suspense.models import Staff
 from ajax_select import LookupChannel
 
 class StaffLookup(LookupChannel):
+    """
+    This class suggests staff names (Ajax Effect) while selecting staff 
+    in programme letter
+    """
 
     model = Staff
 

@@ -33,7 +33,7 @@
        <tr>
            <th>Address:</th>
            <td>{{details.buyer__customer__address__street_address}}&nbsp;
-              {{details.buyer__customer__address__city}}</td>
+              {{details.buyer__customer__address__district}}</td>
           </tr>
           <tr>
            <th>Mode Of Payment:</th>
@@ -48,10 +48,26 @@
        <tr>
          {% if with_transport == 0 %}
            <td><a target="_blank" href = '{% url 'librehatti.suspense.views.with_transport' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="with transport"></a></td>
+
+           <form id="myForm" action="{% url 'librehatti.suspense.views.transport_bill' %}" method="post">
+           {% csrf_token %}
+           <td><input type="submit" class="btn btn-info btn-large" value="Transport Bill"/></td>
+             <input type="hidden" value="{{ session_id }}" name="session" />
+             <input type="hidden" value="{{ voucher_no }}" name="voucher" />
+           </td>
+           </form>
           {% else %}
           <td><a  target="_blank" href = '{% url 'librehatti.suspense.views.with_transport' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="without transport"></a></td>
           {% endif %}
            <td><a target="_blank" href = '{% url 'librehatti.suspense.views.other_charges' %}?voucher_no={{voucher_no}}&session={{session_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Other Charges"></a></td>
+          
+         <form id="myForm" action="{% url 'librehatti.suspense.views.tada_bill_list' %}" method="post">
+           {% csrf_token %}
+           <td><input type="submit" class="btn btn-info btn-large" value="TA/DA Bill" name='button1' id='button1' /></td>
+             <input type="hidden" value="{{ session_id }}" name="session" />
+             <input type="hidden" value="{{ voucher_no }}" name="voucher" />
+           </form>
+
        </tr>
     </table>
        </div>

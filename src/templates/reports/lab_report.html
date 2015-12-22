@@ -37,7 +37,7 @@
       {% for val in purchase_item %}
       <tr>
         <td>{{ forloop.counter }}</td>
-        <td> {{val.purchase_order_id}}</td>
+        <td> {{val.voucherid__purchase_order_of_session}}</td>
         <td> {{val.purchase_order__date_time}}</td>
         <td> 
         {% if val.purchase_order__buyer__first_name != '' %}
@@ -47,7 +47,7 @@
         {% endif %}
         </td>
         <td>{{val.purchase_order__buyer__customer__company}}</td>
-        <td>{{val.purchase_order__buyer__customer__address__street_address}}, {{val.purchase_order__buyer__customer__address__city}}
+        <td>{{val.purchase_order__buyer__customer__address__street_address}}, {{val.purchase_order__buyer__customer__address__district}}
         {% if val.purchase_order__buyer__customer__address__pin != 'None' and val.purchase_order__buyer__customer__address__pin != '' %}
         , {{val.purchase_order__buyer__customer__address__pin}}
         {% endif %}
