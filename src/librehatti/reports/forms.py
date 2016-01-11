@@ -184,3 +184,17 @@ class LabReportForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LabReportForm, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+
+class AmountForm(forms.Form):
+    """
+    A form for month and year selection
+    """
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    amount = forms.IntegerField()
+    
+    def __init__(self, *args, **kwargs):
+        super(AmountForm, self).__init__(*args, **kwargs)
+        self.fields['amount'].widget.attrs={'class':'form-control'}

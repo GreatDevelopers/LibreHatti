@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %} {% load staticfiles %} 
+
+<html>
+<head>
+{% block title %}
+<title>Form</title>
+{% endblock %}
+{% block extracss %} 
+<link rel="stylesheet" type="text/css" href="{% static 'css/register_form.css' %}">
+{% endblock extracss %}
+</head>
+<body>
+  {% block content %}
+  <form class="form-horizontal" role="form" method="POST" action='{% url 'librehatti.reports.register.client_details_according_to_amount' %}' >
+    <div class="form-group">
+        {% csrf_token %}
+        <table class="form_class">
+          {{form.as_table}}
+        </table>
+        <input type="submit" class="btn btn-info btn-large" value="Submit" name='button1' id='button1'>
+    </div>
+  </form>
+{% endblock %}
+ </body>
+ </html>
