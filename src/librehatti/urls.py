@@ -53,4 +53,5 @@ urlpatterns = patterns('',
     url(r'pending_clearance_register', 'librehatti.reports.register.pending_clearance_register'),
     url(r'tada_register', 'librehatti.reports.register.tada_register'),
     url(r'tada_othercharges_register', 'librehatti.reports.register.tada_othercharges_register'),
+    url(r'client_details_according_to_amount', 'librehatti.reports.register.client_details_according_to_amount'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
