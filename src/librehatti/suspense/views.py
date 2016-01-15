@@ -127,11 +127,9 @@ def add_distance(request):
                 filter(purchase_order=purchase_order_id).\
                 filter(session=session_id).distinct()
             for voucher_val in voucher:
-                try:
-                    SuspenseOrder.objects.filter(\
-                        voucher=voucher_val['voucher_no'],\
-                        session_id = financial_obj)
-                except:
+                suspense_check = SuspenseOrder.objects.filter(
+                voucher=voucher_val['voucher_no'],session_id = financial_obj)
+                if not suspense_check:
                     suspense_obj = SuspenseOrder(voucher=voucher_val['voucher_no'],\
                         purchase_order=purchase_order_obj, session_id=financial_obj)
                     suspense_obj.save()
