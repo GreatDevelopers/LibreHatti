@@ -36,7 +36,7 @@
           <!-- Header -->
           <div id="header" class="header">
             <div id="branding">
-              <a href="/"><h1 id="site-name">{% block branding %}{{ 'ADMIN_NAME'|suit_conf }}{% endblock %}</h1></a>
+              <a href="{% url 'home' %}"><h1 id="site-name">{% block branding %}{{ 'ADMIN_NAME'|suit_conf }}{% endblock %}</h1></a>
             </div>
 
             {% block header_time %}
