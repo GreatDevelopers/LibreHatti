@@ -10,7 +10,7 @@ from ajax_select import urls as ajax_select_urls
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'librehatti.catalog.views.index'),
+    url(r'^$', 'librehatti.catalog.views.index', name='home'),
     url(r'^catalog/', include('librehatti.catalog.urls')),
     url(r'^useraccounts/', include('useraccounts.urls')),
     url(r'^print/', include('librehatti.prints.urls')),
