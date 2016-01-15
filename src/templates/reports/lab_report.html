@@ -32,6 +32,7 @@
         <th>Site</th>
         <th>Email</th>
         <th>Contact No.</th>
+        <th>Material</th>
         <th> Amount</th>
       </tr>  
       {% for val in purchase_item %}
@@ -56,6 +57,7 @@
         <td>{{val.purchase_order__delivery_address}}</td>
         <td>{{val.purchase_order__buyer__email}}</td>
         <td>{{val.purchase_order__buyer__customer__telephone}}</td>
+        <td>{{val.item__category__name}}</td>
         <td align="right"> {{val.price}}</td>
       </tr>
       {% endfor %}
