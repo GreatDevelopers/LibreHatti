@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from librehatti.reports.forms import DailyReportForm
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
-from librehatti.reports.forms import MonthYearForm
+from librehatti.reports.forms import MonthYearForm, AmountForm
 from librehatti.reports.forms import PaidTaxesForm, LabReportForm
 
 from datetime import datetime
@@ -1812,4 +1812,53 @@ def tada_othercharges_register(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/tada_othercharges_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def client_details_according_to_amount(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = AmountForm(request.POST)
+        if form.is_valid():
+            amount = request.POST['amount']
+            bill = Bill.objects.values('purchase_order').filter(amount_received__gte=amount)
+            voucherid = VoucherId.objects.filter(purchase_order__in=bill).values('receipt_no_of_session',
+                'receipt_date', 'purchase_order_of_session', 'session_id',
+                'purchase_order__bill__amount_received',
+                'purchase_order__date_time', 'purchase_order__buyer__first_name',
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__title',
+                'purchase_order__delivery_address',
+                'purchase_order__buyer__customer__address__district',
+                'purchase_order__buyer__customer__address__province',
+                'purchase_order__buyer__customer__address__pin',
+                'purchase_order__buyer__customer__address__street_address',
+                'purchase_order_id', 'session_id').distinct().order_by('session_id',
+                'receipt_no_of_session')
+            for value in voucherid:
+                voucherid2 = VoucherId.objects.filter(purchase_order=value['purchase_order_id']
+                    ).values_list('purchase_order__purchaseditem__item__category__name',
+                    flat=True)
+                value['material'] = voucherid2
+
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.client_details_according_to_amount')
+            return render(request,'reports/amount_result.html',\
+            {'voucherid':voucherid, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = AmountForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/amount_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = AmountForm()
+        request_status = request_notify()
+        return render(request,'reports/amount_form.html', \
         {'form':form,'request':request_status})
