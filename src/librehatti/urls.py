@@ -3,20 +3,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from reports.register_generator import GenerateRegister
-from reports.search import SearchResult
+from .reports.register_generator import GenerateRegister
+from .reports.search import SearchResult
 from ajax_select import urls as ajax_select_urls
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'librehatti.catalog.views.index', name='home'),
+    url(r'^$', 'librehatti.catalog.views.index'),
     url(r'^catalog/', include('librehatti.catalog.urls')),
     url(r'^useraccounts/', include('useraccounts.urls')),
     url(r'^print/', include('librehatti.prints.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search/','librehatti.reports.views.search_form'),
-    url(r'^search_result/', SearchResult.as_view(), name='search_result'),
+    url(r'^search_result/', SearchResult.as_view()),
     url(r'^save_fields', 'librehatti.reports.views.save_fields'),
     url(r'^list_saved_registers', 'librehatti.reports.views.list_saved_registers'),
     url(r'daily_result', 'librehatti.reports.register.daily_report_result', name='daily_report_result'),
@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     url(r'^filter_sub_category/', 'librehatti.reports.views.filter_sub_category'),
     url(r'^bill/', 'librehatti.prints.views.bill'),
     url(r'^suspense_bill/', 'librehatti.prints.views.suspense_bill'),
-    url(r'^quoted_bill/', 'librehatti.prints.views.quoted_bill'),
+#    url(r'^quoted_bill/', 'librehatti.prints.views.quoted_bill'),
     url(r'^tax/', 'librehatti.prints.views.tax'),
     url(r'^bills/', include('librehatti.bills.urls')),
     url(r'^suspense/', include('librehatti.suspense.urls')),
@@ -53,5 +53,4 @@ urlpatterns = patterns('',
     url(r'pending_clearance_register', 'librehatti.reports.register.pending_clearance_register'),
     url(r'tada_register', 'librehatti.reports.register.tada_register'),
     url(r'tada_othercharges_register', 'librehatti.reports.register.tada_othercharges_register'),
-    url(r'client_details_according_to_amount', 'librehatti.reports.register.client_details_according_to_amount'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

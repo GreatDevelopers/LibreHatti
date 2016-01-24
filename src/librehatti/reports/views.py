@@ -1,13 +1,11 @@
 from django.shortcuts import render
 
-from django.core.urlresolvers import reverse
-
 from django.http import HttpResponse
 
-from forms import ClientForm
-from forms import OrderForm
-from forms import AddConstraints
-from forms import DailyReportForm
+from .forms import ClientForm
+from .forms import OrderForm
+from .forms import AddConstraints
+from .forms import DailyReportForm
 
 import simplejson
 
@@ -39,7 +37,7 @@ def search_form(request):
     """
     try:
         if request.GET['type'] == 'search':
-            submit_url = reverse('search_result')
+            submit_url = '/search_result/'
             search_type_code = '1'
             client_form = ClientForm()
             order_form = OrderForm()
@@ -49,7 +47,7 @@ def search_form(request):
             'url':submit_url,
             'request':request_status    }
         elif request.GET['type'] == 'register':
-            submit_url = reverse('view_register')
+            submit_url = '/generate_register/'
             search_type_code = '2'
             client_form = ClientForm()
             order_form = OrderForm()

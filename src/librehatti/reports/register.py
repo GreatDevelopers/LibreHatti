@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from librehatti.reports.forms import DailyReportForm
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
-from librehatti.reports.forms import MonthYearForm, AmountForm
+from librehatti.reports.forms import MonthYearForm
 from librehatti.reports.forms import PaidTaxesForm, LabReportForm
 
 from datetime import datetime
@@ -148,12 +148,12 @@ def consultancy_funds_report(request):
         form = ConsultancyFunds(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
         if form.is_valid() and date_form.is_valid():
-            category = form.cleaned_data['sub_category']
+            category = request.POST['sub_category']
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             voucher_object = VoucherId.objects.\
             filter(purchase_order__date_time__range = (start_date,end_date)).\
-            filter(purchased_item__item__category__in = category, is_special=0).\
+            filter(purchased_item__item__category = category, is_special=0).\
             values('purchase_order_of_session','voucher_no',\
                 'session_id',\
             'purchase_order__date_time',\
@@ -164,8 +164,7 @@ def consultancy_funds_report(request):
             'purchase_order__buyer__customer__address__district',\
             'purchase_order__buyer__customer__address__province',\
             'purchase_order__buyer__customer__title',\
-            'purchased_item__item__category',
-            'purchased_item__item__category__name').distinct()
+            'purchased_item__item__category').distinct()
             temp_list = []
             result = []
             consultanttotal = 0
@@ -186,12 +185,14 @@ def consultancy_funds_report(request):
                 values('consultancy_asset').get(voucher_no=
                     temp_value['voucher_no'],session_id=temp_value['session_id'])
                 temp_list.append(consultancy_var['consultancy_asset'])
-                temp_list.append(temp_value['purchased_item__item__category__name'])
                 consultanttotal = consultanttotal +\
                 consultancy_var['consultancy_asset']
                 result.append(temp_list)
                 temp_list = []
-            category_name = Category.objects.filter(id__in=category).values('name')
+            category_name = Category.objects.filter(id=category).values('name')
+            for value in category_name:
+                category_value = value['name']
+
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
@@ -199,7 +200,7 @@ def consultancy_funds_report(request):
             return render(request, 'reports/consultancy_funds_result.html',\
              {'result':result, 'back_link':back_link,\
                 'start_date':start_date, 'end_date':end_date,\
-                'sum':sum, 'category_name':category_name,\
+                'sum':sum, 'category_name':category_value,\
                 'request':request_status, 'consultanttotal':consultanttotal})
         else:
             form = ConsultancyFunds(request.POST)
@@ -655,26 +656,16 @@ def servicetax_register(request):
             service = int(request.POST['paid_service_tax'])
             education = int(request.POST['paid_education_tax'])
             highereducation = int(request.POST['paid_higher_education_tax'])
-            sbc = int(request.POST['paid_swachh_bharat_cess'])
             service_tax = 0
-            service_tax_val = 0
             education_tax = 0
-            education_tax_val = 0
             heducation_tax = 0
-            heducation_tax_val = 0
-            sbc_tax = 0
-            sbc_tax_val = 0
             total = 0
             totalplustax = 0
             surcharge_list = []
-            taxes_name = TaxesApplied.objects.values('surcharge_name','surcharge_value').\
-            filter(purchase_order__date_time__month=month,
-                purchase_order__date_time__year=year).distinct()
-            # return HttpResponse(taxes_name)
-            # surcharge = Surcharge.objects.values('value').filter(\
-            #     taxes_included=1)
-            # for sur_charge in surcharge:
-            #     surcharge_list.append(sur_charge['value'])
+            surcharge = Surcharge.objects.values('value').filter(\
+                taxes_included=1)
+            for sur_charge in surcharge:
+                surcharge_list.append(sur_charge['value'])
             taxesapplied_obj = TaxesApplied.objects.values('purchase_order__id').\
             filter(purchase_order__date_time__month=month,
                 purchase_order__date_time__year=year)
@@ -689,8 +680,8 @@ def servicetax_register(request):
             filter(id__in=taxesapplied_obj).order_by('date_time', 'voucherid__receipt_no_of_session').\
             distinct()
             result = []
+            i=0
             for value in purchase_order:
-                i=0
                 temp = []
                 voucherid = VoucherId.objects.values(\
                     'purchase_order_of_session').filter(\
@@ -724,56 +715,50 @@ def servicetax_register(request):
                 temp.append(address)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']
-                for val in taxes_name:
-                    taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
-                        purchase_order=value['id'], surcharge_name=val['surcharge_name'])
-                    if taxesapplied:
-                        taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
-                            purchase_order=value['id'], surcharge_name=val['surcharge_name'])[0]
-                        if taxesapplied['surcharge_name'] == 'Service Tax':
-                            service_tax = service_tax + taxesapplied['tax']
-                            service_tax_val = taxesapplied['tax']
-                            temp.append(service_tax_val)
-                        elif taxesapplied['surcharge_name'] == 'Education Cess':
-                            education_tax = education_tax + taxesapplied['tax']
-                            education_tax_val = taxesapplied['tax']
-                            temp.append(education_tax_val)
-                        elif taxesapplied['surcharge_name'] == 'Higher Education Cess':
-                            heducation_tax = heducation_tax + taxesapplied['tax']
-                            heducation_tax_val = taxesapplied['tax']
-                            temp.append(heducation_tax_val)
-                        elif taxesapplied['surcharge_name'] == 'Swachh Bharat Cess(SBC)':
-                            sbc_tax = sbc_tax + taxesapplied['tax']
-                            sbc_tax_val = taxesapplied['tax']
-                            temp.append(sbc_tax_val)
-                    else:
-                        temp.append('0')
+                taxesapplied = TaxesApplied.objects.values('tax').filter(\
+                    purchase_order=value['id'])
+                if int(month) < 6 and int(year) <= 2015:
+                    old_tax=1
+                    for taxvalue in taxesapplied:
+                        temp.append(taxvalue['tax'])
+                        if i == 0:
+                            service_tax = service_tax + taxvalue['tax']
+                            i = i + 1
+                        elif i == 1:
+                            education_tax = education_tax + taxvalue['tax']
+                            i = i + 1
+                        else:
+                            heducation_tax = heducation_tax + taxvalue['tax']
+                            i = 0
+                else:
+                    old_tax=0
+                    for taxvalue in taxesapplied:
+                        temp.append(taxvalue['tax'])
+                        service_tax = service_tax + taxvalue['tax']
                 temp.append(value['bill__grand_total'])
                 totalplustax = totalplustax +\
                 value['bill__grand_total']
                 result.append(temp)
                 address = ''
-            total_taxes = service_tax + education_tax + heducation_tax +sbc_tax
+            total_taxes = service_tax + education_tax + heducation_tax
             servicenotpaid = service_tax - service
             educationnotpaid = education_tax - education
             heducationnotpaid = heducation_tax - highereducation
-            sbcnotpaid = sbc_tax - sbc
             total_taxes_not_paid = servicenotpaid + educationnotpaid +\
-            heducationnotpaid + sbcnotpaid
+            heducationnotpaid
             request_status = request_notify()
             month = calendar.month_name[int(month)]
             back_link=reverse('librehatti.reports.register.servicetax_register')
             return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
-            'year':year, 'total':total, 'taxes_name':taxes_name,\
+            'year':year, 'total':total, 'surcharge_list':surcharge_list,\
             'totalplustax':totalplustax, 'service_tax':service_tax,\
             'education_tax':education_tax, 'heducation_tax':heducation_tax,\
             'total_taxes':total_taxes, 'servicenotpaid':servicenotpaid,\
             'educationnotpaid':educationnotpaid, 'heducationnotpaid':\
             heducationnotpaid, 'total_taxes_not_paid':total_taxes_not_paid,\
             'service':service, 'education':education, 'highereducation':\
-            highereducation, 'back_link':back_link, 'sbc':sbc,
-            'sbc_tax':sbc_tax, 'sbcnotpaid':sbcnotpaid})
+            highereducation, 'back_link':back_link, 'old_tax':old_tax})
         else:
             form = MonthYearForm(request.POST)
             data_form = PaidTaxesForm(request.POST)
@@ -1140,7 +1125,7 @@ def material_report(request):
         form = ConsultancyFunds(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
         if form.is_valid() and date_form.is_valid():
-            category = form.cleaned_data['sub_category']
+            category = request.POST['sub_category']
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             if start_date > end_date:
@@ -1152,7 +1137,7 @@ def material_report(request):
 
             purchase_item = PurchasedItem.objects.\
             filter(purchase_order__date_time__range=(start_date, end_date),\
-                item__category__in=category).values(\
+                item__category=category).values(\
                 'purchase_order_id', 'purchase_order__date_time', 'price',
                 'purchase_order__buyer__first_name',
                 'purchase_order__buyer__last_name',
@@ -1164,12 +1149,11 @@ def material_report(request):
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__buyer__email','purchase_order__delivery_address',\
                 'purchase_order__buyer__customer__telephone',
-                'voucherid__purchase_order_of_session',
-                'item__category__name')
-            category_name = Category.objects.values('name').filter(id__in=category)
+                'voucherid__purchase_order_of_session')
+            category_name = Category.objects.values('name').filter(id=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
-                = (start_date,end_date),item__category__in=category).\
+                = (start_date,end_date),item__category=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
             back_link=reverse('librehatti.reports.register.material_report')
@@ -1440,8 +1424,7 @@ def lab_report(request):
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__buyer__email','purchase_order__delivery_address',\
                 'purchase_order__buyer__customer__telephone',
-                'voucherid__purchase_order_of_session',
-                'item__category__name')
+                'voucherid__purchase_order_of_session')
             category_name = Category.objects.values('name').filter(id=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
@@ -1829,53 +1812,4 @@ def tada_othercharges_register(request):
         form = DateRangeSelectionForm()
         request_status = request_notify()
         return render(request,'reports/tada_othercharges_form.html', \
-        {'form':form,'request':request_status})
-
-
-@login_required
-def client_details_according_to_amount(request):
-    """
-    This view is used to display the TADA registers
-    Argument:Http Request
-    Return:Render TADA Register
-    """
-    if request.method == 'POST':
-        form = AmountForm(request.POST)
-        if form.is_valid():
-            amount = request.POST['amount']
-            bill = Bill.objects.values('purchase_order').filter(amount_received__gte=amount)
-            voucherid = VoucherId.objects.filter(purchase_order__in=bill).values('receipt_no_of_session',
-                'receipt_date', 'purchase_order_of_session', 'session_id',
-                'purchase_order__bill__amount_received',
-                'purchase_order__date_time', 'purchase_order__buyer__first_name',
-                'purchase_order__buyer__last_name',
-                'purchase_order__buyer__customer__title',
-                'purchase_order__delivery_address',
-                'purchase_order__buyer__customer__address__district',
-                'purchase_order__buyer__customer__address__province',
-                'purchase_order__buyer__customer__address__pin',
-                'purchase_order__buyer__customer__address__street_address',
-                'purchase_order_id', 'session_id').distinct().order_by('session_id',
-                'receipt_no_of_session')
-            for value in voucherid:
-                voucherid2 = VoucherId.objects.filter(purchase_order=value['purchase_order_id']
-                    ).values_list('purchase_order__purchaseditem__item__category__name',
-                    flat=True)
-                value['material'] = voucherid2
-
-            request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.client_details_according_to_amount')
-            return render(request,'reports/amount_result.html',\
-            {'voucherid':voucherid, 'request':request_status,\
-            'back_link':back_link})
-            
-        else:
-            form = AmountForm(request.POST)
-            request_status = request_notify()
-            return render(request,'reports/amount_form.html', \
-            {'form':form,'request':request_status})
-    else:
-        form = AmountForm()
-        request_status = request_notify()
-        return render(request,'reports/amount_form.html', \
         {'form':form,'request':request_status})

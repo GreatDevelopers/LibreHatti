@@ -2,11 +2,6 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _PASSWORD
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
@@ -19,9 +14,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',
-        'USER': 'db_user',
-        'PASSWORD': 'db_password',
+        'NAME': 'librehatti',
+        'USER': 'root',
+        'PASSWORD': 'q',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -55,10 +50,10 @@ MEDIA_URL = ''
 
 STATIC_ROOT = ''
 
-STATIC_URL = '/librehatti/static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    '/path/to/LibreHatti/static',
+    '/home/aasp/LibreHatti/static',
 )
 
 STATICFILES_FINDERS = (
@@ -93,7 +88,7 @@ ROOT_URLCONF = 'librehatti.urls'
 WSGI_APPLICATION = 'librehatti.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
+    'templates',
 )
 
 INSTALLED_APPS = (
@@ -105,7 +100,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'suit',
     'mptt',
-    'ajax_select',
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',

@@ -1,9 +1,9 @@
 from django import forms
 
-from search_choices import CLIENT_FIELD_CHOICES
-from search_choices import CLIENT_ORDER_CHOICES
-from search_choices import CONSTRAINT_CHOICES
-from search_choices import MONTH_CHOICES
+from .search_choices import CLIENT_FIELD_CHOICES
+from .search_choices import CLIENT_ORDER_CHOICES
+from .search_choices import CONSTRAINT_CHOICES
+from .search_choices import MONTH_CHOICES
 
 import datetime
 
@@ -63,7 +63,7 @@ class ConsultancyFunds(forms.Form):
         sub_category_name = Category.objects.values_list('name', flat=True)
         sub_category_choices = [('', '--------')] + [(id, name) for id,\
         name in itertools.izip(sub_category_id, sub_category_name)]
-        sub_category = forms.MultipleChoiceField(sub_category_choices,\
+        sub_category = forms.ChoiceField(sub_category_choices,\
             label=_SUB_CATEGORY)
     except:
         pass
@@ -71,7 +71,6 @@ class ConsultancyFunds(forms.Form):
         super(ConsultancyFunds, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
         self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
-        self.fields['sub_category'].widget.attrs['size']='15'
 
 
 class ClientForm(forms.Form):
@@ -117,7 +116,7 @@ class AddConstraints(forms.Form):
     session_end = FinancialSession.objects.values_list('session_end_date', \
         flat = True)
     session_choices = [('', '--------')] + [(id, str(start) + '-To-' + \
-        str(end)) for id, start, end in itertools.izip(session_id, \
+        str(end)) for id, start, end in itertools.zip_longest(session_id, \
         session_start, session_end)]
     session = forms.ChoiceField(session_choices)
 
@@ -129,7 +128,7 @@ class AddConstraints(forms.Form):
     mode_of_payment_id = ModeOfPayment.objects.values_list('id', flat = True)
     mode = ModeOfPayment.objects.values_list('method', flat = True)
     mode_choices = [('', '--------')] + [(id, mode) for id, mode in itertools.\
-        izip(mode_of_payment_id, mode)]
+        zip_longest(mode_of_payment_id, mode)]
     mode_of_payment = forms.ChoiceField(mode_choices)
 
     grand_total = forms.BooleanField()
@@ -163,14 +162,11 @@ class PaidTaxesForm(forms.Form):
     paid_service_tax = forms.IntegerField(initial=0)
     paid_education_tax = forms.IntegerField(initial=0)
     paid_higher_education_tax = forms.IntegerField(initial=0)
-    paid_swachh_bharat_cess = forms.IntegerField(initial=0)
     def __init__(self, *args, **kwargs):
         super(PaidTaxesForm, self).__init__(*args, **kwargs)
         self.fields['paid_service_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_higher_education_tax'].widget.attrs={\
-        'class':'form-control'}
-        self.fields['paid_swachh_bharat_cess'].widget.attrs={\
         'class':'form-control'}
 
 
@@ -188,17 +184,3 @@ class LabReportForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LabReportForm, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
-
-
-class AmountForm(forms.Form):
-    """
-    A form for month and year selection
-    """
-    required_css_class = 'required'
-    error_css_class = 'error'
-
-    amount = forms.IntegerField()
-    
-    def __init__(self, *args, **kwargs):
-        super(AmountForm, self).__init__(*args, **kwargs)
-        self.fields['amount'].widget.attrs={'class':'form-control'}
