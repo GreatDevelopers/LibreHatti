@@ -492,25 +492,34 @@ def suspense_clearance_register(request):
         if form.is_valid():
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
-            suspenseclearance = SuspenseClearance.objects.values('voucher_no').\
-            filter(clear_date__range=(start_date,end_date))
-            suspenseorder = SuspenseOrder.objects.values('voucher',\
-                'session_id', 'purchase_order', 'purchase_order__date_time',\
-                'purchase_order__buyer__first_name',\
-                'purchase_order__buyer__last_name',\
-                'purchase_order__buyer__customer__title',\
-                'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__district',\
-                'purchase_order__buyer__customer__address__pin',\
-                'purchase_order__buyer__customer__address__province').\
-            filter(is_cleared=1,\
-            voucher__in=suspenseclearance)
+            suspenseclearance = SuspenseClearance.objects.values('voucher_no',
+            'session_id').filter(clear_date__range=(start_date,end_date))
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             result = []
             temp = []
-            for suspense in suspenseorder:
+            for value in suspenseclearance:
+                suspense = SuspenseOrder.objects.filter(is_cleared=1,
+                voucher=value['voucher_no'],
+                session_id=value['session_id'])
+                if not suspense:
+                    continue
+                suspense = SuspenseOrder.objects.values('voucher',\
+                    'session_id', 'purchase_order', 'purchase_order__date_time',\
+                    'purchase_order__buyer__first_name',\
+                    'purchase_order__buyer__last_name',\
+                    'purchase_order__buyer__customer__title',\
+                    'purchase_order__buyer__customer__address__street_address',\
+                    'purchase_order__buyer__customer__address__district',\
+                    'purchase_order__buyer__customer__address__pin',\
+                    'purchase_order__buyer__customer__address__province').\
+                filter(is_cleared=1, voucher=value['voucher_no'],
+                session_id=value['session_id'])[0]
                 temp.append(suspense['voucher'])
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=suspense['voucher'],
+                    session_id=suspense['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
                 temp.append(suspense['purchase_order__date_time'])
                 voucherid = VoucherId.objects.values(\
                     'purchase_order_of_session').filter(\
@@ -1594,6 +1603,10 @@ def tada_register(request):
                 clear_date__range=(start_date,end_date))
             result=[]
             for voucher in suspense_cleared:
+                tada_check = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                session=voucher['session_id'])
+                if not tada_check:
+                    continue
                 temp=[]
                 cleared_voucher_no = SuspenseClearedRegister.objects.values(
                     'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
@@ -1715,11 +1728,12 @@ def tada_othercharges_register(request):
             end_date = request.POST['end_date']
             suspense_cleared = SuspenseClearance.objects.values('voucher_no',
                 'session_id', 'clear_date', 'boring_charge_external',
-                'labour_charge').filter(
+                'labour_charge', 'work_charge', 'car_taxi_charge').filter(
                 clear_date__range=(start_date,end_date))
             result=[]
             for voucher in suspense_cleared:
                 temp=[]
+                temp.append(voucher['voucher_no'])
                 cleared_voucher_no = SuspenseClearedRegister.objects.values(
                     'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
                     session_id=voucher['session_id'])[0]
@@ -1797,6 +1811,7 @@ def tada_othercharges_register(request):
                 temp.append(tada_amount['tada_amount__sum'])
                 temp.append(voucher['boring_charge_external'])
                 temp.append(voucher['labour_charge'])
+                temp.append(voucher['car_taxi_charge'])
                 try:
                     transport = Transport.objects.values('total').filter(
                         voucher_no=voucher['voucher_no'],
@@ -1805,13 +1820,16 @@ def tada_othercharges_register(request):
                 except:
                     transport_total = 0
                 temp.append(transport_total)
+                temp.append(voucher['work_charge'])
                 if tada_amount['tada_amount__sum']:
                     grand_total = int(voucher['boring_charge_external']) +\
                     int(voucher['labour_charge']) + int(transport_total) +\
-                    int(tada_amount['tada_amount__sum'])
+                    int(tada_amount['tada_amount__sum']) + voucher['work_charge'] +\
+                    voucher['car_taxi_charge']
                 else:
                     grand_total = int(voucher['boring_charge_external']) +\
-                    int(voucher['labour_charge']) + int(transport_total)
+                    int(voucher['labour_charge']) + int(transport_total) +\
+                    voucher['work_charge'] + voucher['car_taxi_charge']
                 temp.append(grand_total)
                 result.append(temp)
             request_status = request_notify()

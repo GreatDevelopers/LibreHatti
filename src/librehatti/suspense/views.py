@@ -378,6 +378,7 @@ def with_transport(request):
         rowspan = rowspan + 1
     if suspenseclearance['boring_charge_internal'] != 0:
         rowspan = rowspan + 1
+    sus_cleared_reg = SuspenseClearedRegister.objects.filter(voucher_no=number, session_id=session)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
@@ -392,7 +393,8 @@ def with_transport(request):
                 'othercharge':othercharge, 'total':total,\
                 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid, 'rowspan':rowspan, 'payment':voucherid})
+                'charges':voucherid, 'rowspan':rowspan, 'payment':voucherid,
+                'sus_cleared_reg':sus_cleared_reg})
 
 
 @login_required
