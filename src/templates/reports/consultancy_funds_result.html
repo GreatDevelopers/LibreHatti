@@ -19,20 +19,13 @@
     <h2>Consultancy Funds</h2>
     <div class='daily-report-list'>
     <table  border="1">
-    <p><center>Description of {% for cat in category_name %}
-    {% if forloop.last %}
-    {{cat.name}}
-    {% else %}
-    {{cat.name}},
-    {% endif %}
-    {% endfor %} samples From {{start_date}} to {{end_date}} </center></p>
+    <p><center>Description of {{category_name}} samples From {{start_date}} to {{end_date}} </center></p>
 
                 <tr>
                     <th>S.No.</th>
                     <th>Receipt No.</th>
                     <th>Dated</th>
                     <th>Name</th>
-                    <th>Material</th>
                     <th>Consultant Share</th>
                 </tr>
                 {% for value in result %}
@@ -43,7 +36,6 @@
                     <td>{{ value.2}}
                     {{ value.3 }}
                     {{value.4}}</td>
-                    <td>{{value.6}}</td>
                     <td align="right">{{ value.5 }}</td>
                     </tr>
                 {% endfor %}

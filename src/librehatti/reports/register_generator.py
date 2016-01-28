@@ -10,7 +10,7 @@ from django.views.generic import View
 
 from django.shortcuts import render
 
-from helper import get_query
+from .helper import get_query
 
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem

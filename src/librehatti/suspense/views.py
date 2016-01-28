@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from django.db.models import Sum, Max
 
-from models import SuspenseClearance
-from models import TaDa
+from .models import SuspenseClearance
+from .models import TaDa
 
 from django.http import  HttpResponseRedirect, HttpResponse
 
@@ -127,9 +127,11 @@ def add_distance(request):
                 filter(purchase_order=purchase_order_id).\
                 filter(session=session_id).distinct()
             for voucher_val in voucher:
-                suspense_check = SuspenseOrder.objects.filter(
-                voucher=voucher_val['voucher_no'],session_id = financial_obj)
-                if not suspense_check:
+                try:
+                    SuspenseOrder.objects.filter(\
+                        voucher=voucher_val['voucher_no'],\
+                        session_id = financial_obj)
+                except:
                     suspense_obj = SuspenseOrder(voucher=voucher_val['voucher_no'],\
                         purchase_order=purchase_order_obj, session_id=financial_obj)
                     suspense_obj.save()
