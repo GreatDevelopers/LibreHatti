@@ -28,6 +28,7 @@
                     <th>Name and Address</th>
                     <th>Testing Staff</th>
                     <th>Total amount</th>
+                    <th>Signature</th>
                 </tr>
                 {% for value in result %}
                 <tr>
@@ -40,10 +41,16 @@
                     <td>
                     {% for staff_name in value.5 %}
                     {{staff_name.name}}
-                    {%if not forloop.last%},{%endif%}
+                    {%if not forloop.last%}<br>{%endif%}
                     {% endfor %}
                     </td>
                     <td>{{ value.6 }}</td>
+                    <td>
+                    {% for staff_name in value.5 %}
+                    <br><br>
+                    .............................................
+                    {% endfor %}
+                    </td>
                 </tr>
                 {% endfor %}
        </table>

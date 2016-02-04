@@ -1690,7 +1690,8 @@ def tada_register(request):
                     for testing_staff in testing_staff_list:
                         testing_staff_details = Staff.objects.filter(\
                             code=testing_staff).values('name')[0]
-                        list_staff.append(testing_staff_details)
+                        if not testing_staff_details in list_staff:
+                            list_staff.append(testing_staff_details)
                 temp.append(list_staff)
                 tada_amount = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
                     session=voucher['session_id']).aggregate(Sum('tada_amount'))
