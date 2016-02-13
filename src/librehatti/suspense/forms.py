@@ -1,11 +1,11 @@
 from django.forms import ModelForm, TextInput
 
-from models import SuspenseClearance
-from models import TaDa
-from models import Staff
-from models import SuspenseOrder
-from models import QuotedSuspenseOrder
-from models import CarTaxiAdvance
+from .models import SuspenseClearance
+from .models import TaDa
+from .models import Staff
+from .models import SuspenseOrder
+from .models import QuotedSuspenseOrder
+from .models import CarTaxiAdvance
 
 from librehatti.catalog.models import Category
 
