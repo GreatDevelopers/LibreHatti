@@ -380,8 +380,8 @@ def payment_register(request):
             'totalplusdelivery','purchase_order__tds','amount_received'\
             ,'purchase_order__buyer__customer__user__email',\
             'purchase_order__buyer__customer__telephone',\
-            'purchase_order__buyer__customer__company')
-            #return HttpResponse(bill_object)
+            'purchase_order__buyer__customer__company',
+            'purchase_order__delivery_address').order_by('id')
             servicetax = 0
             Heducationcess = 0
             educationcess = 0
@@ -391,7 +391,6 @@ def payment_register(request):
                 voucher_object = VoucherId.objects.\
                 filter(purchase_order_id = temp_value['purchase_order__id']).\
                 values('purchase_order_of_session','voucher_no').distinct()
-                #return HttpResponse(voucher_object)
                 for value in voucher_object:
                     purchase_order_of_session=value['purchase_order_of_session']
                 temp_list.append(purchase_order_of_session)
@@ -423,8 +422,7 @@ def payment_register(request):
                        material_list = material_list + ', ' +\
                        item['item__category__name']
                 temp_list.append(material_list)
-                temp_list.append(temp_value[\
-                'purchase_order__buyer__customer__address__street_address'])
+                temp_list.append(temp_value['purchase_order__delivery_address'])
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__telephone'])
                 temp_list.append(temp_value[\
