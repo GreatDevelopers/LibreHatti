@@ -1173,6 +1173,26 @@ def material_report(request):
                 'purchase_order__buyer__customer__telephone',
                 'voucherid__purchase_order_of_session',
                 'item__category__name')
+            
+            total_amount_sum = 0
+            tax_list = Surcharge.objects.all().order_by('id')
+            for value in purchase_item:
+                applied_tax_list = []
+                for tax in tax_list:
+                    try:
+                        taxes_applied = TaxesApplied.objects.filter(purchase_order=
+                        value['purchase_order_id'], surcharge_id=tax.id)[0]
+                        applied_tax_list.append(taxes_applied.tax)
+                    except:
+                        applied_tax_list.append('N.A')
+                    
+                value['applied_tax_list'] = applied_tax_list
+                
+                total_tax = TaxesApplied.objects.filter(purchase_order=
+                value['purchase_order_id']).aggregate(Sum('tax'))
+                value['total_amount'] = total_tax['tax__sum'] + value['price']
+                total_amount_sum = value['total_amount'] + total_amount_sum
+            
             category_name = Category.objects.values('name').filter(id__in=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
@@ -1183,7 +1203,8 @@ def material_report(request):
             return render(request, 'reports/material_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
-                          'request':request_status, 'back_link':back_link})
+                          'request':request_status, 'back_link':back_link,
+                          'total_amount_sum':total_amount_sum, 'tax_list':tax_list})
         else:
             form = ConsultancyFunds(request.POST)
             date_form = DateRangeSelectionForm(request.POST)
@@ -1449,6 +1470,24 @@ def lab_report(request):
                 'purchase_order__buyer__customer__telephone',
                 'voucherid__purchase_order_of_session',
                 'item__category__name')
+            total_amount_sum = 0
+            tax_list = Surcharge.objects.all().order_by('id')
+            for value in purchase_item:
+                applied_tax_list = []
+                for tax in tax_list:
+                    try:
+                        taxes_applied = TaxesApplied.objects.filter(purchase_order=
+                        value['purchase_order_id'], surcharge_id=tax.id)[0]
+                        applied_tax_list.append(taxes_applied.tax)
+                    except:
+                        applied_tax_list.append('N.A')
+                    
+                value['applied_tax_list'] = applied_tax_list
+                
+                total_tax = TaxesApplied.objects.filter(purchase_order=
+                value['purchase_order_id']).aggregate(Sum('tax'))
+                value['total_amount'] = total_tax['tax__sum'] + value['price']
+                total_amount_sum = value['total_amount'] + total_amount_sum
             category_name = Category.objects.values('name').filter(id=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
@@ -1459,7 +1498,8 @@ def lab_report(request):
             return render(request, 'reports/lab_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
-                          'request':request_status, 'back_link':back_link})
+                          'request':request_status, 'back_link':back_link,
+                          'total_amount_sum':total_amount_sum, 'tax_list':tax_list})
         else:
             form = LabReportForm(request.POST)
             date_form = DateRangeSelectionForm(request.POST)
