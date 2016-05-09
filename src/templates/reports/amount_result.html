@@ -1,0 +1,72 @@
+ {% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}
+    <title>Register</title>
+    {% endblock %}
+
+</head>
+<body>
+  {% block content %}
+
+  <div class = 'list-registers'>
+   <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Printable Version"></a>
+            </div>
+    <h2><center>Register</center></h2>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Session</th>
+                    <th>Receipt No.</th>
+                    <th>Receipt Date</th>
+                    <th>Client Name</th>
+                    <th>Client Address</th>
+                    <th>Site</th>
+                    <th>Material</th>
+                    <th>Amount</th>
+
+                </tr>
+                {% for value in voucherid %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ value.session_id }}</td>
+                    <td>{{ value.receipt_no_of_session }}</td>
+                    <td>{{ value.receipt_date }}</td>
+                    <td>
+                    {% if value.purchase_order__buyer__customer__title %}
+                    {{ value.purchase_order__buyer__customer__title }}
+                    {% else %}
+                    {{value.purchase_order__buyer__first_name}} {{value.purchase_order__buyer__last_name}}
+                    {% endif %}</td>
+                    <td>{{ value.purchase_order__buyer__customer__address__street_address}}, {{ value.purchase_order__buyer__customer__address__district}}, {{ value.purchase_order__buyer__customer__address__province}}
+                    {% if value.purchase_order__buyer__customer__address__pin != 'None' %}
+                    -{{ value.purchase_order__buyer__customer__address__pin}}
+                    {% endif %}
+                    </td>
+                    <td>{{ value.purchase_order__delivery_address }}</td>
+                    <td>
+                    {% for val in value.material %}
+                    {% if not forloop.last %}
+                    {{ val }},
+                    {% else %}
+                    {{val}}
+                    {% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>{{ value.purchase_order__bill__amount_received }}</td>
+                    </tr>
+                {% endfor %}
+
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>

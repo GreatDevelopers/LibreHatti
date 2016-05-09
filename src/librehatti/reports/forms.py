@@ -63,7 +63,7 @@ class ConsultancyFunds(forms.Form):
         sub_category_name = Category.objects.values_list('name', flat=True)
         sub_category_choices = [('', '--------')] + [(id, name) for id,\
         name in itertools.izip(sub_category_id, sub_category_name)]
-        sub_category = forms.ChoiceField(sub_category_choices,\
+        sub_category = forms.MultipleChoiceField(sub_category_choices,\
             label=_SUB_CATEGORY)
     except:
         pass
@@ -71,6 +71,7 @@ class ConsultancyFunds(forms.Form):
         super(ConsultancyFunds, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
         self.fields['sub_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+        self.fields['sub_category'].widget.attrs['size']='15'
 
 
 class ClientForm(forms.Form):
@@ -162,11 +163,14 @@ class PaidTaxesForm(forms.Form):
     paid_service_tax = forms.IntegerField(initial=0)
     paid_education_tax = forms.IntegerField(initial=0)
     paid_higher_education_tax = forms.IntegerField(initial=0)
+    paid_swachh_bharat_cess = forms.IntegerField(initial=0)
     def __init__(self, *args, **kwargs):
         super(PaidTaxesForm, self).__init__(*args, **kwargs)
         self.fields['paid_service_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
         self.fields['paid_higher_education_tax'].widget.attrs={\
+        'class':'form-control'}
+        self.fields['paid_swachh_bharat_cess'].widget.attrs={\
         'class':'form-control'}
 
 
@@ -184,3 +188,17 @@ class LabReportForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LabReportForm, self).__init__(*args, **kwargs)
         self.fields['parent_category'].widget.attrs={'class':'btn btn-default dropdown-toggle'}
+
+
+class AmountForm(forms.Form):
+    """
+    A form for month and year selection
+    """
+    required_css_class = 'required'
+    error_css_class = 'error'
+
+    amount = forms.IntegerField()
+    
+    def __init__(self, *args, **kwargs):
+        super(AmountForm, self).__init__(*args, **kwargs)
+        self.fields['amount'].widget.attrs={'class':'form-control'}

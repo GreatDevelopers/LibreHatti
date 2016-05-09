@@ -2,6 +2,11 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _PASSWORD
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
@@ -50,7 +55,7 @@ MEDIA_URL = ''
 
 STATIC_ROOT = ''
 
-STATIC_URL = '/static/'
+STATIC_URL = '/librehatti/static/'
 
 STATICFILES_DIRS = (
     '/path/to/LibreHatti/static',
@@ -88,7 +93,7 @@ ROOT_URLCONF = 'librehatti.urls'
 WSGI_APPLICATION = 'librehatti.wsgi.application'
 
 TEMPLATE_DIRS = (
-    'templates',
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -100,6 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'suit',
     'mptt',
+    'ajax_select',
     'django.contrib.admin',
     'librehatti.catalog',
     'useraccounts',

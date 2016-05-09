@@ -1,0 +1,61 @@
+{% extends 'base_register.html' %}
+{% load i18n %} {% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block title %}
+    <title>TADA Register</title>
+{% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class = 'list-registers'>
+    <div id='toggle-option'>
+            <a id = 'toggle_button'>
+                <input type="button" class="btn btn-info btn-large" 
+                name="" value="Show Printable Version"></a>
+            </div>
+    <h2><center>TADA Register</center></h2>
+    <div class='daily-report-list'>
+        <table border="1px">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Suspense Clearance No.</th>
+                    <th>Clear Date</th>
+                    <th>Receipt No.</th>
+                    <th>Receipt Dated</th>
+                    <th>Name and Address</th>
+                    <th>Testing Staff</th>
+                    <th>Total amount</th>
+                    <th>Signature</th>
+                </tr>
+                {% for value in result %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                    <td>{{ value.2 }}</td>
+                    <td>{{ value.3 }}</td>
+                    <td>{{ value.4 }}</td>
+                    <td>
+                    {% for staff_name in value.5 %}
+                    {{staff_name.name}}
+                    {%if not forloop.last%}<br>{%endif%}
+                    {% endfor %}
+                    </td>
+                    <td>{{ value.6 }}</td>
+                    <td>
+                    {% for staff_name in value.5 %}
+                    <br><br>
+                    .............................................
+                    {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+       </table>
+   </div>
+</div>
+ {% endblock %}
+</body>
+</html>

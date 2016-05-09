@@ -29,9 +29,9 @@
                 <th>Status</th>
             </tr>
             {% for temp_var in listed %}
-            {% for voucher_var,suspense_var in temp_var %}
             <tr>
                 <td>{{ forloop.counter }}</td>
+            {% for voucher_var,suspense_var in temp_var %}
                 <td>{{ suspense_var.voucher_no }}</td>
                 <td>{{ voucher_var.purchase_order__buyer__first_name }} {{ voucher_var.purchase_order__buyer__last_name }}</td>
                 <td>{{voucher_var.purchase_order__buyer__customer__address__street_address}},{{voucher_var.purchase_order__buyer__customer__address__district}},{{voucher_var.purchase_order__buyer__customer__address__province}}</td>

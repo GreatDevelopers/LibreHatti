@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from librehatti.reports.forms import DailyReportForm
 from librehatti.reports.forms import ConsultancyFunds
 from librehatti.reports.forms import DateRangeSelectionForm
-from librehatti.reports.forms import MonthYearForm
+from librehatti.reports.forms import MonthYearForm, AmountForm
 from librehatti.reports.forms import PaidTaxesForm, LabReportForm
 
 from datetime import datetime
@@ -26,8 +26,9 @@ from librehatti.catalog.models import ModeOfPayment
 
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.suspense.models import Transport
-from librehatti.suspense.models import TaDa
+from librehatti.suspense.models import TaDa, Staff
 from librehatti.suspense.models import SuspenseClearance
+from librehatti.suspense.models import SuspenseClearedRegister
 
 from librehatti.voucher.models import CalculateDistribution
 from librehatti.voucher.models import VoucherId, VoucherTotal
@@ -147,12 +148,12 @@ def consultancy_funds_report(request):
         form = ConsultancyFunds(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
         if form.is_valid() and date_form.is_valid():
-            category = request.POST['sub_category']
+            category = form.cleaned_data['sub_category']
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             voucher_object = VoucherId.objects.\
             filter(purchase_order__date_time__range = (start_date,end_date)).\
-            filter(purchased_item__item__category = category, is_special=0).\
+            filter(purchased_item__item__category__in = category, is_special=0).\
             values('purchase_order_of_session','voucher_no',\
                 'session_id',\
             'purchase_order__date_time',\
@@ -163,7 +164,8 @@ def consultancy_funds_report(request):
             'purchase_order__buyer__customer__address__district',\
             'purchase_order__buyer__customer__address__province',\
             'purchase_order__buyer__customer__title',\
-            'purchased_item__item__category').distinct()
+            'purchased_item__item__category',
+            'purchased_item__item__category__name').distinct()
             temp_list = []
             result = []
             consultanttotal = 0
@@ -184,14 +186,12 @@ def consultancy_funds_report(request):
                 values('consultancy_asset').get(voucher_no=
                     temp_value['voucher_no'],session_id=temp_value['session_id'])
                 temp_list.append(consultancy_var['consultancy_asset'])
+                temp_list.append(temp_value['purchased_item__item__category__name'])
                 consultanttotal = consultanttotal +\
                 consultancy_var['consultancy_asset']
                 result.append(temp_list)
                 temp_list = []
-            category_name = Category.objects.filter(id=category).values('name')
-            for value in category_name:
-                category_value = value['name']
-
+            category_name = Category.objects.filter(id__in=category).values('name')
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
@@ -199,7 +199,7 @@ def consultancy_funds_report(request):
             return render(request, 'reports/consultancy_funds_result.html',\
              {'result':result, 'back_link':back_link,\
                 'start_date':start_date, 'end_date':end_date,\
-                'sum':sum, 'category_name':category_value,\
+                'sum':sum, 'category_name':category_name,\
                 'request':request_status, 'consultanttotal':consultanttotal})
         else:
             form = ConsultancyFunds(request.POST)
@@ -380,8 +380,8 @@ def payment_register(request):
             'totalplusdelivery','purchase_order__tds','amount_received'\
             ,'purchase_order__buyer__customer__user__email',\
             'purchase_order__buyer__customer__telephone',\
-            'purchase_order__buyer__customer__company')
-            #return HttpResponse(bill_object)
+            'purchase_order__buyer__customer__company',
+            'purchase_order__delivery_address').order_by('id')
             servicetax = 0
             Heducationcess = 0
             educationcess = 0
@@ -391,7 +391,6 @@ def payment_register(request):
                 voucher_object = VoucherId.objects.\
                 filter(purchase_order_id = temp_value['purchase_order__id']).\
                 values('purchase_order_of_session','voucher_no').distinct()
-                #return HttpResponse(voucher_object)
                 for value in voucher_object:
                     purchase_order_of_session=value['purchase_order_of_session']
                 temp_list.append(purchase_order_of_session)
@@ -423,8 +422,7 @@ def payment_register(request):
                        material_list = material_list + ', ' +\
                        item['item__category__name']
                 temp_list.append(material_list)
-                temp_list.append(temp_value[\
-                'purchase_order__buyer__customer__address__street_address'])
+                temp_list.append(temp_value['purchase_order__delivery_address'])
                 temp_list.append(temp_value[\
                 'purchase_order__buyer__customer__telephone'])
                 temp_list.append(temp_value[\
@@ -492,25 +490,34 @@ def suspense_clearance_register(request):
         if form.is_valid():
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
-            suspenseclearance = SuspenseClearance.objects.values('voucher_no').\
-            filter(clear_date__range=(start_date,end_date))
-            suspenseorder = SuspenseOrder.objects.values('voucher',\
-                'session_id', 'purchase_order', 'purchase_order__date_time',\
-                'purchase_order__buyer__first_name',\
-                'purchase_order__buyer__last_name',\
-                'purchase_order__buyer__customer__title',\
-                'purchase_order__buyer__customer__address__street_address',\
-                'purchase_order__buyer__customer__address__district',\
-                'purchase_order__buyer__customer__address__pin',\
-                'purchase_order__buyer__customer__address__province').\
-            filter(is_cleared=1,\
-            voucher__in=suspenseclearance)
+            suspenseclearance = SuspenseClearance.objects.values('voucher_no',
+            'session_id').filter(clear_date__range=(start_date,end_date))
             distribution = Distribution.objects.values('college_income',\
                 'admin_charges').filter()[0]
             result = []
             temp = []
-            for suspense in suspenseorder:
+            for value in suspenseclearance:
+                suspense = SuspenseOrder.objects.filter(is_cleared=1,
+                voucher=value['voucher_no'],
+                session_id=value['session_id'])
+                if not suspense:
+                    continue
+                suspense = SuspenseOrder.objects.values('voucher',\
+                    'session_id', 'purchase_order', 'purchase_order__date_time',\
+                    'purchase_order__buyer__first_name',\
+                    'purchase_order__buyer__last_name',\
+                    'purchase_order__buyer__customer__title',\
+                    'purchase_order__buyer__customer__address__street_address',\
+                    'purchase_order__buyer__customer__address__district',\
+                    'purchase_order__buyer__customer__address__pin',\
+                    'purchase_order__buyer__customer__address__province').\
+                filter(is_cleared=1, voucher=value['voucher_no'],
+                session_id=value['session_id'])[0]
                 temp.append(suspense['voucher'])
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=suspense['voucher'],
+                    session_id=suspense['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
                 temp.append(suspense['purchase_order__date_time'])
                 voucherid = VoucherId.objects.values(\
                     'purchase_order_of_session').filter(\
@@ -600,22 +607,26 @@ def suspense_clearance_register(request):
                 except:
                     tada_value = 0
                     temp.append(tada_value)
-                suspensecl = SuspenseClearance.objects.values(\
-                    'work_charge', 'labour_charge', 'car_taxi_charge',\
-                    'boring_charge_external', 'boring_charge_internal').get(\
-                    voucher_no=suspense['voucher'],\
-                    session_id=suspense['session_id'])
-                other_charges = suspensecl['labour_charge'] +\
-                suspensecl['car_taxi_charge'] +\
-                suspensecl['boring_charge_external']
-                temp.append(suspensecl['work_charge'])
-                temp.append(other_charges)
-                temp.append(suspensecl['boring_charge_internal'])
-                grand_total = caldistribute['total'] + trans_value + tada_value\
-                + suspensecl['work_charge'] + other_charges +\
-                suspensecl['boring_charge_internal']
-                temp.append(grand_total)
-                result.append(temp)
+                try:
+                    suspensecl = SuspenseClearance.objects.values(\
+                        'work_charge', 'labour_charge', 'car_taxi_charge',\
+                        'boring_charge_external', 'boring_charge_internal').get(\
+                        voucher_no=suspense['voucher'],\
+                        session_id=suspense['session_id'],\
+                        clear_date__range=(start_date,end_date))
+                    other_charges = suspensecl['labour_charge'] +\
+                    suspensecl['car_taxi_charge'] +\
+                    suspensecl['boring_charge_external']
+                    temp.append(suspensecl['work_charge'])
+                    temp.append(other_charges)
+                    temp.append(suspensecl['boring_charge_internal'])
+                    grand_total = caldistribute['total'] + trans_value + tada_value\
+                    + suspensecl['work_charge'] + other_charges +\
+                    suspensecl['boring_charge_internal']
+                    temp.append(grand_total)
+                    result.append(temp)
+                except:
+                    pass
                 temp = []
                 address = ''
             request_status = request_notify()
@@ -651,16 +662,26 @@ def servicetax_register(request):
             service = int(request.POST['paid_service_tax'])
             education = int(request.POST['paid_education_tax'])
             highereducation = int(request.POST['paid_higher_education_tax'])
+            sbc = int(request.POST['paid_swachh_bharat_cess'])
             service_tax = 0
+            service_tax_val = 0
             education_tax = 0
+            education_tax_val = 0
             heducation_tax = 0
+            heducation_tax_val = 0
+            sbc_tax = 0
+            sbc_tax_val = 0
             total = 0
             totalplustax = 0
             surcharge_list = []
-            surcharge = Surcharge.objects.values('value').filter(\
-                taxes_included=1)
-            for sur_charge in surcharge:
-                surcharge_list.append(sur_charge['value'])
+            taxes_name = TaxesApplied.objects.values('surcharge_name','surcharge_value').\
+            filter(purchase_order__date_time__month=month,
+                purchase_order__date_time__year=year).distinct()
+            # return HttpResponse(taxes_name)
+            # surcharge = Surcharge.objects.values('value').filter(\
+            #     taxes_included=1)
+            # for sur_charge in surcharge:
+            #     surcharge_list.append(sur_charge['value'])
             taxesapplied_obj = TaxesApplied.objects.values('purchase_order__id').\
             filter(purchase_order__date_time__month=month,
                 purchase_order__date_time__year=year)
@@ -675,8 +696,8 @@ def servicetax_register(request):
             filter(id__in=taxesapplied_obj).order_by('date_time', 'voucherid__receipt_no_of_session').\
             distinct()
             result = []
-            i=0
             for value in purchase_order:
+                i=0
                 temp = []
                 voucherid = VoucherId.objects.values(\
                     'purchase_order_of_session').filter(\
@@ -710,50 +731,56 @@ def servicetax_register(request):
                 temp.append(address)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']
-                taxesapplied = TaxesApplied.objects.values('tax').filter(\
-                    purchase_order=value['id'])
-                if int(month) < 6 and int(year) <= 2015:
-                    old_tax=1
-                    for taxvalue in taxesapplied:
-                        temp.append(taxvalue['tax'])
-                        if i == 0:
-                            service_tax = service_tax + taxvalue['tax']
-                            i = i + 1
-                        elif i == 1:
-                            education_tax = education_tax + taxvalue['tax']
-                            i = i + 1
-                        else:
-                            heducation_tax = heducation_tax + taxvalue['tax']
-                            i = 0
-                else:
-                    old_tax=0
-                    for taxvalue in taxesapplied:
-                        temp.append(taxvalue['tax'])
-                        service_tax = service_tax + taxvalue['tax']
+                for val in taxes_name:
+                    taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
+                        purchase_order=value['id'], surcharge_name=val['surcharge_name'])
+                    if taxesapplied:
+                        taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
+                            purchase_order=value['id'], surcharge_name=val['surcharge_name'])[0]
+                        if taxesapplied['surcharge_name'] == 'Service Tax':
+                            service_tax = service_tax + taxesapplied['tax']
+                            service_tax_val = taxesapplied['tax']
+                            temp.append(service_tax_val)
+                        elif taxesapplied['surcharge_name'] == 'Education Cess':
+                            education_tax = education_tax + taxesapplied['tax']
+                            education_tax_val = taxesapplied['tax']
+                            temp.append(education_tax_val)
+                        elif taxesapplied['surcharge_name'] == 'Higher Education Cess':
+                            heducation_tax = heducation_tax + taxesapplied['tax']
+                            heducation_tax_val = taxesapplied['tax']
+                            temp.append(heducation_tax_val)
+                        elif taxesapplied['surcharge_name'] == 'Swachh Bharat Cess(SBC)':
+                            sbc_tax = sbc_tax + taxesapplied['tax']
+                            sbc_tax_val = taxesapplied['tax']
+                            temp.append(sbc_tax_val)
+                    else:
+                        temp.append('0')
                 temp.append(value['bill__grand_total'])
                 totalplustax = totalplustax +\
                 value['bill__grand_total']
                 result.append(temp)
                 address = ''
-            total_taxes = service_tax + education_tax + heducation_tax
+            total_taxes = service_tax + education_tax + heducation_tax +sbc_tax
             servicenotpaid = service_tax - service
             educationnotpaid = education_tax - education
             heducationnotpaid = heducation_tax - highereducation
+            sbcnotpaid = sbc_tax - sbc
             total_taxes_not_paid = servicenotpaid + educationnotpaid +\
-            heducationnotpaid
+            heducationnotpaid + sbcnotpaid
             request_status = request_notify()
             month = calendar.month_name[int(month)]
             back_link=reverse('librehatti.reports.register.servicetax_register')
             return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
-            'year':year, 'total':total, 'surcharge_list':surcharge_list,\
+            'year':year, 'total':total, 'taxes_name':taxes_name,\
             'totalplustax':totalplustax, 'service_tax':service_tax,\
             'education_tax':education_tax, 'heducation_tax':heducation_tax,\
             'total_taxes':total_taxes, 'servicenotpaid':servicenotpaid,\
             'educationnotpaid':educationnotpaid, 'heducationnotpaid':\
             heducationnotpaid, 'total_taxes_not_paid':total_taxes_not_paid,\
             'service':service, 'education':education, 'highereducation':\
-            highereducation, 'back_link':back_link, 'old_tax':old_tax})
+            highereducation, 'back_link':back_link, 'sbc':sbc,
+            'sbc_tax':sbc_tax, 'sbcnotpaid':sbcnotpaid})
         else:
             form = MonthYearForm(request.POST)
             data_form = PaidTaxesForm(request.POST)
@@ -1120,7 +1147,7 @@ def material_report(request):
         form = ConsultancyFunds(request.POST)
         date_form = DateRangeSelectionForm(request.POST)
         if form.is_valid() and date_form.is_valid():
-            category = request.POST['sub_category']
+            category = form.cleaned_data['sub_category']
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             if start_date > end_date:
@@ -1132,7 +1159,7 @@ def material_report(request):
 
             purchase_item = PurchasedItem.objects.\
             filter(purchase_order__date_time__range=(start_date, end_date),\
-                item__category=category).values(\
+                item__category__in=category).values(\
                 'purchase_order_id', 'purchase_order__date_time', 'price',
                 'purchase_order__buyer__first_name',
                 'purchase_order__buyer__last_name',
@@ -1144,18 +1171,40 @@ def material_report(request):
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__buyer__email','purchase_order__delivery_address',\
                 'purchase_order__buyer__customer__telephone',
-                'voucherid__purchase_order_of_session')
-            category_name = Category.objects.values('name').filter(id=category)
+                'voucherid__purchase_order_of_session',
+                'item__category__name')
+            
+            total_amount_sum = 0
+            tax_list = Surcharge.objects.all().order_by('id')
+            for value in purchase_item:
+                applied_tax_list = []
+                for tax in tax_list:
+                    try:
+                        taxes_applied = TaxesApplied.objects.filter(purchase_order=
+                        value['purchase_order_id'], surcharge_id=tax.id)[0]
+                        applied_tax_list.append(taxes_applied.tax)
+                    except:
+                        applied_tax_list.append('N.A')
+                    
+                value['applied_tax_list'] = applied_tax_list
+                
+                total_tax = TaxesApplied.objects.filter(purchase_order=
+                value['purchase_order_id']).aggregate(Sum('tax'))
+                value['total_amount'] = total_tax['tax__sum'] + value['price']
+                total_amount_sum = value['total_amount'] + total_amount_sum
+            
+            category_name = Category.objects.values('name').filter(id__in=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
-                = (start_date,end_date),item__category=category).\
+                = (start_date,end_date),item__category__in=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
             back_link=reverse('librehatti.reports.register.material_report')
             return render(request, 'reports/material_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
-                          'request':request_status, 'back_link':back_link})
+                          'request':request_status, 'back_link':back_link,
+                          'total_amount_sum':total_amount_sum, 'tax_list':tax_list})
         else:
             form = ConsultancyFunds(request.POST)
             date_form = DateRangeSelectionForm(request.POST)
@@ -1419,7 +1468,26 @@ def lab_report(request):
                 'purchase_order__buyer__customer__address__province',
                 'purchase_order__buyer__email','purchase_order__delivery_address',\
                 'purchase_order__buyer__customer__telephone',
-                'voucherid__purchase_order_of_session')
+                'voucherid__purchase_order_of_session',
+                'item__category__name')
+            total_amount_sum = 0
+            tax_list = Surcharge.objects.all().order_by('id')
+            for value in purchase_item:
+                applied_tax_list = []
+                for tax in tax_list:
+                    try:
+                        taxes_applied = TaxesApplied.objects.filter(purchase_order=
+                        value['purchase_order_id'], surcharge_id=tax.id)[0]
+                        applied_tax_list.append(taxes_applied.tax)
+                    except:
+                        applied_tax_list.append('N.A')
+                    
+                value['applied_tax_list'] = applied_tax_list
+                
+                total_tax = TaxesApplied.objects.filter(purchase_order=
+                value['purchase_order_id']).aggregate(Sum('tax'))
+                value['total_amount'] = total_tax['tax__sum'] + value['price']
+                total_amount_sum = value['total_amount'] + total_amount_sum
             category_name = Category.objects.values('name').filter(id=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
@@ -1430,7 +1498,8 @@ def lab_report(request):
             return render(request, 'reports/lab_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
-                          'request':request_status, 'back_link':back_link})
+                          'request':request_status, 'back_link':back_link,
+                          'total_amount_sum':total_amount_sum, 'tax_list':tax_list})
         else:
             form = LabReportForm(request.POST)
             date_form = DateRangeSelectionForm(request.POST)
@@ -1443,3 +1512,427 @@ def lab_report(request):
         date_form = DateRangeSelectionForm()
         return render(request,'reports/lab_report_form.html', \
         {'form':form,'date_form':date_form,'request':request_status})
+
+
+@login_required
+def pending_clearance_register(request):
+    """
+    This view is used to display the suspense pending voucher registers
+    Argument:Http Request
+    Return:Render Suspense Pending Voucher Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspenseorder = SuspenseOrder.objects.values('voucher',\
+                'session_id', 'purchase_order', 'purchase_order__date_time',\
+                'purchase_order__buyer__first_name',\
+                'purchase_order__buyer__last_name',\
+                'purchase_order__buyer__customer__title',\
+                'purchase_order__buyer__customer__address__street_address',\
+                'purchase_order__buyer__customer__address__district',\
+                'purchase_order__buyer__customer__address__pin',\
+                'purchase_order__buyer__customer__address__province').\
+            filter(is_cleared=0, purchase_order__date_time__range=(start_date,end_date))
+            result = []
+            for suspense in suspenseorder:
+                temp = []
+                temp.append(suspense['voucher'])
+                temp.append(suspense['purchase_order__date_time'])
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order_of_session').filter(\
+                    voucher_no=suspense['voucher'],\
+                    session_id=suspense['session_id'])[0]
+                temp.append(voucherid['purchase_order_of_session'])
+                if suspense['purchase_order__buyer__first_name']:
+                    if suspense[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = suspense['purchase_order__buyer__first_name']\
+                        + suspense['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = suspense['purchase_order__buyer__first_name'] +\
+                        suspense['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if suspense[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        suspense['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        suspense['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        suspense[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        suspense[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                voucherid = VoucherId.objects.values(\
+                    'purchase_order__purchaseditem__item__category__name').\
+                filter(voucher_no=suspense['voucher'],\
+                    session_id=suspense['session_id'])[0]
+                temp.append(voucherid[\
+                    'purchase_order__purchaseditem__item__category__name'])
+                result.append(temp)
+                address = ''
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.pending_clearance_register')
+            return render(request,'reports/pending_clearance_result.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/pending_clearance_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/pending_clearance_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def tada_register(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspense_cleared = SuspenseClearance.objects.values('voucher_no',
+                'session_id', 'clear_date').filter(
+                clear_date__range=(start_date,end_date))
+            result=[]
+            for voucher in suspense_cleared:
+                tada_check = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                session=voucher['session_id'])
+                if not tada_check:
+                    continue
+                temp=[]
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
+                temp.append(voucher['clear_date'])
+                voucherid = VoucherId.objects.values('receipt_no_of_session',
+                    'receipt_date',
+                    'purchase_order__buyer__customer__address__street_address',
+                    'purchase_order__buyer__customer__address__district',
+                    'purchase_order__buyer__customer__address__pin',
+                    'purchase_order__buyer__customer__address__province',
+                    'purchase_order__buyer__customer__title',
+                    'purchase_order__buyer__first_name',
+                    'purchase_order__buyer__last_name').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(voucherid['receipt_no_of_session'])
+                temp.append(voucherid['receipt_date'])
+                address=''
+                if voucherid['purchase_order__buyer__first_name']:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = voucherid['purchase_order__buyer__first_name']\
+                        + voucherid['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = voucherid['purchase_order__buyer__first_name'] +\
+                        voucherid['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                tada_object = TaDa.objects.values('testing_staff').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id'])
+                list_staff = []
+                for staff in tada_object:
+                    testing_staff = staff['testing_staff']
+                    testing_staff_list = testing_staff.split(',')
+                    for testing_staff in testing_staff_list:
+                        testing_staff_details = Staff.objects.filter(\
+                            code=testing_staff).values('name')[0]
+                        if not testing_staff_details in list_staff:
+                            list_staff.append(testing_staff_details)
+                temp.append(list_staff)
+                tada_amount = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id']).aggregate(Sum('tada_amount'))
+                temp.append(tada_amount['tada_amount__sum'])
+                result.append(temp)
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.tada_register')
+            return render(request,'reports/tada_register.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/tada_register_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/tada_register_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def tada_othercharges_register(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = DateRangeSelectionForm(request.POST)
+        if form.is_valid():
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            suspense_cleared = SuspenseClearance.objects.values('voucher_no',
+                'session_id', 'clear_date', 'boring_charge_external',
+                'labour_charge', 'work_charge', 'car_taxi_charge').filter(
+                clear_date__range=(start_date,end_date))
+            result=[]
+            for voucher in suspense_cleared:
+                temp=[]
+                temp.append(voucher['voucher_no'])
+                cleared_voucher_no = SuspenseClearedRegister.objects.values(
+                    'suspenseclearednumber').filter(voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(cleared_voucher_no['suspenseclearednumber'])
+                temp.append(voucher['clear_date'])
+                voucherid = VoucherId.objects.values('receipt_no_of_session',
+                    'receipt_date',
+                    'purchase_order__buyer__customer__address__street_address',
+                    'purchase_order__buyer__customer__address__district',
+                    'purchase_order__buyer__customer__address__pin',
+                    'purchase_order__buyer__customer__address__province',
+                    'purchase_order__buyer__customer__title',
+                    'purchase_order__buyer__first_name',
+                    'purchase_order__buyer__last_name').filter(
+                    voucher_no=voucher['voucher_no'],
+                    session_id=voucher['session_id'])[0]
+                temp.append(voucherid['receipt_no_of_session'])
+                temp.append(voucherid['receipt_date'])
+                address=''
+                if voucherid['purchase_order__buyer__first_name']:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address = voucherid['purchase_order__buyer__first_name']\
+                        + voucherid['purchase_order__buyer__last_name']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address = voucherid['purchase_order__buyer__first_name'] +\
+                        voucherid['purchase_order__buyer__last_name'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                else:
+                    if voucherid[\
+                    'purchase_order__buyer__customer__address__pin'] == None:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title']\
+                        + ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                    else:
+                        address =\
+                        voucherid['purchase_order__buyer__customer__title'] +\
+                        ', ' +\
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__street_address']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__district']\
+                        + ', ' + \
+                        voucherid[\
+                        'purchase_order__buyer__customer__address__province']
+                temp.append(address)
+                tada_amount = TaDa.objects.filter(voucher_no=voucher['voucher_no'],
+                    session=voucher['session_id']).aggregate(Sum('tada_amount'))
+                temp.append(tada_amount['tada_amount__sum'])
+                temp.append(voucher['boring_charge_external'])
+                temp.append(voucher['labour_charge'])
+                temp.append(voucher['car_taxi_charge'])
+                try:
+                    transport = Transport.objects.values('total').filter(
+                        voucher_no=voucher['voucher_no'],
+                        session_id=voucher['session_id'])[0]
+                    transport_total = transport['total']
+                except:
+                    transport_total = 0
+                temp.append(transport_total)
+                temp.append(voucher['work_charge'])
+                if tada_amount['tada_amount__sum']:
+                    grand_total = int(voucher['boring_charge_external']) +\
+                    int(voucher['labour_charge']) + int(transport_total) +\
+                    int(tada_amount['tada_amount__sum']) + voucher['work_charge'] +\
+                    voucher['car_taxi_charge']
+                else:
+                    grand_total = int(voucher['boring_charge_external']) +\
+                    int(voucher['labour_charge']) + int(transport_total) +\
+                    voucher['work_charge'] + voucher['car_taxi_charge']
+                temp.append(grand_total)
+                result.append(temp)
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.tada_othercharges_register')
+            return render(request,'reports/tada_othercharges.html',\
+            {'result':result, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = DateRangeSelectionForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/tada_othercharges_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = DateRangeSelectionForm()
+        request_status = request_notify()
+        return render(request,'reports/tada_othercharges_form.html', \
+        {'form':form,'request':request_status})
+
+
+@login_required
+def client_details_according_to_amount(request):
+    """
+    This view is used to display the TADA registers
+    Argument:Http Request
+    Return:Render TADA Register
+    """
+    if request.method == 'POST':
+        form = AmountForm(request.POST)
+        if form.is_valid():
+            amount = request.POST['amount']
+            bill = Bill.objects.values('purchase_order').filter(amount_received__gte=amount)
+            voucherid = VoucherId.objects.filter(purchase_order__in=bill).values('receipt_no_of_session',
+                'receipt_date', 'purchase_order_of_session', 'session_id',
+                'purchase_order__bill__amount_received',
+                'purchase_order__date_time', 'purchase_order__buyer__first_name',
+                'purchase_order__buyer__last_name',
+                'purchase_order__buyer__customer__title',
+                'purchase_order__delivery_address',
+                'purchase_order__buyer__customer__address__district',
+                'purchase_order__buyer__customer__address__province',
+                'purchase_order__buyer__customer__address__pin',
+                'purchase_order__buyer__customer__address__street_address',
+                'purchase_order_id', 'session_id').distinct().order_by('session_id',
+                'receipt_no_of_session')
+            for value in voucherid:
+                voucherid2 = VoucherId.objects.filter(purchase_order=value['purchase_order_id']
+                    ).values_list('purchase_order__purchaseditem__item__category__name',
+                    flat=True)
+                value['material'] = voucherid2
+
+            request_status = request_notify()
+            back_link=reverse('librehatti.reports.register.client_details_according_to_amount')
+            return render(request,'reports/amount_result.html',\
+            {'voucherid':voucherid, 'request':request_status,\
+            'back_link':back_link})
+            
+        else:
+            form = AmountForm(request.POST)
+            request_status = request_notify()
+            return render(request,'reports/amount_form.html', \
+            {'form':form,'request':request_status})
+    else:
+        form = AmountForm()
+        request_status = request_notify()
+        return render(request,'reports/amount_form.html', \
+        {'form':form,'request':request_status})
