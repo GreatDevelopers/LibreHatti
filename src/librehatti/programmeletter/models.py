@@ -1,8 +1,5 @@
 from django.db import models
 
-from librehatti.suspense.models import Staff
-from librehatti.suspense.models import Vehicle
-
 
 class TeamName(models.Model):
     """Model for team"""
@@ -14,7 +11,7 @@ class TeamName(models.Model):
 class StaffInTeam(models.Model):
     """Model for staff in team"""
     team_name = models.ForeignKey(TeamName)
-    staff = models.ForeignKey(Staff)
+    staff = models.ForeignKey('suspense.Staff')
     def __unicode__(self):
         return '%s' % (self.staff) + ' - ' '%s' % (self.team_name)
 
@@ -34,6 +31,6 @@ class LetterData(models.Model):
     site = models.CharField(max_length=500)
     date = models.DateField()
     time = models.TimeField()
-    vehicle = models.ForeignKey(Vehicle, default=1)
+    vehicle = models.ForeignKey('suspense.Vehicle', default=1)
     def __unicode__(self):
         return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' % (self.team_name)

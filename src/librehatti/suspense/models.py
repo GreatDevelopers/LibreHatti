@@ -1,13 +1,5 @@
 from django.db import models
 import datetime
-
-from librehatti.voucher.models import VoucherId
-from librehatti.voucher.models import FinancialSession
-
-from librehatti.bills.models import QuotedOrder
-
-from librehatti.catalog.models import PurchaseOrder, Category
-
 import simplejson
 
 
@@ -16,8 +8,8 @@ class SuspenseOrder(models.Model):
     Stores order with over head costs.
     """
     voucher = models.IntegerField()
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    session_id = models.ForeignKey(FinancialSession)
+    purchase_order = models.ForeignKey('catalog.PurchaseOrder')
+    session_id = models.ForeignKey('voucher.FinancialSession')
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
@@ -28,7 +20,7 @@ class SuspenseClearance(models.Model):
     """
     Stores clearance of suspense orders.
     """
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
     voucher_no = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
@@ -73,7 +65,7 @@ class Staff(models.Model):
     position = models.ForeignKey(StaffPosition)
     seniority_credits = models.IntegerField()
     always_included = models.BooleanField(default=True)
-    lab = models.ForeignKey(Category)
+    lab = models.ForeignKey('catalog.Category')
     email =models.EmailField(blank=True)
 
     class Meta:
@@ -137,7 +129,7 @@ class Transport(models.Model):
     date = models.CharField(blank=True, max_length=600)
     total = models.IntegerField()
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
     '''def save(self, *args, **kwargs):
 
         # Now decode the kilometers
@@ -163,18 +155,18 @@ class Transport(models.Model):
 class TransportBillOfSession(models.Model):
     transport = models.ForeignKey(Transport)
     transportbillofsession = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
 
 
 class SuspenseClearedRegister(models.Model):
     suspenseclearednumber = models.IntegerField()
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
 
 
 class CarTaxiAdvance(models.Model):
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
     spent = models.IntegerField()
     advance = models.IntegerField()
     balance = models.IntegerField()

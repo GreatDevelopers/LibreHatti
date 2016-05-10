@@ -1,0 +1,86 @@
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+.form-heading{
+	color: #135375;
+	font-size: 25px;
+	font-family: 'Open Sans Fonts', 'sans-serif';
+	text-align: center;
+	margin-top: 25px;
+}
+
+a{
+	text-decoration: none;
+}
+
+.form-elements{
+	margin-top:50px;
+}
+
+
+input,select{
+	margin-top:10px;
+	margin-bottom:20px;
+	border:none;
+}
+
+input[type=text], select{
+	width: 100%;
+	height:35px;
+	text-indent: 5px;
+	font-family: 'Open Sans', 'sans-serif';
+	color: #34495e;
+}
+
+input[type=number], select{
+	width: 100%;
+	height:35px;
+	text-indent: 5px;
+	font-family: 'Open Sans', 'sans-serif';
+	color: #34495e;
+}
+
+.button-class{
+	background-color:rgba(32, 120, 153, 1);
+	color:#fafafa;	
+	height: 40px;
+	width: 100%;
+	border: none;
+}
+
+.button-class:hover{
+	border-bottom:3px solid #06b9fb;
+	cursor:pointer;
+}
+
+label{
+	font-family: 'Open Sans', 'sans-serif';
+	font-size: 14px;
+	color: #135375;
+	margin-bottom: 0px;
+}
+
+ul{
+	list-style-type: none;
+}
+
+.client-form{
+	float:left;
+	padding-right: 60px;
+}
+
+p.error input, p.error select {
+    border: 2px #F87E7A solid;
+    background-color: #F5DDDD;
+}
+tr.error input, tr.error select {
+    border: 2px #F87E7A solid;
+    background-color: #F5DDDD;
+}
+
+option{
+	text-align: left;
+}

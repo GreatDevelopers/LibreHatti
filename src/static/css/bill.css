@@ -1,0 +1,226 @@
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+body{
+text-align: justify;
+	background-color:#fafafa;
+	font-family: 'Open Sans Fonts', 'sans-serif';
+}
+
+.bill-wrapper {
+	width:95%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.testingfieldstaff{
+	width:40%;
+	float:left;
+	margin-top: 20px;
+}
+
+.testinglabstaff {
+	width:40%;
+	float:left;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+
+.main_header{
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo{
+	height: 125px;
+	margin-top: -195px;
+	margin-bottom: 100px;
+}
+
+.container{
+	position: relative;
+	margin-top: -20px;
+	text-align: center;
+}
+
+#dated{
+	float: right;
+}
+
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table th{
+	text-align: left;
+}
+
+.signed{
+	float: right;
+	margin-top: 20px;
+	margin-bottom: 50px;
+	position: relative;
+	font-weight: 600;
+}
+
+#highlight{
+	 font-weight: 600;
+}
+#base{
+	position: relative;
+	float:right;
+	text-align:bottom;
+}
+#transport_content{
+	text-align: center;
+}
+
+
+.position{
+	float:left;
+	padding-top:20px;
+	position: relative;
+}
+
+#pos-right{
+	text-align:right;
+}
+
+.footertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 110px;
+    width: 95%;
+    position: relative;
+}
+.transportfootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 110px;
+    width: 70%;
+    text-align: center;
+    position: relative;
+}
+
+
+.tadafootertable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
+    width: 50%;
+    position: relative;
+}
+
+.footertable table td{
+    text-align: center;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 20%;
+}
+
+.footer1{
+	padding-top: 60px;
+	float: right;
+	font-weight: bold;
+}
+
+#declaration{
+	float:left;
+}
+
+#declare-sign{
+	float:right;
+	margin-top: 30px;
+}
+
+#notelist{
+	position: relative;
+}
+
+#account{
+	margin-left: 40px;
+	width: 100%;
+}
+
+#account td{
+	text-align: left;
+}
+
+#othercharges table{
+	width:50%;
+}
+
+#othercharges table td{
+	width:70%;
+}
+
+#tadabill{
+	text-align:right;
+	margin-top: 40px;
+	margin-right: 14%;
+}
+
+#transportfooter{
+	text-align: center;
+	padding-top:25px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2%; 
+	width:100%
+}
+
+#total{
+	text-align: right;
+}
+
+#mid-right{
+	text-align: right;
+	padding-top: 100px;
+	padding-right: 150px;
+}
+
+.susvouchertable{
+	float: right;
+	width: 48%;
+}
+
+.taxtable{
+	float: right;
+	width: 25%;
+	margin-bottom: 50px;
+}
+
+#voucher-no{
+	margin-top: 50px;
+}
+
+.othertable{
+	float: right;
+	width: 20%;
+}
+
+.vouchertable{
+	float: right;
+	width: 43%;
+}
+
+#transportbill{
+	text-align:right;
+	margin-top: 60px;
+	margin-right: 1%;
+}
+
+#transportbase{
+	text-align: justify;
+    margin-top: 6%;
+}
+
+#tadafield{
+	text-align: left;
+}

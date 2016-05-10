@@ -1,9 +1,5 @@
 from django.db import models
 
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Category 
-
 import datetime
 
  
@@ -34,14 +30,14 @@ class VoucherId(models.Model):
     This class defines the voucher for purchase order according to the
     materials added in order
     """
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    purchased_item = models.ForeignKey(PurchasedItem)
+    purchase_order = models.ForeignKey('catalog.PurchaseOrder')
+    purchased_item = models.ForeignKey('catalog.PurchasedItem')
     voucher_no = models.IntegerField()
     receipt_no_of_session = models.IntegerField(null=True)
     receipt_date = models.DateField(null=True)
     purchase_order_of_session = models.IntegerField()
     purchased_item_of_session = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
     distribution = models.ForeignKey(Distribution)
     ratio = models.CharField(max_length=10)
     college_income = models.IntegerField()
@@ -57,8 +53,8 @@ class CategoryDistributionType(models.Model):
     category of product
     """
     parent_category = models.ForeignKey\
-    (Category, related_name='parent_category')
-    category = models.ForeignKey(Category, related_name='category')
+    ('catalog.Category', related_name='parent_category')
+    category = models.ForeignKey('catalog.Category', related_name='category')
     distribution = models.ForeignKey(Distribution)
     def __unicode__(self):
         return self.category.name

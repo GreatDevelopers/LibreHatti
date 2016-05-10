@@ -1,0 +1,9 @@
+.cart
+{
+	width: 100%;
+	position: absolute;
+	height: 20%;
+	bottom: 0;
+	color: rgb(160,160,160);
+	border: 1px solid gray;
+}

@@ -1,0 +1,420 @@
+
+
+
+/* line 5, ../sass/accordion/_base.scss */
+.csAccordion {
+  background: #f7f9f7;
+  overflow: hidden;
+  position: relative;
+}
+/* line 11, ../sass/accordion/_base.scss */
+.csAccordion a {
+  color: #333333;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* line 17, ../sass/accordion/_base.scss */
+.csAccordion ul, .csAccordion li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+/* line 24, ../sass/accordion/_base.scss */
+.csAccordion .csAccordion__spinner {
+  height: 100%;
+  width: 100%;
+  background: url(http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/spinner.png) no-repeat center;
+  position: absolute;
+  z-index: 400;
+}
+/* line 32, ../sass/accordion/_base.scss */
+@media (min-width: 720px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-top: 1em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-top: 1em;
+  }
+}
+@media (min-width: 720px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-left: 1em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-left: 1em;
+  }
+}
+@media (min-width: 720px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-right: 1em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-right: 1em;
+  }
+}
+@media (min-width: 720px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-bottom: 0.5em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 32, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    padding-bottom: 0.5em;
+  }
+}
+/* line 49, ../sass/accordion/_base.scss */
+.csAccordion li {
+  padding: 1em;
+  *zoom: 1;
+  position: relative;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+@media (min-width: 720px) {
+  /* line 49, ../sass/accordion/_base.scss */
+  .csAccordion li {
+    padding: 1em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 49, ../sass/accordion/_base.scss */
+  .csAccordion li {
+    padding: 1em;
+  }
+}
+/* line 18, ../bourbon/addons/_clearfix.scss */
+.csAccordion li:before, .csAccordion li:after {
+  content: " ";
+  display: table;
+}
+/* line 23, ../bourbon/addons/_clearfix.scss */
+.csAccordion li:after {
+  clear: both;
+}
+/* line 68, ../sass/accordion/_base.scss */
+.csAccordion li > .col {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+/* line 77, ../sass/accordion/_base.scss */
+.csAccordion li > .col.heading {
+  cursor: pointer;
+}
+/* line 80, ../sass/accordion/_base.scss */
+.csAccordion li > .col.heading p.h3 {
+  padding-right: 3.5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size:18px;
+}
+/* line 89, ../sass/accordion/_base.scss */
+.csAccordion li.show > .col.heading p.h3 {
+  white-space: normal;
+}
+/* line 94, ../sass/accordion/_base.scss */
+.csAccordion li.show {
+  background: #ececec;
+}
+/* line 97, ../sass/accordion/_base.scss */
+.csAccordion li > .col.content {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 1em;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+/* line 106, ../sass/accordion/_base.scss */
+.csAccordion li > .col.content.displayContent {
+  opacity: 1;
+}
+/* line 110, ../sass/accordion/_base.scss */
+.csAccordion img {
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+/* line 116, ../sass/accordion/_base.scss */
+.csAccordion p {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.4em;
+}
+/* line 122, ../sass/accordion/_base.scss */
+.csAccordion p.h3 {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  font-size: 1.3em;
+  color: #333333;
+}
+@media (min-width: 720px) {
+  /* line 122, ../sass/accordion/_base.scss */
+  .csAccordion p.h3 {
+    margin-bottom: 0.5em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 122, ../sass/accordion/_base.scss */
+  .csAccordion p.h3 {
+    margin-bottom: 0.5em;
+  }
+}
+@media (min-width: 720px) {
+  /* line 122, ../sass/accordion/_base.scss */
+  .csAccordion p.h3 {
+    margin-top: 0.5em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 122, ../sass/accordion/_base.scss */
+  .csAccordion p.h3 {
+    margin-top: 0.5em;
+  }
+}
+/* line 131, ../sass/accordion/_base.scss */
+.csAccordion p.small {
+  font-size: 0.875em;
+  margin-top: 0.5em;
+  color: #5ac9b2;
+}
+@media (min-width: 720px) {
+  /* line 131, ../sass/accordion/_base.scss */
+  .csAccordion p.small {
+    margin-top: 0.5em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 131, ../sass/accordion/_base.scss */
+  .csAccordion p.small {
+    margin-top: 0.5em;
+  }
+}
+/* line 138, ../sass/accordion/_base.scss */
+.csAccordion li.featured p.h3, .csAccordion li.featured p.small {
+  color: #DC0066;
+}
+/* line 143, ../sass/accordion/_base.scss */
+.csAccordion .expand {
+  background: url(http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/accordion_arrow.png) no-repeat center;
+  opacity: 100;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 1.5em;
+  opacity: 0.4;
+  top: 1.5em;
+  cursor: pointer;
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+/* line 161, ../sass/accordion/_base.scss */
+.csAccordion .collapse {
+  opacity: 0.8;
+  -moz-transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  display:inline;
+}
+
+@media (max-width: 799px) {
+  /* line 174, ../sass/accordion/_base.scss */
+  .csAccordion .csAccordion__title {
+    font-size: 1.2em;
+    overflow: hidden;
+    padding: 1.3em 6em 0.8em 1em;
+    text-align: left !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+/* line 1, ../sass/accordion/_buttons.scss */
+.csTicker__buttons {
+  height: 4em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 7em;
+  z-index: 200;
+}
+/* line 9, ../sass/accordion/_buttons.scss */
+.csTicker__buttons > div {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  opacity: 0.6;
+}
+/* line 14, ../sass/accordion/_buttons.scss */
+.csTicker__buttons > div:hover {
+  opacity: 1;
+}
+
+/* line 20, ../sass/accordion/_buttons.scss */
+.buttons__prev-button {
+  background: url("http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_up.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+  cursor: pointer;
+  float: left;
+  height: 4em;
+  width: 3em;
+}
+
+/* line 28, ../sass/accordion/_buttons.scss */
+.buttons__next-button {
+  background: url("http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_down.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+  cursor: pointer;
+  float: left;
+  height: 4em;
+  width: 3em;
+}
+
+/* line 37, ../sass/accordion/_buttons.scss */
+.csTicker.csTicker--mini .csTicker__buttons {
+  background: #e8e8e8;
+  height: 3em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 6em;
+  z-index: 200;
+}
+/* line 47, ../sass/accordion/_buttons.scss */
+.csTicker.csTicker--mini .buttons__prev-button {
+  height: 3em;
+  background: url("http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_left.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+/* line 51, ../sass/accordion/_buttons.scss */
+.csTicker.csTicker--mini .buttons__next-button {
+  height: 3em;
+  background: url("http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_right.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+
+/* line 1, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal {
+  height: auto;
+  padding-bottom: 1em;
+}
+@media (min-width: 720px) {
+  /* line 1, ../sass/accordion/_horizontal.scss */
+  .csTicker.csTicker--horizontal {
+    padding-bottom: 1em;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 1, ../sass/accordion/_horizontal.scss */
+  .csTicker.csTicker--horizontal {
+    padding-bottom: 1em;
+  }
+}
+/* line 7, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal ul > li > .col:last-child {
+  min-width: 75%;
+}
+/* line 12, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal .buttons__prev-button {
+  background: url(http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_left.png) no-repeat center;
+}
+/* line 15, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal .buttons__next-button {
+  background: url(http://www.markrosssmith.co.uk/showcase/creamsoda/jquery_accordion/img/arrow_right.png) no-repeat center;
+}
+/* line 20, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal ul {
+  width: 100000px;
+  height: 100%;
+}
+/* line 25, ../sass/accordion/_horizontal.scss */
+.csTicker.csTicker--horizontal ul > li {
+  float: left;
+  display: inline;
+  border-bottom: 0;
+  width: auto;
+}
+
+/* line 1, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini {
+  height: 3em;
+}
+/* line 5, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini ul > li > .col:first-child {
+  display: none;
+}
+/* line 8, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini ul > li > .col:last-child {
+  width: 100%;
+  padding: 0;
+}
+/* line 13, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini .csTicker__title {
+  border-bottom: 0 none;
+  display: block;
+  float: left;
+  font-size: 1em;
+  height: auto;
+  padding-bottom: 1em;
+  padding-right: 1em;
+  padding-top: 1em;
+}
+/* line 24, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini ul {
+  width: 100000px;
+}
+/* line 28, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini ul > li {
+  float: left;
+  display: inline;
+  width: auto;
+}
+/* line 34, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini p {
+  display: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+/* line 41, ../sass/accordion/_mini.scss */
+.csTicker.csTicker--mini li > .col > p.h3, .csTicker.csTicker--mini li > p.h3 {
+  display: block;
+  font-size: 1em;
+  color: #5c5c5c;
+  font-weight: normal;
+}
+
+@media (max-width: 559px) {
+  /* line 50, ../sass/accordion/_mini.scss */
+  .csTicker.csTicker--mini .csTicker__title {
+    display: none;
+    width: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+

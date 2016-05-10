@@ -1,0 +1,167 @@
+
+@font-face {
+  font-family: 'Open Sans Fonts';
+src:
+    url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+body{
+	background-color:#00000;
+}
+
+.main-box{
+	max-width: 400px;
+	margin: auto;
+	margin-top: 25px;
+}
+
+.view-list {
+	width: 40%;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 60px;
+}
+
+table{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+td{
+	padding: 5px 5px 5px 5px;
+}
+
+a{
+	text-decoration: none;
+	color: #06b9fb;
+}
+
+a:hover{
+	text-decoration: none;
+	color: #0f84b0;
+}
+
+.list-results{
+	font-family:'Open Sans Fonts', 'sans-serif';
+	margin-top: 30px;
+}
+
+.list-results h2{
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+#save-regiter-option{
+	float: right; 
+	margin-bottom: 12px;
+	width: 120px;
+}
+
+.list-results #date-range{
+	text-align: center;
+	margin: -15px 0px 10px 0px;
+}
+
+.search table{
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
+
+.search table td{
+	text-align: center;
+}
+
+.shrinked-table{
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.primary-branding a:hover{
+	text-decoration: none;
+}
+
+.order-success table{
+	width: 57%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.order-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+.order-success-options input{
+	width: 56%;
+}
+
+.order-success-options h3{
+	width: 100%;
+	text-align: center;
+	position: relative;
+}
+
+.order-success-options table td{
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 26%;
+}
+
+.clearance-success table{
+	width: 100%;
+    margin-left: -100px;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.clearance-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+
+
+.clearance-success-options{
+	margin-top: -5%;
+	margin-left: -10%;
+}
+
+.clearance-success-options h3{
+	width: 100%;
+	text-align: center;
+	position: relative;
+}
+
+.clearance-success-options table td{
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 100%;
+}
+
+.success-message {
+	margin-top: 3%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.green {
+	color: #2ecc71;
+}
+.daily-report-list{
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 60px;
+}
+
+#toggle-option{
+	float: right;
+margin-top: -42px;
+margin-right: 71px
+}
