@@ -1,6 +1,7 @@
-django==1.7.1
+django==1.9.6
 docutils
 simplejson
-django-ajax-selects==1.3.5
+django-ajax-selects
 django-suit
 django-mptt
+django-tinymce

@@ -5,8 +5,10 @@ from django.views.generic import TemplateView
 from librehatti.prints import views
 
 
-urlpatterns = patterns('',        
-    url(r'^bill/', views.bill),
-    url(r'^suspense_bill/', views.suspense_bill),
-    url(r'^quoted_bill/',views.quoted_bill),
-)	
+urlpatterns = [
+    url(r'^bill/', views.bill, name='bill'),
+    url(r'^suspense_bill/', views.suspense_bill, name='suspense_bill'),
+    url(r'^quoted_bill/',views.quoted_bill, name='quoted_bill'),
+    url(r'^tax/', views.tax, name='tax'),
+    url(r'^receipt/', views.receipt, name='receipt'),
+]
