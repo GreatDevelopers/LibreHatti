@@ -1,7 +1,7 @@
 $(document).ready(function(){
             $('.summary').click(function(){
                 var addressValue = $(this).attr("href");
-                var a = reverse('librehatti.suspense.views.summary_page', function(url) {
+                var a = reverse('summary_page', function(url) {
                                 var request_url = url + "?" + addressValue;
                                 $.ajax({
                                     url: request_url,

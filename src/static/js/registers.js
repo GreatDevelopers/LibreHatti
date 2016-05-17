@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('#save_register_button').click(function(){
         var addressValue = $(this).attr("href");
-        reverse('librehatti.reports.views.save_fields', function(url) {
+        reverse('save_fields', function(url) {
             var request_url = url + "/?" + addressValue;
             $.ajax({
                 url: request_url,

@@ -10,7 +10,7 @@ $(document).ready(function(){
         $('#id_quoteditem_set-' + parent_category_id +'-parent_category').empty();
         $('#id_quoteditem_set-' + parent_category_id +'-parent_category').removeAttr('disabled');
         type_id = $(this).val();
-        reverse('librehatti.catalog.views.select_type', function(url) {
+        reverse('select_type', function(url) {
             var request_url = url + "/?type_id=" + type_id;
             $.ajax({
                 url: request_url,
@@ -29,7 +29,7 @@ $(document).ready(function(){
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').empty();
         $('#id_quoteditem_set-' + sub_category_id +'-sub_category').removeAttr('disabled');
         parent_category_id = $(this).val();
-        reverse('librehatti.catalog.views.select_sub_category', function(url) {
+        reverse('select_sub_category', function(url) {
             var request_url = url + "/?cat_id=" + parent_category_id;
             $.ajax({
                 url: request_url,
@@ -48,7 +48,7 @@ $(document).ready(function(){
         $('#id_quoteditem_set-'+ item_id + '-item').empty();
         $('#id_quoteditem_set-'+ item_id + '-item').removeAttr('disabled');
         sub_category_id = $(this).val();
-        reverse('librehatti.catalog.views.select_item', function(url) {
+        reverse('select_item', function(url) {
             var request_url = url + "/?cat_id=" + sub_category_id;
             $.ajax({
                 url: request_url,

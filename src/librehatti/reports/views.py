@@ -95,12 +95,11 @@ def list_saved_registers(request):
     Argument:Http Request
     Return:Render List of Registers
     """
-    local_url = settings.LOCAL_URL
     list_of_registers = SavedRegisters.objects.\
     values('title','selected_fields')
     request_status = request_notify()
     return render(request,'reports/list_of_registers.html', \
-        {'list_of_registers':list_of_registers,'local_url': local_url,\
+        {'list_of_registers':list_of_registers,
         'request':request_status})
 
 

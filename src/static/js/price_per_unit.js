@@ -3,7 +3,7 @@ $(document).ready(function(){
     $('body').on('click','select.item',function(){
         field_id = this.id.split("-")[1]
         item_id = $(this).val();
-        reverse('librehatti.catalog.views.price_per_unit', function(url) {
+        reverse('price_per_unit', function(url) {
             var request_url = url + "/?item_id=" + item_id;
             $.ajax({
                 url: request_url,

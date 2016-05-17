@@ -7,7 +7,7 @@ $(document).ready(function(){
         $('.category').empty();
         $('.category').removeAttr('disabled');
         parent_category_id = $(this).val();
-        reverse('librehatti.catalog.views.select_sub_category', function(url) {
+        reverse('select_sub_category', function(url) {
             var request_url = url + "/?cat_id=" + parent_category_id;
             $.ajax({
                 url: request_url,

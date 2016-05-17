@@ -10,7 +10,7 @@ $(document).ready(function(){
                 action: function(dialogItself){
                   var note_line = document.getElementById('new_note_id').value;
                   dialogItself.close();
-                  reverse('librehatti.bills.views.new_note_line', function(url) {
+                  reverse('new_note_line', function(url) {
                     var request_url = url + "/?note_line=" + note_line;
                     $.ajax({
                         url: request_url,
@@ -38,7 +38,7 @@ $(document).ready(function(){
                       val[i] = $(this).val();
                   });
                     dialogItself.close();
-                    reverse('librehatti.bills.views.delete_note', function(url) {
+                    reverse('delete_note', function(url) {
                         var request_url = url + "/?delete_note=" + val;
                         $.ajax({
                             url: request_url,

@@ -10,7 +10,7 @@ $(document).ready(function(){
                 label: ' Yes',
                 action: function(dialogItself){
                     dialogItself.close();
-                    reverse('librehatti.catalog.request_change.accept_request', function(url) {
+                    reverse('accept_request', function(url) {
                         var request_url = url + "/?id=" + id;
                         $.ajax({
                             url: request_url,
@@ -27,7 +27,7 @@ $(document).ready(function(){
                 label: ' No',
                 action: function(dialogItself){
                     dialogItself.close();
-                    reverse('librehatti.catalog.request_change.reject_request', function(url) {
+                    reverse('reject_request', function(url) {
                         var request_url = url + "/?id=" + id;
                         $.ajax({
                             url: request_url,
