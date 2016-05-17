@@ -206,6 +206,17 @@
 {% endblock %}
 
   <script src="{% static 'suit/js/suit.js' %}"></script>
+  <script type="text/javascript">
+      var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
+
+      function reverse(urlstring, callback) {
+          if (typeof callback != "function") {
+              return false;
+          }
+          
+          $.get(reverseurl + "?string=" + urlstring, callback);
+      }
+  </script>
   {% block extrajs %}{% endblock %}
 
 </body>
