@@ -11,8 +11,8 @@ from librehatti.catalog.models import Category
 
 from django import forms
 
-from librehatti.suspense.models import FinancialSession
-from librehatti.suspense.models import VoucherId
+from librehatti.voucher.models import FinancialSession
+from librehatti.voucher.models import VoucherId
 from librehatti.suspense.models import Vehicle
 
 import datetime

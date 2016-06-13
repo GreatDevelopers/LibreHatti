@@ -276,8 +276,7 @@ class ChangeRequest(models.Model):
     to request a change in the Bill Amount
     """
     purchase_order_of_session = models.IntegerField()
-    from librehatti.voucher.models import FinancialSession
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
     previous_total = models.IntegerField()
     new_total = models.IntegerField()
     description = models.CharField(max_length=100)
@@ -328,8 +327,7 @@ class NonPaymentOrderOfSession(models.Model):
     """
     non_payment_order = models.ForeignKey(NonPaymentOrder)
     non_payment_order_of_session = models.IntegerField()
-    from librehatti.voucher.models import FinancialSession
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
 
 
 class SpecialCategories(models.Model):

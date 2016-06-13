@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static admin_list admin_urls suit_list suit_tags %}
-{% load url from future %}
+{% load url from suit_compat %}
 
 {% block extrastyle %}
   {{ block.super }}
@@ -42,7 +42,7 @@
       <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
         <span class="divider">&raquo;</span></li>
       <li>
-        <a href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{{ app_label|capfirst|escape }}</a>
+        <a href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{% firstof cl.opts.app_config.verbose_name app_label|capfirst|escape %}</a>
         <span class="divider">&raquo;</span></li>
       <li class="active">{{ cl.opts.verbose_name_plural|capfirst }}</li>
     </ul>
@@ -60,16 +60,16 @@
 
         <div class="toolbar-content clearfix">
           {% block object-tools %}
-            {% if has_add_permission %}
-              <div class="object-tools">
-                {% block object-tools-items %}
+            <div class="object-tools">
+              {% block object-tools-items %}
+                {% if has_add_permission %}
                   <a href="{% url cl.opts|admin_urlname:'add' %}{% if is_popup %}?_popup=1{% endif %}" class="btn btn-success">
                     <i class="icon-plus-sign icon-white"></i>&nbsp;
                     {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
                   </a>
-                {% endblock %}
-              </div>
-            {% endif %}
+                {% endif %}
+              {% endblock %}
+            </div>
           {% endblock %}
 
           {% block search %}{% search_form cl %}{% endblock %}

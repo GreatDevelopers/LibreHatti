@@ -8,7 +8,7 @@ REQUIREMENTS
     3.python2.7
     4.python-pip
     5.python-mysqldb
-    6.django 1.7
+    6.django 1.9
 
 Installation of Requirements
 

@@ -1,13 +1,13 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls %}
-{% load url from future %}
+{% load url from suit_compat %}
 
 {% block breadcrumbs %}
   <ul class="breadcrumb">
     <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
       <span class="divider">&raquo;</span></li>
     <li>
-      <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ app_label|capfirst }}</a>
+      <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{% firstof opts.app_config.verbose_name app_label|capfirst|escape %}</a>
       <span class="divider">&raquo;</span></li>
     <li>
       <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst|escape }}</a>
@@ -53,6 +53,8 @@
           <br>
 
           <div>
+            {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+            {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
             <input type="hidden" name="post" value="yes"/>
             <input type="submit" value="{% trans "Yes, I'm sure" %}" class="btn btn-danger"/>
           </div>

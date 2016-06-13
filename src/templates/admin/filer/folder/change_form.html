@@ -1,6 +1,6 @@
 {% extends "admin/change_form.html" %}
-{% load i18n admin_modify filermedia %}
-{% load url from future %}
+{% load i18n admin_modify staticfiles %}
+{% load url from suit_compat %}
 
 {% block breadcrumbs %}
     <ul class="breadcrumb">
@@ -47,6 +47,6 @@
 
 {% block sidebar %}{% if not is_popup %}
     <div class="box text-center">
-        <img src="{% filer_staticmedia_prefix %}icons/plainfolder_128x128.png" alt="{% trans "Folder Icon" %}"/>
+        <img src="{% static 'filer/icons/plainfolder_128x128.png' %}" alt="{% trans "Folder Icon" %}"/>
     </div>
 {% endif %}{% endblock %}

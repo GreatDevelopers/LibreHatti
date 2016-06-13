@@ -2,10 +2,6 @@ from django.db import models
 
 import useraccounts
 
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import ModeOfPayment
-from librehatti.catalog.models import Surcharge
-
 from django.contrib.auth.models import User
 
 from librehatti.config import _BUYER
@@ -15,8 +11,6 @@ from librehatti.config import _PURCHASED_ITEMS
 from librehatti.config import _QTY
 from librehatti.config import _REFERENCE
 from librehatti.config import _REFERENCE_DATE
-
-from librehatti.voucher.models import FinancialSession
 
 from django.core.urlresolvers import reverse
 
@@ -62,7 +56,7 @@ class QuotedItem(models.Model):
     price_per_unit = models.IntegerField()
     qty = models.IntegerField(verbose_name=_QTY)
     price = models.IntegerField()
-    item = models.ForeignKey(Product)
+    item = models.ForeignKey('catalog.Product')
     def save(self, *args, **kwargs):
         if self.quoted_order:
             self.price = self.price_per_unit * self.qty
@@ -78,7 +72,7 @@ class QuotedOrderofSession(models.Model):
     """
     quoted_order = models.ForeignKey(QuotedOrder)
     quoted_order_session = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey('voucher.FinancialSession')
 
 
 class QuotedTaxesApplied(models.Model):
@@ -86,7 +80,7 @@ class QuotedTaxesApplied(models.Model):
     Handles taxes applied on qouted order.
     """
     quoted_order = models.ForeignKey(QuotedOrder)
-    surcharge = models.ForeignKey(Surcharge)
+    surcharge = models.ForeignKey('catalog.Surcharge')
     surcharge_name = models.CharField(max_length=500)
     surcharge_value = models.FloatField()
     tax = models.IntegerField()
