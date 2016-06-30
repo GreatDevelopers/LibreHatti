@@ -46,83 +46,45 @@
                     <td>{{ value.1 }}</td>
                     <td>{{ value.2 }}</td>
                     <td align= 'right'>{{ value.3 }}</td>
-                    {% if value.4 or value.4 == 0 %}
-                    <td align= 'right'>{{ value.4 }}</td>
-                    {% endif %}
-                    {% if value.5 or value.5 == 0 %}
+                    {% for val in value.4 %}
+                    <td align= 'right'>{{ val }}</td>
+                    {% endfor %}
                     <td align= 'right'>{{ value.5 }}</td>
-                    {% endif %}
-                    {% if value.6 or value.6 == 0 %}
-                    <td align= 'right'>{{ value.6 }}</td>
-                    {% endif %}
-                    {% if value.7 or value.7 == 0 %}
-                    <td align= 'right'>{{ value.7 }}</td>
-                    {% endif %}
-                    {% if value.8 or value.8 == 0 %}
-                    <td align= 'right'>{{ value.8 }}</td>
-                    {% endif %}
-                    {% if value.9 or value.9 == 0 %}
-                    <td align= 'right'>{{ value.9 }}</td>
-                    {% endif %}
-                    {% if value.10 or value.10 == 0 %}
-                    <td align= 'right'>{{ value.10 }}</td>
-                    {% endif %}
                 </tr>
                 {% endfor %}
                 <tr>
                     <td colspan="4"><b><center>SUM</center></b></td>
                     <td align= 'right'>{{total}}</td>
-                    {% if service_tax %}
-                    <td align= 'right'>{{service_tax}}</td>
-                    {% endif %}
-                    {% if education_tax %}
-                    <td align= 'right'>{{education_tax}}</td>
-                    {% endif %}
-                    {% if heducation_tax %}
-                    <td align= 'right'>{{heducation_tax}}</td>
-                    {% endif %}
-                    {% if sbc_tax %}
-                    <td align= 'right'>{{sbc_tax}}</td>
-                    {% endif %}
+                    {% for key, value in init_taxes.items %}
+                    <td align= 'right'>{{value}}</td>
+                    {% endfor %}
                     <td align= 'right'>{{totalplustax}}</td>
                 </tr>
                 <tr>
                     <td colspan="5"></td>
-                    <td colspan="3" align="center"><b>{{total_taxes}}</b></td>
+                    <td colspan="{{taxes_name|length}}" align="center"><b>{{total_taxes}}</b></td>
                 </tr>
        </table>
    </div>
    <div class='daily-report-list'>
         <table border="1px">
+          <tr>
+            <td colspan="4"><center>Taxes</center></td>
+            {% for val in taxes_name %}
+            <th><center>{{val.surcharge_name}}</center></th>
+            {% endfor %}
+          </tr>
             <tr>
                 <td colspan="4"><center>Service Tax Already Paid</center></td>
-                {% if service_tax %}
-                <td align= 'right'>{{service}}</td>
-                {% endif %}
-                {% if education_tax %}
-                <td align= 'right'>{{education}}</td>
-                {% endif %}
-                {% if heducation_tax%}
-                <td align= 'right'>{{highereducation}}</td>
-                {% endif %}
-                {% if sbc_tax %}
-                <td align= 'right'>{{sbc}}</td>
-                {% endif %}
+                {% for key, value in paid_taxes.items %}
+                <td align= 'right'>{{value}}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <td colspan="4"></td>
-                {% if service_tax %}
-                <td align= 'right'>{{servicenotpaid}}</td>
-                {% endif %}
-                {% if education_tax %}
-                <td align= 'right'>{{educationnotpaid}}</td>
-                {% endif %}
-                {% if heducation_tax %}
-                <td align= 'right'>{{heducationnotpaid}}</td>
-                {% endif %}
-                {% if sbc_tax %}
-                <td align= 'right'>{{sbcnotpaid}}</td>
-                {% endif %}
+                {% for key, value in not_paid_taxes.items %}
+                <td align= 'right'>{{value}}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <td colspan="4"><center><b>Total Amount</b></center></td>

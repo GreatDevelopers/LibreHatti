@@ -160,18 +160,12 @@ class PaidTaxesForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    paid_service_tax = forms.IntegerField(initial=0)
-    paid_education_tax = forms.IntegerField(initial=0)
-    paid_higher_education_tax = forms.IntegerField(initial=0)
-    paid_swachh_bharat_cess = forms.IntegerField(initial=0)
     def __init__(self, *args, **kwargs):
         super(PaidTaxesForm, self).__init__(*args, **kwargs)
-        self.fields['paid_service_tax'].widget.attrs={'class':'form-control'}
-        self.fields['paid_education_tax'].widget.attrs={'class':'form-control'}
-        self.fields['paid_higher_education_tax'].widget.attrs={\
-        'class':'form-control'}
-        self.fields['paid_swachh_bharat_cess'].widget.attrs={\
-        'class':'form-control'}
+        surcharges = Surcharge.objects.filter()
+        for val in surcharges:
+            self.fields['paid_'+ val.tax_name.replace(" ", "_").lower()] = forms.IntegerField(initial=0)
+            self.fields['paid_'+ val.tax_name.replace(" ", "_").lower()].widget.attrs={'class':'form-control'}
 
 
 class LabReportForm(forms.Form):
