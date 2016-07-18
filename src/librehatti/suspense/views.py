@@ -712,8 +712,8 @@ def transportbill(request):
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
             session_id=session).update(is_cleared=0)
             try:
-                if Transport.objects.filter(voucher_no=voucher).exists():
-                    Transport.objects.filter(voucher_no = voucher).\
+                if Transport.objects.filter(voucher_no=voucher, session=session).exists():
+                    Transport.objects.filter(voucher_no = voucher, session=session).\
                     update(vehicle=vehicle,kilometer=kilometers ,\
                     date_of_generation=date_of_generation, total = total,\
                     date=date, rate=rate, voucher_no=voucher,\
@@ -752,8 +752,8 @@ def transportbill(request):
                             temp_obj.save()
             except:
                 pass 
-            temp = Transport.objects.filter(voucher_no=voucher).values()
-            total_amount = Transport.objects.filter(voucher_no=voucher).\
+            temp = Transport.objects.filter(voucher_no=voucher, session=session).values()
+            total_amount = Transport.objects.filter(voucher_no=voucher, session=session).\
             aggregate(Sum('total')).get('total__sum', 0.00)
             zipped_data = zip(date, kilometers)
             transport_total = [] 
