@@ -21,7 +21,8 @@
         <table border="1px">
                 <tr>
                     <th>S.No.</th>
-                    <th>Clearance Voucher No.</th>
+                    <th>Voucher No.</th>
+                    <th>Suspense Clearance No.</th>
                     <th>Clear Date</th>
                     <th>Receipt No.</th>
                     <th>Receipt Dated</th>
@@ -29,7 +30,9 @@
                     <th>TADA</th>
                     <th>Boring External</th>
                     <th>Labour Charges</th>
+                    <th>Car Taxi Charge</th>
                     <th>Transport</th>
+                    <th>Work Charge</th>
                     <th>Total</th>
                 </tr>
                 {% for value in result %}
@@ -45,6 +48,9 @@
                     <td>{{ value.7 }}</td>
                     <td>{{ value.8 }}</td>
                     <td>{{ value.9 }}</td>
+                    <td>{{ value.10 }}</td>
+                    <td>{{ value.11 }}</td>
+                    <td>{{ value.12 }}</td>
                 </tr>
                 {% endfor %}
        </table>

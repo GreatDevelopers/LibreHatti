@@ -32,7 +32,12 @@
         <th>Site</th>
         <th>Email</th>
         <th>Contact No.</th>
-        <th> Amount</th>
+        <th>Material</th>
+        {% for tax in tax_list %}
+        <th>{{tax.tax_name}}</th>
+        {% endfor %}
+        <th>Amount</th>
+        <th>Amount Including tax</th>
       </tr>  
       {% for val in purchase_item %}
       <tr>
@@ -56,12 +61,18 @@
         <td>{{val.purchase_order__delivery_address}}</td>
         <td>{{val.purchase_order__buyer__email}}</td>
         <td>{{val.purchase_order__buyer__customer__telephone}}</td>
+        <td>{{val.item__category__name}}</td>
+        {% for applied_tax in val.applied_tax_list %}
+        <td align="right"> {{applied_tax}}</td>
+        {% endfor %}
         <td align="right"> {{val.price}}</td>
+        <td align="right"> {{val.total_amount}}</td>
       </tr>
       {% endfor %}
       <tr>
-        <td colspan='9'> <center><b>Sum</center></b></td>
+        <td colspan='15'> <center><b>Sum</center></b></td>
         <td align="right">{{total_cost}}</td>
+        <td align="right">{{total_amount_sum}}</td>
       </tr>
     </table>
   </div>

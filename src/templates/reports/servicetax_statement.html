@@ -18,7 +18,15 @@
             </div>
     <h2><center>Service Tax Statement</center></h2>
     <div class='daily-report-list'>
-        <center>Detailed list of taxes including Service tax @ {{surcharge_list.0}} %, Education Cess @ {{surcharge_list.1}} % and Higher Education Cess @ {{surcharge_list.2}} % for the month of {{month}}, {{year}}</center>
+        <center>Detailed list of taxes including 
+        {% for val in taxes_name %}
+        {% if forloop.last %}
+        {{val.surcharge_name}} @ {{val.surcharge_value}} %
+        {% else %}
+        {{val.surcharge_name}} @ {{val.surcharge_value}} %,
+        {% endif %}
+        {% endfor %}
+         for the month of {{month}}, {{year}}</center>
         <table border="1px">
                 <tr>
                     <th>S.No.</th>
@@ -26,11 +34,9 @@
                     <th>Dated</th>
                     <th>Name of Parties</th>
                     <th>Charges</th>
-                    <th>Service Tax ({{surcharge_list.0}}%)</th>
-                    {% if old_tax %}
-                    <th>Education Cess ({{surcharge_list.1}}%)</th>
-                    <th>H.Education Cess ({{surcharge_list.2}}%)</th>
-                    {% endif %}
+                    {% for val in taxes_name %}
+                    <th>{{val.surcharge_name}}</th>
+                    {% endfor %}
                     <th>Total</th>
                 </tr>
                 {% for value in result %}
@@ -40,53 +46,49 @@
                     <td>{{ value.1 }}</td>
                     <td>{{ value.2 }}</td>
                     <td align= 'right'>{{ value.3 }}</td>
-                    <td align= 'right'>{{ value.4 }}</td>
-                    {% if old_tax %}
+                    {% for val in value.4 %}
+                    <td align= 'right'>{{ val }}</td>
+                    {% endfor %}
                     <td align= 'right'>{{ value.5 }}</td>
-                    <td align= 'right'>{{ value.6 }}</td>
-                    <td align= 'right'>{{ value.7 }}</td>
-                    {% else %}
-                    <td align= 'right'>{{ value.5 }}</td>
-                    {% endif %}
                 </tr>
                 {% endfor %}
                 <tr>
                     <td colspan="4"><b><center>SUM</center></b></td>
                     <td align= 'right'>{{total}}</td>
-                    <td align= 'right'>{{service_tax}}</td>
-                    {% if old_tax %}
-                    <td align= 'right'>{{education_tax}}</td>
-                    <td align= 'right'>{{heducation_tax}}</td>
-                    {% endif %}
+                    {% for key, value in init_taxes.items %}
+                    <td align= 'right'>{{value}}</td>
+                    {% endfor %}
                     <td align= 'right'>{{totalplustax}}</td>
                 </tr>
                 <tr>
                     <td colspan="5"></td>
-                    <td colspan="3" align="center"><b>{{total_taxes}}</b></td>
+                    <td colspan="{{taxes_name|length}}" align="center"><b>{{total_taxes}}</b></td>
                 </tr>
        </table>
    </div>
    <div class='daily-report-list'>
         <table border="1px">
+          <tr>
+            <td colspan="4"><center>Taxes</center></td>
+            {% for val in taxes_name %}
+            <th><center>{{val.surcharge_name}}</center></th>
+            {% endfor %}
+          </tr>
             <tr>
                 <td colspan="4"><center>Service Tax Already Paid</center></td>
-                <td align= 'right'>{{service}}</td>
-                {% if old_tax %}
-                <td align= 'right'>{{education}}</td>
-                <td align= 'right'>{{highereducation}}</td>
-                {% endif %}
+                {% for key, value in paid_taxes.items %}
+                <td align= 'right'>{{value}}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <td colspan="4"></td>
-                <td align= 'right'>{{servicenotpaid}}</td>
-                {% if old_tax %}
-                <td align= 'right'>{{educationnotpaid}}</td>
-                <td align= 'right'>{{heducationnotpaid}}</td>
-                {% endif %}
+                {% for key, value in not_paid_taxes.items %}
+                <td align= 'right'>{{value}}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <td colspan="4"><center><b>Total Amount</b></center></td>
-                <td colspan="3" align= 'center'><b>{{total_taxes_not_paid}}</b></td>
+                <td colspan="4" align= 'center'><b>{{total_taxes_not_paid}}</b></td>
             </tr>
         </table>
     </div>

@@ -127,11 +127,9 @@ def add_distance(request):
                 filter(purchase_order=purchase_order_id).\
                 filter(session=session_id).distinct()
             for voucher_val in voucher:
-                try:
-                    SuspenseOrder.objects.filter(\
-                        voucher=voucher_val['voucher_no'],\
-                        session_id = financial_obj)
-                except:
+                suspense_check = SuspenseOrder.objects.filter(
+                voucher=voucher_val['voucher_no'],session_id = financial_obj)
+                if not suspense_check:
                     suspense_obj = SuspenseOrder(voucher=voucher_val['voucher_no'],\
                         purchase_order=purchase_order_obj, session_id=financial_obj)
                     suspense_obj.save()
@@ -380,6 +378,7 @@ def with_transport(request):
         rowspan = rowspan + 1
     if suspenseclearance['boring_charge_internal'] != 0:
         rowspan = rowspan + 1
+    sus_cleared_reg = SuspenseClearedRegister.objects.filter(voucher_no=number, session_id=session)[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
     return render(request,'suspense/with_transport.html', {'header':header,\
                 'voucher_no':number, 'date':suspenseclearance['clear_date'],\
@@ -394,7 +393,8 @@ def with_transport(request):
                 'othercharge':othercharge, 'total':total,\
                 'total_in_words':total_in_words,\
                 'test_date':suspenseclearance['test_date'],\
-                'charges':voucherid, 'rowspan':rowspan, 'payment':voucherid})
+                'charges':voucherid, 'rowspan':rowspan, 'payment':voucherid,
+                'sus_cleared_reg':sus_cleared_reg})
 
 
 @login_required
@@ -712,8 +712,8 @@ def transportbill(request):
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
             session_id=session).update(is_cleared=0)
             try:
-                if Transport.objects.filter(voucher_no=voucher).exists():
-                    Transport.objects.filter(voucher_no = voucher).\
+                if Transport.objects.filter(voucher_no=voucher, session=session).exists():
+                    Transport.objects.filter(voucher_no = voucher, session=session).\
                     update(vehicle=vehicle,kilometer=kilometers ,\
                     date_of_generation=date_of_generation, total = total,\
                     date=date, rate=rate, voucher_no=voucher,\
@@ -752,8 +752,8 @@ def transportbill(request):
                             temp_obj.save()
             except:
                 pass 
-            temp = Transport.objects.filter(voucher_no=voucher).values()
-            total_amount = Transport.objects.filter(voucher_no=voucher).\
+            temp = Transport.objects.filter(voucher_no=voucher, session=session).values()
+            total_amount = Transport.objects.filter(voucher_no=voucher, session=session).\
             aggregate(Sum('total')).get('total__sum', 0.00)
             zipped_data = zip(date, kilometers)
             transport_total = [] 
