@@ -10,6 +10,13 @@ REQUIREMENTS
     5.python-mysqldb
     6.django 1.7
 
+#### Installation of LibreHatti
+    
+    cd path/to/LibreHatti/
+    ./install.sh
+    
+#### OR
+
 Installation of Requirements
 
 1) Apache2
