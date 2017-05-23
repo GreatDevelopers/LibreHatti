@@ -1127,7 +1127,7 @@ def mark_status(request):
                     temp_obj.save()
                 else:
                     temp_obj = SuspenseClearedRegister(
-                    suspenseclearednumber=clearednumber['suspenseclearednumber']+1,\
+                    suspenseclearednumber=clearednumber['suspenseclearednumber__max']+1,\
                     session=financialsession, voucher_no=voucher)
                     temp_obj.save()
 
