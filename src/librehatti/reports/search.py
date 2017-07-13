@@ -42,6 +42,7 @@ class SearchResult(View):
         }
 
     def get(self,request):
+        # type: (object) -> object
         """
         Retrieve values from URL.
         Convert date into datetime format.

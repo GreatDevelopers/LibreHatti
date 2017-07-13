@@ -1,6 +1,6 @@
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
-from librehatti.config import _SENDER_EMAIL
-from librehatti.config import _PASSWORD
+from .config import _SENDER_EMAIL
+from .config import _PASSWORD
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -19,9 +19,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',
-        'USER': 'db_user',
-        'PASSWORD': 'db_password',
+        'NAME': 'librehatti',
+        'USER': 'root',
+        'PASSWORD': 'a',
         'HOST': 'localhost',
         'PORT': '',
     }

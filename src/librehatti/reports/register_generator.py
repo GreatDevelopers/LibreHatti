@@ -234,6 +234,7 @@ class GenerateRegister(View):
             return self.fetch_values(request)
 
     def get(self,request):
+        # type: (object) -> object
         """
         Retrieve values from URL.
         Convert date into datetime format.
