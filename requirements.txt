@@ -3,4 +3,4 @@ docutils
 simplejson
 django-ajax-selects==1.3.5
 django-suit
-django-mptt
+django-mptt==0.7.0
