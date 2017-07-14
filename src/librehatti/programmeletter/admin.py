@@ -1,3 +1,7 @@
+from ajax_select.admin import AjaxSelectAdmin
+
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 
 from librehatti.programmeletter.models import TeamName
@@ -6,12 +10,6 @@ from librehatti.programmeletter.models import LetterData
 
 from librehatti.programmeletter.forms import StaffInTeamForm
 from librehatti.programmeletter.forms import TeamNameForm
-
-from ajax_select.admin import AjaxSelectAdmin
-
-from django.http import HttpResponseRedirect
-
-from django.core.urlresolvers import reverse
 
 
 class StaffInline(admin.StackedInline):
@@ -47,8 +45,8 @@ class LetterDataAdmin(admin.ModelAdmin):
     def response_change(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['letterdata_id'] = obj.id
-        return HttpResponseRedirect(reverse\
-            ("librehatti.programmeletter.views.programmeletter"))
+        return HttpResponseRedirect(
+            reverse("librehatti.programmeletter.views.programmeletter"))
 
 admin.site.register(TeamName, TeamNameAdmin)
 admin.site.register(LetterData, LetterDataAdmin)
