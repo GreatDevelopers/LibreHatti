@@ -4,12 +4,12 @@ This file display usage information that admin requires to edit or add
 in database tables, classes in admin interface. This make the data entry
 easy as one need to do it through MySQL server.
 """
-from librehatti.catalog.models import Attributes, Catalog, Surcharge, \
-    ModeOfPayment, PurchasedItem, PurchaseOrder, HeaderFooter, \
-    SpecialCategories, Category, Product, NonPaymentOrder, Unit
 from django.contrib.auth.admin import admin
 from django.contrib.admin.models import LogEntry
 
+from librehatti.catalog.models import Attributes, Catalog, Surcharge, \
+    ModeOfPayment, PurchasedItem, PurchaseOrder, HeaderFooter, \
+    SpecialCategories, Category, Product, NonPaymentOrder, Unit
 from librehatti.catalog.forms import ItemSelectForm, BuyerForm
 from librehatti.catalog.forms import SpecialCategoriesForm
 from librehatti.catalog.actions import mark_inactive, mark_active

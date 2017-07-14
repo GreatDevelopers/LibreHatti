@@ -2,9 +2,7 @@
 %% actions.py %%
 This file contains the user defined actions for admin site.
 """
-from librehatti.catalog.models import *
 
-from django.contrib import admin
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 
