@@ -8,8 +8,6 @@ from librehatti.bills.models import QuotedOrder
 
 from librehatti.catalog.models import PurchaseOrder, Category
 
-import simplejson
-
 
 class SuspenseOrder(models.Model):
     """
@@ -20,6 +18,7 @@ class SuspenseOrder(models.Model):
     session_id = models.ForeignKey(FinancialSession)
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
+
     def __unicode__(self):
         return '%s' % (self.id)
 
@@ -30,13 +29,14 @@ class SuspenseClearance(models.Model):
     """
     session = models.ForeignKey(FinancialSession)
     voucher_no = models.IntegerField()
-    work_charge =models.IntegerField(blank=True, null=True)
+    work_charge = models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
     car_taxi_charge = models.IntegerField(blank=True, null=True)
     boring_charge_external = models.IntegerField(blank=True, null=True)
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200, blank=True, null=True)
-    field_testing_staff = models.CharField(max_length=200,blank=True,null=True)
+    field_testing_staff = models.CharField(max_length=200, blank=True,
+                                           null=True)
     test_date = models.CharField(max_length=600, blank=True, null=True)
     clear_date = models.DateField()
 
@@ -49,8 +49,10 @@ class Department(models.Model):
     address = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, blank=True)
     dean = models.CharField(max_length=50, blank=True)
+
     def __unicode__(self):
         return self.title
+
 
 class StaffPosition(models.Model):
     """
@@ -61,6 +63,7 @@ class StaffPosition(models.Model):
 
     def __unicode__(self):
         return self.position
+
 
 class Staff(models.Model):
     """
@@ -74,7 +77,7 @@ class Staff(models.Model):
     seniority_credits = models.IntegerField()
     always_included = models.BooleanField(default=True)
     lab = models.ForeignKey(Category)
-    email =models.EmailField(blank=True)
+    email = models.EmailField(blank=True)
 
     class Meta:
         verbose_name_plural = "Staff"
@@ -90,18 +93,19 @@ class TaDa(models.Model):
     date_of_generation = models.DateField(default=datetime.date.today)
     voucher_no = models.IntegerField()
     session = models.IntegerField()
-    departure_time_from_tcc= models.TimeField()
+    departure_time_from_tcc = models.TimeField()
     arrival_time_at_site = models.TimeField()
     departure_time_from_site = models.TimeField()
     arrival_time_at_tcc = models.TimeField()
     tada_amount = models.IntegerField()
     start_test_date = models.DateField()
     end_test_date = models.DateField()
-    source_site = models.CharField(max_length=100, default = 'GNDEC, Ludhiana')
-    testing_site= models.CharField(max_length=100)
+    source_site = models.CharField(max_length=100, default='GNDEC, Ludhiana')
+    testing_site = models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
+
     def __unicode__(self):
-       return self.suspense
+        return self.suspense
 
 
 class QuotedSuspenseOrder(models.Model):
@@ -111,6 +115,7 @@ class QuotedSuspenseOrder(models.Model):
     quoted_order = models.ForeignKey('bills.QuotedOrder')
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
+
     def __unicode__(self):
         return '%s' % (self.id)
 
@@ -122,6 +127,7 @@ class Vehicle(models.Model):
     vehicle_id = models.CharField(max_length=20)
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
+
     def __unicode__(self):
         return '%s' % (self.vehicle_no)
 

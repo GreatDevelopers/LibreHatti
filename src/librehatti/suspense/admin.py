@@ -1,17 +1,15 @@
-from django.contrib import admin
-from django.contrib.auth.admin import *
+from django.contrib.auth.admin import admin
 
-from librehatti.suspense.models import SuspenseOrder, Staff, Department, StaffPosition
+from librehatti.suspense.models import SuspenseOrder, Staff, Department,\
+    StaffPosition
 
 from librehatti.catalog.actions import mark_inactive, mark_active
-from librehatti.catalog.models import *
 
 from librehatti.suspense.forms import StaffForm
 from librehatti.suspense.models import Vehicle, Transport
 
 
 admin.autodiscover()
-
 admin.site.register(Department)
 admin.site.register(Transport)
 admin.site.register(Vehicle)
