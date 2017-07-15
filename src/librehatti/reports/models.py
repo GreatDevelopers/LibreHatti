@@ -8,4 +8,4 @@ class SavedRegisters(models.Model):
     selected_fields = models.CharField(max_length = 1000)
 
     def __unicode__(self):
-    	return self.title
+        return self.title

@@ -1,28 +1,19 @@
 from django.shortcuts import render
-
 from django.core.urlresolvers import reverse
-
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from forms import ClientForm
 from forms import OrderForm
 from forms import AddConstraints
-from forms import DailyReportForm
 
 import simplejson
 
-from datetime import datetime
-
 import librehatti.settings as settings
-
 from librehatti.catalog.request_change import request_notify
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Bill
 from librehatti.catalog.models import Category
-
 from librehatti.reports.models import SavedRegisters
 
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def search_form(request):
@@ -82,7 +73,7 @@ def save_fields(request):
 
     selected_fields = request.META['QUERY_STRING']
 
-    save_fields = SavedRegisters(title = title,\
+    save_fields = SavedRegisters(title = title,
      selected_fields = selected_fields)
     save_fields.save()
     return HttpResponse('1')
@@ -99,8 +90,8 @@ def list_saved_registers(request):
     list_of_registers = SavedRegisters.objects.\
     values('title','selected_fields')
     request_status = request_notify()
-    return render(request,'reports/list_of_registers.html', \
-        {'list_of_registers':list_of_registers,'local_url': local_url,\
+    return render(request,'reports/list_of_registers.html',
+        {'list_of_registers':list_of_registers,'local_url': local_url,
         'request':request_status})
 
 

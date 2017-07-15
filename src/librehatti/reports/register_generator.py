@@ -3,17 +3,11 @@
 This file contains the functions that will be used to generate 
 registers.
 """
-
-from django.http import HttpResponse, HttpResponseRedirect
-
 from django.views.generic import View
 
 from django.shortcuts import render
 
-from helper import get_query
-
 from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Surcharge
 from librehatti.catalog.models import TaxesApplied
 from librehatti.catalog.request_change import request_notify
@@ -37,10 +31,11 @@ class GenerateRegister(View):
     def dispatch(self, *args, **kwargs):
         return super(GenerateRegister, self).dispatch(*args, **kwargs)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Initializing required lists.
         """
+        super(GenerateRegister, self).__init__(**kwargs)
         self.grand_total_list = []
         self.result_fields = []
         self.list_dict = {'First Name':'buyer__first_name',
@@ -52,7 +47,7 @@ class GenerateRegister(View):
             'quantity':'qty','unit price':'item__price_per_unit',
             'item':'item__name','Discount':'total_discount',
             'Debit':'is_debit', 'total price':'price',
-            'TDS': 'tds', 'Total With Taxes': 'bill__grand_total', 
+            'TDS': 'tds', 'Total With Taxes': 'bill__grand_total',
             'Order Id':'voucherid__purchase_order_of_session', 'Total Without Taxes': 'bill__total_cost',
             'Order Date': 'date_time',
             'Street Address': 'buyer__customer__address__street_address'
@@ -98,7 +93,7 @@ class GenerateRegister(View):
             generated_data_list.append(temporary)
         number_of_fields = len(self.selected_fields_order) + len(self.\
             selected_fields_client)
-        if ('Total With Taxes' in self.selected_fields_order \
+        if ('Total With Taxes' in self.selected_fields_order
             and 'Total Without Taxes' in self.selected_fields_order):
             number_of_fields -= 1
             number_of_fields = number_of_fields - self.decrement_field
@@ -106,18 +101,18 @@ class GenerateRegister(View):
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title, 'number_of_fields':number_of_fields,'get_data':
-            self.get_data, 'save_option': self.save_option,\
+            self.get_data, 'save_option': self.save_option,
             'request':request_status}
         try:
             temp['grand_total'] = self.grand_total_list
         except:
-            pass 
+            pass
         try:
             self.selected_fields_order[-1:-1] = self.surcharge
             temp['surcharge'] = self.surcharge
             self.grand_total_list[-1:-1]  = self.total_taxes
         except:
-            pass      
+            pass
         return render(request,'reports/generated_register.html',temp)
 
     def cal_grand_total(self,request):
@@ -226,7 +221,7 @@ class GenerateRegister(View):
         if self.fields_list:
             return self.fetch_values(request)
         else:
-            self.fields_list = ['first_name','last_name', 
+            self.fields_list = ['first_name','last_name',
                 'customer__address__street_address', 'customer__address__district',
                 'customer__address__province']
             self.selected_fields_client = ['First Name','Last Name',
@@ -242,7 +237,7 @@ class GenerateRegister(View):
         self.get_data = request.META['QUERY_STRING']
         self.title = request.GET['title']
         self.save_option = '1'
-        saved_registers = SavedRegisters.objects.values_list('title',\
+        saved_registers = SavedRegisters.objects.values_list('title',
          flat = True)
         if self.title in saved_registers:
             self.save_option = '0'

@@ -4,21 +4,16 @@ This file contains the functions that will be used
 to generate results based on the search term entered.
 """
 
-from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from helper import get_query
 from django.shortcuts import render
+
 from librehatti.catalog.request_change import request_notify
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Bill
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId
-from useraccounts.models import Customer
 from useraccounts.models import User
-from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from librehatti.bills.models import QuotedOrder
 from librehatti.bills.models import QuotedOrderofSession
 
 class SearchResult(View):
@@ -231,6 +226,6 @@ class SearchResult(View):
         temp = {'client':self.selected_fields_client,
             'order':self.selected_fields_order, 'result':generated_data_list,
             'title':self.title,'order_id':self.purchase_order_id,
-            'records':self.results,'request':request_status, 'flag':flag,\
+            'records':self.results,'request':request_status, 'flag':flag,
             'suspense_flag':suspense_flag}
         return render(request,'reports/search_result.html',temp)
