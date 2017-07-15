@@ -4,8 +4,6 @@ from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.models import Category 
 
-import datetime
-
  
 class FinancialSession(models.Model):
     """

@@ -1,8 +1,8 @@
-from django.contrib import admin
 
-from librehatti.voucher.models import *
+from librehatti.voucher.models import FinancialSession, Distribution, \
+    CategoryDistributionType, VoucherId
 
-from django.contrib.auth.admin import *
+from django.contrib.auth.admin import admin
 
 from librehatti.voucher.forms import AssignDistributionForm
 

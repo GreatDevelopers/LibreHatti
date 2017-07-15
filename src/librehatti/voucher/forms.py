@@ -1,7 +1,6 @@
 from django import forms
 
 from librehatti.catalog.models import Category
-from librehatti.voucher.models import CategoryDistributionType
 from librehatti.voucher.models import Distribution
 
 from librehatti.config import _PARENT_CATEGORY
@@ -20,9 +19,9 @@ class AssignDistributionForm(forms.ModelForm):
         )
     try:
         parent_category = forms.ModelChoiceField(queryset=Category.objects.\
-            filter(parent__parent__isnull=True).filter(parent__isnull=False),\
+            filter(parent__parent__isnull=True).filter(parent__isnull=False),
             label = _PARENT_CATEGORY)
-        category = forms.ModelChoiceField(queryset = Category.objects.all(),\
+        category = forms.ModelChoiceField(queryset = Category.objects.all(),
             label = _SUB_CATEGORY)
         distribution = forms.ModelChoiceField\
         (queryset = Distribution.objects.all())
