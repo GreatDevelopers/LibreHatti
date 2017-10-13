@@ -149,7 +149,6 @@ class PurchaseOrder(models.Model):
     type_of_service = models.ForeignKey('useraccounts.OrganisationType')
     is_active = models.BooleanField(default = True)
     def save(self, *args, **kwargs):
-
         surchages = Surcharge.objects.filter(taxes_included=1)
 
         if surchages:

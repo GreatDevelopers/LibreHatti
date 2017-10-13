@@ -38,9 +38,7 @@
             {% if order and item.0 == 'purchase_order_id' %}
             <a target="_blank" href = '{% url 'librehatti.prints.views.receipt'%}?order_id={{item.1}}'>Receipt</a> |
             <a target="_blank" href = '{% url 'librehatti.prints.views.bill'%}?order_id={{item.1}}'>Bill</a> |
-            {% if suspense_flag == 1 %}
             <a target="_blank" href = '{% url 'librehatti.prints.views.suspense_bill'%}?order_id={{item.1}}&suspense=suspense'>Suspense Bill</a> |
-            {% endif %}
             <a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{item.1}}'>View Voucher</a> |
             <a target="_blank" href = '{% url 'librehatti.prints.views.tax'%}?order_id={{item.1}}'>Tax Details</a>
 
