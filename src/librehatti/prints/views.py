@@ -164,8 +164,9 @@ def bill(request):
     organisation_id = purchase_order_obj['organisation']
     date = purchase_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
+    customer_gst_details = Customer.objects.values('gst_in', 'state', 'state_code').get(user=buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no',\
-        'stc_no').get(id=organisation_id)
+        'stc_no', 'gst_in', 'state', 'state_code').get(id=organisation_id)
     voucherid = VoucherId.objects.values('purchase_order_of_session').\
     filter(purchase_order=id)[0]
     total_in_words=num2eng(grand_total)
@@ -173,11 +174,11 @@ def bill(request):
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     return render(request, 'prints/bill.html', {\
-        'stc_no' : admin_organisations, 'pan_no' : admin_organisations,\
+        'admin_org' : admin_organisations,\
         'id':voucherid['purchase_order_of_session'], 'ref':purchase_order_obj,\
         'date':date, 'purchase_order':purchase_order, 'address':address,\
         'total_cost':total_cost, 'grand_cost':grand_total,\
-        'taxes_applied':taxes_applied,\
+        'taxes_applied':taxes_applied, 'customer_gst_details':customer_gst_details,\
         'buyer':purchase_order_obj, 'buyer_name':customer_obj,\
         'site':purchase_order_obj, 'delivery_charges':delivery_charges,\
         'total_discount':total_discount, 'tax_count':tax_count,\
@@ -495,7 +496,7 @@ def quoted_bill(request):
     date = quoted_order_obj['date_time']
     customer_obj = Customer.objects.values('company').get(user=buyer)
     admin_organisations = AdminOrganisations.objects.values('pan_no',\
-        'stc_no').get(id = organisation_id)
+        'stc_no', 'gst_in').get(id = organisation_id)
     header = HeaderFooter.objects.values('header').get(is_active=True)
     footer = HeaderFooter.objects.values('footer').get(is_active=True)
     permanent_note = NoteLine.objects.values('note').filter(is_permanent=True)
@@ -509,7 +510,7 @@ def quoted_bill(request):
     ref_letter = _YOUR_LETTER_No
     total_in_words = num2eng(grand_total)
     return render(request, 'bills/quote_bill.html', {
-        'stc_no':admin_organisations,'pan_no':admin_organisations,\
+        'admin_org': admin_organisations,\
         'ref':quoted_order_obj, 'date':date,\
         'quoted_order':quoted_order, 'address':address,\
         'total_cost': total_cost, 'grand_cost':grand_total,\

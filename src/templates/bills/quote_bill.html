@@ -12,8 +12,8 @@
 <body>
     {% block content %}
     <div class = "bill-left">
-        <span id ="highlight">STC No: </span>{{ stc_no.stc_no }}
-        <span id = "dated"><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }}</span>
+        <span id ="highlight">GST IN: </span>{{ admin_org.gst_in }}
+        <span id = "dated"><span id ="highlight">PAN No. </span>{{ admin_org.pan_no }}</span>
     </div>
     <div class="container">
         <h2>Proforma Bill</h2>
@@ -93,7 +93,7 @@
             </tr>
             {% if delivery_charges != 0 %}
             <tr>
-                <td>Transportation Charges</td>
+                <td>Transportation & Other Charges</td>
                 <td id="total">{{delivery_charges}}</td>
             </tr>
             <tr>
