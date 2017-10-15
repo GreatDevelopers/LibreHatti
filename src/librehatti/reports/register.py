@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+#import inflect
+from random import randint
 from django.core.urlresolvers import reverse
 
 from django.http import HttpResponse
@@ -435,6 +436,7 @@ def payment_register(request):
                 temp_list.append(temp_value['purchase_order__tds'])
                 temp_list.append(temp_value['amount_received'])
                 result.append(temp_list)
+		print temp_list[0],",",temp_list[1],",",temp_list[2],",",temp_list[6],",",temp_list[7],",",temp_list[10]+temp_list[11]+temp_list[12]+temp_list[13]
                 temp_list = []
                 material_list = ''
                 billamount = billamount + temp_value['totalplusdelivery']
@@ -645,6 +647,114 @@ def suspense_clearance_register(request):
         return render(request,'reports/suspense_clearance_form.html', \
         {'form':form,'request':request_status})
 
+Teacher=["Prof. kulbir Sing Gill","Dr. B.S. Walia","Dr. B.S. Walia","Prof. Harjinder Singh", "Prof. Gurdeepak Singh", "Dr. Harpal Singh", "Dr. Hardeep Singh"," Dr. Harvinder Singh","Prof. Parshant Garg", "Prof. K.S. Bedi","Prof. K.S. Bedi","Prof. K.S. Bedi","Prof. K.S. Bedi","Prof. K.S. Bedi","Dr. Jagbir Singh","Dr. Jagbir Singh","Dr. Jagbir Singh","Dr. Jagbir Singh","Dr.R.P.Singh", "Prof. Puneet Pal Singh"]
+
+
+def servicetax_registerYear(year):
+    """
+    This view is used to display the servicetax_register registers
+    Argument:Http Request
+    Return:Render Service Tax Register
+    """
+    #p = inflect.engine()
+    total = 0
+    totalplustax = 0
+    taxes_name = TaxesApplied.objects.values('surcharge_name','surcharge_value').\
+    filter(
+        purchase_order__date_time__year=year).distinct()
+    paid_taxes = {}
+    init_taxes = {}
+    not_paid_taxes = {}
+    surcharges = Surcharge.objects.filter()
+    for val in surcharges:
+        for val2 in taxes_name:
+            if val.tax_name in val2['surcharge_name']:
+                init_taxes['%s' % val.tax_name.replace(" ", "_").lower()] = 0
+    taxesapplied_obj = TaxesApplied.objects.values('purchase_order__id').\
+    filter(
+        purchase_order__date_time__year=year).order_by('purchase_order__date_time')
+    purchase_order = PurchaseOrder.objects.values('date_time', 'id',\
+        'bill__totalplusdelivery', 'bill__grand_total',\
+        'buyer__first_name', 'buyer__last_name',\
+	'buyer__customer__gst_in',\
+        'buyer__customer__title',\
+        'buyer__customer__address__street_address',\
+        'buyer__customer__address__district',\
+        'buyer__customer__address__pin',\
+        'buyer__customer__address__province',).\
+    filter(id__in=taxesapplied_obj).order_by('date_time')
+    result = []
+    for value in purchase_order:
+        i=0
+        temp = []
+        voucherid = VoucherId.objects.values(\
+            'purchase_order_of_session').filter(\
+            purchase_order=value['id'])
+        if(len(voucherid)==0):
+            temp.append("Nil")
+        else:   
+            temp.append(voucherid[0]['purchase_order_of_session'])
+        temp.append(value['date_time'])
+        if value['buyer__first_name']:
+            address = value['buyer__first_name']\
+            + value['buyer__last_name']\
+            + ', ' +\
+            value[\
+            'buyer__customer__address__street_address']\
+            + ', ' + \
+            value[\
+            'buyer__customer__address__district']\
+            + ', ' + \
+            value[\
+            'buyer__customer__address__province']
+        else:
+            address =\
+            value['buyer__customer__title']\
+            + ', ' +\
+            value[\
+            'buyer__customer__address__street_address']\
+            + ', ' + \
+            value[\
+            'buyer__customer__address__district']\
+            + ', ' + \
+            value[\
+            'buyer__customer__address__province']
+	if value['buyer__customer__gst_in']:
+	    gst_in = value['buyer__customer__gst_in']
+	else:
+	    gst_in = ''
+        temp.append(address)
+	temp.append(gst_in)
+        temp.append(value['bill__totalplusdelivery'])
+        total = total+value['bill__totalplusdelivery']
+        tax_data = []
+        for val in taxes_name:
+            taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
+                purchase_order=value['id'], surcharge_name=val['surcharge_name'])
+            if taxesapplied:
+                taxesapplied = TaxesApplied.objects.values('tax', 'surcharge_name').filter(\
+                    purchase_order=value['id'], surcharge_name=val['surcharge_name'])[0]
+                init_taxes[val['surcharge_name'].replace(" ", "_").lower()]\
+                = init_taxes[val['surcharge_name'].replace(" ", "_").lower()] + taxesapplied['tax']
+                tax_data.append(taxesapplied['tax'])
+            else:
+                tax_data.append('0')
+        temp.append(tax_data)
+        temp.append(value['bill__grand_total'])
+        totalplustax = totalplustax +\
+        value['bill__grand_total']
+        materiallist=""
+        material = VoucherId.objects.\
+        values(\
+            'purchased_item__item_id__category__name').filter(\
+            purchase_order=value['id']).distinct()
+        for i in material:
+            if(materiallist== ""):
+                materiallist=i['purchased_item__item_id__category__name']
+
+            else:
+                materiallist=materiallist+" , "+i['purchased_item__item_id__category__name']
+        print temp[0],"|",temp[1],"|",Teacher[randint(0,19)],"|",temp[2],"|",materiallist,"|",temp[5]#,"|",p.number_to_word(temp[5])
 
 @login_required
 def servicetax_register(request):
@@ -659,6 +769,7 @@ def servicetax_register(request):
         if form.is_valid() and data_form.is_valid():
             month = request.POST['month']
             year = request.POST['year']
+            servicetax_registerYear(year)
             total = 0
             totalplustax = 0
             taxes_name = TaxesApplied.objects.values('surcharge_name','surcharge_value').\
@@ -681,7 +792,8 @@ def servicetax_register(request):
                 'bill__totalplusdelivery', 'bill__grand_total',\
                 'buyer__first_name', 'buyer__last_name',\
                 'buyer__customer__title',\
-                'buyer__customer__address__street_address',\
+                'buyer__customer__address__street_address', 'buyer__customer__gst_in',\
+	        'buyer__customer__telephone',\
                 'buyer__customer__address__district',\
                 'buyer__customer__address__pin',\
                 'buyer__customer__address__province').\
@@ -719,7 +831,13 @@ def servicetax_register(request):
                     + ', ' + \
                     value[\
                     'buyer__customer__address__province']
+               	if value['buyer__customer__gst_in']:
+	            gst_in = value['buyer__customer__gst_in']
+		else:
+	            gst_in = ''
+		telephone = value['buyer__customer__telephone']
                 temp.append(address)
+	        temp.append(gst_in)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']
                 tax_data = []
@@ -736,6 +854,7 @@ def servicetax_register(request):
                         tax_data.append('0')
                 temp.append(tax_data)
                 temp.append(value['bill__grand_total'])
+		temp.append(telephone)
                 totalplustax = totalplustax +\
                 value['bill__grand_total']
                 result.append(temp)
@@ -906,7 +1025,7 @@ def proforma_register(request):
                 'buyer__customer__title',\
                 'buyer__customer__address__street_address',\
                 'buyer__customer__address__district',\
-                'buyer__customer__company', 'buyer__customer__telephone',\
+                'buyer__customer__company',\
                 'buyer__email', 'quotedbill__totalplusdelivery',\
                 'quotedbill__grand_total', 'delivery_address').filter(\
                 id__in=quotedtaxesapplied)
@@ -944,7 +1063,7 @@ def proforma_register(request):
                         item['item__category__name']
                 temp.append(material_list)
                 temp.append(order['delivery_address'])
-                temp.append(order['buyer__customer__telephone'])
+                #temp.append(order['buyer__customer__telephone'])
                 temp.append(order['buyer__email'])
                 temp.append(order['quotedbill__totalplusdelivery'])
                 taxes = QuotedTaxesApplied.objects.values('tax').filter(\
