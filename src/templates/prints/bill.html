@@ -11,11 +11,13 @@
 <body>
     {% block content %}
     <div class = "bill-left">
-        <span id ="highlight">STC No: </span>{{ stc_no.stc_no }}
-        <span id = "dated"><span id ="highlight">PAN No. </span>{{ pan_no.pan_no }}</span>
+        <span id ="highlight">GST IN. </span>{{ admin_org.gst_in }}
+        <span id = "dated"><span id ="highlight">PAN No. </span>{{ admin_org.pan_no }}</span><br/>
+	<strong>State: </strong>{{ admin_org.state }}<br/>
+	<strong>State Code: </strong>{{admin_org.state_code}}<br/>
     </div>
     <div class="container">
-        <h2> Bill</h2>
+        <h2> Tax Invoice</h2>
     </div>
     <div class = "bill-left">
         <div><span id ="highlight">No. </span>GNDEC/TCC/B/{{id}} <span id = "dated"><span id ="highlight">Dated : </span>{{ date|date:"d M, Y" }}</span></div>
@@ -35,12 +37,17 @@
         {% if buyer_name.company %}
         <div><b>Agency:</b> {{buyer_name.company}}</div>
         {% endif %}
+	    <div style="float:right; margin-top:-130px;">
+            	<span id ="highlight"> Client GST No: </span>{{customer_gst_details.gst_in}}<br>
+            	<span id ="highlight"> Client State: </span>{{customer_gst_details.state}}<br>
+            	<span id ="highlight"> Client State Code: </span>{{customer_gst_details.state_code}}<br>
+	    </div>
+        </div>
             <p><span id ="highlight"> Ref: </span>{{ref_letter}} {{ref.reference}} dated {{ref.reference_date}}</p>
             <p><span id ="highlight"> Site: </span>{{site.delivery_address}}</p>
-        </div>
-        <table class="data" border="1px">
+        <table class="data" border="1px" style="border:1px solid black;">
             <tr>
-                <th>Item/Services</th>
+                <th>Item/Services&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAC Code: 9983</th>
                 <th>Quantity/Unit</th>
                 <th>Rate &#8377;</th>
                 <th>Total &#8377;</th>
@@ -92,7 +99,7 @@
             </tr>
             {% if delivery_charges != 0 %}
             <tr>
-                <td>Transportation Charges</td>
+                <td>Transportation & Other Charges</td>
                 <td id="total">{{delivery_charges}}</td>
             </tr>
             <tr>
@@ -113,7 +120,7 @@
                 <td id="total"><b>{{grand_cost}}</b></td>
             </tr>
         </table>
-        <div>
+        <div><br><br>
     {% endblock %}
     <!-- Dean is liable to change-->
 </body>
