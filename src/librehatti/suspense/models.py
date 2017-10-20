@@ -95,6 +95,7 @@ class TaDa(models.Model):
     departure_time_from_site = models.TimeField()
     arrival_time_at_tcc = models.TimeField()
     tada_amount = models.IntegerField()
+    tada_amount_without_tax = models.IntegerField()
     start_test_date = models.DateField()
     end_test_date = models.DateField()
     source_site = models.CharField(max_length=100, default = 'GNDEC, Ludhiana')
@@ -103,6 +104,10 @@ class TaDa(models.Model):
     def __unicode__(self):
        return self.suspense
 
+class TaDa_Tax_Detail(models.Model):
+    tada = models.ForeignKey(TaDa)
+    name = models.CharField(max_length=100)
+    amount = models.IntegerField()
 
 class QuotedSuspenseOrder(models.Model):
     """

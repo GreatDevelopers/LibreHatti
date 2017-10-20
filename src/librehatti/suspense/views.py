@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.db.models import Sum, Max
 
 from models import SuspenseClearance
-from models import TaDa
+from models import TaDa, TaDa_Tax_Detail
 
 from django.http import  HttpResponseRedirect, HttpResponse
 
@@ -48,7 +48,7 @@ from librehatti.reports.forms import DateRangeSelectionForm
 from django.contrib.auth.decorators import login_required
 
 import simplejson
-import json 
+import json
 from datetime import date, datetime
 
 from django.template.loader import get_template
@@ -62,7 +62,7 @@ def add_distance(request):
     return: Check for type of order and redirects accordingly.
         Types of Order:
             1.Main
-            2.Suspense 
+            2.Suspense
     """
     old_post = request.session.get('old_post')
     purchase_order_id = request.session.get('purchase_order_id')
@@ -193,7 +193,7 @@ def clearance_search(request):
                 request_status = request_notify()
                 return render(request, 'suspense/suspense_first.html', \
                     {'form':form, 'clearance':clearance,\
-                    'messages':messages, 'request':request_status}) 
+                    'messages':messages, 'request':request_status})
             else:
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session"
@@ -258,14 +258,14 @@ def clearance_result(request):
             except:
                 obj= SuspenseClearance(session=session, voucher_no=voucher_no,
                      work_charge=0, labour_charge=labour_charge,
-                     car_taxi_charge=car_taxi_charge, 
+                     car_taxi_charge=car_taxi_charge,
                      boring_charge_external=boring_charge_external,
                      boring_charge_internal=boring_charge_internal,
                      lab_testing_staff=lab_testing_staff,
                      field_testing_staff=field_testing_staff,
                      test_date=test_date, clear_date=clear_date)
                 obj.save()
-            request_status = request_notify()    
+            request_status = request_notify()
             temp = {'session':session,'voucher_no': voucher_no,\
                     'labour_charge':labour_charge,\
                     'car_taxi_charge':car_taxi_charge,
@@ -463,7 +463,7 @@ def other_charges(request):
                     'boring_charges':suspenseclearance['boring_charge_external'],\
                     'total':total, 'other_charges':other_charges,\
                     'transport':transport, 'complete_total':complete_total,\
-                    'transplusother':transplusother, 
+                    'transplusother':transplusother,
                     'transportbillno':transportbillno,
                     'test_date':suspenseclearance['test_date'],
                     'receipt_dated':receipt_dated,
@@ -478,7 +478,7 @@ def other_charges(request):
                     'boring_charges':suspenseclearance['boring_charge_external'],\
                     'total':total, 'other_charges':other_charges,\
                     'transport':transport, 'complete_total':complete_total,\
-                    'transplusother':transplusother, 
+                    'transplusother':transplusother,
                     'transportbillno':transportbillno,
                     'test_date':suspenseclearance['test_date']})
 
@@ -489,7 +489,7 @@ def suspense(request):
     argument: Http Request
     returns: render SuspenseForm.
     """
-    form = SuspenseForm()   
+    form = SuspenseForm()
     return render(request,'suspense/form.html',{'form':form})
 
 
@@ -661,10 +661,10 @@ def sessionselect(request):
             else:
                 form = SessionSelectForm()
                 request_status = request_notify()
-                errors = "No such voucher number in selected session" 
+                errors = "No such voucher number in selected session"
                 temp = {"SelectForm":form, "errors":errors,\
                 'request':request_status}
-                return render(request, 'voucher/sessionselect.html', temp)  
+                return render(request, 'voucher/sessionselect.html', temp)
         else:
             form = SessionSelectForm(request.POST)
             request_status = request_notify()
@@ -680,7 +680,7 @@ def sessionselect(request):
 @login_required
 def transportbill(request):
     """
-    This view is used to generate the Transport Bill 
+    This view is used to generate the Transport Bill
     argument: Http Request
     returns: Render Transport Bill.
     """
@@ -751,12 +751,12 @@ def transportbill(request):
                                 transportbillofsession=1)
                             temp_obj.save()
             except:
-                pass 
+                pass
             temp = Transport.objects.filter(voucher_no=voucher, session=session).values()
             total_amount = Transport.objects.filter(voucher_no=voucher, session=session).\
             aggregate(Sum('total')).get('total__sum', 0.00)
             zipped_data = zip(date, kilometers)
-            transport_total = [] 
+            transport_total = []
             for date_var,kilometers_var in zipped_data:
                 cal_total = rate * int(kilometers_var)
                 transport_total.append(cal_total)
@@ -794,13 +794,12 @@ def transportbill(request):
         temp = {"SelectForm":form,'request':request_status}
         return render(request, 'voucher/sessionselect.html', temp)
 
-
 @login_required
 def tada_result(request):
     """
     This view is used to generate TADA bill
-    argument: Http Request 
-    returns: Render TA/DA Form for selected order if order is valid. If order 
+    argument: Http Request
+    returns: Render TA/DA Form for selected order if order is valid. If order
     is not valid, it returns error on same page.
     """
     if request.method == 'POST':
@@ -846,6 +845,17 @@ def tada_result(request):
             for temp_var in list_staff:
                 for tada_value in temp_var:
                     tada_total = tada_value['daily_ta_da'] + tada_total
+
+            tada_taxes = []
+            # Current valid taxes
+            valid_taxes = Surcharge.objects.filter(taxes_included=1)
+            tada_total_with_tax = tada_total
+            for tax in valid_taxes:
+                tax_name = tax.tax_name + " @ " + str(tax.value) + " %"
+                tax_amount = tada_total * tax.value / 100
+                tax_amount = int(round(tax_amount))
+                tada_taxes.append((tax_name, tax_amount))
+                tada_total_with_tax += tax_amount
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
                 session_id=session).update(is_cleared=0)
             object = TaDa.objects.filter(session=session, voucher_no=voucher,
@@ -857,19 +867,29 @@ def tada_result(request):
                 arrival_time_at_site=arrival_time_at_site,\
                 departure_time_from_site=departure_time_from_site,\
                 arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_total, start_test_date=start_test_date,\
+                tada_amount=tada_total_with_tax, tada_amount_without_tax=tada_total,\
+                start_test_date=start_test_date,\
                 end_test_date=end_test_date, source_site=source_site,\
                 testing_site=testing_site , testing_staff=testing_staff)
+                tada_id = TaDa.objects.get(session=session, voucher_no=voucher, start_test_date=start_test_date).id
+                tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
+                for tax_obj, tax in zip(tada_tax_detail, tada_taxes):
+                    tax_obj.name = tax[0]
+                    tax_obj.amount = tax[1]
+                    tax_obj.save()
             else:
                 obj = TaDa(voucher_no=voucher, session=session,\
                 departure_time_from_tcc=departure_time_from_tcc,\
                 arrival_time_at_site=arrival_time_at_site,\
                 departure_time_from_site=departure_time_from_site,\
                 arrival_time_at_tcc=arrival_time_at_tcc,\
-                tada_amount=tada_total, start_test_date=start_test_date,\
+                tada_amount=tada_total_with_tax, tada_amount_without_tax=tada_total, start_test_date=start_test_date,\
                 end_test_date=end_test_date, source_site=source_site,\
                 testing_site=testing_site , testing_staff=testing_staff )
                 obj.save()
+                for tax in tada_taxes:
+                    tada_tax_detail = TaDa_Tax_Detail(tada=obj, name=tax[0], amount=tax[1])
+                    tada_tax_detail.save()
             recent_tada = TaDa.objects.values_list('id',flat=True).filter(voucher_no=voucher).\
                 order_by('-id')[0]
             tada_obj = TaDa.objects.values('departure_time_from_tcc',\
@@ -877,17 +897,23 @@ def tada_result(request):
                 'arrival_time_at_tcc', 'tada_amount', 'start_test_date',\
                 'end_test_date', 'source_site', 'testing_site',\
                 'date_of_generation').get(id=recent_tada)
-            tada_amount_in_words = tada_total
+            #tada_amount_in_words = tada_total
+            tada_tax_detail_dict = {}
+            tada_id = TaDa.objects.get(session=session, voucher_no=voucher, start_test_date=start_test_date).id
+            tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
+            for i in tada_tax_detail:
+                tada_tax_detail_dict[i.name] = i.amount
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             request_status = request_notify()
             return render(request, 'suspense/tada_summary.html',{\
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
-                'list_staff':list_staff, 'words':num2eng(int(tada_total)),\
-                'total':tada_total, 'request':request_status,'session':session,\
+                'list_staff':list_staff, 'words':num2eng(int(tada_total_with_tax)),\
+                'total':tada_total_with_tax, 'amount':tada_total, 'tax_detail': tada_tax_detail_dict,\
+                'request':request_status,'session':session,\
                 'voucher':voucher})
-        else:    
+        else:
             session = request.POST['session']
             voucher = request.POST['voucher_no']
             form = TaDaForm(request.POST,initial={'voucher_no':voucher,\
@@ -1010,7 +1036,7 @@ def mark_clear(request):
             list_user_clr = zip (list_user,list_clearance)
             for suspense_var,voucher_var in list_user_clr:
                 final_list = zip(suspense_var,voucher_var)
-                list_details.append(final_list)    
+                list_details.append(final_list)
             request_status = request_notify()
             return render(request, 'suspense/mark_suspense_clear.html', {
                 'listed':list_details, 'suspense_cleared':suspense_cleared,\
@@ -1239,7 +1265,7 @@ def transport_bill(request):
             'purchase_order__buyer__customer__title',\
             'purchase_order__buyer__customer__address__district')[0]
         header = HeaderFooter.objects.values('header').get(is_active=True)
-        request_status = request_notify()   
+        request_status = request_notify()
         return render(request, 'suspense/transport_bill.html',
                {'words':num2eng(total_amount), 'total':total, 'rate':rate,\
                'date':date, "bill_no":bill_no,\
@@ -1255,6 +1281,7 @@ def tada_bill_list(request):
     tada = TaDa.objects.values('id','tada_amount','start_test_date',
         'end_test_date').filter(voucher_no=voucher).filter(session=session)
     return render(request, 'suspense/tada_bill_list.html',{'tada':tada})
+
 def tada_bill(request):
     """
     This view generate the T.A/D.A bill.
@@ -1267,10 +1294,11 @@ def tada_bill(request):
     ('date_of_generation','departure_time_from_tcc',\
     'departure_time_from_site','arrival_time_at_tcc',\
     'arrival_time_at_site','tada_amount','start_test_date','end_test_date',\
-    'source_site','testing_site','testing_staff').\
+    'source_site','testing_site','testing_staff','tada_amount_without_tax').\
     get(id=tada_id)
     start_test_date = tada_object['start_test_date']
     tada_amount = tada_object['tada_amount']
+    tada_amount_without_tax = tada_object['tada_amount_without_tax']
     end_test_date = tada_object['end_test_date']
     testing_staff = tada_object['testing_staff']
     testing_staff_list = testing_staff.split(',')
@@ -1286,6 +1314,10 @@ def tada_bill(request):
         for tada_val in testing_staff_details:
             tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
         list_staff.append(testing_staff_details)
+    tada_tax_detail_dict = {}
+    tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
+    for i in tada_tax_detail:
+        tada_tax_detail_dict[i.name] = i.amount
 
     voucher_obj = VoucherId.objects.values('purchase_order_of_session', 'receipt_date').\
     filter(session=tada_obj.session,voucher_no=tada_obj.voucher_no)[0]
@@ -1297,12 +1329,13 @@ def tada_bill(request):
         'buyer__customer__address__district', 'buyer__customer__address__street_address',
         'buyer__customer__address__pin', 'buyer__customer__address__province')[0]
     header = HeaderFooter.objects.values('header').get(is_active=True)
-    request_status = request_notify()   
+    request_status = request_notify()
     return render(request, 'suspense/tada_result.html',{\
     'purchase_order_object':purchase_order_object,
     'tada':tada_object, 'purchase_order_id':purchase_order_var,\
-     'words':num2eng(int(tada_amount)),'tada_amount':tada_amount,\
-     'request':request_status,'session':tada_obj.session,\
+    'words':num2eng(int(tada_amount)),'tada_total':tada_amount,\
+    'tada_amount':tada_amount_without_tax, 'tax_detail':tada_tax_detail_dict,\
+    'request':request_status,'session':tada_obj.session,\
     'voucher':tada_obj.voucher_no,'list_staff':list_staff,'header':header,
     'date':voucher_obj['receipt_date']
     })
@@ -1323,7 +1356,7 @@ def car_taxi_advance_form(request):
                 request_status = request_notify()
                 return render(request, 'suspense/car_taxi_advance_form.html', \
                     {'form':form, 'request':request_status,
-                    'car_taxi_advance':car_taxi_advance}) 
+                    'car_taxi_advance':car_taxi_advance})
             else:
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session"
