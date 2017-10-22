@@ -898,11 +898,11 @@ def tada_result(request):
                 'end_test_date', 'source_site', 'testing_site',\
                 'date_of_generation').get(id=recent_tada)
             #tada_amount_in_words = tada_total
-            tada_tax_detail_dict = {}
+            tada_tax_detail_list = []
             tada_id = TaDa.objects.get(session=session, voucher_no=voucher, start_test_date=start_test_date).id
             tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
             for i in tada_tax_detail:
-                tada_tax_detail_dict[i.name] = i.amount
+                tada_tax_detail_list.append((i.name, i.amount))
             header = HeaderFooter.objects.values('header').get(is_active=True)
             footer = HeaderFooter.objects.values('footer').get(is_active=True)
             request_status = request_notify()
@@ -910,7 +910,7 @@ def tada_result(request):
                 'purchase_order_object':purchase_order_object,
                 'tada':tada_obj, 'purchase_order_id':voucher,\
                 'list_staff':list_staff, 'words':num2eng(int(tada_total_with_tax)),\
-                'total':tada_total_with_tax, 'amount':tada_total, 'tax_detail': tada_tax_detail_dict,\
+                'total':tada_total_with_tax, 'amount':tada_total, 'tax_detail': tada_tax_detail_list,\
                 'request':request_status,'session':session,\
                 'voucher':voucher})
         else:
@@ -1314,10 +1314,10 @@ def tada_bill(request):
         for tada_val in testing_staff_details:
             tada_val['daily_ta_da'] = tada_val['daily_ta_da'] * days
         list_staff.append(testing_staff_details)
-    tada_tax_detail_dict = {}
+    tada_tax_detail_list = []
     tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
     for i in tada_tax_detail:
-        tada_tax_detail_dict[i.name] = i.amount
+        tada_tax_detail_list.append((i.name, i.amount))
 
     voucher_obj = VoucherId.objects.values('purchase_order_of_session', 'receipt_date').\
     filter(session=tada_obj.session,voucher_no=tada_obj.voucher_no)[0]
@@ -1334,7 +1334,7 @@ def tada_bill(request):
     'purchase_order_object':purchase_order_object,
     'tada':tada_object, 'purchase_order_id':purchase_order_var,\
     'words':num2eng(int(tada_amount)),'tada_total':tada_amount,\
-    'tada_amount':tada_amount_without_tax, 'tax_detail':tada_tax_detail_dict,\
+    'tada_amount':tada_amount_without_tax, 'tax_detail':tada_tax_detail_list,\
     'request':request_status,'session':tada_obj.session,\
     'voucher':tada_obj.voucher_no,'list_staff':list_staff,'header':header,
     'date':voucher_obj['receipt_date']
