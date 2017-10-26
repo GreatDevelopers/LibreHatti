@@ -30,7 +30,7 @@ class Clearance_form(ModelForm):
         exclude = ('work_charge',)
         widgets = {'session': forms.HiddenInput(),\
         'voucher_no': forms.HiddenInput()}
-    
+
     def __init__(self, *args, **kwargs):
         super(Clearance_form, self).__init__(*args, **kwargs)
         self.fields['voucher_no'].widget.attrs={'class':'form-control'}
@@ -75,7 +75,7 @@ class TaDaForm(ModelForm):
 
     class Meta:
         model = TaDa
-        exclude = ('date_of_generation','tada_amount')
+        exclude = ('date_of_generation','tada_amount', 'tada_amount_without_tax')
         widgets = {'session': forms.HiddenInput(),\
         'voucher_no': forms.HiddenInput()}
     def __init__(self, *args, **kwargs):
@@ -114,7 +114,7 @@ class SessionSelectForm(forms.Form):
     """
     required_css_class = 'required'
     error_css_class = 'error'
-    
+
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())
     voucher = forms.CharField()
     def __init__(self, *args, **kwargs):
