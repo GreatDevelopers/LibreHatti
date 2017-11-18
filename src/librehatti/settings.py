@@ -29,6 +29,8 @@ DATABASES = {
 
 ALLOWED_HOSTS = []
 
+LOCALE_PATHS = (BASE_DIR + '/locale',)
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -116,6 +118,7 @@ INSTALLED_APPS = (
     'librehatti.reports',
     'librehatti.voucher',
     'librehatti.programmeletter',
+    'librehatti.dispatch_register',
 )
 
 SUIT_CONFIG = {

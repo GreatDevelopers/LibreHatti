@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    <form action='{% url 'dispatch_index' %}' method='POST'> {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value ='Submit' />
+
+{% endblock %}

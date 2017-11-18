@@ -2,15 +2,17 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-
+from django.shortcuts import redirect
 from reports.register_generator import GenerateRegister
 from reports.search import SearchResult
 from ajax_select import urls as ajax_select_urls
+from django.views.generic import TemplateView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'librehatti.catalog.views.index', name='home'),
+    url(r'^dispatch_index/$', 'librehatti.dispatch_register.views.dispatch_view', name='dispatch_index'),
     url(r'^catalog/', include('librehatti.catalog.urls')),
     url(r'^useraccounts/', include('useraccounts.urls')),
     url(r'^print/', include('librehatti.prints.urls')),
@@ -20,8 +22,8 @@ urlpatterns = patterns('',
     url(r'^save_fields', 'librehatti.reports.views.save_fields'),
     url(r'^list_saved_registers', 'librehatti.reports.views.list_saved_registers'),
     url(r'daily_result', 'librehatti.reports.register.daily_report_result', name='daily_report_result'),
-    url(r'consultancy_funds_report', 'librehatti.reports.register.consultancy_funds_report', name='consultancy_funds_report'),    
-    url(r'tds_report', 'librehatti.reports.register.tds_report_result', name='tds_report_result'),    
+    url(r'consultancy_funds_report', 'librehatti.reports.register.consultancy_funds_report', name='consultancy_funds_report'),
+    url(r'tds_report', 'librehatti.reports.register.tds_report_result', name='tds_report_result'),
     url(r'payment_report', 'librehatti.reports.register.payment_register', name='payment_register'),
     url(r'suspense_clearance_register', 'librehatti.reports.register.suspense_clearance_register'),
     url(r'servicetax', 'librehatti.reports.register.servicetax_register'),
