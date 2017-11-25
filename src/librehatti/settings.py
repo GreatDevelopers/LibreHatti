@@ -1,4 +1,4 @@
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+#from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from librehatti.config import _SENDER_EMAIL
 from librehatti.config import _PASSWORD
 
@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
-TEMPLATE_DEBUG = DEBUG
+#TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
 )
@@ -19,9 +19,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',
-        'USER': 'db_user',
-        'PASSWORD': 'db_password',
+        'NAME': 'lh',#'db_name',
+        'USER': 'root',#'db_user',
+        'PASSWORD':'r',#'db_password',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -67,16 +67,18 @@ STATICFILES_FINDERS = (
 
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-)
+#TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+#    'django.core.context_processors.request',
+#)
+
+#TEMPLATE_CONTEXT_PROCESSORS = ('django.contrib.auth.context_processors.auth', 'django.core.context_processors.debug', 'django.core.context_processors.i18n', 'django.core.context_processors.media', 'django.core.context_processors.static', 'django.core.context_processors.tz', 'django.contrib.messages.context_processors.messages', 'django.core.context_processors.request')
 
 SECRET_KEY = 'v5j3-ny)7zlk3wmqyg298#re3#8-v_v6+@9635h0-x9zak+8t*'
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
+#TEMPLATE_LOADERS = (
+#    'django.template.loaders.filesystem.Loader',
+#    'django.template.loaders.app_directories.Loader',
+#)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -92,9 +94,40 @@ ROOT_URLCONF = 'librehatti.urls'
 
 WSGI_APPLICATION = 'librehatti.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ]
+        },
+    },
+]
+#import ipdb
+#ipdb.set_trace()
+#TEMPLATE_DIRS = (
+#    os.path.join(BASE_DIR, 'templates'),
+#)
+
+
+
+#print("ttttttttttttttttttttttttttttttttttt")
+#print(BASE_DIR, '\n')
+#print(TEMPLATE_DIRS)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -110,6 +143,7 @@ INSTALLED_APPS = (
     'librehatti.catalog',
     'useraccounts',
     'tinymce',
+#    'templates.admin',
     'librehatti.prints',
     'librehatti.suspense',
     'librehatti.bills',
