@@ -6,7 +6,7 @@ register = template.Library()
 
 
 def addcss(field, css):
-	"""
-	This view adds css to the field argument passed
-	"""
+    """
+    This view adds css to the field argument passed
+    """
     return field.as_widget(attrs={'class':css})
