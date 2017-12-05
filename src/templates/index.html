@@ -25,34 +25,34 @@
             <a href= {% url 'admin:catalog_nonpaymentorder_add' %}><img src="{% static 'icons/non-payment.png' %}"><span class="panel-text">Non-Payment</span></a>
         </li>
         <li class="panel-item" id="registers">
-            <a href='{% url 'reports.views.list_saved_registers' %}'><img src="{% static 'icons/Documents-256.png' %}"><span class="panel-text"> View Registers</span></a>
+            <a href='{% url 'list_saved_registers' %}'><img src="{% static 'icons/Documents-256.png' %}"><span class="panel-text"> View Registers</span></a>
         </li>
         <li class="panel-item" id="registers">
-            <a href='{% url 'librehatti.reports.views.search_form' %}?type=register'><img src="{% static 'icons/Document-Settings-256.png' %}"><span class="panel-text">Generate Registers</span></a>
+            <a href='{% url 'search_form' %}?type=register'><img src="{% static 'icons/Document-Settings-256.png' %}"><span class="panel-text">Generate Registers</span></a>
         </li>
         <li class="panel-item" id="search">
-            <a href= '{% url 'librehatti.reports.views.search_form' %}?type=search'><img src="{% static 'icons/Search-256.png' %}"><span class="panel-text">Search</span></a>
+            <a href= '{% url 'search_form' %}?type=search'><img src="{% static 'icons/Search-256.png' %}"><span class="panel-text">Search</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.catalog.request_change.request_save' %}'><img src="{% static 'icons/Hand-Sign.png' %}"><span class="panel-text">Request Change</span></a>
+            <a href= '{% url 'catalog:request_save' %}'><img src="{% static 'icons/Hand-Sign.png' %}"><span class="panel-text">Request Change</span></a>
         </li>
         <li class="panel-item" id="porforma">
-            <a href= '{% url 'librehatti.suspense.views.sessionselect' %}'><img src="{% static 'icons/Transport-Truck-256.png' %}"><span class="panel-text">Transport Bills</span></a>
+            <a href= '{% url 'suspense:sessionselect' %}'><img src="{% static 'icons/Transport-Truck-256.png' %}"><span class="panel-text">Transport Bills</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.suspense.views.tada_order_session' %}'><img src="{% static 'icons/Man-Eating-256.png' %}"><span class="panel-text">Allowance</span></a>
+            <a href= '{% url 'suspense:tada_order_session' %}'><img src="{% static 'icons/Man-Eating-256.png' %}"><span class="panel-text">Allowance</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.suspense.views.clearance_search' %}'><img src="{% static 'icons/Bill-256.png' %}"><span class="panel-text">Clearance Bills</span></a>
+            <a href= '{% url 'suspense:clearance_search' %}'><img src="{% static 'icons/Bill-256.png' %}"><span class="panel-text">Clearance Bills</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.suspense.views.mark_clear' %}'><img src="{% static 'icons/Clean-256.png' %}"><span class="panel-text">Clear Suspense</span></a>
+            <a href= '{% url 'suspense:mark_clear' %}'><img src="{% static 'icons/Clean-256.png' %}"><span class="panel-text">Clear Suspense</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.suspense.views.car_taxi_advance_form' %}'><img src="{% static 'icons/Clean-256.png' %}"><span class="panel-text">Car/Taxi Advance</span></a>
+            <a href= '{% url 'suspense:car_taxi_advance_form' %}'><img src="{% static 'icons/Clean-256.png' %}"><span class="panel-text">Car/Taxi Advance</span></a>
         </li>
         <li class="panel-item" id="clearance">
-            <a href= '{% url 'librehatti.catalog.views.list_products' %}'><img src="{% static 'icons/View-List-256.png' %}"><span class="panel-text">Product Rate List</span></a>
+            <a href= '{% url 'catalog:list_products' %}'><img src="{% static 'icons/View-List-256.png' %}"><span class="panel-text">Product Rate List</span></a>
         </li>
     </ul>
     {% endblock %}
