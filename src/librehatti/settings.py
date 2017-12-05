@@ -106,6 +106,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
@@ -119,15 +123,6 @@ TEMPLATES = [
 ]
 #import ipdb
 #ipdb.set_trace()
-#TEMPLATE_DIRS = (
-#    os.path.join(BASE_DIR, 'templates'),
-#)
-
-
-
-#print("ttttttttttttttttttttttttttttttttttt")
-#print(BASE_DIR, '\n')
-#print(TEMPLATE_DIRS)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
