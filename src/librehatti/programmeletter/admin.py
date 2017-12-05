@@ -42,13 +42,13 @@ class LetterDataAdmin(admin.ModelAdmin):
         request.session['old_post'] = request.POST
         request.session['letterdata_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.programmeletter.views.programmeletter"))
+            ("programmeletter"))
 
     def response_change(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['letterdata_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.programmeletter.views.programmeletter"))
+            ("programmeletter"))
 
 admin.site.register(TeamName, TeamNameAdmin)
 admin.site.register(LetterData, LetterDataAdmin)
