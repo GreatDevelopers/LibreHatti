@@ -6,7 +6,7 @@ from librehatti.prints import views
 
 
 urlpatterns = [        
-    url(r'^bill/', views.bill),
-    url(r'^suspense_bill/', views.suspense_bill),
-    url(r'^quoted_bill/',views.quoted_bill),
+    url(r'^bill/', views.bill, name= 'bill'),
+    url(r'^suspense_bill/', views.suspense_bill, name= 'suspense_bill'),
+    url(r'^quoted_bill/',views.quoted_bill, name= 'quoted_bill'),
 ]	
