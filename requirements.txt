@@ -1,6 +1,8 @@
 django==1.11.7
 docutils
 simplejson
-django-ajax-selects==1.4.0
+django-ajax-selects==1.6.1
 django-suit
 django-mptt==0.8.7
+mysqlclient
+social-auth-app-django
