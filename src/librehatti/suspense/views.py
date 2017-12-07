@@ -689,7 +689,7 @@ def transportbill(request):
         if form.is_valid():
             if not 'session' in request.POST:
                 HttpResponseRedirect(\
-                    reverse("librehatti.suspense.views.sessionselect"))
+                    reverse("suspense:sessionselect"))
             session = FinancialSession.objects.\
             get(id=request.POST['session'])
             session_id = FinancialSession.objects.values('id').\
