@@ -12,7 +12,7 @@
 </head>
 <body>
   {% block content %}
-  <form class="form-horizontal" role="form" method="POST"  action='{% url 'librehatti.reports.register.registered_users' %}' >
+  <form class="form-horizontal" role="form" method="POST"  action='{% url 'registered_users' %}' >
     <div class="form-group">
         {% csrf_token %}
         <table class="form_class">

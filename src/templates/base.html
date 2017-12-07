@@ -8,7 +8,7 @@
     {% endblock %}
     {% block extrahead %}
     <script type="text/javascript">
-        var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
+        var reverseurl = "{% url 'catalog:jsreverse' %}";
 
         function reverse(urlstring, callback) {
             if (typeof callback != "function") {
@@ -46,7 +46,7 @@
             voucher_no = event.target.id.split("_")[1];
             distance = $('#distance_' + voucher_no).val();
             order = $('#order').val();
-            reverse('librehatti.suspense.views.save_distance', function(url) {
+            reverse('suspense:save_distance', function(url) {
                 var request_url = url + "/?voucher=" + voucher_no + "&distance=" + distance + "&order=" + order;
                 $.ajax({
                     url: request_url,
@@ -78,7 +78,7 @@
             $('#id_sub_category').empty();
             $('#id_sub_category').removeAttr('disabled');
             parent_id = $(this).val();
-            reverse('librehatti.reports.views.filter_sub_category', function(url) {
+            reverse('reports:filter_sub_category', function(url) {
                 var request_url = url + "?parent_id=" + parent_id;
                 $.ajax({
                     url: request_url,
@@ -186,7 +186,7 @@
                     <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
                     {% endif %}
                     <ul>
-                      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
+                      <li><a href='{% url 'catalog:list_request' %}'>View requests</a></li>
                       <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
                       <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
                       <li><a href="{% url 'admin:logout' %}">Log out</a></li>

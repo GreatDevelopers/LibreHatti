@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from django.db.models import Sum, Max
 
-from models import SuspenseClearance
-from models import TaDa, TaDa_Tax_Detail
+from .models import SuspenseClearance
+from .models import TaDa, TaDa_Tax_Detail
 
 from django.http import  HttpResponseRedirect, HttpResponse
 
@@ -689,7 +689,7 @@ def transportbill(request):
         if form.is_valid():
             if not 'session' in request.POST:
                 HttpResponseRedirect(\
-                    reverse("librehatti.suspense.views.sessionselect"))
+                    reverse("suspense:sessionselect"))
             session = FinancialSession.objects.\
             get(id=request.POST['session'])
             session_id = FinancialSession.objects.values('id').\

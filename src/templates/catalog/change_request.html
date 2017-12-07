@@ -7,7 +7,7 @@
 </head>
 <body>
     {% block content %}
-    <form method="POST" action={% url 'librehatti.catalog.views.change_request' %} >
+    <form method="POST" action={% url 'catalog:change_request' %} >
         {% if errors %}
         <div class="alert alert-danger">
             {{ errors }}

@@ -39,7 +39,7 @@
         </td>
     </tr>
 </table>
-<form action='{% url 'librehatti.catalog.request_change.request_save' %}?order_id={{order_id}}&session={{session}}' method='POST'>
+<form action='{% url 'catalog:request_save' %}?order_id={{order_id}}&session={{session}}' method='POST'>
     <table class="changeform">
         {% csrf_token %}
         <tr>

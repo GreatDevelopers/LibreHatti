@@ -129,13 +129,13 @@ class HeaderAdmin(admin.ModelAdmin):
             return db_field.formfield(widget=TinyMCE(
                 attrs={'cols': 120, 'rows': 10},
                 mce_attrs={'external_link_list_url': reverse\
-                ('tinymce.views.flatpages_link_list')},
+                ('tinymce:flatpages_link_list')},
             ))
         if db_field.name in ('footer'):
             return db_field.formfield(widget=TinyMCE(
                 attrs={'cols': 120, 'rows': 10},
                 mce_attrs={'external_link_list_url': reverse\
-                ('tinymce.views.flatpages_link_list')},
+                ('tinymce:flatpages_link_list')},
             ))
         return super(HeaderAdmin, self).\
         formfield_for_dbfield(db_field, **kwargs)

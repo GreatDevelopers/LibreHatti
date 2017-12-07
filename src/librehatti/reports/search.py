@@ -6,7 +6,7 @@ to generate results based on the search term entered.
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
-from helper import get_query
+from .helper import get_query
 from django.shortcuts import render
 from librehatti.catalog.request_change import request_notify
 from librehatti.catalog.models import PurchaseOrder
