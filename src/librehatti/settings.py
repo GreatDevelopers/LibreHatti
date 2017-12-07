@@ -58,7 +58,7 @@ STATIC_ROOT = ''
 STATIC_URL = '/librehatti/static/'
 
 STATICFILES_DIRS = (
-    '../static',
+    '../../static',
 )
 
 STATICFILES_FINDERS = (
