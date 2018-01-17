@@ -1,6 +1,5 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static admin_modify suit_tags admin_urls %}
-{#% load url from future %#}
 
 {% block extrahead %}{{ block.super }}
   {% url 'admin:jsi18n' as jsi18nurl %}
@@ -171,7 +170,7 @@
         {% include 'suit/includes/change_form_includes.html' with position='bottom' %}
 
         {% if adminform and add %}
-          <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}").focus();</script>
+          <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}");</script>
         {% endif %}
 
         {# JavaScript for prepopulated fields #}
