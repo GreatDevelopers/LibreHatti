@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from django.db.models import Sum, Max
 
-from models import SuspenseClearance
-from models import TaDa, TaDa_Tax_Detail
+from .models import SuspenseClearance
+from .models import TaDa, TaDa_Tax_Detail
 
 from django.http import  HttpResponseRedirect, HttpResponse
 

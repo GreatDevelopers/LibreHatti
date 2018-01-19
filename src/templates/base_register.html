@@ -8,7 +8,7 @@
     {% endblock %}
     {% block extrahead %}
     <script type="text/javascript">
-        var reverseurl = "{% url 'librehatti.catalog.views.jsreverse' %}";
+        var reverseurl = "{% url 'catalog:jsreverse' %}";
 
         function reverse(urlstring, callback) {
             if (typeof callback != "function") {
@@ -39,7 +39,7 @@
                         cssClass: 'btn btn-success',
                         label: ' Yes',
                         action: function(dialogItself){
-                            reverse('librehatti.suspense.views.mark_status', function(url) {
+                            reverse('suspense:mark_status', function(url) {
                                 var request_url = url + "/?" + addressValue;
                                 $.ajax({
                                     url: request_url,
@@ -112,7 +112,7 @@ $(document).ready(function(){
                     <a href="#"><img width="40px" src="{% static 'icons/settings.png' %}"></a>
                     {% endif %}
                     <ul>
-                      <li><a href='{% url 'librehatti.catalog.request_change.list_request' %}'>View requests</a></li>
+                      <li><a href='{% url 'catalog:list_request' %}'>View requests</a></li>
                       <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
                       <li><a href="{% url 'admin:password_change' %}">Change Password</a></li>
                       <li><a href="{% url 'admin:logout' %}">Log out</a></li>

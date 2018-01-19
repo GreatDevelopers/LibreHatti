@@ -4,10 +4,10 @@ from django.core.urlresolvers import reverse
 
 from django.http import HttpResponse
 
-from forms import ClientForm
-from forms import OrderForm
-from forms import AddConstraints
-from forms import DailyReportForm
+from .forms import ClientForm
+from .forms import OrderForm
+from .forms import AddConstraints
+from .forms import DailyReportForm
 
 import simplejson
 
