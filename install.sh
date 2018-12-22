@@ -34,9 +34,9 @@ mysql -u$user -e "create database librehatti;" -p$password
 
 cd src/librehatti/
 
-sed -i -e "s/'NAME': 'lh'/'NAME': 'librehatti'/g" settings.py
-sed -i -e "s/'USER': 'root'/'USER': '$user'/g" settings.py
-sed -i -e "s/'PASSWORD': 'r'/'PASSWORD': '$password'/g" settings.py
+sed -i -e "s/'NAME': 'db_name'/'NAME': 'librehatti'/g" settings.py
+sed -i -e "s/'USER': 'db_user'/'USER': '$user'/g" settings.py
+sed -i -e "s/'PASSWORD': 'db_password'/'PASSWORD': '$password'/g" settings.py
 
 cd ../
 python manage.py migrate
