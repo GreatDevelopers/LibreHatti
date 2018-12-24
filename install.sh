@@ -39,4 +39,5 @@ sed -i -e "s/'USER': 'db_user'/'USER': '$user'/g" settings.py
 sed -i -e "s/'PASSWORD': 'db_password'/'PASSWORD': '$password'/g" settings.py
 
 cd ../
-python manage.py syncdb
+python manage.py makemigrations
+python manage.py migrate
