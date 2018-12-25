@@ -13,8 +13,8 @@ class TeamName(models.Model):
 
 class StaffInTeam(models.Model):
     """Model for staff in team"""
-    team_name = models.ForeignKey(TeamName)
-    staff = models.ForeignKey(Staff)
+    team_name = models.ForeignKey(TeamName, on_delete=models.CASCADE,)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE,)
     def __unicode__(self):
         return '%s' % (self.staff) + ' - ' '%s' % (self.team_name)
 
@@ -30,10 +30,10 @@ class LetterData(models.Model):
     contact_number = models.IntegerField()
     letter_subject = models.CharField(max_length=500)
     letter_date = models.DateField(auto_now_add=True)
-    team_name = models.ForeignKey(TeamName)
+    team_name = models.ForeignKey(TeamName, on_delete=models.CASCADE,)
     site = models.CharField(max_length=500)
     date = models.DateField()
     time = models.TimeField()
-    vehicle = models.ForeignKey(Vehicle, default=1)
+    vehicle = models.ForeignKey(Vehicle, default=1, on_delete=models.CASCADE,)
     def __unicode__(self):
         return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' % (self.team_name)

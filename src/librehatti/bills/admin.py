@@ -9,7 +9,7 @@ from librehatti.catalog.actions import mark_inactive, mark_active
 
 from django.http import HttpResponse,HttpResponseRedirect
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 import itertools

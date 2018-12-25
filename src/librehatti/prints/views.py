@@ -7,7 +7,7 @@ from django.shortcuts import *
 
 from django.contrib.auth.decorators import login_required
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from librehatti.catalog.models import *
 from librehatti.catalog.request_change import request_notify

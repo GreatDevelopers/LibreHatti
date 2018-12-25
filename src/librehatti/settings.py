@@ -19,9 +19,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lh',#'db_name',
+        'NAME': 'librehatti',#'db_name',
         'USER': 'root',#'db_user',
-        'PASSWORD':'r',#'db_password',
+        'PASSWORD':'q',#'db_password',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -80,7 +80,9 @@ SECRET_KEY = 'v5j3-ny)7zlk3wmqyg298#re3#8-v_v6+@9635h0-x9zak+8t*'
 #    'django.template.loaders.app_directories.Loader',
 #)
 
-MIDDLEWARE_CLASSES = (
+'''The MIDDLEWARE_CLASSES changed to MIDDLEWARE in django2.0'''
+#MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

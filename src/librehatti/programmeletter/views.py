@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from librehatti.catalog.request_change import request_notify
 

@@ -19,7 +19,7 @@ from librehatti.prints.helper import num2eng
 
 from librehatti.suspense.models import SuspenseOrder, Staff
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 

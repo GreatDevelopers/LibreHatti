@@ -11,7 +11,7 @@ from ajax_select.admin import AjaxSelectAdmin
 
 from django.http import HttpResponseRedirect
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class StaffInline(admin.StackedInline):

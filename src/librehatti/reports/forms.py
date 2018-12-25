@@ -109,7 +109,7 @@ class AddConstraints(forms.Form):
     year = forms.ChoiceField(choices= [(datetime.date.today().year, datetime.\
         date.today().year)] + [(x, x) for x in range(2000, 2050)], \
         required=False)
-    month = forms.ChoiceField(MONTH_CHOICES)
+    month = forms.ChoiceField(choices=MONTH_CHOICES)
 
     session_id = FinancialSession.objects.values_list('id',flat = True)
     session_start = FinancialSession.objects.values_list('session_start_date',\
@@ -119,7 +119,7 @@ class AddConstraints(forms.Form):
     session_choices = [('', '--------')] + [(id, str(start) + '-To-' + \
         str(end)) for id, start, end in zip(session_id, \
         session_start, session_end)]
-    session = forms.ChoiceField(session_choices)
+    session = forms.ChoiceField(choices=session_choices)
 
     surcharges = forms.ModelMultipleChoiceField(required=False,
     widget=forms.CheckboxSelectMultiple, queryset= Surcharge.objects.filter(
@@ -130,7 +130,7 @@ class AddConstraints(forms.Form):
     mode = ModeOfPayment.objects.values_list('method', flat = True)
     mode_choices = [('', '--------')] + [(id, mode) for id, mode in \
         zip(mode_of_payment_id, mode)]
-    mode_of_payment = forms.ChoiceField(mode_choices)
+    mode_of_payment = forms.ChoiceField(choices=mode_choices)
 
     grand_total = forms.BooleanField()
     all_registered_user = forms.BooleanField()
@@ -143,7 +143,7 @@ class MonthYearForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
 
-    month = forms.ChoiceField(MONTH_CHOICES)
+    month = forms.ChoiceField(choices=MONTH_CHOICES)
     year = forms.ChoiceField(choices= [(datetime.date.today().year, datetime.\
         date.today().year)] + [(x, x) for x in range(2000, 2050)], \
         required=False)

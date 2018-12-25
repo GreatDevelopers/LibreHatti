@@ -16,8 +16,8 @@ class SuspenseOrder(models.Model):
     Stores order with over head costs.
     """
     voucher = models.IntegerField()
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    session_id = models.ForeignKey(FinancialSession)
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE,)
+    session_id = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
@@ -28,7 +28,7 @@ class SuspenseClearance(models.Model):
     """
     Stores clearance of suspense orders.
     """
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     voucher_no = models.IntegerField()
     work_charge =models.IntegerField(blank=True, null=True)
     labour_charge = models.IntegerField(blank=True, null=True)
@@ -66,14 +66,14 @@ class Staff(models.Model):
     """
     Stores staff and map it with position.
     """
-    department = models.ForeignKey(Department)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,)
     code = models.CharField(max_length=5)
     name = models.CharField(max_length=50)
     daily_ta_da = models.IntegerField(blank=True)
-    position = models.ForeignKey(StaffPosition)
+    position = models.ForeignKey(StaffPosition, on_delete=models.CASCADE,)
     seniority_credits = models.IntegerField()
     always_included = models.BooleanField(default=True)
-    lab = models.ForeignKey(Category)
+    lab = models.ForeignKey(Category, on_delete=models.CASCADE,)
     email =models.EmailField(blank=True)
 
     class Meta:
@@ -105,7 +105,7 @@ class TaDa(models.Model):
        return self.suspense
 
 class TaDa_Tax_Detail(models.Model):
-    tada = models.ForeignKey(TaDa)
+    tada = models.ForeignKey(TaDa, on_delete=models.CASCADE,)
     name = models.CharField(max_length=100)
     amount = models.IntegerField()
 
@@ -113,7 +113,7 @@ class QuotedSuspenseOrder(models.Model):
     """
     Stores Quoted suspense order.
     """
-    quoted_order = models.ForeignKey('bills.QuotedOrder')
+    quoted_order = models.ForeignKey('bills.QuotedOrder', on_delete=models.CASCADE,)
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
     def __unicode__(self):
@@ -135,14 +135,14 @@ class Transport(models.Model):
     """
     Stores Transportation details.
     """
-    vehicle = models.ForeignKey(Vehicle)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE,)
     kilometer = models.CharField(max_length=500)
     rate = models.FloatField(default=10.0)
     date_of_generation = models.DateField()
     date = models.CharField(blank=True, max_length=600)
     total = models.IntegerField()
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     '''def save(self, *args, **kwargs):
 
         # Now decode the kilometers
@@ -166,20 +166,20 @@ class Transport(models.Model):
 
 
 class TransportBillOfSession(models.Model):
-    transport = models.ForeignKey(Transport)
+    transport = models.ForeignKey(Transport, on_delete=models.CASCADE,)
     transportbillofsession = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
 
 
 class SuspenseClearedRegister(models.Model):
     suspenseclearednumber = models.IntegerField()
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
 
 
 class CarTaxiAdvance(models.Model):
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     spent = models.IntegerField()
     advance = models.IntegerField()
     balance = models.IntegerField()

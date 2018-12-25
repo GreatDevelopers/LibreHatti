@@ -7,7 +7,7 @@ from librehatti.catalog.models import *
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
-
+#from django.contrib.contenttypes.fields.GenericForeignKey
 
 def mark_active(modeladmin, request, queryset):
     """

@@ -14,7 +14,7 @@ from librehatti.catalog.forms import ItemSelectForm, BuyerForm
 from librehatti.catalog.forms import SpecialCategoriesForm
 from librehatti.catalog.actions import mark_inactive, mark_active 
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from ajax_select.admin import AjaxSelectAdmin
 

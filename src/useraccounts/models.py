@@ -36,8 +36,8 @@ class Address(models.Model):
 describes the details of the user's organisation 
 """
 class HattiUser(models.Model):   
-    user = models.OneToOneField(User) 
-    address = models.ForeignKey(Address)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,) 
+    address = models.ForeignKey(Address, on_delete=models.CASCADE,)
     telephone = models.CharField(max_length=500)
     date_joined  = models.DateTimeField(auto_now_add=True)
     fax = models.CharField(max_length=100, blank=True, null=True)
@@ -58,7 +58,7 @@ organisation and its type
 """
 class AdminOrganisations(HattiUser):
     title = models.CharField(max_length=200)
-    organisation_type = models.ForeignKey(OrganisationType)
+    organisation_type = models.ForeignKey(OrganisationType, on_delete=models.CASCADE,)
 
     class Meta:
         verbose_name_plural = "Admin Organisations"
@@ -76,7 +76,7 @@ name
 class Customer(HattiUser):
     title = models.CharField(max_length=200, blank=True, null=True)
     is_org = models.BooleanField(default=False);
-    org_type = models.ForeignKey(OrganisationType)
+    org_type = models.ForeignKey(OrganisationType, on_delete=models.CASCADE,)
     company = models.CharField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):

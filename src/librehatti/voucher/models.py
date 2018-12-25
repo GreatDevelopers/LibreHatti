@@ -34,15 +34,15 @@ class VoucherId(models.Model):
     This class defines the voucher for purchase order according to the
     materials added in order
     """
-    purchase_order = models.ForeignKey(PurchaseOrder)
-    purchased_item = models.ForeignKey(PurchasedItem)
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE,)
+    purchased_item = models.ForeignKey(PurchasedItem, on_delete=models.CASCADE,)
     voucher_no = models.IntegerField()
     receipt_no_of_session = models.IntegerField(null=True)
     receipt_date = models.DateField(null=True)
     purchase_order_of_session = models.IntegerField()
     purchased_item_of_session = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
-    distribution = models.ForeignKey(Distribution)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
+    distribution = models.ForeignKey(Distribution, on_delete=models.CASCADE,)
     ratio = models.CharField(max_length=10)
     college_income = models.IntegerField()
     admin_charges = models.IntegerField()
@@ -57,9 +57,9 @@ class CategoryDistributionType(models.Model):
     category of product
     """
     parent_category = models.ForeignKey\
-    (Category, related_name='parent_category')
-    category = models.ForeignKey(Category, related_name='category')
-    distribution = models.ForeignKey(Distribution)
+    (Category, related_name='parent_category', on_delete=models.CASCADE,)
+    category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE,)
+    distribution = models.ForeignKey(Distribution, on_delete=models.CASCADE,)
     def __unicode__(self):
         return self.category.name
 
@@ -74,7 +74,7 @@ class CalculateDistribution(models.Model):
     consultancy_asset = models.IntegerField()
     development_fund = models.IntegerField()
     total = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
 
 
 class VoucherTotal(models.Model):
@@ -82,5 +82,5 @@ class VoucherTotal(models.Model):
     This class defines the total value of each voucher generated
     """
     voucher_no = models.IntegerField()
-    session = models.ForeignKey(FinancialSession)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     total = models.IntegerField()

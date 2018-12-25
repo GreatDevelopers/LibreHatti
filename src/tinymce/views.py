@@ -2,7 +2,9 @@
 # Licensed under the terms of the MIT License (see LICENSE.txt)
 
 import logging
-from django.core import urlresolvers
+'''Django 2.0 removes the django.core.urlresolvers module, which was moved to django.urls in version 1.10. You should change any import to use django.urls instead, like this:    from django.urls import reverse'''
+#from django.core import urlresolvers
+from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader

@@ -7,7 +7,7 @@ from .models import TaDa, TaDa_Tax_Detail
 
 from django.http import  HttpResponseRedirect, HttpResponse
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from librehatti.catalog.models import Product
 from librehatti.catalog.models import PurchaseOrder

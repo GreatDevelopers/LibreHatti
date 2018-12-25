@@ -2,7 +2,7 @@
 urls of useraccounts are..
 """
 from django.conf.urls import  url
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib.auth import views as auth_views
 from librehatti.catalog import views as catalog_views
 from . import views as useraccounts_views
