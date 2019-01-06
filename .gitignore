@@ -11,10 +11,12 @@ __pycache__/
 *.so
 *~
 *.pyc
+
 # Distribution / packaging
 .Python
 env/
 bin/
+include/
 build/
 develop-eggs/
 dist/
