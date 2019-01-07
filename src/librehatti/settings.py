@@ -53,13 +53,7 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
-
-STATIC_URL = '/librehatti/static/'
-
-STATICFILES_DIRS = (
-    '../../static',
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')                                                  STATIC_URL = '/librehatti/static/'                                                              STATICFILES_DIRS = [                                    os.path.join(BASE_DIR, '../static')     ]
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
