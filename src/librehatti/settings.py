@@ -19,9 +19,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'librehatti',#'db_name',
-        'USER': 'root',#'db_user',
-        'PASSWORD':'q',#'db_password',
+        'NAME': 'db_name',
+        'USER': 'db_user',
+        'PASSWORD': 'db_password',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -53,13 +53,7 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
-
-STATIC_URL = '/librehatti/static/'
-
-STATICFILES_DIRS = (
-    '../../static',
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')                                                  STATIC_URL = '/librehatti/static/'                                                              STATICFILES_DIRS = [                                    os.path.join(BASE_DIR, '../static')     ]
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
