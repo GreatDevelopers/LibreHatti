@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-# modified <form action='{% url 'librehatti.suspense.views.sessionselect' %}' method='POST'> to make compatible with django2.0
+# modified  url 'librehatti.suspense.views.sessionselect' to make compatible with django2.0
 # File LibreHatti/src/librehatti/suspense/urls.py uses namespace for sessionselect
 
 <form action='{% url 'suspense:sessionselect' %}' method='POST'>
