@@ -72,7 +72,7 @@ class Category(MPTTModel):
 
 class Product(models.Model):
     """
-    This class defines the name of product, category, price of eact item of
+    This class defines the name of product, category, price of each item of
     that product and the organisation with which user deals
     """
     name = models.CharField(max_length=500)
