@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'librehatti.reports',
     'librehatti.voucher',
     'librehatti.programmeletter',
+    'django.contrib.admindocs',
 )
 
 SUIT_CONFIG = {
