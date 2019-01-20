@@ -81,7 +81,7 @@ def jsreverse(request):
     """
     This function reverse looks up the urls for the AJAX Requests
     Argument: Http Request
-    Return: Dunamic Url
+    Return: Dynamic Url
     """
     string_to_reverse = request.GET['string'];
     return HttpResponse(reverse(string_to_reverse))
