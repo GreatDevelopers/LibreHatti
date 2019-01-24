@@ -116,7 +116,7 @@ def daily_report_result(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
-            back_link=reverse('librehatti.reports.register.daily_report_result')
+            back_link=reverse('daily_report_result')
             return render(request,'reports/daily_report_result.html',\
             {'result':result,'sum':sum, 'mode_name':mode_name,\
             'start_date':start_date,'end_date':end_date,\
@@ -196,7 +196,7 @@ def consultancy_funds_report(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
-            back_link=reverse('librehatti.reports.register.consultancy_funds_report')
+            back_link=reverse('consultancy_funds_report')
             return render(request, 'reports/consultancy_funds_result.html',\
              {'result':result, 'back_link':back_link,\
                 'start_date':start_date, 'end_date':end_date,\
@@ -321,7 +321,7 @@ def tds_report_result(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
-            back_link=reverse('librehatti.reports.register.tds_report_result')
+            back_link=reverse('tds_report_result')
             return render(request,'reports/tds_report_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -460,7 +460,7 @@ def payment_register(request):
             request_status = request_notify()
             start_date = datetime.strptime(start_date, '%Y-%m-%d').strftime('%B-%d-%Y')
             end_date = datetime.strptime(end_date, '%Y-%m-%d').strftime('%B-%d-%Y')
-            back_link=reverse('librehatti.reports.register.payment_register')
+            back_link=reverse('payment_register')
             return render(request,'reports/payment_register_result.html',\
             {'result':result,'request':request_status,\
             'servicetax':servicetax,'Heducationcess':Heducationcess,\
@@ -632,7 +632,7 @@ def suspense_clearance_register(request):
                 temp = []
                 address = ''
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.suspense_clearance_register')
+            back_link=reverse('suspense_clearance_register')
             return render(request,'reports/suspense_clearance_result.html',\
             {'result':result, 'request':request_status,\
             'distribution':distribution, 'back_link':back_link})
@@ -868,7 +868,7 @@ def servicetax_register(request):
             total_taxes_not_paid = sum(not_paid_taxes.values())
             request_status = request_notify()
             month = calendar.month_name[int(month)]
-            back_link=reverse('librehatti.reports.register.servicetax_register')
+            back_link=reverse('servicetax_register')
             return render(request,'reports/servicetax_statement.html',\
             {'result':result, 'request':request_status, 'month':month,\
             'year':year, 'total':total, 'taxes_name':taxes_name,\
@@ -983,7 +983,7 @@ def main_register(request):
                 temp_list = []
             month_name = calendar.month_name[int(month)]
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.main_register')
+            back_link=reverse('main_register')
             return render(request,'reports/main_register_result.html',\
             {'request':request_status, 'distribution':distribution,\
              'result':result,'month':month_name,'year':year,
@@ -1077,7 +1077,7 @@ def proforma_register(request):
                 material_list = ''
                 name = ''
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.proforma_register')
+            back_link=reverse('proforma_register')
             return render(request,'reports/proforma_register.html',\
             {'result':result, 'request':request_status,\
             'surcharge_values':surcharge_values, 'back_link':back_link})
@@ -1145,7 +1145,7 @@ def non_payment_register(request):
                 temp = []
                 address = ''
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.non_payment_register')
+            back_link=reverse('non_payment_register')
             return render(request,'reports/non_payment_register.html',\
             {'result':result, 'request':request_status, 'back_link':back_link})
         else:
@@ -1216,7 +1216,7 @@ def client_register(request):
                     result.append(temp_list)
                     temp_list = []
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.client_register')
+            back_link=reverse('client_register')
             return render(request,'reports/client_register_result.html',\
             {'request':request_status, 'result':result, 'back_link':back_link})
         else:
@@ -1294,7 +1294,7 @@ def material_report(request):
                 = (start_date,end_date),item__category__in=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.material_report')
+            back_link=reverse('material_report')
             return render(request, 'reports/material_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
@@ -1429,7 +1429,7 @@ def suspense_register(request):
                 result.append(temp_list)
                 previous_order = value['purchase_order']
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.suspense_register')
+            back_link=reverse('suspense_register')
             return render(request,'reports/suspense_register.html',\
             {'request':request_status, 'result':result, 'back_link':back_link,
             'amount':amount, 'transport_total':int(transport_total),
@@ -1490,7 +1490,7 @@ def registered_users(request):
                 temp_list.append(value['customer__org_type__type_desc'])
                 result.append(temp_list)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.registered_users')
+            back_link=reverse('registered_users')
             return render(request,'reports/registeredusers_result.html',\
             {'request':request_status, 'result':result, 'back_link':back_link})
         else:
@@ -1518,7 +1518,7 @@ def registered_users(request):
                 temp_list.append(value['customer__org_type__type_desc'])
                 result.append(temp_list)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.registered_users')
+            back_link=reverse('registered_users')
             return render(request,'reports/registeredusers_result.html',\
             {'request':request_status, 'result':result, 'back_link':back_link})
     else:
@@ -1589,7 +1589,7 @@ def lab_report(request):
                 = (start_date,end_date),item__category__parent=category).\
                 aggregate(Sum('price')).get('price__sum', 0.00)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.lab_report')
+            back_link=reverse('lab_report')
             return render(request, 'reports/lab_report.html', {'purchase_item':
                            purchase_item,'start_date':start_date, 'end_date':end_date,
                           'total_cost':total, 'category_name':category_name,\
@@ -1703,7 +1703,7 @@ def pending_clearance_register(request):
                 result.append(temp)
                 address = ''
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.pending_clearance_register')
+            back_link=reverse('pending_clearance_register')
             return render(request,'reports/pending_clearance_result.html',\
             {'result':result, 'request':request_status,\
             'back_link':back_link})
@@ -1831,7 +1831,7 @@ def tada_register(request):
                 temp.append(tada_amount['tada_amount__sum'])
                 result.append(temp)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.tada_register')
+            back_link=reverse('tada_register')
             return render(request,'reports/tada_register.html',\
             {'result':result, 'request':request_status,\
             'back_link':back_link})
@@ -1967,7 +1967,7 @@ def tada_othercharges_register(request):
                 temp.append(grand_total)
                 result.append(temp)
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.tada_othercharges_register')
+            back_link=reverse('tada_othercharges_register')
             return render(request,'reports/tada_othercharges.html',\
             {'result':result, 'request':request_status,\
             'back_link':back_link})
@@ -2016,7 +2016,7 @@ def client_details_according_to_amount(request):
                 value['material'] = voucherid2
 
             request_status = request_notify()
-            back_link=reverse('librehatti.reports.register.client_details_according_to_amount')
+            back_link=reverse('client_details_according_to_amount')
             return render(request,'reports/amount_result.html',\
             {'voucherid':voucherid, 'request':request_status,\
             'back_link':back_link})
