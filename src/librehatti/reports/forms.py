@@ -63,7 +63,7 @@ class ConsultancyFunds(forms.Form):
         sub_category_name = Category.objects.values_list('name', flat=True)
         sub_category_choices = [('', '--------')] + [(id, name) for id,\
         name in zip(sub_category_id, sub_category_name)]
-        sub_category = forms.MultipleChoiceField(sub_category_choices,\
+        sub_category = forms.MultipleChoiceField(choices=sub_category_choices,\
             label=_SUB_CATEGORY)
     except:
         pass
