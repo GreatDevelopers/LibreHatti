@@ -47,7 +47,7 @@
     <table>
        <tr>
            <td></td>
-           <form id="myForm" action="{% url 'librehatti.suspense.views.transport_bill' %}" method="post">
+           <form id="myForm" action="{% url 'suspense:transport_bill' %}" method="post">
            {% csrf_token %}
            <td><input type="submit" class="btn btn-info btn-large" value="Generate Bill" name='button1' id='button1' /></td>
              <input type="hidden" value="{{ session }}" name="session" />

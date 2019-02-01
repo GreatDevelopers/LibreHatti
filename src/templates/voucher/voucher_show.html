@@ -39,7 +39,7 @@
                 {% for suspense_voucher in suspense_order %}
                 {% if suspense_voucher.voucher == value.voucher_no %}
                 |
-                <a href = '{% url 'librehatti.suspense.views.clearance_options'%}?voucher_no={{value.voucher_no}}&session={{value.session}}'>Clearance Options</a>
+                <a href = '{% url 'suspense:clearance_options'%}?voucher_no={{value.voucher_no}}&session={{value.session}}'>Clearance Options</a>
                 {% endif %}
                 {% endfor %}
                 </td>

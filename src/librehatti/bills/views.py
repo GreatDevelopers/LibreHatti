@@ -239,4 +239,4 @@ def quoted_order_of_session(request):
     request.session['old_post'] = old_post
     request.session['quoted_order_id'] = quoted_order_id
     return HttpResponseRedirect(\
-        reverse("librehatti.suspense.views.quoted_add_distance"))
+        reverse("suspense:quoted_add_distance"))

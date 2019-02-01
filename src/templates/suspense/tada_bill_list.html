@@ -21,7 +21,7 @@
       <td>{{values.start_test_date}}</td>
       <td>{{values.end_test_date}}</td>
       <td>{{values.tada_amount}}</td>
-      <td><a href="{% url 'librehatti.suspense.views.tada_bill' %}?tada_id={{values.id}}">Bill</a></td>
+      <td><a href="{% url 'suspense:tada_bill' %}?tada_id={{values.id}}">Bill</a></td>
     </tr>
     {% endfor %}
   </table>

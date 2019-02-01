@@ -291,7 +291,7 @@ def clearance_result(request):
                 'request':request_status})
     else:
         return HttpResponseRedirect(\
-            reverse('librehatti.suspense.views.clearance_search'))
+            reverse('suspense:clearance_search'))
 
 
 @login_required
@@ -689,7 +689,7 @@ def transportbill(request):
         if form.is_valid():
             if not 'session' in request.POST:
                 HttpResponseRedirect(\
-                    reverse("librehatti.suspense.views.sessionselect"))
+                    reverse("suspense:sessionselect"))
             session = FinancialSession.objects.\
             get(id=request.POST['session'])
             session_id = FinancialSession.objects.values('id').\
@@ -945,7 +945,7 @@ def tada_result(request):
                 'request':request_status})
         else:
             return HttpResponseRedirect(\
-                reverse('librehatti.suspense.views.tada_order_session'))
+                reverse('suspense:tada_order_session'))
 
 @login_required
 def tada_order_session(request):
@@ -1409,4 +1409,4 @@ def car_taxi_advance(request):
                 {'form':form, 'request':request_status})
     else:
         return HttpResponseRedirect(\
-            reverse("librehatti.suspense.views.car_taxi_advance_form"))
+            reverse("suspense:car_taxi_advance_form"))

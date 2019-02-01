@@ -9,7 +9,7 @@
 <body>
     {% block content %}
     {% if clearance %}
-    <form method="POST" action={% url 'librehatti.suspense.views.clearance_result' %} >
+    <form method="POST" action={% url 'suspense:clearance_result' %} >
         {% else %}
         <form method="POST" action=''>
             {% endif %}

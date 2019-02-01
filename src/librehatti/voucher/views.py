@@ -324,7 +324,7 @@ def voucher_generate(request):
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
     return HttpResponseRedirect(\
-        reverse("librehatti.suspense.views.add_distance"))
+        reverse("suspense:add_distance"))
 
 
 @login_required
