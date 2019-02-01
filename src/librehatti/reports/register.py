@@ -797,7 +797,7 @@ def servicetax_register(request):
                 'buyer__customer__address__district',\
                 'buyer__customer__address__pin',\
                 'buyer__customer__address__province').\
-            filter(id__in=taxesapplied_obj).order_by('date_time')
+            filter(id__in=taxesapplied_obj).order_by('date_time', 'voucherid__receipt_no_of_session')
             result = []
             for value in purchase_order:
                 i=0
