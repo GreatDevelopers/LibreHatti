@@ -78,7 +78,7 @@
             $('#id_sub_category').empty();
             $('#id_sub_category').removeAttr('disabled');
             parent_id = $(this).val();
-            reverse('reports:filter_sub_category', function(url) {
+            reverse('filter_sub_category', function(url) {
                 var request_url = url + "?parent_id=" + parent_id;
                 $.ajax({
                     url: request_url,
