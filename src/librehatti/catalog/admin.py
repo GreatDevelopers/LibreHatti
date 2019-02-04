@@ -115,7 +115,7 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.catalog.views.previous_value"))
+            ("catalog:previous_value"))
 
 
 class HeaderAdmin(admin.ModelAdmin):
@@ -166,13 +166,13 @@ class NonPaymentOrderAdmin(AjaxSelectAdmin):
         request.session['old_post'] = request.POST
         request.session['nonpaymentorder_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.catalog.views.nonpaymentorderofsession"))
+            ("catalog:nonpaymentorderofsession"))
 
     def response_change(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.catalog.views.nonpaymentorderofsession"))
+            ("catalog:nonpaymentorderofsession"))
 
 
 class SpecialCategoriesAdmin(admin.ModelAdmin):

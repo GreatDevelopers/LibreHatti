@@ -35,7 +35,7 @@
                 {% for value in voucherid %}
                 <td>{{ value.purchase_order_of_session }}</td>
                 <td>{{ value.voucher_no }}</td>
-                <td><a target="_blank" href = '{% url 'librehatti.voucher.views.voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a> 
+                <td><a target="_blank" href = '{% url 'voucher:voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a> 
                 {% for suspense_voucher in suspense_order %}
                 {% if suspense_voucher.voucher == value.voucher_no %}
                 |

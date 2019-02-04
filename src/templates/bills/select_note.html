@@ -7,7 +7,7 @@
 </head>
 <body>
     {% block content %}
-    <form method="POST" action={% url 'librehatti.bills.views.select_note_save' %} >
+    <form method="POST" action={% url 'bills:select_note_save' %} >
         {% csrf_token %}
         <table> 
             {{form.as_p}}

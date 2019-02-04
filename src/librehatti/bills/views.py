@@ -108,7 +108,7 @@ def quoted_bill_cal(request):
     bill.save()
     request.session['old_post'] = old_post
     request.session['quoted_order_id'] = quoted_order_id
-    return HttpResponseRedirect(reverse("librehatti.bills.views.select_note"))
+    return HttpResponseRedirect(reverse("bills:select_note"))
 
 
 @login_required
@@ -162,10 +162,10 @@ def select_note_save(request):
                 obj.save()
 
             return HttpResponseRedirect(\
-                reverse("librehatti.bills.views.quoted_order_added_success"))
+                reverse("bills:quoted_order_added_success"))
         else:
             return HttpResponseRedirect(\
-                reverse("librehatti.bills.views.quoted_order_added_success"))
+                reverse("bills:quoted_order_added_success"))
     else:
         error_type = "404 Forbidden"
         error = "Please again place the order"

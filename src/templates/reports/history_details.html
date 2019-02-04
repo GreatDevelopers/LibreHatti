@@ -39,10 +39,10 @@
                 <th colspan='4'><h3><center>Options</center></h3></th>
             </tr>
             <tr>
-                <td><a href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
-                <td><a href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
-                <td><a href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
-                <td><a href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
+                <td><a href = '{% url 'prints:bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
+                <td><a href = '{% url 'prints:tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
+                <td><a href = '{% url 'voucher:voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
+                <td><a href = '{% url 'prints:receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
             </tr>
         </table>
     </table>

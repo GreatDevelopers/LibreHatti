@@ -108,7 +108,7 @@ def add_distance(request):
             request.session['old_post'] = old_post
             request.session['purchase_order_id'] = purchase_order_id
             return HttpResponseRedirect(\
-                reverse("librehatti.catalog.views.bill_cal"))
+                reverse("catalog:bill_cal"))
         else:
             purchase_order = PurchaseOrder.objects.values('date_time').\
                 get(id=purchase_order_id)
@@ -157,12 +157,12 @@ def add_distance(request):
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
         return HttpResponseRedirect(\
-            reverse("librehatti.catalog.views.bill_cal"))
+            reverse("catalog:bill_cal"))
     else:
         request.session['old_post'] = old_post
         request.session['purchase_order_id'] = purchase_order_id
         return HttpResponseRedirect(\
-            reverse("librehatti.catalog.views.bill_cal"))
+            reverse("catalog:bill_cal"))
 
 
 @login_required
@@ -554,7 +554,7 @@ def quoted_add_distance(request):
             request.session['old_post'] = old_post
             request.session['quoted_order_id'] = quoted_order_id
             return HttpResponseRedirect(\
-                reverse("librehatti.bills.views.quoted_bill_cal"))
+                reverse("bills:quoted_bill_cal"))
         else:
             return render(request,'suspense/quoted_add_distance.html',{\
                 'quoted_order_id':quoted_order_id,})
@@ -562,7 +562,7 @@ def quoted_add_distance(request):
         request.session['old_post'] = old_post
         request.session['quoted_order_id'] = quoted_order_id
         return HttpResponseRedirect(\
-            reverse("librehatti.bills.views.quoted_bill_cal"))
+            reverse("bills:quoted_bill_cal"))
 
 
 @login_required
