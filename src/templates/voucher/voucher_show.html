@@ -35,11 +35,11 @@
                 {% for value in voucherid %}
                 <td>{{ value.purchase_order_of_session }}</td>
                 <td>{{ value.voucher_no }}</td>
-                <td><a target="_blank" href = '{% url 'librehatti.voucher.views.voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a> 
+                <td><a target="_blank" href = '{% url 'voucher:voucher_print'%}?purchase_order={{value.purchase_order}}&voucher_no={{value.voucher_no}}&session={{value.session}}'>Generate Voucher</a> 
                 {% for suspense_voucher in suspense_order %}
                 {% if suspense_voucher.voucher == value.voucher_no %}
                 |
-                <a href = '{% url 'librehatti.suspense.views.clearance_options'%}?voucher_no={{value.voucher_no}}&session={{value.session}}'>Clearance Options</a>
+                <a href = '{% url 'suspense:clearance_options'%}?voucher_no={{value.voucher_no}}&session={{value.session}}'>Clearance Options</a>
                 {% endif %}
                 {% endfor %}
                 </td>

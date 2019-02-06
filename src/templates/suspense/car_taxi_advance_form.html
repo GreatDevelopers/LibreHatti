@@ -9,7 +9,7 @@
 <body>
     {% block content %}
     {% if car_taxi_advance %}
-    <form method="POST" action={% url 'librehatti.suspense.views.car_taxi_advance' %} >
+    <form method="POST" action={% url 'suspense:car_taxi_advance' %} >
         {% else %}
         <form method="POST" action=''>
             {% endif %}

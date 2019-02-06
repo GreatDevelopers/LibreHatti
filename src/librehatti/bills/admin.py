@@ -53,7 +53,7 @@ class QuotedOrderAdmin(admin.ModelAdmin):
         request.session['old_post'] = request.POST
         request.session['quoted_order_id'] = obj.id
         return HttpResponseRedirect(\
-            reverse("librehatti.bills.views.quoted_order_of_session"))
+            reverse("bills:quoted_order_of_session"))
 
 
 class NoteLineAdmin(admin.ModelAdmin):

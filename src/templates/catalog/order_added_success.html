@@ -36,22 +36,22 @@
        </tr>
        <tr>
           {% if details.receipt_no_of_session %}
-           <td><a target="_blank" href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
+           <td><a target="_blank" href = '{% url 'prints:receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Receipt"></a></td>
            {% else %}
-           <td><a target="_blank" href = '{% url 'librehatti.prints.views.receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Confirm"></a></td>
+           <td><a target="_blank" href = '{% url 'prints:receipt' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Confirm"></a></td>
            {% endif %}
            <td></td>
-           <td><a target="_blank" href = '{% url 'librehatti.voucher.views.voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
+           <td><a target="_blank" href = '{% url 'voucher:voucher_show' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Voucher"></a></td>
        </tr>
        <tr>
-           <td><a target="_blank" href = '{% url 'librehatti.prints.views.bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
+           <td><a target="_blank" href = '{% url 'prints:bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Bill"></a></td>
            <td></td>
-           <td><a target="_blank" href = '{% url 'librehatti.prints.views.tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
+           <td><a target="_blank" href = '{% url 'prints:tax' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Tax Details"></a></td>
        </tr>
        {% if suspense_flag == 1 %}
        <tr>
            <td></td>
-           <td><a target="_blank" href = '{% url 'librehatti.prints.views.suspense_bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Suspense Bill"></a></td>
+           <td><a target="_blank" href = '{% url 'prints:suspense_bill' %}?order_id={{order_id}}'><input type="button" class="btn btn-info btn-large" name="" value="Suspense Bill"></a></td>
            <td></td>
        </tr>
        {% endif %}

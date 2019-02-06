@@ -26,7 +26,7 @@ class BuyerLookup(LookupChannel):
         return user[0:15]
 
     def get_result(self, obj):
-        return unicode(obj.username)
+        return str(obj.username)
 
     def format_match(self, obj):
         return self.format_item_display(obj)

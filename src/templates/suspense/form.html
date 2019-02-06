@@ -12,7 +12,7 @@
   </div>
   {% endif %}
   {% if tada %}
-  <form method="POST" action={% url 'librehatti.suspense.views.tada_result' %} >
+  <form method="POST" action={% url 'suspense:tada_result' %} >
     {% else %}
     <form method="POST" action=''>
       {% endif %}

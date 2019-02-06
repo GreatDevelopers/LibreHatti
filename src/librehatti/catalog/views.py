@@ -208,7 +208,7 @@ def bill_cal(request):
     request.session['old_post'] = old_post
     request.session['purchase_order_id'] = purchase_order_id
     return HttpResponseRedirect(reverse\
-        ("librehatti.catalog.views.order_added_success"))
+        ("catalog:order_added_success"))
 
 
 @login_required
@@ -282,7 +282,7 @@ def previous_value(request):
         get(voucher_no=value['voucher_no'], session=value['session']).delete()
     VoucherId.objects.filter(purchase_order=purchase_order_id).delete()
     return HttpResponseRedirect(reverse\
-        ("librehatti.voucher.views.voucher_generate"))
+        ("voucher:voucher_generate"))
 
 @login_required
 def order_added_success(request):
@@ -434,7 +434,7 @@ def nonpaymentorderofsession(request):
     request.session['old_post'] = old_post
     request.session['nonpaymentorder_id'] = nonpaymentorder_id
     return HttpResponseRedirect(\
-        reverse("librehatti.catalog.views.nonpaymentordersuccess"))
+        reverse("catalog:nonpaymentordersuccess"))
 
 
 @login_required
