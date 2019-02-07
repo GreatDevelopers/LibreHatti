@@ -20,7 +20,7 @@ class SuspenseOrder(models.Model):
     session_id = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
 
@@ -49,7 +49,7 @@ class Department(models.Model):
     address = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, blank=True)
     dean = models.CharField(max_length=50, blank=True)
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 class StaffPosition(models.Model):
@@ -59,7 +59,7 @@ class StaffPosition(models.Model):
     position = models.CharField(max_length=50)
     rank = models.IntegerField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.position
 
 class Staff(models.Model):
@@ -79,7 +79,7 @@ class Staff(models.Model):
     class Meta:
         verbose_name_plural = "Staff"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -101,7 +101,7 @@ class TaDa(models.Model):
     source_site = models.CharField(max_length=100, default = 'GNDEC, Ludhiana')
     testing_site= models.CharField(max_length=100)
     testing_staff = models.CharField(max_length=100)
-    def __unicode__(self):
+    def __str__(self):
        return self.suspense
 
 class TaDa_Tax_Detail(models.Model):
@@ -116,7 +116,7 @@ class QuotedSuspenseOrder(models.Model):
     quoted_order = models.ForeignKey('bills.QuotedOrder', on_delete=models.CASCADE,)
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
 
@@ -127,7 +127,7 @@ class Vehicle(models.Model):
     vehicle_id = models.CharField(max_length=20)
     vehicle_no = models.CharField(max_length=20)
     vehicle_name = models.CharField(max_length=20)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.vehicle_no)
 
 
@@ -161,7 +161,7 @@ class Transport(models.Model):
     class Meta:
         verbose_name_plural = "Transport"
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.vehicle)
 
 

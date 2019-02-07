@@ -11,7 +11,7 @@ describes the type of organisation where the user deals
 """
 class OrganisationType(models.Model):    
     type_desc = models.CharField(max_length=200)
-    def __unicode__(self):
+    def __str__(self):
         return self.type_desc
 
 
@@ -28,7 +28,7 @@ class Address(models.Model):
     class Meta:
         verbose_name_plural = "Addresses"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.street_address + ',' + self.district
 
 
@@ -63,7 +63,7 @@ class AdminOrganisations(HattiUser):
     class Meta:
         verbose_name_plural = "Admin Organisations"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -79,5 +79,5 @@ class Customer(HattiUser):
     org_type = models.ForeignKey(OrganisationType, on_delete=models.CASCADE,)
     company = models.CharField(max_length=200, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return unicode(self.user)

@@ -29,7 +29,7 @@ class NoteLine(models.Model):
     note = models.CharField(max_length=400)
     is_permanent = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.note)
 
     class Meta:
@@ -50,7 +50,7 @@ class QuotedOrder(models.Model):
     date_time = models.DateField(auto_now_add=True)
     total_discount = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
 
@@ -69,7 +69,7 @@ class QuotedItem(models.Model):
             self.price = self.price_per_unit * self.qty
             super(QuotedItem,self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.quoted_order)
 
 
@@ -91,7 +91,7 @@ class QuotedTaxesApplied(models.Model):
     surcharge_name = models.CharField(max_length=500)
     surcharge_value = models.FloatField()
     tax = models.IntegerField()
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.surcharge)
 
 
