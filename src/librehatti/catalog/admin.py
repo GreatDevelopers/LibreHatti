@@ -109,7 +109,7 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
         request.session['old_post'] = request.POST
         request.session['purchase_order_id'] = obj.id
         return HttpResponseRedirect(reverse\
-            ("librehatti.voucher.views.voucher_generate"))
+            ("voucher:voucher_generate"))
 
     def response_change(self, request, obj, post_url_continue=None):
         request.session['old_post'] = request.POST
