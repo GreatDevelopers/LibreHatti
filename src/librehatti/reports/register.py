@@ -837,6 +837,21 @@ def servicetax_register(request):
                     gst_in = ''
                 telephone = value['buyer__customer__telephone']
                 temp.append(address)
+
+                flag=1
+                material = PurchasedItem.objects.values\
+                ('item__category__name').\
+                filter(purchase_order__id =\
+                    value['id']).distinct()
+                for item in material:
+                    if flag == 1:
+                        material_list = item['item__category__name']
+                        flag = 0
+                    else:
+                       material_list = material_list + ', ' +\
+                       item['item__category__name']
+                temp.append(material_list)
+ 
                 temp.append(gst_in)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']

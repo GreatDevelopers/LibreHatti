@@ -33,7 +33,9 @@
                     <th>Receipt No.</th>
                     <th>Dated</th>
                     <th>Name of Parties</th>
-		    <th>GST IN</th>
+		    <th>Material</th>
+
+                    <th>GST IN</th>
                     <th>Amount</th>
                     {% for val in taxes_name %}
                     <th>{{val.surcharge_name}}</th>
@@ -48,16 +50,17 @@
                     <td>{{ value.1 }}</td>
                     <td>{{ value.2 }}</td>
 		    <td>{{value.3}}</td>
-                    <td align= 'right'>{{ value.4 }}</td>
-                    {% for val in value.5 %}
+                    <td>{{value.4}}</td>
+                    <td align= 'right'>{{ value.5 }}</td>
+                    {% for val in value.6 %}
                     <td align= 'right'>{{ val }}</td>
                     {% endfor %}
-                    <td align= 'right'>{{ value.6 }}</td>
-                    <td>{{value.7}}</td>
+                    <td align= 'right'>{{ value.7 }}</td>
+                    <td>{{value.8}}</td>
 		</tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="5"><b><center>SUM</center></b></td>
+                    <td colspan="6"><b><center>SUM</center></b></td>
                     <td align= 'right'>{{total}}</td>
                     {% for key, value in init_taxes.items %}
                     <td align= 'right'>{{value}}</td>
@@ -66,7 +69,7 @@
 		    <td></td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td colspan="7"></td>
                     <td colspan="{{taxes_name|length}}" align="center"><b>{{total_taxes}}</b></td>
                 </tr>
        </table>
