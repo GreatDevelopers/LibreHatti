@@ -13,7 +13,7 @@ class FinancialSession(models.Model):
     """
     session_start_date = models.DateField()
     session_end_date = models.DateField()
-    def __unicode__(self):
+    def __str__(self):
         return "%s : %s" % (self.session_start_date, self.session_end_date)
 
 
@@ -25,7 +25,7 @@ class Distribution(models.Model):
     ratio = models.CharField(max_length=10)
     college_income = models.IntegerField(default = 15)
     admin_charges = models.IntegerField(default = 5)
-    def __unicode__(self):
+    def __str__(self):
          return self.name
 
 
@@ -47,7 +47,7 @@ class VoucherId(models.Model):
     college_income = models.IntegerField()
     admin_charges = models.IntegerField()
     is_special = models.BooleanField(default=False)
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.voucher_no)
 
 
@@ -60,7 +60,7 @@ class CategoryDistributionType(models.Model):
     (Category, related_name='parent_category', on_delete=models.CASCADE,)
     category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE,)
     distribution = models.ForeignKey(Distribution, on_delete=models.CASCADE,)
-    def __unicode__(self):
+    def __str__(self):
         return self.category.name
 
 

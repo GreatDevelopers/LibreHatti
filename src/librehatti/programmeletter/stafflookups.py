@@ -24,7 +24,7 @@ class StaffLookup(LookupChannel):
         return staff[0:15]
 
     def get_result(self, obj):
-        return unicode(obj.name)
+        return str(obj.name)
 
     def format_match(self, obj):
         return self.format_item_display(obj)

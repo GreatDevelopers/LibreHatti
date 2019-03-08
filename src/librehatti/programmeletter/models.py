@@ -7,7 +7,7 @@ from librehatti.suspense.models import Vehicle
 class TeamName(models.Model):
     """Model for team"""
     team_name = models.CharField(max_length=500)
-    def __unicode__(self):
+    def __str__(self):
         return self.team_name
 
 
@@ -15,7 +15,7 @@ class StaffInTeam(models.Model):
     """Model for staff in team"""
     team_name = models.ForeignKey(TeamName, on_delete=models.CASCADE,)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE,)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.staff) + ' - ' '%s' % (self.team_name)
 
 
@@ -35,5 +35,5 @@ class LetterData(models.Model):
     date = models.DateField()
     time = models.TimeField()
     vehicle = models.ForeignKey(Vehicle, default=1, on_delete=models.CASCADE,)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.letter_subject) + ' -- TEAM NAME: ' '%s' % (self.team_name)

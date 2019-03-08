@@ -40,7 +40,7 @@ class mCategory(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
 
-    def __unicode__(self):
+    def __str__(self):
         return unicode(self.name)
 
 
@@ -49,7 +49,7 @@ class Unit(models.Model):
     This class defines a unit variable for Categories
     """
     unit = models.CharField(max_length=100)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.unit)
 
 
@@ -66,7 +66,7 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % self.name
 
 
@@ -79,7 +79,7 @@ class Product(models.Model):
     category = mptt.fields.TreeForeignKey(Category, related_name="products", on_delete=models.CASCADE,)
     price_per_unit = models.IntegerField(blank=True,null=True)
     organisation = models.ForeignKey('useraccounts.AdminOrganisations', on_delete=models.CASCADE,)
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -94,7 +94,7 @@ class Attributes(models.Model):
     class Meta:
         verbose_name_plural = "Attributes"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -108,7 +108,7 @@ class ModeOfPayment(models.Model):
     class Meta:
         verbose_name_plural = "Modes of payment"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.method
 
 
@@ -124,7 +124,7 @@ class Surcharge(models.Model):
     tax_effected_from = models.DateField(null = True)
     tax_valid_till = models.DateField(null = True)
     Remark = models.CharField(max_length=1000, null = True)
-    def __unicode__(self):
+    def __str__(self):
          return self.tax_name
 
 
@@ -169,7 +169,7 @@ class PurchaseOrder(models.Model):
             super(PurchaseOrder, self).save(*args, **kwargs)
         except:
             raise ValidationError('No Current Financial Session')
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
 
@@ -190,7 +190,7 @@ class PurchasedItem(models.Model):
         except:
             raise ValidationError('No Active Taxes. Unable to add Items')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.item) + ' - ' '%s' % (self.purchase_order)
 
     class Meta:
@@ -205,7 +205,7 @@ class Catalog(models.Model):
     attribute = models.ForeignKey(Attributes, on_delete=models.CASCADE,)
     value = models.CharField(max_length=200)
     product = models.ForeignKey(Product, on_delete=models.CASCADE,)
-    def __unicode__(self):
+    def __str__(self):
         return self.attribute.name
 
 
@@ -218,7 +218,7 @@ class TaxesApplied(models.Model):
     surcharge_name = models.CharField(max_length=500)
     surcharge_value = models.FloatField()
     tax = models.IntegerField()
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.surcharge)
 
 
@@ -254,7 +254,7 @@ class HeaderFooter(models.Model):
                 super(HeaderFooter, self).save(*args, **kwargs)
         else:
             super(HeaderFooter, self).save(*args, **kwargs)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
     class Meta:
@@ -265,7 +265,7 @@ class SurchargePaid(models.Model):
     surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE,)
     value = models.IntegerField()
     date = models.DateField(auto_now_add = True)
-    def __unicode__(self):
+    def __str__(self):
         return '%s paid on ' % (self.surcharge, self.date)
 
 
@@ -316,7 +316,7 @@ class NonPaymentOrder(models.Model):
     delivery_address = models.CharField(max_length=500, blank=True, null=True,\
         verbose_name = _DELIVERY_ADDRESS)
     item_type = models.CharField(max_length = 200)
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.id)
 
 
