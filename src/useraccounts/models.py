@@ -80,4 +80,4 @@ class Customer(HattiUser):
     company = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return unicode(self.user)
+        return str(self.user)
