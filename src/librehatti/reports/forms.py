@@ -7,9 +7,7 @@ from .search_choices import MONTH_CHOICES
 
 import datetime
 
-import itertools
-
-from librehatti.voucher.models import FinancialSession
+from librehatti.catalog.models import FinancialSession
 
 from librehatti.catalog.models import Category
 
@@ -117,8 +115,8 @@ class AddConstraints(forms.Form):
     session_end = FinancialSession.objects.values_list('session_end_date', \
         flat = True)
     session_choices = [('', '--------')] + [(id, str(start) + '-To-' + \
-        str(end)) for id, start, end in zip(session_id, \
-        session_start, session_end)]
+        str(end)) for id, start, end in list(zip(session_id, \
+        session_start, session_end))]
     session = forms.ChoiceField(choices=session_choices)
 
     surcharges = forms.ModelMultipleChoiceField(required=False,

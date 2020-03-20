@@ -436,7 +436,7 @@ def payment_register(request):
                 temp_list.append(temp_value['purchase_order__tds'])
                 temp_list.append(temp_value['amount_received'])
                 result.append(temp_list)
-                print (temp_list[0],",",temp_list[1],",",temp_list[2],",",temp_list[6],",",temp_list[7],",",temp_list[10]+temp_list[11]+temp_list[12]+temp_list[13])
+                print((temp_list[0],",",temp_list[1],",",temp_list[2],",",temp_list[6],",",temp_list[7],",",temp_list[10]+temp_list[11]+temp_list[12]+temp_list[13]))
                 temp_list = []
                 material_list = ''
                 billamount = billamount + temp_value['totalplusdelivery']
@@ -754,7 +754,7 @@ def servicetax_registerYear(year):
 
             else:
                 materiallist=materiallist+" , "+i['purchased_item__item_id__category__name']
-        print (temp[0],"|",temp[1],"|",Teacher[randint(0,19)],"|",temp[2],"|",materiallist,"|",temp[5])#,"|",p.number_to_word(temp[5])
+        print((temp[0],"|",temp[1],"|",Teacher[randint(0,19)],"|",temp[2],"|",materiallist,"|",temp[5]))#,"|",p.number_to_word(temp[5])
 
 @login_required
 def servicetax_register(request):

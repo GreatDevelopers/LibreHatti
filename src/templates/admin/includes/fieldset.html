@@ -1,85 +1,67 @@
-{% load suit_tags %}
-<fieldset class="module aligned{{ fieldset.name|yesno:' with-legend, first' }} {{ fieldset.classes }}">
-    {% if fieldset.name %}
-        <h2 class="legend">{{ fieldset.name }}
-            {% if fieldset.description %}
-                <span class="description">{{ fieldset.description|safe }}</span>
-            {% endif %}
-        </h2>{% endif %}
-  {% for line in fieldset %}
-    {% with singlefield=line.fields|length_is:'1' %}
-      <div class="control-group form-row{% if line.errors %} {{ singlefield|yesno:'error,first-error' }} errors{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %} {{ field.field.field.widget.attrs.rowclass }}{% endfor %}{{ singlefield|yesno:',multi-field-row' }}">
-        {% for field in line %}
-          {% spaceless %}
+{% load suit_forms %}
+<fieldset class="suit-form module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% for line in fieldset %}
+        {% with is_single=line.fields|length_is:'1' %}
 
-        {# write special control tags only for first multi field #}
-        {% if forloop.first %}
-            <div{% if not singlefield %}
-                class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}"{% endif %}>
+            <div class="form-group row form-row {% if is_single and line.errors or field.errors %} has-danger errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}{% endfor %}">
 
-            <div class="control-label">
-                {{ field.label_tag }}
+                {% for field in line %}
+                    {% if is_single or forloop.first %}
+                        <label for="{{ field.field.id_for_label }}" class="form-control-label {{ field.field|suit_form_label_class:fieldset }}">{{ field.label_tag }}</label>
+                        <div class="{% if is_single %} {{ field.field|suit_form_field_class:fieldset }} {% else %}col-xs-12 col-sm-9 col-md-10 col-multi-fields{% endif %}">
+                    {% endif %}
+
+                {# Open multi-field #}
+                {% if not is_single %}
+                    <div class="multi-field {{ field.field|suit_form_field_widget_class }} {% if field.errors %} has-danger errors{% endif %}">
+                    {% if not forloop.first %}
+                        <label for="{{ field.field.id_for_label }}" class="form-control-label">{{ field.label_tag }}</label>
+                        <div class="multi-field-content {{ field.field|suit_form_field_widget_class }}">
+                    {% endif %}
+                {% endif %}
+
+                {% if field.is_readonly %}
+                    <p class="form-control-static">{{ field.contents }}</p>
+                {% else %}
+                    {{ field.field }}
+                {% endif %}
+                {% if field.errors and not is_single and not field.is_readonly %}
+                    <div class="text-help">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+                {% if is_single and line.errors %}
+                    <div class="text-help">
+                        {{ line.errors }}
+                    </div>
+                {% endif %}
+                {% if field.field.help_text %}
+                    <small class="text-help">{{ field.field.help_text|safe }}</small>
+                {% endif %}
+
+                {# Close multi-field #}
+                {% if not is_single %}
+
+                    {# Close multi-field-content #}
+                    {% if not forloop.first %}
+                        </div>
+                    {% endif %}
+
+                    </div>
+                {% endif %}
+
+                {# Close multi-row first field container #}
+                {% if is_single or forloop.last %}
+                    </div>
+                {% endif %}
+
+                {% endfor %}
+
             </div>
-            <div class="controls">
-            {# if multi-fields and first field #}
-            {% if not singlefield %}
-              <div class="multi-field-box">
-            {% endif %}
-        {% else %}
-          {# If multi-fields and not first wrap also label #}
-          {% if not singlefield and not forloop.first %}
-            <div class="multi-field-box{{ field.errors|yesno:' error,' }}">
-          {% endif %}
-            {{ field.label_tag }}
-        {% endif %}
-
-        {% if not field.is_readonly and field.errors %}<div class="inline error errors">{% endif %}
-
-        {# If multi-fields and wrap controls too #}
-         {% if not singlefield %}
-            <div class="multi-field-controls">
-          {% endif %}
-
-        {% if field.is_readonly %}
-            <span class="readonly">{{ field|field_contents_foreign_linked }}</span>
-        {% else %}
-            {{ field.field }}
-        {% endif %}
-
-        {# For single field errors#}
-        {% if singlefield and line.errors %}
-            <span class="help-inline">{{ line.errors }}</span>
-        {% endif %}
-
-        {# For multi field errors #}
-        {% if field.errors and not singlefield and not field.is_readonly %}
-          <span class="help-block">{{ field.errors|striptags }}</span>
-        {% endif %}
-
-        {% if field.field.help_text %}
-          <span class="{% if line.errors or field.errors or not singlefield %}help-block{% else %}help-inline{% endif %}">{{ field.field.help_text|safe }}</span>
-        {% endif %}
-
-        {% if not field.is_readonly and field.errors %}</div>{% endif %}
-
-        {% if not singlefield %}
-         </div> {# close multi-controls #}
-         </div> {# close multi-field-box #}
-        {% endif %}
-
-        {% if forloop.last %}
-            </div>
-            </div>
-        {% endif %}
-
-          {% endspaceless %}
-        {% endfor %}
-
-      </div>
-    {% endwith %}
-  {% endfor %}
+        {% endwith %}
+    {% endfor %}
 </fieldset>
-{# For closing line #}
-{% if 'plugin-holder' in fieldset.classes %}
-  <hr class="plugin-holder-separator">
-{% endif %}

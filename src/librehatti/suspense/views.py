@@ -178,8 +178,8 @@ def clearance_search(request):
         if sessiondata.is_valid():
             voucher = sessiondata.data['voucher']
             session = sessiondata.data['session']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 form = Clearance_form(initial={'voucher_no':voucher,\
                 'session':session, 'labour_charge':0, 'car_taxi_charge':0,\
@@ -648,8 +648,8 @@ def sessionselect(request):
             for date in Session:
                 session_start_date = date['session_start_date']
                 session_end_date =  date['session_end_date']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 Transport = TransportForm1()
                 messages = " Voucher "+" "+ voucher +" and Session"+" "+\
@@ -752,15 +752,15 @@ def transportbill(request):
                             temp_obj.save()
             except:
                 pass
-            temp = Transport.objects.filter(voucher_no=voucher, session=session).values()
+            temp = list(Transport.objects.filter(voucher_no=voucher, session=session).values())
             total_amount = Transport.objects.filter(voucher_no=voucher, session=session).\
             aggregate(Sum('total')).get('total__sum', 0.00)
-            zipped_data = zip(date, kilometers)
+            zipped_data = list(zip(date, kilometers))
             transport_total = []
             for date_var,kilometers_var in zipped_data:
                 cal_total = rate * int(kilometers_var)
                 transport_total.append(cal_total)
-            zip_data = zip(date, kilometers, transport_total)
+            zip_data = list(zip(date, kilometers, transport_total))
             header = HeaderFooter.objects.values('header').\
             get(is_active=True)
             footer = HeaderFooter.objects.values('footer').\
@@ -779,8 +779,8 @@ def transportbill(request):
             message = " Fields are mandatory"
             session = request.POST['session']
             voucher = request.POST['voucher']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 TransportForm = TransportForm1(request.POST)
                 message = " Fields are mandatory"
@@ -858,8 +858,8 @@ def tada_result(request):
                 tada_total_with_tax += tax_amount
             suspense_object = SuspenseOrder.objects.filter(voucher=voucher,\
                 session_id=session).update(is_cleared=0)
-            object = TaDa.objects.filter(session=session, voucher_no=voucher,
-                start_test_date=start_test_date).values()
+            object = list(TaDa.objects.filter(session=session, voucher_no=voucher,
+                start_test_date=start_test_date).values())
             if object:
                 TaDa.objects.filter(session=session, voucher_no=voucher,
                 start_test_date=start_test_date).update(voucher_no=voucher, session=session,\
@@ -928,8 +928,8 @@ def tada_result(request):
         if request.GET['voucher_no']:
             session = request.GET['session']
             voucher = request.GET['voucher_no']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 form = TaDaForm(initial={'voucher_no':voucher,\
                     'session': session})
@@ -959,8 +959,8 @@ def tada_order_session(request):
         if form.is_valid():
             session = request.POST['session']
             voucher = request.POST['voucher']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 form = TaDaForm(initial={'voucher_no':voucher,\
                     'session': session})
@@ -1033,9 +1033,9 @@ def mark_clear(request):
                         'purchase_order__buyer__customer__address__province')
                     if voucher_object:
                         list_user.append(voucher_object)
-            list_user_clr = zip (list_user,list_clearance)
+            list_user_clr = list(zip(list_user,list_clearance))
             for suspense_var,voucher_var in list_user_clr:
-                final_list = zip(suspense_var,voucher_var)
+                final_list = list(zip(suspense_var,voucher_var))
                 list_details.append(final_list)
             request_status = request_notify()
             return render(request, 'suspense/mark_suspense_clear.html', {
@@ -1207,8 +1207,8 @@ def summary_page(request):
     transport = Transport.objects.values('rate','total').filter(voucher_no=voucher).\
         filter(session=session)[0]
     distance_travelled = transport['total'] / transport['rate']
-    other_charges = SuspenseClearance.objects.filter(voucher_no = voucher).\
-        filter(session=session).values()[0]
+    other_charges = list(SuspenseClearance.objects.filter(voucher_no = voucher).\
+        filter(session=session).values())[0]
     temp = Context({'tada':tada_amount,'distance_travelled':distance_travelled,
         'other_charge':other_charges,'rate':transport['rate']})
     content = get_template('suspense/summary.html')
@@ -1256,7 +1256,7 @@ def transport_bill(request):
                 total = rate * int(temp_var)
                 total_list.append(int(total))
             total_amount = value['total']
-        zip_data = zip(list_of_date,list_of_kilometer,total_list)
+        zip_data = list(zip(list_of_date,list_of_kilometer,total_list))
         client_address = VoucherId.objects.\
         filter(session_id = session,voucher_no = voucher).\
         values('purchase_order__buyer__customer__address__street_address',\
@@ -1347,8 +1347,8 @@ def car_taxi_advance_form(request):
         if sessiondata.is_valid():
             voucher = sessiondata.data['voucher']
             session = sessiondata.data['session']
-            object = SuspenseOrder.objects.filter(session_id=session).\
-            filter(voucher=voucher).values()
+            object = list(SuspenseOrder.objects.filter(session_id=session).\
+            filter(voucher=voucher).values())
             if object:
                 form = CarTaxiAdvance_form(initial={'voucher_no':voucher,\
                 'session':session})

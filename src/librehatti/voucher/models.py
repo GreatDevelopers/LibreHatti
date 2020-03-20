@@ -2,19 +2,8 @@ from django.db import models
 
 from librehatti.catalog.models import PurchaseOrder
 from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Category 
-
-import datetime
-
- 
-class FinancialSession(models.Model):
-    """
-    This class defines start date and end date for a financial session.
-    """
-    session_start_date = models.DateField()
-    session_end_date = models.DateField()
-    def __str__(self):
-        return "%s : %s" % (self.session_start_date, self.session_end_date)
+from librehatti.catalog.models import Category
+from librehatti.catalog.models import FinancialSession
 
 
 class Distribution(models.Model):

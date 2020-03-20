@@ -30,18 +30,29 @@ from librehatti.config import _REFERENCE
 from librehatti.config import _REFERENCE_DATE
 
 
+class FinancialSession(models.Model):
+    """
+    This class defines start date and end date for a financial session.
+    """
+    session_start_date = models.DateField()
+    session_end_date = models.DateField()
+
+    def __str__(self):
+        return "%s : %s" % (self.session_start_date, self.session_end_date)
+
+
 class mCategory(models.Model):
     """
     This class defines the name of category and parent category of product
     """
     name = models.CharField(max_length=100)
-    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE,)
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, )
 
     class Meta:
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return unicode(self.name)
+        return str(self.name)
 
 
 class Unit(models.Model):
@@ -49,6 +60,7 @@ class Unit(models.Model):
     This class defines a unit variable for Categories
     """
     unit = models.CharField(max_length=100)
+
     def __str__(self):
         return '%s' % (self.unit)
 
@@ -60,8 +72,8 @@ class Category(MPTTModel):
     """
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', null=True, blank=True, \
-        related_name="children", on_delete=models.CASCADE,)
-    unit = models.ForeignKey(Unit, null=True, blank=True, on_delete=models.CASCADE,)
+                            related_name="children", on_delete=models.CASCADE, )
+    unit = models.ForeignKey(Unit, null=True, blank=True, on_delete=models.CASCADE, )
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -76,9 +88,10 @@ class Product(models.Model):
     that product and the organisation with which user deals
     """
     name = models.CharField(max_length=500)
-    category = mptt.fields.TreeForeignKey(Category, related_name="products", on_delete=models.CASCADE,)
-    price_per_unit = models.IntegerField(blank=True,null=True)
-    organisation = models.ForeignKey('useraccounts.AdminOrganisations', on_delete=models.CASCADE,)
+    category = mptt.fields.TreeForeignKey(Category, related_name="products", on_delete=models.CASCADE, )
+    price_per_unit = models.IntegerField(blank=True, null=True)
+    organisation = models.ForeignKey('useraccounts.AdminOrganisations', on_delete=models.CASCADE, )
+
     def __str__(self):
         return self.name
 
@@ -88,8 +101,8 @@ class Attributes(models.Model):
     This class defines the features of product
     """
     name = models.CharField(max_length=200)
-    is_number = models.BooleanField(default = True)
-    is_string = models.BooleanField(default = False)
+    is_number = models.BooleanField(default=True)
+    is_string = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Attributes"
@@ -113,41 +126,42 @@ class ModeOfPayment(models.Model):
 
 
 class Surcharge(models.Model):
-
     """
     This class defines the type of taxes, value, validation of taxes
     mentioning the startdate and end date
     """
     tax_name = models.CharField(max_length=200)
     value = models.FloatField()
-    taxes_included = models.BooleanField(default = False)
-    tax_effected_from = models.DateField(null = True)
-    tax_valid_till = models.DateField(null = True)
-    Remark = models.CharField(max_length=1000, null = True)
+    taxes_included = models.BooleanField(default=False)
+    tax_effected_from = models.DateField(null=True)
+    tax_valid_till = models.DateField(null=True)
+    Remark = models.CharField(max_length=1000, null=True)
+
     def __str__(self):
-         return self.tax_name
+        return self.tax_name
 
 
 class PurchaseOrder(models.Model):
     """
     This class defines members for orders to placed by users
     """
-    buyer = models.ForeignKey(User,verbose_name= _BUYER, on_delete=models.CASCADE,)
-    is_debit = models.BooleanField(default = False, verbose_name = _IS_DEBIT)
+    buyer = models.ForeignKey(User, verbose_name=_BUYER, on_delete=models.CASCADE, )
+    is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(blank=True, null=True, verbose_name=_REFERENCE_DATE)
-    delivery_address = models.CharField(max_length=500, blank=True, null=True,\
-        verbose_name = _DELIVERY_ADDRESS)
-    organisation = models.ForeignKey('useraccounts.AdminOrganisations', default=1, on_delete=models.CASCADE,)
+    delivery_address = models.CharField(max_length=500, blank=True, null=True, \
+                                        verbose_name=_DELIVERY_ADDRESS)
+    organisation = models.ForeignKey('useraccounts.AdminOrganisations', default=1, on_delete=models.CASCADE, )
     date_time = models.DateField(auto_now_add=True)
     purchase_order_time = models.TimeField(auto_now_add=True)
-    total_discount = models.IntegerField(default = 0)
-    tds = models.IntegerField(default = 0)
-    mode_of_payment = models.ForeignKey(ModeOfPayment, on_delete=models.CASCADE,)
+    total_discount = models.IntegerField(default=0)
+    tds = models.IntegerField(default=0)
+    mode_of_payment = models.ForeignKey(ModeOfPayment, on_delete=models.CASCADE, )
     cheque_dd_number = models.CharField(max_length=50, blank=True)
     cheque_dd_date = models.DateField(max_length=50, blank=True, null=True)
-    type_of_service = models.ForeignKey('useraccounts.OrganisationType', on_delete=models.CASCADE,)
-    is_active = models.BooleanField(default = True)
+    type_of_service = models.ForeignKey('useraccounts.OrganisationType', on_delete=models.CASCADE, )
+    is_active = models.BooleanField(default=True)
+
     def save(self, *args, **kwargs):
         surchages = Surcharge.objects.filter(taxes_included=1)
 
@@ -155,10 +169,9 @@ class PurchaseOrder(models.Model):
             pass
         else:
             raise ValidationError('No Active Taxes. Unable to add Order')
-        from librehatti.voucher.models import FinancialSession
         now = datetime.datetime.now()
-        financialsession = FinancialSession.objects.\
-        values('id','session_start_date','session_end_date')
+        financialsession = FinancialSession.objects. \
+            values('id', 'session_start_date', 'session_end_date')
         for value in financialsession:
             start_date = value['session_start_date']
             end_date = value['session_end_date']
@@ -169,6 +182,7 @@ class PurchaseOrder(models.Model):
             super(PurchaseOrder, self).save(*args, **kwargs)
         except:
             raise ValidationError('No Current Financial Session')
+
     def __str__(self):
         return '%s' % (self.id)
 
@@ -177,11 +191,12 @@ class PurchasedItem(models.Model):
     """
     This class defines members for items purchased in a purchase order
     """
-    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE,)
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE, )
     price_per_unit = models.IntegerField()
-    qty = models.IntegerField(verbose_name = _QTY)
+    qty = models.IntegerField(verbose_name=_QTY)
     price = models.IntegerField()
-    item = models.ForeignKey(Product, on_delete=models.CASCADE,)
+    item = models.ForeignKey(Product, on_delete=models.CASCADE, )
+
     def save(self, *args, **kwargs):
         try:
             if self.purchase_order:
@@ -202,9 +217,10 @@ class Catalog(models.Model):
     """
     This class defines the features, value of product
     """
-    attribute = models.ForeignKey(Attributes, on_delete=models.CASCADE,)
+    attribute = models.ForeignKey(Attributes, on_delete=models.CASCADE, )
     value = models.CharField(max_length=200)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE,)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, )
+
     def __str__(self):
         return self.attribute.name
 
@@ -213,11 +229,12 @@ class TaxesApplied(models.Model):
     """
     This class defines the taxes applied on the purchase order
     """
-    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE,)
-    surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE,)
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE, )
+    surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE, )
     surcharge_name = models.CharField(max_length=500)
     surcharge_value = models.FloatField()
     tax = models.IntegerField()
+
     def __str__(self):
         return "%s" % (self.surcharge)
 
@@ -226,7 +243,7 @@ class Bill(models.Model):
     """
     This class defines the grand total of the purchase order
     """
-    purchase_order = models.ForeignKey(PurchaseOrder,on_delete=models.CASCADE,)
+    purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE, )
     delivery_charges = models.IntegerField()
     total_cost = models.IntegerField()
     totalplusdelivery = models.IntegerField()
@@ -242,18 +259,20 @@ class HeaderFooter(models.Model):
     """
     header = HTMLField()
     footer = HTMLField()
-    is_active = models.BooleanField(default = False)
+    is_active = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         if self.is_active == True:
             temp = HeaderFooter.objects.filter(is_active=1)
             if temp:
-                HeaderFooter.objects.filter(is_active=1).\
-                update(is_active=0)
+                HeaderFooter.objects.filter(is_active=1). \
+                    update(is_active=0)
                 super(HeaderFooter, self).save(*args, **kwargs)
             else:
                 super(HeaderFooter, self).save(*args, **kwargs)
         else:
             super(HeaderFooter, self).save(*args, **kwargs)
+
     def __str__(self):
         return '%s' % (self.id)
 
@@ -262,9 +281,10 @@ class HeaderFooter(models.Model):
 
 
 class SurchargePaid(models.Model):
-    surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE,)
+    surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE, )
     value = models.IntegerField()
-    date = models.DateField(auto_now_add = True)
+    date = models.DateField(auto_now_add=True)
+
     def __str__(self):
         return '%s paid on ' % (self.surcharge, self.date)
 
@@ -275,21 +295,20 @@ class ChangeRequest(models.Model):
     to request a change in the Bill Amount
     """
     purchase_order_of_session = models.IntegerField()
-    from librehatti.voucher.models import FinancialSession
-    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE, )
     previous_total = models.IntegerField()
     new_total = models.IntegerField()
     description = models.CharField(max_length=100)
     initiator = models.CharField(max_length=50)
-    initiation_date = models.DateField(auto_now_add = True)
+    initiation_date = models.DateField(auto_now_add=True)
 
 
 class RequestSurchargeChange(models.Model):
     """
     This class defines members for requesting the change in a Bill
     """
-    change_request = models.ForeignKey(ChangeRequest, on_delete=models.CASCADE,)
-    surcharge = models.ForeignKey(TaxesApplied, on_delete=models.CASCADE,)
+    change_request = models.ForeignKey(ChangeRequest, on_delete=models.CASCADE, )
+    surcharge = models.ForeignKey(TaxesApplied, on_delete=models.CASCADE, )
     previous_value = models.IntegerField()
     new_value = models.IntegerField()
 
@@ -298,10 +317,10 @@ class RequestStatus(models.Model):
     """
     This class defines members to specify status of the chnage request
     """
-    change_request = models.ForeignKey(ChangeRequest, on_delete=models.CASCADE,)
+    change_request = models.ForeignKey(ChangeRequest, on_delete=models.CASCADE, )
     confirmed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
-    request_response = models.DateField(null = True)
+    request_response = models.DateField(null=True)
 
 
 class NonPaymentOrder(models.Model):
@@ -309,13 +328,14 @@ class NonPaymentOrder(models.Model):
     This class defines members for the purchase orders to be completed in 
     future but the date is not determined
     """
-    buyer = models.ForeignKey(User,verbose_name= _BUYER, on_delete=models.CASCADE,)
+    buyer = models.ForeignKey(User, verbose_name=_BUYER, on_delete=models.CASCADE, )
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
     date = models.DateField(auto_now_add=True)
-    delivery_address = models.CharField(max_length=500, blank=True, null=True,\
-        verbose_name = _DELIVERY_ADDRESS)
-    item_type = models.CharField(max_length = 200)
+    delivery_address = models.CharField(max_length=500, blank=True, null=True, \
+                                        verbose_name=_DELIVERY_ADDRESS)
+    item_type = models.CharField(max_length=200)
+
     def __str__(self):
         return '%s' % (self.id)
 
@@ -325,10 +345,9 @@ class NonPaymentOrderOfSession(models.Model):
     This class defines members for Non Payment order of a 
     particular session
     """
-    non_payment_order = models.ForeignKey(NonPaymentOrder, on_delete=models.CASCADE,)
+    non_payment_order = models.ForeignKey(NonPaymentOrder, on_delete=models.CASCADE, )
     non_payment_order_of_session = models.IntegerField()
-    from librehatti.voucher.models import FinancialSession
-    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE,)
+    session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE, )
 
 
 class SpecialCategories(models.Model):
@@ -336,6 +355,6 @@ class SpecialCategories(models.Model):
     This class defines members for special categories where no tax is applied
     and voucher is not generated
     """
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, )
     voucher = models.BooleanField(default=False)
     tax = models.BooleanField(default=False)

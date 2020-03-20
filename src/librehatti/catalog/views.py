@@ -322,8 +322,8 @@ def change_request(request):
         sessiondata = ChangeRequestForm(request.POST)
         purchase_order_of_session = sessiondata.data['purchase_order']
         session = sessiondata.data['session']
-        object = VoucherId.objects.filter(session_id = session).\
-        filter(purchase_order_of_session = purchase_order_of_session).values()
+        object = list(VoucherId.objects.filter(session_id = session).\
+        filter(purchase_order_of_session = purchase_order_of_session).values())
         if object:
             voucherid = VoucherId.objects.\
             filter(purchase_order_of_session=purchase_order_of_session,\

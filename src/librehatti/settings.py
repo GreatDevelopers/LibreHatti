@@ -19,9 +19,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',
-        'USER': 'db_user',
-        'PASSWORD': 'db_password',
+        'NAME': 'librehatti2',
+        'USER': 'root',
+        'PASSWORD': 'J@1diamond',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -123,8 +123,6 @@ TEMPLATES = [
         },
     },
 ]
-#import ipdb
-#ipdb.set_trace()
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -149,15 +147,6 @@ INSTALLED_APPS = (
     'librehatti.programmeletter',
     'django.contrib.admindocs',
 )
-
-SUIT_CONFIG = {
-    'ADMIN_NAME': 'LibreHatti',
-    'MENU_ICONS': {
-        'sites': 'icon-leaf',
-       'auth': 'icon-lock',
-       'bills': 'icon-file',
-     },
-}
 
 
 ACCOUNT_ACTIVATION_DAYS = 7

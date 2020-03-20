@@ -1,5 +1,6 @@
 #from django.urls import patterns, include, url
-from django.urls import  include, re_path
+from django.urls import re_path
+from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -55,8 +56,8 @@ urlpatterns = [
     re_path(r'^receipt/', prints_views.receipt, name ='receipt'),
     re_path(r'^tinymce/', include(('tinymce.urls','tinymce'), namespace='tinymce')),
     re_path(r'^programmeletter/', programmeletter_views.programmeletter, name='programmeletter'),
-    re_path(r'pending_clearance_register', register.pending_clearance_register, name='pending_clearance_register'),
-    re_path(r'tada_register', register.tada_register, name='tada_register'),
-    re_path(r'tada_othercharges_register', register.tada_othercharges_register, name='tada_othercharges_register'),
-    re_path(r'client_details_according_to_amount', register.client_details_according_to_amount, name='client_details_according_to_amount')
+    # re_path(r'pending_clearance_register', register.pending_clearance_register, name='pending_clearance_register'),
+    # re_path(r'tada_register', register.tada_register, name='tada_register'),
+    # re_path(r'tada_othercharges_register', register.tada_othercharges_register, name='tada_othercharges_register'),
+    # re_path(r'client_details_according_to_amount', register.client_details_according_to_amount, name='client_details_according_to_amount')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -11,8 +11,8 @@ urls for the login, signup, password reset, and logout by the user
 """
 next_page = reverse_lazy(catalog_views.index)
 urlpatterns = [
-        re_path(r'^login$', auth_views.login, {'template_name': 'useraccounts/login.html'}),
-        re_path(r'^logout$', auth_views.logout, {'next_page': next_page}),
+        re_path(r'^login$', auth_views.LoginView, {'template_name': 'useraccounts/login.html'}),
+        re_path(r'^logout$', auth_views.LogoutView, {'next_page': next_page}),
         re_path(r'^signup$', useraccounts_views.register),
 ]
 

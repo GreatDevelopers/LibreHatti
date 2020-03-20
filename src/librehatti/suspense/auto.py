@@ -33,8 +33,8 @@ i=0
 #ipdb.set_trace()
 for j in range(0, len(fin_content)):
     if (i<len(li) and li[i] in fin_content[j]):
-       print (i,j)
-       print (li[i]+ "    "+fin_content[j])
+       print((i,j))
+       print((li[i]+ "    "+fin_content[j]))
        if (i!=len(li)-1):
           k= fin_content[j].replace("),", ", name= '" + li[i] + "'),")
        else: 
