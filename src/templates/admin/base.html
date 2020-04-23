@@ -7,6 +7,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
     <link href='{% static "suit/css/font-awesome.min.css" %}' rel='stylesheet' type='text/css'>
 {% endblock %}
+  {% block extrahead %}{% endblock %}
 
 {% block bodyclass %}{{ block.super|suit_body_class:request }}{% endblock %}
 
@@ -15,7 +16,7 @@
 {% block branding %}
     <h1 id="site-name">
         <a href="{% url 'admin:index' %}">
-            {{ site_header|default:_('Django administration') }}
+            {{ site_header|default:_('LibreHatti') }}
             <span class="header-label">{% trans 'Admin' %}</span></a>
     </h1>
 {% endblock %}

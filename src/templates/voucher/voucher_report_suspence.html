@@ -24,19 +24,19 @@
         </div>
     <div class="designation">Principal,</div>
     <br>
-    A sum of &#8377; {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by 
+    A sum of &#8377; {{cost.amount_received}}/- ( Rupees {{ inwords }} only ) has been deposited by
     {% if buyer.buyer__first_name %}
     {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}
     {% else %}
     {{buyer.buyer__customer__title}}
     {% endif %}
-    , {{address.address__street_address}}, {{address.address__district}}, 
+    , {{address.address__street_address}}, {{address.address__district}},
     {% if address.address__pin != 'None' and address.address__pin != '' %}
      {{address.address__pin}},
-     {% endif %} 
+     {% endif %}
      {{address.address__province}} {% if buyer_name.company %}
       Agency: {{buyer.buyer__customer__company}}
-        {% endif %} by {{method}} 
+        {% endif %} by {{method}}
       {% if method_id != 1 and method_id != 4 %}
       No. {{method_number}} dated {{method_date}}
       {% endif %}

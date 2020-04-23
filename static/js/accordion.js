@@ -33,7 +33,7 @@ $.fn.csAccordion = function (args) {
 
         var $this = this;
 
-      
+
 
         if (args.accordionTitle) {
             $(this).prepend('<div class="csAccordion__title">' + args.accordionTitle + '</div>');
@@ -41,10 +41,10 @@ $.fn.csAccordion = function (args) {
 
         $(this).find('ul').wrap('<div class="wrapper"></div>');
 
-       
 
 
-      
+
+
             $(this).find('li').each(function () {
                 var content = $(this).html();
 
@@ -61,13 +61,13 @@ $.fn.csAccordion = function (args) {
 
                     html += '</div><div class="col content"><div class="inner_content">' + content + '</div>';
 
-              
+
 
 
 
                 $(this).empty().append(html);
             });
-      
+
 
         /*********************************************
 			Configure CS Ticker
@@ -75,7 +75,7 @@ $.fn.csAccordion = function (args) {
 
         $(this).addClass('csAccordion');
 
-        
+
         if(args.backgroundColour){
          $(this).css('background', args.backgroundColour);
         }
@@ -85,7 +85,7 @@ $.fn.csAccordion = function (args) {
         if(args.titleTextColour){
             $(this).find('.csAccordion__title').css('color', args.titleTextColour);
         }
-        
+
 
         function setupAnimation($this) {
             setInterval(function () {
@@ -97,7 +97,7 @@ $.fn.csAccordion = function (args) {
             $($this).find('ul').mouseenter(function () {
             	pause = true;
             }).mouseleave(function () {
-            	pause = false;	
+            	pause = false;
             });
         }
 
@@ -119,7 +119,7 @@ $.fn.csAccordion = function (args) {
      }
 
         /*********************************************
-			Setup Functions 
+			Setup Functions
 			**********************************************/
 
         return this.each(function () {
@@ -132,25 +132,24 @@ $.fn.csAccordion = function (args) {
                $(this).parent().addClass('show').find('.col.content').addClass('displayContent').css('height', $(this).parent().find('.inner_content').height());
                $(this).parent().find('.expand').addClass('collapse');
                 currentSlide = $(this).parent().index();
-                
+
             });
 
             if (args.autoAnimate) {
                 setupAnimation($this);
                 $($this).find('li:nth-child(1) .col.heading').click();
             }
-            
+
 
 
          $(window).resize(function(){
             $($this).find('.displayContent').css('height', $($this).find('.show').find('.inner_content').outerHeight());
         });
-        
+
         });
     };
 
 $(document).ready(function()
                   {
-                    $('.accordion').csAccordion({ 'accordionTitle': 'Advanced Settings'}); 
+                    $('.accordion').csAccordion({ 'accordionTitle': 'Advanced Settings'});
                   });
-		

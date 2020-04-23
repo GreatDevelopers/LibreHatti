@@ -9,20 +9,20 @@ from django.shortcuts import render
 """
 this function displays the register and login button for user
 """
+
+
 def register(request):
     """
     displays the form for items purchased
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect('/catalog/')
+            return HttpResponseRedirect("/catalog/")
     else:
         form = UserCreationForm()
     """
     returns the login and signup option for user
     """
-    return render(request, 'authentication/signup.html', { 'form': form,
-                 })
- 
+    return render(request, "authentication/signup.html", {"form": form})

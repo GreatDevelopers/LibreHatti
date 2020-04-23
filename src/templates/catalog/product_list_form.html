@@ -9,7 +9,7 @@
 </head>
 <body>
   {% block content %}
-  <form class="form-horizontal" role="form" method="POST"  action='{% url 'catalog:list_products' %}' >
+  <form class="form-horizontal" role="form" method="POST"  action="{% url 'catalog:list_products' %}">
   	<div class="form-group">
        	{% csrf_token %}
        		<table class="form_class">

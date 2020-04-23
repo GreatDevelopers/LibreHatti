@@ -8,7 +8,7 @@
                 <div class="col-md-4 column">
                     {% if form.errors %}
                     <div class="alert alert-danger">
-                        Uh Oh! wrong password or username friend. Try again. 
+                        Uh Oh! wrong password or username friend. Try again.
                     </div>
                     {% endif %}
                     <form role="form" action="{% url 'django.contrib.auth.views.login' %}" method="post">

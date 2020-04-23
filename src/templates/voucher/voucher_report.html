@@ -16,7 +16,7 @@
 		{{ purchase_order }}/{{voucher}}
 	<span id='dated'>
 		<span id='highlight'>
-			Dated:</span> 
+			Dated:</span>
 		{{date |date:"d M, Y"}}
 	</span>
 </div>
@@ -25,17 +25,17 @@
         </div>
     <div class="designation">Principal,</div>
     <br>
-    Received a sum of &#8377; {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only ) 
-    Vide Cash from 
+    Received a sum of &#8377; {{calculate_distribution.total }}/- ( Rupees {{total_in_words}} only )
+    Vide Cash from
     {% if buyer.buyer__first_name %}
     {{ buyer.buyer__first_name}} {{ buyer.buyer__last_name }}
     {% else %}
     {{buyer.buyer__customer__title}}
     {% endif %}
-    , {{address.address__street_address}}, {{address.address__district}}, 
+    , {{address.address__street_address}}, {{address.address__district}},
     {% if address.address__pin != 'None' and address.address__pin != '' %}
      {{address.address__pin}},
-     {% endif %} 
+     {% endif %}
      {{address.address__province}}
      {% if buyer_name.company %}
       Agency: {{buyer.buyer__customer__company}}

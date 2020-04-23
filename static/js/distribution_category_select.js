@@ -2,12 +2,12 @@
 
 $(document).ready(function(){
     $('.category').attr('disabled', 'disabled');
-    
+
     $('.parent_category').change(function(){
         $('.category').empty();
         $('.category').removeAttr('disabled');
         parent_category_id = $(this).val();
-        reverse('librehatti.catalog.views.select_sub_category', function(url) {
+        reverse('catalog:select_sub_category', function(url) {
             var request_url = url + "/?cat_id=" + parent_category_id;
             $.ajax({
                 url: request_url,
@@ -20,5 +20,4 @@ $(document).ready(function(){
             })
         });
     })
-});        
-
+});

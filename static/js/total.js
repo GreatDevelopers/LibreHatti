@@ -1,7 +1,7 @@
 $(document).on("input", ".new_value", function() {
 
     var previous_total = document.getElementById('previous_total').value;
-    
+
     var new_value = 0;
     $(".new_value").each(function(){
         new_value += +$(this).val();

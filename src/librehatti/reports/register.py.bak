@@ -692,7 +692,7 @@ def servicetax_registerYear(year):
             purchase_order=value['id'])
         if(len(voucherid)==0):
             temp.append("Nil")
-        else:   
+        else:
             temp.append(voucherid[0]['purchase_order_of_session'])
         temp.append(value['date_time'])
         if value['buyer__first_name']:
@@ -851,7 +851,7 @@ def servicetax_register(request):
                        material_list = material_list + ', ' +\
                        item['item__category__name']
                 temp.append(material_list)
- 
+
                 temp.append(gst_in)
                 temp.append(value['bill__totalplusdelivery'])
                 total = total+value['bill__totalplusdelivery']
@@ -1283,7 +1283,7 @@ def material_report(request):
                 'purchase_order__buyer__customer__telephone',
                 'voucherid__purchase_order_of_session',
                 'item__category__name')
-            
+
             total_amount_sum = 0
             tax_list = Surcharge.objects.all().order_by('id')
             for value in purchase_item:
@@ -1295,14 +1295,14 @@ def material_report(request):
                         applied_tax_list.append(taxes_applied.tax)
                     except:
                         applied_tax_list.append('N.A')
-                    
+
                 value['applied_tax_list'] = applied_tax_list
-                
+
                 total_tax = TaxesApplied.objects.filter(purchase_order=
                 value['purchase_order_id']).aggregate(Sum('tax'))
                 value['total_amount'] = total_tax['tax__sum'] + value['price']
                 total_amount_sum = value['total_amount'] + total_amount_sum
-            
+
             category_name = Category.objects.values('name').filter(id__in=category)
 
             total = PurchasedItem.objects.filter(purchase_order__date_time__range
@@ -1591,9 +1591,9 @@ def lab_report(request):
                         applied_tax_list.append(taxes_applied.tax)
                     except:
                         applied_tax_list.append('N.A')
-                    
+
                 value['applied_tax_list'] = applied_tax_list
-                
+
                 total_tax = TaxesApplied.objects.filter(purchase_order=
                 value['purchase_order_id']).aggregate(Sum('tax'))
                 value['total_amount'] = total_tax['tax__sum'] + value['price']
@@ -1850,7 +1850,7 @@ def tada_register(request):
             return render(request,'reports/tada_register.html',\
             {'result':result, 'request':request_status,\
             'back_link':back_link})
-            
+
         else:
             form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
@@ -1986,7 +1986,7 @@ def tada_othercharges_register(request):
             return render(request,'reports/tada_othercharges.html',\
             {'result':result, 'request':request_status,\
             'back_link':back_link})
-            
+
         else:
             form = DateRangeSelectionForm(request.POST)
             request_status = request_notify()
@@ -2035,7 +2035,7 @@ def client_details_according_to_amount(request):
             return render(request,'reports/amount_result.html',\
             {'voucherid':voucherid, 'request':request_status,\
             'back_link':back_link})
-            
+
         else:
             form = AmountForm(request.POST)
             request_status = request_notify()

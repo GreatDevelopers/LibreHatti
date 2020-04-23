@@ -31,11 +31,11 @@
 </div>
 <script type="text/javascript">
 
-    //This function will be used to add itrms in the cart. Only one piece 
+    //This function will be used to add itrms in the cart. Only one piece
     $(".product button").click(function() {
 
     //First read the id of the product
-    var parent = parseInt($(this).parent("div")[0].id);    
+    var parent = parseInt($(this).parent("div")[0].id);
 
     // We have the product id. Get the name show
     var name = $(this).siblings("span").html();
@@ -44,7 +44,7 @@
 
     //This will make the element draggable
     $(".draggable").draggable();
-    
+
     //This will make it droppable
     $(".droppable").droppable({
 

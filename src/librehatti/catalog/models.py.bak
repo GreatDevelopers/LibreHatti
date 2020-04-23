@@ -237,7 +237,7 @@ class Bill(models.Model):
 
 class HeaderFooter(models.Model):
     """
-    This class is used to add, edit or delete Header and Footer to be 
+    This class is used to add, edit or delete Header and Footer to be
     used for Bills in the organisation
     """
     header = HTMLField()
@@ -306,7 +306,7 @@ class RequestStatus(models.Model):
 
 class NonPaymentOrder(models.Model):
     """
-    This class defines members for the purchase orders to be completed in 
+    This class defines members for the purchase orders to be completed in
     future but the date is not determined
     """
     buyer = models.ForeignKey(User,verbose_name= _BUYER, on_delete=models.CASCADE,)
@@ -322,7 +322,7 @@ class NonPaymentOrder(models.Model):
 
 class NonPaymentOrderOfSession(models.Model):
     """
-    This class defines members for Non Payment order of a 
+    This class defines members for Non Payment order of a
     particular session
     """
     non_payment_order = models.ForeignKey(NonPaymentOrder, on_delete=models.CASCADE,)

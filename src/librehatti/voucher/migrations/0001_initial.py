@@ -8,69 +8,163 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('catalog', '__first__'),
-    ]
+    dependencies = [("catalog", "__first__")]
 
     operations = [
         migrations.CreateModel(
-            name='Distribution',
+            name="Distribution",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('ratio', models.CharField(max_length=10)),
-                ('college_income', models.IntegerField(default=15)),
-                ('admin_charges', models.IntegerField(default=5)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("ratio", models.CharField(max_length=10)),
+                ("college_income", models.IntegerField(default=15)),
+                ("admin_charges", models.IntegerField(default=5)),
             ],
         ),
         migrations.CreateModel(
-            name='VoucherTotal',
+            name="VoucherTotal",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('voucher_no', models.IntegerField()),
-                ('total', models.IntegerField()),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.FinancialSession')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("voucher_no", models.IntegerField()),
+                ("total", models.IntegerField()),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalog.FinancialSession",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='VoucherId',
+            name="VoucherId",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('voucher_no', models.IntegerField()),
-                ('receipt_no_of_session', models.IntegerField(null=True)),
-                ('receipt_date', models.DateField(null=True)),
-                ('purchase_order_of_session', models.IntegerField()),
-                ('purchased_item_of_session', models.IntegerField()),
-                ('ratio', models.CharField(max_length=10)),
-                ('college_income', models.IntegerField()),
-                ('admin_charges', models.IntegerField()),
-                ('is_special', models.BooleanField(default=False)),
-                ('distribution', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='voucher.Distribution')),
-                ('purchase_order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.PurchaseOrder')),
-                ('purchased_item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.PurchasedItem')),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.FinancialSession')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("voucher_no", models.IntegerField()),
+                ("receipt_no_of_session", models.IntegerField(null=True)),
+                ("receipt_date", models.DateField(null=True)),
+                ("purchase_order_of_session", models.IntegerField()),
+                ("purchased_item_of_session", models.IntegerField()),
+                ("ratio", models.CharField(max_length=10)),
+                ("college_income", models.IntegerField()),
+                ("admin_charges", models.IntegerField()),
+                ("is_special", models.BooleanField(default=False)),
+                (
+                    "distribution",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="voucher.Distribution",
+                    ),
+                ),
+                (
+                    "purchase_order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalog.PurchaseOrder",
+                    ),
+                ),
+                (
+                    "purchased_item",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalog.PurchasedItem",
+                    ),
+                ),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalog.FinancialSession",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CategoryDistributionType',
+            name="CategoryDistributionType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='category', to='catalog.Category')),
-                ('distribution', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='voucher.Distribution')),
-                ('parent_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='parent_category', to='catalog.Category')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="category",
+                        to="catalog.Category",
+                    ),
+                ),
+                (
+                    "distribution",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="voucher.Distribution",
+                    ),
+                ),
+                (
+                    "parent_category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="parent_category",
+                        to="catalog.Category",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CalculateDistribution',
+            name="CalculateDistribution",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('voucher_no', models.IntegerField()),
-                ('college_income_calculated', models.IntegerField()),
-                ('admin_charges_calculated', models.IntegerField()),
-                ('consultancy_asset', models.IntegerField()),
-                ('development_fund', models.IntegerField()),
-                ('total', models.IntegerField()),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.FinancialSession')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("voucher_no", models.IntegerField()),
+                ("college_income_calculated", models.IntegerField()),
+                ("admin_charges_calculated", models.IntegerField()),
+                ("consultancy_asset", models.IntegerField()),
+                ("development_fund", models.IntegerField()),
+                ("total", models.IntegerField()),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalog.FinancialSession",
+                    ),
+                ),
             ],
         ),
     ]

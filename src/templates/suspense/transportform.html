@@ -1,7 +1,7 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block extrastyle %}
-{% endblock %} 
+{% endblock %}
 
 {% block extrajs %}
 <script type="text/javascript">
@@ -9,7 +9,7 @@
         $("[name='date']").datepicker({
             changeMonth: true,
             changeYear: true,dateFormat:"yy-mm-dd"
-        }); 
+        });
         $("#button2").click(function() {
 
         //Insert just after the kilo input in p element
@@ -24,11 +24,11 @@
         $("[name='date']").datepicker({
             changeMonth: true,
             changeYear: true,dateFormat:"yy-mm-dd"
-        }); 
+        });
     });
     });
 </script>
-{% endblock %} 
+{% endblock %}
 {% block content %}
 <table>
     <tr>
@@ -36,12 +36,12 @@
             <form action='{% url 'suspense:transportbill' %}' method='POST'>
                 {% if messages %}
                 <div class="alert alert-success">
-                    {{ messages }} 
+                    {{ messages }}
                 </div>
                 {% endif %}
                 {% if message %}
                 <div class="alert alert-danger">
-                    {{ message }} 
+                    {{ message }}
                 </div>
                 {% endif %}
                 {% csrf_token %}

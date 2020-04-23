@@ -3,12 +3,12 @@ sudo pip install -r requirements.txt
 sudo apt-get install exim4
 
 while [ true ]
-do 
-    echo " To Conifgure Exim (a mail transfer agent)" 
-    echo " To know how to configure Exim https://jasvirsinghgrewal91.wordpress.com/2013/06/23/e-mail-server-exim4/" 
+do
+    echo " To Conifgure Exim (a mail transfer agent)"
+    echo " To know how to configure Exim https://jasvirsinghgrewal91.wordpress.com/2013/06/23/e-mail-server-exim4/"
     echo " Enter Y to start configuration else N"
     read config
-    if [ "$config" == "Y" -o "$config" == "y" ]; 
+    if [ "$config" == "Y" -o "$config" == "y" ];
     then
         sudo dpkg-reconfigure exim4-config
         echo "******************Information for Exim******************"
@@ -20,7 +20,7 @@ do
         break
     fi
     if [ "$config"  ==  "N" -o "$config" == "n" ]
-    then    
+    then
         break
     fi
 done

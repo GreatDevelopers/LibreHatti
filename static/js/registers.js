@@ -19,7 +19,7 @@ $(document).ready(function(){
                             }
                         }]
                     });
-                       
+
                    }
 
                    else if (data == 1){
@@ -38,7 +38,7 @@ $(document).ready(function(){
                     });
                    }
                }
-               
+
            })
 });
 return false;

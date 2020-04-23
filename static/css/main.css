@@ -139,7 +139,7 @@ body{
 }
 
 
-@media only screen 
+@media only screen
 and (max-width : 800px) {
 
 .primary-branding{
@@ -163,7 +163,7 @@ and (max-width : 800px) {
 	line-height:40px;
 }
 #primary_nav_wrap ul ul {
-	width:100%;	
+	width:100%;
 }
 
 #primary_nav_wrap ul ul li a {

@@ -124,7 +124,7 @@ def select_type(request):
     category_dict = {}
     for category in categories:
         category_dict[category.id] = category.name.split(':')[0]
-    return HttpResponse(simplejson.dumps(category_dict))         
+    return HttpResponse(simplejson.dumps(category_dict))
 
 
 @login_required
@@ -217,7 +217,7 @@ def list_products(request):
     This view lists products for viewing purpose
     Argument: Http Request
     Return: Render catalog page
-    """ 
+    """
     if request.method == 'POST':
         form = ProductListForm(request.POST)
         if form.is_valid():
@@ -349,19 +349,19 @@ def change_request(request):
             messages = "Order" + " : " + purchase_order_of_session +\
             " and Session" + " : " + str(session_data['session_start_date']) +\
             ":" + str(session_data['session_end_date'])
-            request_status = request_notify()    
+            request_status = request_notify()
             return render(request,'catalog/change_form.html',\
                 {'details': details,'order_id':purchase_order_of_session,\
                 'session':session,'surcharge':surcharge,'bill':bill,\
                 'messages':messages, 'request':request_status})
         else:
                 form = ChangeRequestForm()
-                errors = "No such purchase order number in selected session" 
+                errors = "No such purchase order number in selected session"
                 request_status = request_notify()
                 temp = {"form" : form , "errors" : errors,\
                 'request':request_status}
-                
-                return render(request, 'catalog/change_request.html', temp) 
+
+                return render(request, 'catalog/change_request.html', temp)
     else:
         form = ChangeRequestForm()
         request_status = request_notify()

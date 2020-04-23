@@ -23,7 +23,7 @@
             <h3 class="leaf-category"> {{ category }} </h3>
             {% for product, attributes in products.items %}
             <div class="product-container">
-              <h4 class="product-head"> <span class="product-name"> {{ product | safe}} </span> <span class="product-price"> 
+              <h4 class="product-head"> <span class="product-name"> {{ product | safe}} </span> <span class="product-price">
                   &#8377; {{ product.price_per_unit }}/- </span> </h4>
                   {% for att in attributes %}
                   <p class="attribute-row"> <span class="att-name"> {{att.attribute}} </span> <span class="att-value">  {{att.value}}  </span></p>

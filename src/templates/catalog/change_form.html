@@ -12,7 +12,7 @@
   {% block content %}
   {% if messages %}
                 <div class="alert alert-success">
-                    <p>{{ messages }}</p> 
+                    <p>{{ messages }}</p>
                 </div>
                 {% endif %}
   <div class='change_request'>
@@ -54,8 +54,8 @@
             </tr>
             {% for value in surcharge %}
             <tr>
-                <td><input name="surcharge" class='form-control' value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td> 
-                <td><input name="previous_value" class='form-control' value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td> 
+                <td><input name="surcharge" class='form-control' value="{{value.surcharge__tax_name}}" readonly="readonly" type="text" /></td>
+                <td><input name="previous_value" class='form-control' value="{{value.tax}}" readonly="readonly" type="text" id="previous_{{value.id}}" /></td>
                 <td><input name="new_value" type="number" class='form-control new_value' placeholder="New Value" id="{{value.id}}" /></td>
             </tr>
             {% endfor %}

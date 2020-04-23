@@ -1,6 +1,6 @@
 """
 %% admin.py %%
-This file display usage information that admin requires to edit or add 
+This file display usage information that admin requires to edit or add
 in database tables, classes in admin interface. This make the data entry
 easy as one need to do it through MySQL server.
 """
@@ -9,8 +9,8 @@ from django.contrib.auth.admin import UserAdmin
 from useraccounts.models import *
 
 """
-these fields are required in admin interface to add the details of 
-particular organisation with which the user deals and also customer 
+these fields are required in admin interface to add the details of
+particular organisation with which the user deals and also customer
 details whether its individual or owner of a company
 """
 admin.site.register(AdminOrganisations)
@@ -24,41 +24,65 @@ admin.site.unregister(User)
 This class is used to add, edit or delete the address of the organisation
 or user
 """
+
+
 class AddressInline(admin.StackedInline):
-     model = Address
+    model = Address
 
 
 """
-This class is used to add, edit or delete the details of customer 
-mentioning the address along with ithe information whether customer is  
+This class is used to add, edit or delete the details of customer
+mentioning the address along with ithe information whether customer is
 org_type or not
 """
+
+
 class CustomerInline(admin.StackedInline):
-     model = Customer
+    model = Customer
 
 
 """
-This class is used to add new customer, edit or delete existing 
-customers specifying the username , email, first and last name and 
+This class is used to add new customer, edit or delete existing
+customers specifying the username , email, first and last name and
 confirming the passwords
 """
+
+
 class CustomUserAdd(UserAdmin):
-    list_display = ['user','email','address','date_joined']
+    list_display = ["user", "email", "address", "date_joined"]
     add_fieldsets = (
-        ('Add Customer', {
-            'classes': ('wide',),
-            'fields': ('username', 'email', 'first_name', 'last_name', 
-            'password1', 'password2')}
+        (
+            "Add Customer",
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password1",
+                    "password2",
+                ),
+            },
         ),
     )
     inlines = [CustomerInline]
 
     def user(self, instance):
-        return "%s" % (instance.first_name + ' ' + instance.last_name + ' ' + \
-            instance.customer.title)
-    
-    def address(self,instance):
-        return "%s" % (instance.customer.address.street_address + ' ' + \
-            instance.customer.address.district)
+        return "%s" % (
+            instance.first_name
+            + " "
+            + instance.last_name
+            + " "
+            + instance.customer.title
+        )
 
-admin.site.register(User,CustomUserAdd)
+    def address(self, instance):
+        return "%s" % (
+            instance.customer.address.street_address
+            + " "
+            + instance.customer.address.district
+        )
+
+
+admin.site.register(User, CustomUserAdd)

@@ -8,30 +8,39 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('programmeletter', '0001_initial'),
-        ('suspense', '0001_initial'),
-    ]
+    dependencies = [("programmeletter", "0001_initial"), ("suspense", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='staffinteam',
-            name='staff',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='suspense.Staff'),
+            model_name="staffinteam",
+            name="staff",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="suspense.Staff"
+            ),
         ),
         migrations.AddField(
-            model_name='staffinteam',
-            name='team_name',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='programmeletter.TeamName'),
+            model_name="staffinteam",
+            name="team_name",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="programmeletter.TeamName",
+            ),
         ),
         migrations.AddField(
-            model_name='letterdata',
-            name='team_name',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='programmeletter.TeamName'),
+            model_name="letterdata",
+            name="team_name",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="programmeletter.TeamName",
+            ),
         ),
         migrations.AddField(
-            model_name='letterdata',
-            name='vehicle',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='suspense.Vehicle'),
+            model_name="letterdata",
+            name="vehicle",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="suspense.Vehicle",
+            ),
         ),
     ]

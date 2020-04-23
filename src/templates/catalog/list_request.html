@@ -26,12 +26,12 @@
                 <td>{{values.id}}</td>
                 <td>{{values.description}}</td>
                 <td>{{values.request_status}}</td>
-                <td><a href = '{% url 'catalog.request_change.view_request' %}?id={{values.id}}'>View</a></td>
+                <td><a href = '{% url 'catalog:view_request' %}?id={{values.id}}'>View</a></td>
             </tr>
             {% endfor %}
         </table>
     </div>
-</div> 
+</div>
 {% endblock %}
 </body>
 </html>

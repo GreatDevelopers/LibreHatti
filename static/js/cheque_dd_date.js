@@ -13,5 +13,5 @@ $(document).ready(function(){
         $('.control-group.form-row.field-cheque_dd_date ').hide();
     }
     });
-    
+
 });

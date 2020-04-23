@@ -24,12 +24,13 @@ from librehatti.reports.models import SavedRegisters
 
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def search_form(request):
     """
     View to display "search.html" i.e. the search interface or form.
-    
-    First it'll check which type of request is i.e; 'search' request or 
+
+    First it'll check which type of request is i.e; 'search' request or
     'generate register' request. On the basis of that, it'll assign code
     to search_type_code which will be used in template.
 
@@ -38,32 +39,39 @@ def search_form(request):
     Return:Render Search
     """
     try:
-        if request.GET['type'] == 'search':
-            submit_url = reverse('search_result')
-            search_type_code = '1'
+        if request.GET["type"] == "search":
+            submit_url = reverse("search_result")
+            search_type_code = "1"
             client_form = ClientForm()
             order_form = OrderForm()
             request_status = request_notify()
-            temp = {'client_form':client_form,'order_form':order_form, 
-            'code':search_type_code,
-            'url':submit_url,
-            'request':request_status    }
-        elif request.GET['type'] == 'register':
-            submit_url = reverse('view_register')
-            search_type_code = '2'
+            temp = {
+                "client_form": client_form,
+                "order_form": order_form,
+                "code": search_type_code,
+                "url": submit_url,
+                "request": request_status,
+            }
+        elif request.GET["type"] == "register":
+            submit_url = reverse("view_register")
+            search_type_code = "2"
             client_form = ClientForm()
             order_form = OrderForm()
-            add_constraints=  AddConstraints()
+            add_constraints = AddConstraints()
             request_status = request_notify()
-            temp = {'client_form':client_form,'order_form':order_form, 
-            'add_constraints':add_constraints,'code':search_type_code,
-            'url':submit_url,
-            'request':request_status    }
+            temp = {
+                "client_form": client_form,
+                "order_form": order_form,
+                "add_constraints": add_constraints,
+                "code": search_type_code,
+                "url": submit_url,
+                "request": request_status,
+            }
         else:
-            return HttpResponse('<h1>Page not found</h1>')
+            return HttpResponse("<h1>Page not found</h1>")
     except:
-        return HttpResponse('<h1>Invalid URL</h1>')
-    return render(request, 'reports/search.html',temp)
+        return HttpResponse("<h1>Invalid URL</h1>")
+    return render(request, "reports/search.html", temp)
 
 
 @login_required
@@ -73,19 +81,18 @@ def save_fields(request):
     Argument:Http Request
     """
 
-    title = request.GET['title']
+    title = request.GET["title"]
 
     if title:
         pass
     else:
-        return HttpResponse('0')
+        return HttpResponse("0")
 
-    selected_fields = request.META['QUERY_STRING']
+    selected_fields = request.META["QUERY_STRING"]
 
-    save_fields = SavedRegisters(title = title,\
-     selected_fields = selected_fields)
+    save_fields = SavedRegisters(title=title, selected_fields=selected_fields)
     save_fields.save()
-    return HttpResponse('1')
+    return HttpResponse("1")
 
 
 @login_required
@@ -96,12 +103,17 @@ def list_saved_registers(request):
     Return:Render List of Registers
     """
     local_url = settings.LOCAL_URL
-    list_of_registers = SavedRegisters.objects.\
-    values('title','selected_fields')
+    list_of_registers = SavedRegisters.objects.values("title", "selected_fields")
     request_status = request_notify()
-    return render(request,'reports/list_of_registers.html', \
-        {'list_of_registers':list_of_registers,'local_url': local_url,\
-        'request':request_status})
+    return render(
+        request,
+        "reports/list_of_registers.html",
+        {
+            "list_of_registers": list_of_registers,
+            "local_url": local_url,
+            "request": request_status,
+        },
+    )
 
 
 @login_required
@@ -111,7 +123,7 @@ def filter_sub_category(request):
     Argument:Http Request
     Return:Http Response
     """
-    parent_category = request.GET['parent_id']
+    parent_category = request.GET["parent_id"]
     sub_categories = Category.objects.filter(parent=parent_category)
     sub_category_dict = {}
     for sub_category in sub_categories:

@@ -37,7 +37,7 @@ for j in range(0, len(fin_content)):
        print (li[i]+ "    "+fin_content[j])
        if (i!=len(li)-1):
           k= fin_content[j].replace("),", ", name= '" + li[i] + "'),")
-       else: 
+       else:
           k= fin_content[j].replace(")", ", name= '" + li[i] + "')")
        new_li.append(k)
        i=i+1
@@ -50,5 +50,3 @@ fo = open("urls.py", "w")
 
 line = fo.writelines( new_li )
 fo.close()
-
-

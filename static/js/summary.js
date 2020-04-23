@@ -6,7 +6,7 @@ $(document).ready(function(){
                                 $.ajax({
                                     url: request_url,
                                     success: function(data){
-                                        
+
                                         BootstrapDialog.show({
                     title: '<b>Suspense Summary</b>',
                     message: data,

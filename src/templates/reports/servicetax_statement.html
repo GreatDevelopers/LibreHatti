@@ -13,12 +13,12 @@
   <div class = 'list-registers'>
     <div id='toggle-option'>
             <a id = 'toggle_button'>
-                <input type="button" class="btn btn-info btn-large" 
+                <input type="button" class="btn btn-info btn-large"
                 name="" value="Show Printable Version"></a>
             </div>
     <h2><center>Tax Statement</center></h2>
     <div class='daily-report-list'>
-        <center>Detailed list of 
+        <center>Detailed list of
         {% for val in taxes_name %}
         {% if forloop.last %}
         {{val.surcharge_name}} @ {{val.surcharge_value}} %

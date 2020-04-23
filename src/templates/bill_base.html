@@ -17,14 +17,14 @@
     {{header.header | safe}}
 <hr>
 </div>
-<div class='logo'>                                                    
- <img src='{{STATIC_URL}}/css/images/logo.png'   
- class=".img-responsive">                                             
+<div class='logo'>
+ <img src='{{STATIC_URL}}/css/images/logo.png'
+ class=".img-responsive">
  </div>
     <div class = "bill-wrapper">
         {% block content %}{% endblock %}
     </div>
-    {{footer.footer | safe}} 
+    {{footer.footer | safe}}
     {% block extracontent %}
     {% endblock %}
 </body>

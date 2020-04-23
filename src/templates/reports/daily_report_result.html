@@ -14,14 +14,14 @@
   <div class = 'list-registers'>
     <div id='toggle-option'>
             <a id = 'toggle_button'>
-                <input type="button" class="btn btn-info btn-large" 
+                <input type="button" class="btn btn-info btn-large"
                 name="" value="Show Printable Version"></a>
             </div>
 <h2><center>Daily Report</center></h2>
 <div class='daily-report-list'>
         <table border="1px">
             <p><center>Daily report from {{start_date}} to {{end_date}} for {{mode_name.method}}</center></p>
-            
+
 
                 <tr>
                     <th>S.No.</th>
@@ -42,7 +42,7 @@
                     <td></td>
                     <td align="right">{{ value.5 }}</td>
                     </tr>
-                {% endfor %} 
+                {% endfor %}
                 <tr>
                     <td colspan="5" align="center"><b>Sum</b></td>
                     <td align="right">{{sum}}</td>

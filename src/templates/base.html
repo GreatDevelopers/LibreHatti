@@ -9,12 +9,12 @@
     {% block extrahead %}
     <script type="text/javascript">
         var reverseurl = "{% url 'catalog:jsreverse' %}";
-
+        console.log("testing");
         function reverse(urlstring, callback) {
             if (typeof callback != "function") {
                 return false;
             }
-            
+
             $.get(reverseurl + "?string=" + urlstring, callback);
         }
     </script>
@@ -26,7 +26,6 @@
     </script>
     <script src="{% static 'js/bootstrap-timepicker.min.js' %}">
     </script>
-</script>
 <script src="{% static 'js/total.js' %}">
 </script>
 <script src="{% static 'js/quoted_save_distance.js' %}">
@@ -66,9 +65,7 @@
 </script>
 <script type="text/javascript">
         $(document).ready(function(){
-    $('#button1').click(function(){
-        $('#button1').attr('disabled', 'disabled');
-    })
+
 });
 </script>
 <script type="text/javascript">
@@ -151,8 +148,8 @@
     disableFocus: true,
     template: 'dropdown',
     showMeridian:false
-}); 
-});       
+});
+});
 </script>
 {% endblock js %}
 {% block extrajs %} {% endblock extrajs %}
@@ -170,7 +167,7 @@
 <body>
     <div class = "wrapper">
         <div class="white-board">
-            <div class ="main-box" id="c-panel"> 
+            <div class ="main-box" id="c-panel">
                 <header class="primary-branding">
                    <a href='{% url "home" %}'> <span class="pb-dark">LIBRE</span><span class="pb-light">HATTI</span></a>
                </header>

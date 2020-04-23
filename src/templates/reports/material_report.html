@@ -2,7 +2,7 @@
 {% load i18n %} {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">    
+<html lang="en">
 <head>
   <title>Material Report</title>
 </head>
@@ -11,12 +11,12 @@
   <div class = 'list-registers'>
     <div id='toggle-option'>
             <a id = 'toggle_button'>
-                <input type="button" class="btn btn-info btn-large" 
+                <input type="button" class="btn btn-info btn-large"
                 name="" value="Show Printable Version"></a>
             </div>
 <div class='daily-report-list'>
   <div class='list-results'>
-  <h2>Material Report for 
+  <h2>Material Report for
     {% for name in category_name %}
     {% if forloop.last %}
     {{name.name}}
@@ -44,17 +44,17 @@
         {% endfor %}
         <th>Amount</th>
         <th>Amount Including tax</th>
-      </tr>  
+      </tr>
       {% for val in purchase_item %}
       <tr>
         <td>{{ forloop.counter }}</td>
         <td> {{val.voucherid__purchase_order_of_session}}</td>
         <td> {{val.purchase_order__date_time}}</td>
-        <td> 
+        <td>
         {% if val.purchase_order__buyer__first_name != '' %}
         {{val.purchase_order__buyer__first_name}} {{val.purchase_order__buyer__last_name}}
         {% else %}
-        {{val.purchase_order__buyer__customer__title}} 
+        {{val.purchase_order__buyer__customer__title}}
         {% endif %}
         </td>
         <td>{{val.purchase_order__buyer__customer__company}}</td>

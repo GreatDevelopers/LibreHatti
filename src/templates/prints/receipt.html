@@ -24,19 +24,19 @@
     {% else %}
     {{buyer.buyer__customer__title}}
     {% endif %}
-     , {{address.address__street_address}}, {{address.address__district}}, 
+     , {{address.address__street_address}}, {{address.address__district}},
      {% if address.address__pin != 'None' and address.address__pin != '' %}
      {{address.address__pin}},
      {% endif %}
       {{address.address__province}} {% if method.buyer__customer__company %}
        Agency:{{method.buyer__customer__company}}
-        {% endif %} by  
+        {% endif %} by
       {% if method.mode_of_payment != 1 and method.mode_of_payment != 4 %}
     {{method.mode_of_payment__method}} No. {{method.cheque_dd_number}} dated {{method.cheque_dd_date}}
     {% else %}
-      {{method.mode_of_payment__method}} 
+      {{method.mode_of_payment__method}}
     {% endif %}
-      on account of 
+      on account of
         {% for value in material %}
         {% if flag1 == 0 and not forloop.last %}
         ,

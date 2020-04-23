@@ -1,2 +1,16 @@
 {% extends 'admin/base.html' %}
 {# Workaround to avoid circular template extends errors #}
+{% load static %}{% load i18n admin_urls %}
+{% block extrahead %}
+<script type="text/javascript">
+    var reverseurl = "{% url 'catalog:jsreverse' %}";
+
+    function reverse(urlstring, callback) {
+        if (typeof callback != "function") {
+            return false;
+            }
+
+        $.get(reverseurl + "?string=" + urlstring, callback);
+            }
+</script>
+{% endblock %}

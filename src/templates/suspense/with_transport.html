@@ -21,20 +21,20 @@
         </div>
     </div>
     <div class="designation">Principal,</div>
-    Received a sum of &#8377; {{total}}/- ( Rupees {{total_in_words}} only ) 
-    vide 
+    Received a sum of &#8377; {{total}}/- ( Rupees {{total_in_words}} only )
+    vide
     {% if payment.purchase_order__mode_of_payment != 1 and payment.purchase_order__mode_of_payment != 4 %}
     {{payment.purchase_order__mode_of_payment__method}} No. {{payment.purchase_order__cheque_dd_number}} dated:{{payment.purchase_order__cheque_dd_date}}
     {% else %}
     {{payment.purchase_order__mode_of_payment__method}}
     {% endif %}
-    from 
+    from
     {% if address.purchase_order__buyer__first_name %}
     {{address.purchase_order__buyer__first_name}} {{address.purchase_order__buyer__last_name}}
     {% else %}
     {{address.purchase_order__buyer__customer__title}}
     {% endif %}
-    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__district}} 
+    , {{address.purchase_order__buyer__customer__address__street_address}}, {{address.purchase_order__buyer__customer__address__district}}
     {% if address.purchase_order__buyer__customer__address__pin != 'None' and address.purchase_order__buyer__customer__address__pin != '' %}
     , {{address.purchase_order__buyer__customer__address__pin}}
     {% endif %}
@@ -149,4 +149,4 @@
         </div>
         {% endblock %}
 </body>
-</html>       
+</html>
