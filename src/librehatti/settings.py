@@ -2,7 +2,7 @@
 # from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 import os
 
-from librehatti.config import _PASSWORD, _SENDER_EMAIL
+from librehatti.config import PASSWORD, SENDER_EMAIL
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,8 +33,8 @@ ALLOWED_HOSTS = []
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = _SENDER_EMAIL
-EMAIL_HOST_PASSWORD = _PASSWORD
+EMAIL_HOST_USER = SENDER_EMAIL
+EMAIL_HOST_PASSWORD = PASSWORD
 
 TIME_ZONE = "Asia/Kolkata"
 

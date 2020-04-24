@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 from django.db import models
 from librehatti.catalog.models import Product, Surcharge
 from librehatti.config import (
-    _BUYER,
-    _DELIVERY_ADDRESS,
-    _IS_DEBIT,
-    _QTY,
-    _REFERENCE,
-    _REFERENCE_DATE,
+    BUYER,
+    DELIVERY_ADDRESS,
+    IS_DEBIT,
+    QTY,
+    REFERENCE,
+    REFERENCE_DATE,
 )
 from librehatti.voucher.models import FinancialSession
 
@@ -37,13 +37,13 @@ class QuotedOrder(models.Model):
     """
 
     buyer = models.ForeignKey(
-        User, verbose_name=_BUYER, on_delete=models.CASCADE
+        User, verbose_name=BUYER, on_delete=models.CASCADE
     )
-    is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
-    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
-    reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
+    is_debit = models.BooleanField(default=False, verbose_name=IS_DEBIT)
+    reference = models.CharField(max_length=200, verbose_name=REFERENCE)
+    reference_date = models.DateField(verbose_name=REFERENCE_DATE)
     delivery_address = models.CharField(
-        max_length=500, blank=True, null=True, verbose_name=_DELIVERY_ADDRESS
+        max_length=500, blank=True, null=True, verbose_name=DELIVERY_ADDRESS
     )
     organisation = models.ForeignKey(
         "useraccounts.AdminOrganisations", default=1, on_delete=models.CASCADE
@@ -64,7 +64,7 @@ class QuotedItem(models.Model):
 
     quoted_order = models.ForeignKey(QuotedOrder, on_delete=models.CASCADE)
     price_per_unit = models.IntegerField()
-    qty = models.IntegerField(verbose_name=_QTY)
+    qty = models.IntegerField(verbose_name=QTY)
     price = models.IntegerField()
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
 

@@ -9,13 +9,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from librehatti.config import (
-    _BUYER,
-    _DELIVERY_ADDRESS,
-    _IS_DEBIT,
-    _PURCHASED_ITEMS,
-    _QTY,
-    _REFERENCE,
-    _REFERENCE_DATE,
+    BUYER,
+    DELIVERY_ADDRESS,
+    IS_DEBIT,
+    PURCHASED_ITEMS,
+    QTY,
+    REFERENCE,
+    REFERENCE_DATE,
 )
 from mptt.models import MPTTModel, TreeForeignKey
 from tinymce.models import HTMLField
@@ -159,15 +159,15 @@ class PurchaseOrder(models.Model):
     """
 
     buyer = models.ForeignKey(
-        User, verbose_name=_BUYER, on_delete=models.CASCADE
+        User, verbose_name=BUYER, on_delete=models.CASCADE
     )
-    is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
-    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
+    is_debit = models.BooleanField(default=False, verbose_name=IS_DEBIT)
+    reference = models.CharField(max_length=200, verbose_name=REFERENCE)
     reference_date = models.DateField(
-        blank=True, null=True, verbose_name=_REFERENCE_DATE
+        blank=True, null=True, verbose_name=REFERENCE_DATE
     )
     delivery_address = models.CharField(
-        max_length=500, blank=True, null=True, verbose_name=_DELIVERY_ADDRESS
+        max_length=500, blank=True, null=True, verbose_name=DELIVERY_ADDRESS
     )
     organisation = models.ForeignKey(
         "useraccounts.AdminOrganisations", default=1, on_delete=models.CASCADE
@@ -217,7 +217,7 @@ class PurchasedItem(models.Model):
 
     purchase_order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE)
     price_per_unit = models.IntegerField()
-    qty = models.IntegerField(verbose_name=_QTY)
+    qty = models.IntegerField(verbose_name=QTY)
     price = models.IntegerField()
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -233,8 +233,8 @@ class PurchasedItem(models.Model):
         return "%s" % (self.item) + " - " "%s" % (self.purchase_order)
 
     class Meta:
-        verbose_name = _PURCHASED_ITEMS
-        verbose_name_plural = _PURCHASED_ITEMS
+        verbose_name = PURCHASED_ITEMS
+        verbose_name_plural = PURCHASED_ITEMS
 
 
 class Catalog(models.Model):
@@ -313,7 +313,7 @@ class SurchargePaid(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return "%s paid on " % (self.surcharge, self.date)
+        return "%s paid on %s" % (self.surcharge, self.date)
 
 
 class ChangeRequest(models.Model):
@@ -360,13 +360,13 @@ class NonPaymentOrder(models.Model):
     """
 
     buyer = models.ForeignKey(
-        User, verbose_name=_BUYER, on_delete=models.CASCADE
+        User, verbose_name=BUYER, on_delete=models.CASCADE
     )
-    reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
-    reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
+    reference = models.CharField(max_length=200, verbose_name=REFERENCE)
+    reference_date = models.DateField(verbose_name=REFERENCE_DATE)
     date = models.DateField(auto_now_add=True)
     delivery_address = models.CharField(
-        max_length=500, blank=True, null=True, verbose_name=_DELIVERY_ADDRESS
+        max_length=500, blank=True, null=True, verbose_name=DELIVERY_ADDRESS
     )
     item_type = models.CharField(max_length=200)
 

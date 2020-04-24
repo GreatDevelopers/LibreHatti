@@ -485,7 +485,6 @@ def payment_register(request):
     Argument:Http Request
     Return:Render Payment Register
     """
-    global purchase_order_of_session, material_list, material_list
     if request.method == "POST":
         form = DateRangeSelectionForm(request.POST)
         if form.is_valid():
@@ -1110,7 +1109,6 @@ def servicetax_register(request):
     Argument:Http Request
     Return:Render Service Tax Register
     """
-    global material_list, material_list
     if request.method == "POST":
         form = MonthYearForm(request.POST)
         data_form = PaidTaxesForm(request.POST)

@@ -8,7 +8,7 @@ from librehatti.catalog.models import (
     ModeOfPayment,
     Surcharge,
 )
-from librehatti.config import _PARENT_CATEGORY, _SUB_CATEGORY
+from librehatti.config import PARENT_CATEGORY, SUB_CATEGORY
 
 from .search_choices import (
     CLIENT_FIELD_CHOICES,
@@ -66,7 +66,7 @@ class ConsultancyFunds(forms.Form):
         queryset=Category.objects.filter(parent__parent__isnull=True).filter(
             parent__isnull=False
         ),
-        label=_PARENT_CATEGORY,
+        label=PARENT_CATEGORY,
     )
     try:
         sub_category_id = Category.objects.values_list("id", flat=True)
@@ -75,7 +75,7 @@ class ConsultancyFunds(forms.Form):
             (id, name) for id, name in zip(sub_category_id, sub_category_name)
         ]
         sub_category = forms.MultipleChoiceField(
-            choices=sub_category_choices, label=_SUB_CATEGORY
+            choices=sub_category_choices, label=SUB_CATEGORY
         )
     except BaseException:
         pass
@@ -86,9 +86,9 @@ class ConsultancyFunds(forms.Form):
             "class": "btn btn-default dropdown-toggle"
         }
         self.fields["sub_category"].widget.attrs = {
-            "class": "btn btn-default dropdown-toggle"
+            "class": "btn btn-default dropdown-toggle",
+            "size": "15",
         }
-        self.fields["sub_category"].widget.attrs["size"] = "15"
 
 
 class ClientForm(forms.Form):
@@ -224,7 +224,7 @@ class LabReportForm(forms.Form):
         queryset=Category.objects.filter(parent__parent__isnull=True).filter(
             parent__isnull=False
         ),
-        label=_PARENT_CATEGORY,
+        label=PARENT_CATEGORY,
     )
 
     def __init__(self, *args, **kwargs):

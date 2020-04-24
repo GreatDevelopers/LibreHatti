@@ -25,12 +25,12 @@ from librehatti.catalog.models import (
     TaxesApplied,
 )
 from librehatti.config import (
-    _ACCOUNT_HOLDER,
-    _BRANCH,
-    _IFSC_CODE,
-    _NAME_OF_BANK,
-    _ONLINE_ACCOUNT,
-    _YOUR_LETTER_No,
+    ACCOUNT_HOLDER,
+    BRANCH,
+    IFSC_CODE,
+    NAME_OF_BANK,
+    ONLINE_ACCOUNT,
+    YOUR_LETTER_No,
 )
 from librehatti.prints.helper import num2eng
 from librehatti.suspense.models import QuotedSuspenseOrder, SuspenseOrder
@@ -197,7 +197,7 @@ def bill(request):
         purchase_order=id
     )[0]
     total_in_words = num2eng(grand_total)
-    ref_letter = _YOUR_LETTER_No
+    ref_letter = YOUR_LETTER_No
     header = HeaderFooter.objects.values("header").get(is_active=True)
     footer = HeaderFooter.objects.values("footer").get(is_active=True)
     return render(
@@ -358,7 +358,7 @@ def suspense_bill(request):
         purchase_order=id
     )[0]
     total_in_words = num2eng(grand_total)
-    ref_letter = _YOUR_LETTER_No
+    ref_letter = YOUR_LETTER_No
     header = HeaderFooter.objects.values("header").get(is_active=True)
     footer = HeaderFooter.objects.values("footer").get(is_active=True)
     return render(
@@ -683,12 +683,12 @@ def quoted_bill(request):
     quoted_note = QuotedOrderNote.objects.values("note").filter(
         quoted_order=quoted_order_id
     )
-    account_holder = _ACCOUNT_HOLDER
-    name_of_bank = _NAME_OF_BANK
-    branch = _BRANCH
-    online_account = _ONLINE_ACCOUNT
-    ifsc_code = _IFSC_CODE
-    ref_letter = _YOUR_LETTER_No
+    account_holder = ACCOUNT_HOLDER
+    name_of_bank = NAME_OF_BANK
+    branch = BRANCH
+    online_account = ONLINE_ACCOUNT
+    ifsc_code = IFSC_CODE
+    ref_letter = YOUR_LETTER_No
     total_in_words = num2eng(grand_total)
     return render(
         request,

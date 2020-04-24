@@ -4,7 +4,7 @@ from ajax_select import make_ajax_field
 from django import forms
 from librehatti.bills.models import NoteLine, QuotedOrder
 from librehatti.catalog.models import Category, Product
-from librehatti.config import _ITEM, _PARENT_CATEGORY, _SUB_CATEGORY, _TYPE
+from librehatti.config import ITEM, PARENT_CATEGORY, SUB_CATEGORY, TYPE
 
 
 class BuyerForm(forms.ModelForm):
@@ -36,22 +36,22 @@ class ItemSelectForm(forms.ModelForm):
             queryset=Category.objects.filter(
                 parent__parent__isnull=True
             ).filter(parent__isnull=False),
-            label=_PARENT_CATEGORY,
+            label=PARENT_CATEGORY,
         )
         sub_category = forms.ModelChoiceField(
-            queryset=Category.objects.all(), label=_SUB_CATEGORY
+            queryset=Category.objects.all(), label=SUB_CATEGORY
         )
     except BaseException:
         pass
 
-    item = forms.ModelChoiceField(queryset=Product.objects.all(), label=_ITEM)
+    item = forms.ModelChoiceField(queryset=Product.objects.all(), label=ITEM)
     CHOICES = (
         ("", "---------"),
         ("1", "Lab Work"),
         ("2", "Field Work"),
         ("3", "Other Services"),
     )
-    type = forms.ChoiceField(choices=CHOICES, label=_TYPE)
+    type = forms.ChoiceField(choices=CHOICES, label=TYPE)
     price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):

@@ -1632,7 +1632,6 @@ def clearance_options(request):
         {
             "details": details,
             "order_id": voucherid["purchase_order_of_session"],
-            "request": request_status,
             "voucher_no": voucher_no,
             "session_id": session_id,
             "financialsession": financialsession,

@@ -16,7 +16,7 @@ from librehatti.catalog.models import (
     RequestSurchargeChange,
     TaxesApplied,
 )
-from librehatti.config import _ADMIN_GROUP, _RECEIVER_EMAIL, _SENDER_EMAIL
+from librehatti.config import ADMIN_GROUP, RECEIVER_EMAIL, SENDER_EMAIL
 from librehatti.voucher.models import FinancialSession, VoucherId
 
 
@@ -186,7 +186,7 @@ def request_notify():
 
 @login_required
 @user_passes_test(
-    lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1 or u.is_superuser,
+    lambda u: u.groups.filter(name=ADMIN_GROUP).count() == 1 or u.is_superuser,
     login_url="/catalog/permission_denied/",
 )
 def list_request(request):
@@ -219,7 +219,7 @@ def list_request(request):
 
 @login_required
 @user_passes_test(
-    lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1 or u.is_superuser,
+    lambda u: u.groups.filter(name=ADMIN_GROUP).count() == 1 or u.is_superuser,
     login_url="/catalog/permission_denied/",
 )
 def view_request(request):
@@ -284,7 +284,7 @@ def view_request(request):
 
 @login_required
 @user_passes_test(
-    lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1 or u.is_superuser,
+    lambda u: u.groups.filter(name=ADMIN_GROUP).count() == 1 or u.is_superuser,
     login_url="/catalog/permission_denied/",
 )
 def accept_request(request):
@@ -359,7 +359,7 @@ def accept_request(request):
     )
     text_content = plaintext.render(temp)
     html_content = content.render(temp)
-    subject, from_email, to = "Change Request", _SENDER_EMAIL, _RECEIVER_EMAIL
+    subject, from_email, to = "Change Request", SENDER_EMAIL, RECEIVER_EMAIL
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -368,7 +368,7 @@ def accept_request(request):
 
 @login_required
 @user_passes_test(
-    lambda u: u.groups.filter(name=_ADMIN_GROUP).count() == 1 or u.is_superuser,
+    lambda u: u.groups.filter(name=ADMIN_GROUP).count() == 1 or u.is_superuser,
     login_url="/catalog/permission_denied/",
 )
 def reject_request(request):
@@ -443,7 +443,7 @@ def reject_request(request):
     )
     text_content = plaintext.render(temp)
     html_content = content.render(temp)
-    subject, from_email, to = "Change Request", _SENDER_EMAIL, _RECEIVER_EMAIL
+    subject, from_email, to = "Change Request", SENDER_EMAIL, RECEIVER_EMAIL
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
