@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from librehatti.catalog.forms import ChangeRequestForm, ProductListForm
 from librehatti.catalog.models import (
+    Bill,
     Category,
     NonPaymentOrder,
     NonPaymentOrderOfSession,
@@ -20,7 +21,6 @@ from librehatti.catalog.models import (
 from librehatti.catalog.request_change import request_notify
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import (
-    Bill,
     CalculateDistribution,
     FinancialSession,
     VoucherId,
