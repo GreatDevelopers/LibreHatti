@@ -1,25 +1,21 @@
+# -*- coding: utf-8 -*-
 """
 %% search.py %%
 This file contains the functions that will be used
 to generate results based on the search term entered.
 """
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import View
-from .helper import get_query
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from librehatti.bills.models import QuotedOrderofSession
 from librehatti.catalog.request_change import request_notify
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Bill
 from librehatti.suspense.models import SuspenseOrder
 from librehatti.voucher.models import VoucherId
-from useraccounts.models import Customer
 from useraccounts.models import User
-from datetime import datetime, timedelta
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from librehatti.bills.models import QuotedOrder
-from librehatti.bills.models import QuotedOrderofSession
+
+from .helper import get_query
 
 
 class SearchResult(View):
@@ -85,7 +81,7 @@ class SearchResult(View):
             self.list_dict = {
                 "First Name": "purchase_order__buyer__first_name",
                 "Last Name": "purchase_order__buyer__last_name",
-                "district": "purchase_order__buyer__customer__address__district",
+                "district": "purchase_order__buyer__customer__address__district",  # noqa
                 "Phone": "purchase_order__buyer__customer__telephone",
                 "Joining Date": "purchase_order__buyer__customer__date_joined",
                 "Company": "purchase_order__buyer__customer__company",
@@ -146,8 +142,6 @@ class SearchResult(View):
         Filtering according to the search term entered.
         """
         self.results = []
-        i = 0
-        buyer_id = []
         purchase_order = []
         self.entry_query = get_query(self.title, self.fields_list)
         if "Client" in request.GET:
@@ -164,11 +158,15 @@ class SearchResult(View):
                 self.found_entries = VoucherId.objects.filter(
                     purchase_order_of_session=self.title
                 )
-                suspenseorder = SuspenseOrder.objects.values("purchase_order_id")
+                suspenseorder = SuspenseOrder.objects.values(
+                    "purchase_order_id"
+                )
                 for entries in self.found_entries:
                     self.temp = []
                     for value in self.fields_list:
-                        self.obj = VoucherId.objects.values(value).filter(id=entries.id)
+                        self.obj = VoucherId.objects.values(value).filter(
+                            id=entries.id
+                        )
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
                     if (
@@ -184,9 +182,9 @@ class SearchResult(View):
                 for entries in self.found_entries:
                     self.temp = []
                     for value in self.fields_list:
-                        self.obj = QuotedOrderofSession.objects.values(value).filter(
-                            id=entries.id
-                        )
+                        self.obj = QuotedOrderofSession.objects.values(
+                            value
+                        ).filter(id=entries.id)
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
                     self.results.append(self.temp)
@@ -197,7 +195,9 @@ class SearchResult(View):
                 for entries in self.found_entries:
                     self.temp = []
                     for value in self.fields_list:
-                        self.obj = VoucherId.objects.values(value).filter(id=entries.id)
+                        self.obj = VoucherId.objects.values(value).filter(
+                            id=entries.id
+                        )
                         for temp_result in self.obj:
                             self.temp.append(temp_result)
                     if self.temp[-1] in purchase_order:
@@ -235,7 +235,7 @@ class SearchResult(View):
                 )
                 if suspense:
                     suspense_flag = 1
-            except:
+            except BaseException:
                 pass
         request_status = request_notify()
         temp = {

@@ -1,18 +1,12 @@
-from django.contrib import admin
-from django.contrib.auth.admin import *
+# -*- coding: utf-8 -*-
 
-from librehatti.bills.models import *
-from librehatti.bills.forms import ItemSelectForm
-from librehatti.bills.forms import BuyerForm
-
-from librehatti.catalog.actions import mark_inactive, mark_active
-
-from django.http import HttpResponse, HttpResponseRedirect
-
+from django.contrib.auth.admin import admin
+from django.http import HttpResponseRedirect
 from django.urls import reverse
+from librehatti.bills.forms import BuyerForm, ItemSelectForm
+from librehatti.bills.models import NoteLine, QuotedItem, QuotedOrder
+from librehatti.catalog.actions import mark_active, mark_inactive
 
-
-import itertools
 
 admin.autodiscover()
 
@@ -45,7 +39,13 @@ class QuotedOrderAdmin(admin.ModelAdmin):
 
     form = BuyerForm
     exclude = ("is_active",)
-    list_display = ["id", "buyer_name", "delivery_address", "date_time", "is_active"]
+    list_display = [
+        "id",
+        "buyer_name",
+        "delivery_address",
+        "date_time",
+        "is_active",
+    ]
     inlines = [QuotedItemInline]
     model = QuotedOrder
     actions = [mark_active, mark_inactive]

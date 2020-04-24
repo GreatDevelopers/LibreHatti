@@ -1,7 +1,7 @@
-from django.contrib import admin
-from django.contrib.auth.admin import *
-
+# -*- coding: utf-8 -*-
+from django.contrib.auth.admin import admin
 from librehatti.reports.models import SavedRegisters
+
 
 admin.autodiscover()
 

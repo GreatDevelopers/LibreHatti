@@ -1,11 +1,8 @@
+# -*- coding: utf-8 -*-
 from django import forms
-
 from librehatti.catalog.models import Category
-from librehatti.voucher.models import CategoryDistributionType
+from librehatti.config import _PARENT_CATEGORY, _SUB_CATEGORY
 from librehatti.voucher.models import Distribution
-
-from librehatti.config import _PARENT_CATEGORY
-from librehatti.config import _SUB_CATEGORY
 
 
 class AssignDistributionForm(forms.ModelForm):
@@ -20,19 +17,23 @@ class AssignDistributionForm(forms.ModelForm):
 
     try:
         parent_category = forms.ModelChoiceField(
-            queryset=Category.objects.filter(parent__parent__isnull=True).filter(
-                parent__isnull=False
-            ),
+            queryset=Category.objects.filter(
+                parent__parent__isnull=True
+            ).filter(parent__isnull=False),
             label=_PARENT_CATEGORY,
         )
         category = forms.ModelChoiceField(
             queryset=Category.objects.all(), label=_SUB_CATEGORY
         )
-        distribution = forms.ModelChoiceField(queryset=Distribution.objects.all())
-    except:
+        distribution = forms.ModelChoiceField(
+            queryset=Distribution.objects.all()
+        )
+    except BaseException:
         pass
 
     def __init__(self, *args, **kwargs):
         super(AssignDistributionForm, self).__init__(*args, **kwargs)
-        self.fields["parent_category"].widget.attrs = {"class": "parent_category"}
+        self.fields["parent_category"].widget.attrs = {
+            "class": "parent_category"
+        }
         self.fields["category"].widget.attrs = {"class": "category"}

@@ -1,14 +1,9 @@
-from django.db import models
+# -*- coding: utf-8 -*-
 import datetime
 
-from librehatti.voucher.models import VoucherId
+from django.db import models
+from librehatti.catalog.models import Category, PurchaseOrder
 from librehatti.voucher.models import FinancialSession
-
-from librehatti.bills.models import QuotedOrder
-
-from librehatti.catalog.models import PurchaseOrder, Category
-
-import simplejson
 
 
 class SuspenseOrder(models.Model):
@@ -39,7 +34,9 @@ class SuspenseClearance(models.Model):
     boring_charge_external = models.IntegerField(blank=True, null=True)
     boring_charge_internal = models.IntegerField(blank=True, null=True)
     lab_testing_staff = models.CharField(max_length=200, blank=True, null=True)
-    field_testing_staff = models.CharField(max_length=200, blank=True, null=True)
+    field_testing_staff = models.CharField(
+        max_length=200, blank=True, null=True
+    )
     test_date = models.CharField(max_length=600, blank=True, null=True)
     clear_date = models.DateField()
 
@@ -127,7 +124,9 @@ class QuotedSuspenseOrder(models.Model):
     Stores Quoted suspense order.
     """
 
-    quoted_order = models.ForeignKey("bills.QuotedOrder", on_delete=models.CASCADE)
+    quoted_order = models.ForeignKey(
+        "bills.QuotedOrder", on_delete=models.CASCADE
+    )
     distance_estimated = models.IntegerField(default=0)
     is_cleared = models.BooleanField(default=False)
 

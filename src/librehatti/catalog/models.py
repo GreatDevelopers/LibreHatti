@@ -1,33 +1,24 @@
+# -*- coding: utf-8 -*-
 """
 models of catalog are..
 """
-from django.db import models
-
-from django.forms import ModelForm
-
-import useraccounts
-
-from django.contrib.auth.models import User
-
-from django.http import HttpResponse
-
-from mptt.models import MPTTModel, TreeForeignKey
-
-import mptt.fields
-
-from django.core.exceptions import ValidationError
-
 import datetime
 
+import mptt.fields
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db import models
+from librehatti.config import (
+    _BUYER,
+    _DELIVERY_ADDRESS,
+    _IS_DEBIT,
+    _PURCHASED_ITEMS,
+    _QTY,
+    _REFERENCE,
+    _REFERENCE_DATE,
+)
+from mptt.models import MPTTModel, TreeForeignKey
 from tinymce.models import HTMLField
-
-from librehatti.config import _BUYER
-from librehatti.config import _DELIVERY_ADDRESS
-from librehatti.config import _IS_DEBIT
-from librehatti.config import _PURCHASED_ITEMS
-from librehatti.config import _QTY
-from librehatti.config import _REFERENCE
-from librehatti.config import _REFERENCE_DATE
 
 
 class FinancialSession(models.Model):
@@ -48,7 +39,9 @@ class mCategory(models.Model):
     """
 
     name = models.CharField(max_length=100)
-    parent = models.ForeignKey("self", blank=True, null=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        "self", blank=True, null=True, on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -70,15 +63,21 @@ class Unit(models.Model):
 
 class Category(MPTTModel):
     """
-    This class defines the name of category, its parent and unit of each category
-    the organisation deals with
+    This class defines the name of category, its parent and unit of
+    each category the organisation deals with
     """
 
     name = models.CharField(max_length=100)
     parent = TreeForeignKey(
-        "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
+        "self",
+        null=True,
+        blank=True,
+        related_name="children",
+        on_delete=models.CASCADE,
     )
-    unit = models.ForeignKey(Unit, null=True, blank=True, on_delete=models.CASCADE)
+    unit = models.ForeignKey(
+        Unit, null=True, blank=True, on_delete=models.CASCADE
+    )
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -159,7 +158,9 @@ class PurchaseOrder(models.Model):
     This class defines members for orders to placed by users
     """
 
-    buyer = models.ForeignKey(User, verbose_name=_BUYER, on_delete=models.CASCADE)
+    buyer = models.ForeignKey(
+        User, verbose_name=_BUYER, on_delete=models.CASCADE
+    )
     is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(
@@ -202,7 +203,7 @@ class PurchaseOrder(models.Model):
         try:
             session_id
             super(PurchaseOrder, self).save(*args, **kwargs)
-        except:
+        except BaseException:
             raise ValidationError("No Current Financial Session")
 
     def __str__(self):
@@ -225,7 +226,7 @@ class PurchasedItem(models.Model):
             if self.purchase_order:
                 self.price = self.price_per_unit * self.qty
                 super(PurchasedItem, self).save(*args, **kwargs)
-        except:
+        except BaseException:
             raise ValidationError("No Active Taxes. Unable to add Items")
 
     def __str__(self):
@@ -289,7 +290,7 @@ class HeaderFooter(models.Model):
     is_active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        if self.is_active == True:
+        if self.is_active:
             temp = HeaderFooter.objects.filter(is_active=1)
             if temp:
                 HeaderFooter.objects.filter(is_active=1).update(is_active=0)
@@ -358,7 +359,9 @@ class NonPaymentOrder(models.Model):
     future but the date is not determined
     """
 
-    buyer = models.ForeignKey(User, verbose_name=_BUYER, on_delete=models.CASCADE)
+    buyer = models.ForeignKey(
+        User, verbose_name=_BUYER, on_delete=models.CASCADE
+    )
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(verbose_name=_REFERENCE_DATE)
     date = models.DateField(auto_now_add=True)
@@ -377,7 +380,9 @@ class NonPaymentOrderOfSession(models.Model):
     particular session
     """
 
-    non_payment_order = models.ForeignKey(NonPaymentOrder, on_delete=models.CASCADE)
+    non_payment_order = models.ForeignKey(
+        NonPaymentOrder, on_delete=models.CASCADE
+    )
     non_payment_order_of_session = models.IntegerField()
     session = models.ForeignKey(FinancialSession, on_delete=models.CASCADE)
 

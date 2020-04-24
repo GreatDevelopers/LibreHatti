@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 from django.db import models
-
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Category
-from librehatti.catalog.models import FinancialSession
+from librehatti.catalog.models import (
+    Category,
+    FinancialSession,
+    PurchaseOrder,
+    PurchasedItem,
+)
 
 
 class Distribution(models.Model):

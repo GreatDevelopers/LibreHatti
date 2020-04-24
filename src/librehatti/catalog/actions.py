@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
 """
 %% actions.py %%
 This file contains the user defined actions for admin site.
 """
-from librehatti.catalog.models import *
-
-from django.contrib import admin
-from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.contenttypes.models import ContentType
+
 
 # from django.contrib.contenttypes.fields.GenericForeignKey
 

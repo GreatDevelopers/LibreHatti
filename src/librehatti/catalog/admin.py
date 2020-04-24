@@ -1,26 +1,37 @@
+# -*- coding: utf-8 -*-
 """
 %% admin.py %%
 This file display usage information that admin requires to edit or add
 in database tables, classes in admin interface. This make the data entry
 easy as one need to do it through MySQL server.
 """
-from librehatti.catalog.models import *
-
-from django.contrib import admin
-from django.contrib.auth.admin import *
-from django.contrib.admin.models import LogEntry
-
-from librehatti.catalog.forms import ItemSelectForm, BuyerForm
-from librehatti.catalog.forms import SpecialCategoriesForm
-from librehatti.catalog.actions import mark_inactive, mark_active
-
-from django.urls import reverse
-
 from ajax_select.admin import AjaxSelectAdmin
-
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.admin import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from librehatti.catalog.actions import mark_active, mark_inactive
+from librehatti.catalog.forms import (
+    BuyerForm,
+    ItemSelectForm,
+    SpecialCategoriesForm,
+)
+from librehatti.catalog.models import (
+    Attributes,
+    Catalog,
+    Category,
+    HeaderFooter,
+    ModeOfPayment,
+    NonPaymentOrder,
+    Product,
+    PurchaseOrder,
+    PurchasedItem,
+    SpecialCategories,
+    Surcharge,
+    Unit,
+)
 from tinymce.widgets import TinyMCE
 
-from django.http import HttpResponse
 
 admin.autodiscover()
 admin.site.register(Attributes)
@@ -109,7 +120,13 @@ class PurchaseOrderAdmin(AjaxSelectAdmin):
 
     form = BuyerForm
     exclude = ("is_active",)
-    list_display = ["id", "buyer_name", "delivery_address", "date_time", "is_active"]
+    list_display = [
+        "id",
+        "buyer_name",
+        "delivery_address",
+        "date_time",
+        "is_active",
+    ]
     inlines = [PurchasedItemInline]
     model = PurchaseOrder
     actions = [mark_active, mark_inactive]
@@ -168,7 +185,9 @@ class HeaderAdmin(admin.ModelAdmin):
                     },
                 )
             )
-        return super(HeaderAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        return super(HeaderAdmin, self).formfield_for_dbfield(
+            db_field, **kwargs
+        )
 
 
 class CategoryAdmin(admin.ModelAdmin):

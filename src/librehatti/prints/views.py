@@ -1,49 +1,41 @@
+# -*- coding: utf-8 -*-
 # from django.http import HttpResponse
 # from useraccounts.models import *
 # from helper import *
-from django import forms
-
-from django.shortcuts import *
+import datetime
 
 from django.contrib.auth.decorators import login_required
-
-from django.urls import reverse
-
-from librehatti.catalog.models import *
-from librehatti.catalog.request_change import request_notify
-
-from django.db.models import Sum, Count
-
-import simplejson
-
-from useraccounts.models import AdminOrganisations
-from useraccounts.models import Customer
-from useraccounts.models import Address
-
+from django.db.models import Count, Max
+from django.shortcuts import render
+from librehatti.bills.models import (
+    NoteLine,
+    QuotedBill,
+    QuotedItem,
+    QuotedOrder,
+    QuotedOrderNote,
+    QuotedOrderofSession,
+    QuotedTaxesApplied,
+)
+from librehatti.catalog.models import (
+    Bill,
+    HeaderFooter,
+    PurchaseOrder,
+    PurchasedItem,
+    Surcharge,
+    TaxesApplied,
+)
+from librehatti.config import (
+    _ACCOUNT_HOLDER,
+    _BRANCH,
+    _IFSC_CODE,
+    _NAME_OF_BANK,
+    _ONLINE_ACCOUNT,
+    _YOUR_LETTER_No,
+)
 from librehatti.prints.helper import num2eng
-
-from librehatti.voucher.models import CalculateDistribution
-from librehatti.voucher.models import VoucherId, FinancialSession
-
-from librehatti.suspense.models import SuspenseOrder
-from librehatti.suspense.models import QuotedSuspenseOrder
-
-from librehatti.bills.models import QuotedOrder
-from librehatti.bills.models import QuotedBill
-from librehatti.bills.models import QuotedTaxesApplied
-from librehatti.bills.models import QuotedItem
-from librehatti.bills.models import NoteLine
-from librehatti.bills.models import QuotedOrderNote
-from librehatti.bills.models import QuotedOrderofSession
-
-from librehatti.config import _ACCOUNT_HOLDER
-from librehatti.config import _NAME_OF_BANK
-from librehatti.config import _BRANCH
-from librehatti.config import _ONLINE_ACCOUNT
-from librehatti.config import _IFSC_CODE
-from librehatti.config import _YOUR_LETTER_No
-
-from django.db.models import Max
+from librehatti.suspense.models import QuotedSuspenseOrder, SuspenseOrder
+from librehatti.voucher.models import FinancialSession, VoucherId
+from useraccounts.models import AdminOrganisations, Customer
 
 
 @login_required
@@ -76,14 +68,15 @@ def bill(request):
     )
     cost = (
         PurchasedItem.objects.filter(purchase_order__in=purchase_order)
-        .values("price", "item__category", "item__name", "item__category__parent__name")
+        .values(
+            "price",
+            "item__category",
+            "item__name",
+            "item__category__parent__name",
+        )
         .order_by("item__category")
     )
-    bill_obj = Bill.objects.values("delivery_charges").get(purchase_order=id)
     bill_values = []
-    field_check = 1
-    # from ipdb import set_trace
-    # set_trace()
     for category in purchased_item:
         flag1 = 1
         list = []
@@ -134,9 +127,9 @@ def bill(request):
     taxes_applied = TaxesApplied.objects.filter(
         purchase_order__in=purchase_order
     ).values("surcharge", "tax", "surcharge_name", "surcharge_value")
-    taxes_applied_obj = TaxesApplied.objects.filter(
-        purchase_order__in=purchase_order
-    ).aggregate(Count("id"))
+    TaxesApplied.objects.filter(purchase_order__in=purchase_order).aggregate(
+        Count("id")
+    )
     bill = Bill.objects.values(
         "total_cost", "totalplusdelivery", "grand_total", "delivery_charges"
     ).get(purchase_order=id)
@@ -194,9 +187,9 @@ def bill(request):
     organisation_id = purchase_order_obj["organisation"]
     date = purchase_order_obj["date_time"]
     customer_obj = Customer.objects.values("company").get(user=buyer)
-    customer_gst_details = Customer.objects.values("gst_in", "state", "state_code").get(
-        user=buyer
-    )
+    customer_gst_details = Customer.objects.values(
+        "gst_in", "state", "state_code"
+    ).get(user=buyer)
     admin_organisations = AdminOrganisations.objects.values(
         "pan_no", "stc_no", "gst_in", "state", "state_code"
     ).get(id=organisation_id)
@@ -255,14 +248,18 @@ def suspense_bill(request):
     suspenseorder = SuspenseOrder.objects.values(
         "voucher", "session_id", "distance_estimated"
     ).filter(purchase_order=id)
-    rate = Surcharge.objects.values("value").filter(tax_name="Transportation")[0]
+    rate = Surcharge.objects.values("value").filter(tax_name="Transportation")[
+        0
+    ]
     for distance_temp in suspenseorder:
         distance = distance_temp["distance_estimated"] * rate["value"]
         distance_temp["distance_estimated"] = distance
     purchased_item = (
         PurchasedItem.objects.filter(purchase_order=id)
         .values(
-            "item__category__name", "item__category", "item__category__parent__name"
+            "item__category__name",
+            "item__category",
+            "item__category__parent__name",
         )
         .order_by("item__category")
         .distinct()
@@ -274,14 +271,18 @@ def suspense_bill(request):
     )
     cost = (
         PurchasedItem.objects.filter(purchase_order=id)
-        .values("price", "item__category", "item__name", "item__category__parent__name")
+        .values(
+            "price",
+            "item__category",
+            "item__name",
+            "item__category__parent__name",
+        )
         .order_by("item__category")
     )
     bill = Bill.objects.values("totalplusdelivery", "grand_total").get(
         purchase_order=id
     )
     bill_values = []
-    field_check = 1
     for category in purchased_item:
         flag1 = 1
         list = []
@@ -313,17 +314,17 @@ def suspense_bill(request):
                         voucher=voucher_obj["voucher_no"],
                         session_id=voucher_obj["session"],
                     )
-                    total = total + suspense_obj["distance_estimated"] * rate["value"]
-                except:
+                    total = (
+                        total
+                        + suspense_obj["distance_estimated"] * rate["value"]
+                    )
+                except BaseException:
                     pass
         list.append(item_names)
         list.append(int(total))
         bill_values.append(list)
     taxes_applied = TaxesApplied.objects.filter(purchase_order=id).values(
         "surcharge", "tax"
-    )
-    taxes_applied_obj = TaxesApplied.objects.filter(purchase_order=id).aggregate(
-        Count("id")
     )
     surcharge = Surcharge.objects.values("id", "tax_name", "value")
     totalplusdelivery = bill["totalplusdelivery"]
@@ -340,9 +341,6 @@ def suspense_bill(request):
         "total_discount",
         "buyer__customer__title",
     ).get(id=id)
-    taxes_applied_obj = TaxesApplied.objects.filter(purchase_order=id).aggregate(
-        Count("id")
-    )
     buyer = purchase_order_obj["buyer"]
     address = Customer.objects.values(
         "address__street_address",
@@ -353,9 +351,9 @@ def suspense_bill(request):
     organisation_id = purchase_order_obj["organisation"]
     date = purchase_order_obj["date_time"]
     customer_obj = Customer.objects.values("company").get(user=buyer)
-    admin_organisations = AdminOrganisations.objects.values("pan_no", "stc_no").get(
-        id=organisation_id
-    )
+    admin_organisations = AdminOrganisations.objects.values(
+        "pan_no", "stc_no"
+    ).get(id=organisation_id)
     voucherid = VoucherId.objects.values("purchase_order_of_session").filter(
         purchase_order=id
     )[0]
@@ -458,7 +456,9 @@ def receipt(request):
             voucherid_obj = VoucherId.objects.values(
                 "receipt_no_of_session", "session", "purchase_order__date_time"
             ).filter(
-                receipt_no_of_session=max_receipt_no["receipt_no_of_session__max"],
+                receipt_no_of_session=max_receipt_no[
+                    "receipt_no_of_session__max"
+                ],
                 session_id=session_id,
             )[
                 0
@@ -468,7 +468,9 @@ def receipt(request):
             ).filter(purchase_order=id)[0]
             if voucherid_obj["session"] == voucherid_obj2["session"]:
                 VoucherId.objects.filter(purchase_order=id).update(
-                    receipt_no_of_session=max_receipt_no["receipt_no_of_session__max"]
+                    receipt_no_of_session=max_receipt_no[
+                        "receipt_no_of_session__max"
+                    ]
                     + 1,
                     receipt_date=today_date,
                 )
@@ -497,7 +499,10 @@ def receipt(request):
     date = purchase_order["date_time"]
     total_in_words = num2eng(bill["amount_received"])
     customer_obj = PurchaseOrder.objects.values(
-        "buyer", "buyer__first_name", "buyer__last_name", "buyer__customer__title"
+        "buyer",
+        "buyer__first_name",
+        "buyer__last_name",
+        "buyer__customer__title",
     ).get(id=id)
     address = Customer.objects.values(
         "address__street_address",
@@ -612,12 +617,9 @@ def quoted_bill(request):
         list.append(price_unit)
         list.append(total)
         bill_values.append(list)
-    taxes_applied = QuotedTaxesApplied.objects.filter(quoted_order=quoted_order).values(
-        "surcharge", "tax", "surcharge_name", "surcharge_value"
-    )
-    taxes_applied_obj = QuotedTaxesApplied.objects.filter(
+    taxes_applied = QuotedTaxesApplied.objects.filter(
         quoted_order=quoted_order
-    ).aggregate(Count("id"))
+    ).values("surcharge", "tax", "surcharge_name", "surcharge_value")
     bill = QuotedBill.objects.values(
         "total_cost", "grand_total", "delivery_charges", "totalplusdelivery"
     ).get(quoted_order=quoted_order_id)
@@ -642,9 +644,9 @@ def quoted_bill(request):
         quoted_order=quoted_order
     ).aggregate(Count("id"))
     try:
-        suspense_order = QuotedSuspenseOrder.objects.values("distance_estimated").get(
-            quoted_order=quoted_order_id
-        )
+        suspense_order = QuotedSuspenseOrder.objects.values(
+            "distance_estimated"
+        ).get(quoted_order=quoted_order_id)
         if suspense_order["distance_estimated"] == 0:
             if total_discount == 0:
                 tax_count = taxes_applied_obj["id__count"] + 2
@@ -655,7 +657,7 @@ def quoted_bill(request):
                 tax_count = taxes_applied_obj["id__count"] + 4
             else:
                 tax_count = taxes_applied_obj["id__count"] + 5
-    except:
+    except BaseException:
         if total_discount == 0:
             tax_count = taxes_applied_obj["id__count"] + 2
         else:

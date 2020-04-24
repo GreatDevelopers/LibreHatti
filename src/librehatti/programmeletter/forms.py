@@ -1,16 +1,10 @@
+# -*- coding: utf-8 -*-
 """
 Forms of programmeletter are ..
 """
-from django import forms
-
-from librehatti.programmeletter.models import TeamName
-from librehatti.programmeletter.models import StaffInTeam
-
-from librehatti.catalog.models import Category
-
-from librehatti.suspense.models import Staff
-
 from ajax_select import make_ajax_field
+from django import forms
+from librehatti.programmeletter.models import StaffInTeam
 
 
 class StaffInTeamForm(forms.ModelForm):

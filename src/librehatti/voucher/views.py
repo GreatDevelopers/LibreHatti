@@ -1,29 +1,29 @@
-from django.shortcuts import render
-
-from django.http import HttpResponseRedirect, HttpResponse
-
-from librehatti.voucher.models import *
-
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Bill
-from librehatti.catalog.models import HeaderFooter
-from librehatti.catalog.models import TaxesApplied
-from librehatti.catalog.models import SpecialCategories
-
-from useraccounts.models import Address, Customer
-
-from django.db.models import Max, Sum
-
-from librehatti.prints.helper import num2eng
-
-from librehatti.suspense.models import SuspenseOrder, Staff
-
-from django.urls import reverse
-
+# -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Max
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from librehatti.catalog.models import (
+    Bill,
+    FinancialSession,
+    HeaderFooter,
+    PurchaseOrder,
+    PurchasedItem,
+    SpecialCategories,
+    TaxesApplied,
+)
 from librehatti.catalog.request_change import request_notify
+from librehatti.prints.helper import num2eng
+from librehatti.suspense.models import Staff, SuspenseOrder
+from librehatti.voucher.models import (
+    CalculateDistribution,
+    CategoryDistributionType,
+    Distribution,
+    VoucherId,
+    VoucherTotal,
+)
+from useraccounts.models import Customer
 
 
 @login_required
@@ -47,7 +47,7 @@ def voucher_generate(request):
         specialcategories = SpecialCategories.objects.values("voucher").filter(
             category=first_item["item__category__id"]
         )[0]
-        if specialcategories["voucher"] == False:
+        if not specialcategories["voucher"]:
             generate_voucher = 0
     purchase_order = PurchaseOrder.objects.values("id", "date_time").get(
         id=purchase_order_id
@@ -62,7 +62,6 @@ def voucher_generate(request):
         end_date = value["session_end_date"]
         if start_date <= purchase_order_date <= end_date:
             session_id = value["id"]
-    pre_purchase_order_id = purchase_order_id - 1
     purchased_item = (
         PurchasedItem.objects.values_list("item__category", flat=True)
         .filter(purchase_order=purchase_order_id)
@@ -79,7 +78,7 @@ def voucher_generate(request):
     session = FinancialSession.objects.get(id=session_id)
     poi = PurchaseOrder.objects.get(id=purchase_order_id)
     max_id = VoucherId.objects.all().aggregate(Max("id"))
-    if max_id["id__max"] == None:
+    if max_id["id__max"] is None:
         voucherno = 1
         is_special_var = 0
         purchaseditemofsession = 1
@@ -98,7 +97,9 @@ def voucher_generate(request):
             )
             voucherid = VoucherId(
                 purchase_order=poi,
-                purchased_item=PurchasedItem.objects.get(pk=purchased_item_id[item]),
+                purchased_item=PurchasedItem.objects.get(
+                    pk=purchased_item_id[item]
+                ),
                 voucher_no=voucherno,
                 purchase_order_of_session=1,
                 purchased_item_of_session=purchaseditemofsession,
@@ -111,7 +112,6 @@ def voucher_generate(request):
             )
             voucherid.save()
             try:
-                purchaseditem = purchased_item[item + 1]
                 if purchased_item[item] == purchased_item[item + 1]:
                     purchaseditemofsession = purchaseditemofsession + 1
                     item = item + 1
@@ -119,7 +119,7 @@ def voucher_generate(request):
                     voucherno = voucherno + 1
                     purchaseditemofsession = purchaseditemofsession + 1
                     item = item + 1
-            except:
+            except BaseException:
                 continue
     else:
         voucherid = VoucherId.objects.values(
@@ -135,7 +135,9 @@ def voucher_generate(request):
             if temp_obj:
                 for temp_val in temp_obj:
                     maxid = temp_val["id"]
-                voucherid_temp = VoucherId.objects.values("voucher_no").get(id=maxid)
+                voucherid_temp = VoucherId.objects.values("voucher_no").get(
+                    id=maxid
+                )
                 voucherid["voucher_no"] = voucherid_temp["voucher_no"]
             else:
                 voucherid["voucher_no"] = 0
@@ -177,7 +179,6 @@ def voucher_generate(request):
                 )
                 voucherid.save()
                 try:
-                    purchaseditem = purchased_item[item + 1]
                     if purchased_item[item] == purchased_item[item + 1]:
                         purchaseditemofsession = purchaseditemofsession + 1
                         item = item + 1
@@ -185,7 +186,7 @@ def voucher_generate(request):
                         voucherno = voucherno + 1
                         purchaseditemofsession = purchaseditemofsession + 1
                         item = item + 1
-                except:
+                except BaseException:
                     continue
         else:
             voucherno = 1
@@ -222,7 +223,6 @@ def voucher_generate(request):
                 )
                 voucherid.save()
                 try:
-                    p = purchased_item[item + 1]
                     if purchased_item[item] == purchased_item[item + 1]:
                         purchaseditemofsession = purchaseditemofsession + 1
                         item = item + 1
@@ -230,7 +230,7 @@ def voucher_generate(request):
                         voucherno = voucherno + 1
                         purchaseditemofsession = purchaseditemofsession + 1
                         item = item + 1
-                except:
+                except BaseException:
                     continue
     voucher_obj = (
         VoucherId.objects.values_list("id", flat=True)
@@ -281,8 +281,12 @@ def voucher_generate(request):
                 )
                 remain_cost = price - (cost_college_income + cost_admin_charges)
                 split = distribution_obj["ratio"].split(":")
-                cost_consultancy_asset = round((remain_cost * int(split[0])) / 100)
-                cost_development_fund = round((remain_cost * int(split[1])) / 100)
+                cost_consultancy_asset = round(
+                    (remain_cost * int(split[0])) / 100
+                )
+                cost_development_fund = round(
+                    (remain_cost * int(split[1])) / 100
+                )
                 calculate_distribution = CalculateDistribution(
                     voucher_no=voucher_number,
                     college_income_calculated=cost_college_income,
@@ -300,7 +304,7 @@ def voucher_generate(request):
                 price = 0
                 flag = 1
                 i = i + 1
-        except:
+        except BaseException:
             if flag == 0:
                 price_item = purchased_item_obj["price"]
                 price = price + price_item
@@ -319,8 +323,12 @@ def voucher_generate(request):
                 )
                 remain_cost = price - (cost_college_income + cost_admin_charges)
                 split = distribution_obj["ratio"].split(":")
-                cost_consultancy_asset = round((remain_cost * int(split[0])) / 100)
-                cost_development_fund = round((remain_cost * int(split[1])) / 100)
+                cost_consultancy_asset = round(
+                    (remain_cost * int(split[0])) / 100
+                )
+                cost_development_fund = round(
+                    (remain_cost * int(split[1])) / 100
+                )
                 calculate_distribution = CalculateDistribution(
                     voucher_no=voucher_number,
                     college_income_calculated=cost_college_income,
@@ -354,8 +362,12 @@ def voucher_generate(request):
                 )
                 remain_cost = price - (cost_college_income + cost_admin_charges)
                 split = distribution_obj["ratio"].split(":")
-                cost_consultancy_asset = round((remain_cost * int(split[0])) / 100)
-                cost_development_fund = round((remain_cost * int(split[1])) / 100)
+                cost_consultancy_asset = round(
+                    (remain_cost * int(split[0])) / 100
+                )
+                cost_development_fund = round(
+                    (remain_cost * int(split[1])) / 100
+                )
                 calculate_distribution = CalculateDistribution(
                     voucher_no=voucher_number,
                     college_income_calculated=cost_college_income,
@@ -404,9 +416,9 @@ def voucher_show(request):
         if value["voucher_no"] not in voucher_no_list:
             voucher_no_list.append(value["voucher_no"])
             voucher_obj_distinct.append(value)
-    suspense_order = SuspenseOrder.objects.values("voucher", "session_id_id").filter(
-        purchase_order=id, is_cleared=1
-    )
+    suspense_order = SuspenseOrder.objects.values(
+        "voucher", "session_id_id"
+    ).filter(purchase_order=id, is_cleared=1)
     request_status = request_notify()
     return render(
         request,
@@ -512,7 +524,6 @@ def voucher_print(request):
         "purchase_order__mode_of_payment",
     ).filter(purchase_order=purchase_order_id)[0]
     header = HeaderFooter.objects.values("header").get(is_active=True)
-    footer = HeaderFooter.objects.values("footer").get(is_active=True)
     if flag == 0:
         return render(
             request,
@@ -550,8 +561,12 @@ def voucher_print(request):
                 "header": header,
                 "material": category_name,
                 "buyer": purchase_order_obj,
-                "method": voucheridobj["purchase_order__mode_of_payment__method"],
-                "method_number": voucheridobj["purchase_order__cheque_dd_number"],
+                "method": voucheridobj[
+                    "purchase_order__mode_of_payment__method"
+                ],
+                "method_number": voucheridobj[
+                    "purchase_order__cheque_dd_number"
+                ],
                 "method_date": voucheridobj["purchase_order__cheque_dd_date"],
                 "method_id": voucheridobj["purchase_order__mode_of_payment"],
             },

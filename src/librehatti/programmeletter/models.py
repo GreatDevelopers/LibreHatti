@@ -1,7 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.db import models
-
-from librehatti.suspense.models import Staff
-from librehatti.suspense.models import Vehicle
+from librehatti.suspense.models import Staff, Vehicle
 
 
 class TeamName(models.Model):
@@ -42,4 +41,6 @@ class LetterData(models.Model):
     vehicle = models.ForeignKey(Vehicle, default=1, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s" % (self.letter_subject) + " -- TEAM NAME: " "%s" % (self.team_name)
+        return "%s" % (self.letter_subject) + " -- TEAM NAME: " "%s" % (
+            self.team_name
+        )

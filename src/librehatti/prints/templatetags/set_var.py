@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from django import template
+
 
 register = template.Library()
 
@@ -24,7 +26,7 @@ def set_var(parser, token):
     parts = token.split_contents()
     if len(parts) < 4:
         raise template.TemplateSyntaxError(
-            "'set' tag must be of the form:  {% set <var_name>  = <var_value> %}"
+            "'set' tag must be of the form:  {% set <var_name>  = <var_value> %}"  # noqa
         )
     return SetVarNode(parts[1], parts[3])
 

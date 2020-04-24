@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.urls import re_path
-
-from django.views.generic import TemplateView
-
 from librehatti.prints import views
+
 
 app_name = "prints"
 

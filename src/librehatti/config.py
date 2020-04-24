@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Catalog"""
 _BUYER = "Client"
 _DELIVERY_ADDRESS = "Site"
@@ -10,15 +11,15 @@ _QTY = "Quantity"
 _TYPE = "Type Of Work"
 _COUNTRY = "Country"
 
-"""User Configs"""
+# User Configs
 _SENDER_EMAIL = "your email"
 _PASSWORD = "email password"
 _RECEIVER_EMAIL = "receiver email id"
 
-"""Group Configs"""
+# Group Configs
 _ADMIN_GROUP = "group name"
 
-"""Account Information"""
+# Account Information
 _ACCOUNT_HOLDER = "ACCOUNT HOLDER"
 _NAME_OF_BANK = "Bank Name"
 _BRANCH = "district"
@@ -28,7 +29,7 @@ _ORG_TYPE = "Organisation"
 _CUBE_TEST = "Cube Test"
 _TEST_DATE = "Date of testing"
 
-"""Reference"""
+# Reference
 _REFERENCE = "Letter No."
 _REFERENCE_DATE = "Letter Date"
 _YOUR_LETTER_No = "Your letter No."

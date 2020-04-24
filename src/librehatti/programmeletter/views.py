@@ -1,21 +1,8 @@
-from django.shortcuts import render
-
-from django.http import HttpResponse, HttpResponseRedirect
-
-from django.urls import reverse
-
-from librehatti.catalog.request_change import request_notify
-
+# -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
-
-from librehatti.suspense.models import Staff
-
-from librehatti.programmeletter.models import LetterData
-from librehatti.programmeletter.models import StaffInTeam
-
+from django.shortcuts import render
 from librehatti.catalog.models import HeaderFooter
-
-import simplejson
+from librehatti.programmeletter.models import LetterData, StaffInTeam
 
 
 @login_required

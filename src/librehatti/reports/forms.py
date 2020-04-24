@@ -1,21 +1,21 @@
-from django import forms
-
-from .search_choices import CLIENT_FIELD_CHOICES
-from .search_choices import CLIENT_ORDER_CHOICES
-from .search_choices import CONSTRAINT_CHOICES
-from .search_choices import MONTH_CHOICES
-
+# -*- coding: utf-8 -*-
 import datetime
 
-from librehatti.catalog.models import FinancialSession
+from django import forms
+from librehatti.catalog.models import (
+    Category,
+    FinancialSession,
+    ModeOfPayment,
+    Surcharge,
+)
+from librehatti.config import _PARENT_CATEGORY, _SUB_CATEGORY
 
-from librehatti.catalog.models import Category
-
-from librehatti.config import _PARENT_CATEGORY
-from librehatti.config import _SUB_CATEGORY
-
-from librehatti.catalog.models import ModeOfPayment
-from librehatti.catalog.models import Surcharge
+from .search_choices import (
+    CLIENT_FIELD_CHOICES,
+    CLIENT_ORDER_CHOICES,
+    CONSTRAINT_CHOICES,
+    MONTH_CHOICES,
+)
 
 
 class DateRangeSelectionForm(forms.Form):
@@ -77,7 +77,7 @@ class ConsultancyFunds(forms.Form):
         sub_category = forms.MultipleChoiceField(
             choices=sub_category_choices, label=_SUB_CATEGORY
         )
-    except:
+    except BaseException:
         pass
 
     def __init__(self, *args, **kwargs):
@@ -121,7 +121,9 @@ class AddConstraints(forms.Form):
     """
 
     additional_constraints = forms.MultipleChoiceField(
-        required=False, widget=forms.CheckboxSelectMultiple, choices=CONSTRAINT_CHOICES
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=CONSTRAINT_CHOICES,
     )
 
     amount_greater_than = forms.FloatField(required=False, initial=0)
@@ -142,7 +144,9 @@ class AddConstraints(forms.Form):
     session_start = FinancialSession.objects.values_list(
         "session_start_date", flat=True
     )
-    session_end = FinancialSession.objects.values_list("session_end_date", flat=True)
+    session_end = FinancialSession.objects.values_list(
+        "session_end_date", flat=True
+    )
     session_choices = [("", "--------")] + [
         (id, str(start) + "-To-" + str(end))
         for id, start, end in list(zip(session_id, session_start, session_end))
@@ -159,7 +163,7 @@ class AddConstraints(forms.Form):
     mode_of_payment_id = ModeOfPayment.objects.values_list("id", flat=True)
     mode = ModeOfPayment.objects.values_list("method", flat=True)
     mode_choices = [("", "--------")] + [
-        (id, mode) for id, mode in zip(mode_of_payment_id, mode)
+        (_id, _mode) for _id, _mode in zip(mode_of_payment_id, mode)
     ]
     mode_of_payment = forms.ChoiceField(choices=mode_choices)
 

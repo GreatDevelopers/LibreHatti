@@ -1,17 +1,10 @@
-from django.contrib import admin
-
-from librehatti.programmeletter.models import TeamName
-from librehatti.programmeletter.models import StaffInTeam
-from librehatti.programmeletter.models import LetterData
-
-from librehatti.programmeletter.forms import StaffInTeamForm
-from librehatti.programmeletter.forms import TeamNameForm
-
+# -*- coding: utf-8 -*-
 from ajax_select.admin import AjaxSelectAdmin
-
+from django.contrib import admin
 from django.http import HttpResponseRedirect
-
 from django.urls import reverse
+from librehatti.programmeletter.forms import StaffInTeamForm, TeamNameForm
+from librehatti.programmeletter.models import LetterData, StaffInTeam, TeamName
 
 
 class StaffInline(admin.StackedInline):

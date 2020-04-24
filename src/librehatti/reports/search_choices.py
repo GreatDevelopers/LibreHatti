@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 It includes the choices used in forms.
 """

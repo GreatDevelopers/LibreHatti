@@ -1,10 +1,7 @@
-from django.db.models import Q
-
-from django.utils.html import escape
-
-from librehatti.suspense.models import Staff
-
+# -*- coding: utf-8 -*-
 from ajax_select import LookupChannel
+from django.db.models import Q
+from librehatti.suspense.models import Staff
 
 
 class StaffLookup(LookupChannel):

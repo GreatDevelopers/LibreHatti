@@ -1,20 +1,20 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import sys
+
 import django
+from librehatti.suspense import urls
+
 
 # if __name__ == '__main__':
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "librehatti.settings")
 # django.setup()
-from django.core.management import execute_from_command_line
 
 sys.path.insert(0, "/home/amisha/python_programs/lh/LibreHatti/src/")
 # execute_from_command_line(sys.argv)
 # import manage
 django.setup()
-import librehatti
-from librehatti.suspense import urls
-from shutil import copyfile
 
 # copyfile("urls.py", "urlsold.py")
 

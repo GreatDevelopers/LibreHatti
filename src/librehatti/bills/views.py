@@ -1,41 +1,22 @@
-from django.shortcuts import render
-
-from django.http import HttpResponse, HttpResponseRedirect
-
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Category
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import ModeOfPayment
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import HeaderFooter
-from librehatti.catalog.models import Surcharge
-from librehatti.catalog.models import SpecialCategories
-from librehatti.catalog.request_change import request_notify
-
-from librehatti.bills.models import QuotedTaxesApplied
-from librehatti.bills.models import QuotedOrder
-from librehatti.bills.models import QuotedBill
-from librehatti.bills.models import QuotedItem
-from librehatti.bills.models import QuotedOrderofSession
-from librehatti.bills.models import QuotedOrderNote
-from librehatti.bills.models import NoteLine
-from librehatti.bills.forms import SelectNoteForm
-from librehatti.bills.forms import ItemSelectForm
-
-from librehatti.suspense.models import QuotedSuspenseOrder
-
-from django.contrib.auth.models import User
+# -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
-
-import useraccounts
-
-from django.db.models import Sum
-from django.db.models import Max
-
-import simplejson
-
+from django.db.models import Max, Sum
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
-
+from librehatti.bills.forms import SelectNoteForm
+from librehatti.bills.models import (
+    NoteLine,
+    QuotedBill,
+    QuotedItem,
+    QuotedOrder,
+    QuotedOrderNote,
+    QuotedOrderofSession,
+    QuotedTaxesApplied,
+)
+from librehatti.catalog.models import SpecialCategories, Surcharge
+from librehatti.catalog.request_change import request_notify
+from librehatti.suspense.models import QuotedSuspenseOrder
 from librehatti.voucher.models import FinancialSession
 
 
@@ -60,20 +41,24 @@ def quoted_bill_cal(request):
         specialcategories = SpecialCategories.objects.values("tax").filter(
             category=first_item["item__category__id"]
         )[0]
-        if specialcategories["tax"] == False:
+        if not specialcategories["tax"]:
             generate_tax = 0
     quoted_order = QuotedOrder.objects.get(id=quoted_order_id)
     quoted_order_obj = QuotedOrder.objects.values("total_discount").get(
         id=quoted_order_id
     )
-    quoted_item = QuotedItem.objects.filter(quoted_order=quoted_order_id).aggregate(
-        Sum("price")
-    )
+    quoted_item = QuotedItem.objects.filter(
+        quoted_order=quoted_order_id
+    ).aggregate(Sum("price"))
     total = quoted_item["price__sum"]
     price_total = total - quoted_order_obj["total_discount"]
     totalplusdelivery = price_total
-    surcharge = Surcharge.objects.values("id", "value", "taxes_included", "tax_name")
-    delivery_rate = Surcharge.objects.values("value").filter(tax_name="Transportation")
+    surcharge = Surcharge.objects.values(
+        "id", "value", "taxes_included", "tax_name"
+    )
+    delivery_rate = Surcharge.objects.values("value").filter(
+        tax_name="Transportation"
+    )
     distance = QuotedSuspenseOrder.objects.filter(
         quoted_order=quoted_order_id
     ).aggregate(Sum("distance_estimated"))
@@ -101,7 +86,9 @@ def quoted_bill_cal(request):
                 surcharge_value=value["value"],
             )
             taxes_applied.save()
-    taxes_applied_temp = QuotedTaxesApplied.objects.filter(quoted_order=quoted_order_id)
+    taxes_applied_temp = QuotedTaxesApplied.objects.filter(
+        quoted_order=quoted_order_id
+    )
     if taxes_applied_temp:
         taxes_applied_obj = QuotedTaxesApplied.objects.filter(
             quoted_order=quoted_order_id
@@ -159,7 +146,9 @@ def select_note(request):
     form = SelectNoteForm(initial={"quoted_order": quoted_order_id})
     request_status = request_notify()
     return render(
-        request, "bills/select_note.html", {"form": form, "request": request_status}
+        request,
+        "bills/select_note.html",
+        {"form": form, "request": request_status},
     )
 
 
@@ -183,9 +172,13 @@ def select_note_save(request):
                 obj = QuotedOrderNote(quoted_order=quoted_order_id, note=value)
                 obj.save()
 
-            return HttpResponseRedirect(reverse("bills:quoted_order_added_success"))
+            return HttpResponseRedirect(
+                reverse("bills:quoted_order_added_success")
+            )
         else:
-            return HttpResponseRedirect(reverse("bills:quoted_order_added_success"))
+            return HttpResponseRedirect(
+                reverse("bills:quoted_order_added_success")
+            )
     else:
         error_type = "404 Forbidden"
         error = "Please again place the order"
@@ -242,7 +235,7 @@ def quoted_order_of_session(request):
             session_id = value["id"]
     session = FinancialSession.objects.get(id=session_id)
     max_id = QuotedOrderofSession.objects.all().aggregate(Max("id"))
-    if max_id["id__max"] == None:
+    if max_id["id__max"] is None:
         obj = QuotedOrderofSession(
             quoted_order=quoted_order, session=session, quoted_order_session=1
         )
@@ -255,13 +248,17 @@ def quoted_order_of_session(request):
             obj = QuotedOrderofSession(
                 quoted_order=quoted_order,
                 session=session,
-                quoted_order_session=quoted_order_of_session["quoted_order_session"]
+                quoted_order_session=quoted_order_of_session[
+                    "quoted_order_session"
+                ]
                 + 1,
             )
             obj.save()
         else:
             obj = QuotedOrderofSession(
-                quoted_order=quoted_order, session=session, quoted_order_session=1
+                quoted_order=quoted_order,
+                session=session,
+                quoted_order_session=1,
             )
             obj.save()
     request.session["old_post"] = old_post

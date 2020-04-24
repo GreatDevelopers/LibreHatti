@@ -1,16 +1,9 @@
+# -*- coding: utf-8 -*-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
-from django.http import HttpResponse
-
-from librehatti.catalog.models import PurchaseOrder
+from librehatti.bills.models import QuotedItem, QuotedOrderofSession
 from librehatti.catalog.models import PurchasedItem
 from librehatti.catalog.request_change import request_notify
-
-from librehatti.bills.models import QuotedOrderofSession
-from librehatti.bills.models import QuotedItem
-
-from django.contrib.auth.decorators import login_required
-
 from librehatti.voucher.models import VoucherId
 
 
@@ -36,7 +29,11 @@ def history(request):
     return render(
         request,
         "reports/purchase_history.html",
-        {"purchases": purchases, "proformas": proformas, "request": request_status},
+        {
+            "purchases": purchases,
+            "proformas": proformas,
+            "request": request_status,
+        },
     )
 
 
@@ -54,7 +51,11 @@ def details(request):
     return render(
         request,
         "reports/history_details.html",
-        {"purchases": purchases, "order_id": order_id, "request": request_status},
+        {
+            "purchases": purchases,
+            "order_id": order_id,
+            "request": request_status,
+        },
     )
 
 

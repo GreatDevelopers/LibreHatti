@@ -1,28 +1,16 @@
-from django.shortcuts import render
-
-from django.urls import reverse
-
-from django.http import HttpResponse
-
-from .forms import ClientForm
-from .forms import OrderForm
-from .forms import AddConstraints
-from .forms import DailyReportForm
+# -*- coding: utf-8 -*-
 
 import simplejson
-
-from datetime import datetime
-
-import librehatti.settings as settings
-
-from librehatti.catalog.request_change import request_notify
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import Bill
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.urls import reverse
+from librehatti import settings
 from librehatti.catalog.models import Category
-
+from librehatti.catalog.request_change import request_notify
 from librehatti.reports.models import SavedRegisters
 
-from django.contrib.auth.decorators import login_required
+from .forms import AddConstraints, ClientForm, OrderForm
 
 
 @login_required
@@ -69,7 +57,7 @@ def search_form(request):
             }
         else:
             return HttpResponse("<h1>Page not found</h1>")
-    except:
+    except BaseException:
         return HttpResponse("<h1>Invalid URL</h1>")
     return render(request, "reports/search.html", temp)
 
@@ -103,7 +91,9 @@ def list_saved_registers(request):
     Return:Render List of Registers
     """
     local_url = settings.LOCAL_URL
-    list_of_registers = SavedRegisters.objects.values("title", "selected_fields")
+    list_of_registers = SavedRegisters.objects.values(
+        "title", "selected_fields"
+    )
     request_status = request_notify()
     return render(
         request,

@@ -1,34 +1,21 @@
+# -*- coding: utf-8 -*-
 """
 %% actions.py %%
 This file contains the functions that will be used to generate
 registers.
 """
 
-from django.http import HttpResponse, HttpResponseRedirect
-
-from django.views.generic import View
-
-from django.shortcuts import render
-
-from .helper import get_query
-
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Surcharge
-from librehatti.catalog.models import TaxesApplied
-from librehatti.catalog.request_change import request_notify
-
-from librehatti.reports.models import SavedRegisters
-
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-
+from calendar import monthrange
 from datetime import datetime, timedelta
 
-from calendar import monthrange
-
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views.generic import View
+from librehatti.catalog.models import PurchaseOrder, Surcharge, TaxesApplied
+from librehatti.catalog.request_change import request_notify
+from librehatti.reports.models import SavedRegisters
 
 
 class GenerateRegister(View):
@@ -72,14 +59,14 @@ class GenerateRegister(View):
         generated_data_list = []
         try:
             details = self.details
-        except:
+        except BaseException:
             details = self.client_details
         for data in details:
             temporary = []
             if self.surcharge:
                 try:
                     data["bill__grand_total"]
-                except:
+                except BaseException:
                     error_type = "Insufficient fields"
                     error = "Total must be included in field list"
                     temp = {"type": error_type, "message": error}
@@ -94,8 +81,10 @@ class GenerateRegister(View):
                     .filter(surcharge=val)
                 )
                 try:
-                    self.total_taxes[tax_pos] = self.total_taxes[tax_pos] + tax[0]
-                except:
+                    self.total_taxes[tax_pos] = (
+                        self.total_taxes[tax_pos] + tax[0]
+                    )
+                except BaseException:
                     pass
                 if tax:
                     temporary[-1:-1] = tax
@@ -125,13 +114,13 @@ class GenerateRegister(View):
         }
         try:
             temp["grand_total"] = self.grand_total_list
-        except:
+        except BaseException:
             pass
         try:
             self.selected_fields_order[-1:-1] = self.surcharge
             temp["surcharge"] = self.surcharge
             self.grand_total_list[-1:-1] = self.total_taxes
-        except:
+        except BaseException:
             pass
         return render(request, "reports/generated_register.html", temp)
 
@@ -146,14 +135,16 @@ class GenerateRegister(View):
 
         try:
             values = self.details
-        except:
+        except BaseException:
             values = self.client_details
         try:
             for total in values:
                 if total["bill__total_cost"] is not None:
-                    self.bill_total = self.bill_total + total["bill__total_cost"]
+                    self.bill_total = (
+                        self.bill_total + total["bill__total_cost"]
+                    )
             self.grand_total_list = [self.bill_total]
-        except:
+        except BaseException:
             pass
         try:
             for tds in values:
@@ -161,14 +152,14 @@ class GenerateRegister(View):
                     self.tds = self.tds + tds["tds"]
             self.grand_total_list.append(self.tds)
             self.decrement_field = 1
-        except:
+        except BaseException:
             pass
         try:
             for total in values:
                 if total["bill__grand_total"] is not None:
                     grand_total = grand_total + total["bill__grand_total"]
             self.grand_total_list.append(grand_total)
-        except:
+        except BaseException:
             pass
         return self.view_register(request)
 
@@ -184,7 +175,7 @@ class GenerateRegister(View):
             self.details = self.client_details.filter(
                 mode_of_payment=self.mode_of_payment
             )
-        except:
+        except BaseException:
             pass
         try:
             month_start = str(self.year) + "-" + str(self.month) + "-1"
@@ -198,7 +189,7 @@ class GenerateRegister(View):
             self.details = self.client_details.filter(
                 date_time__range=(month_start, month_end)
             )
-        except:
+        except BaseException:
             pass
 
         try:
@@ -208,12 +199,12 @@ class GenerateRegister(View):
                     bill__total_cost__gt=gt_amount
                 )
 
-        except:
+        except BaseException:
             pass
         try:
             if request.GET["grand_total"]:
                 return self.cal_grand_total(request)
-        except:
+        except BaseException:
             return self.view_register(request)
 
     def fetch_values(self, request):
@@ -223,16 +214,16 @@ class GenerateRegister(View):
         try:
             try:
                 if request.GET["all_registered_user"]:
-                    self.client_details = User.objects.values(*self.fields_list).filter(
-                        is_superuser=0
-                    )
+                    self.client_details = User.objects.values(
+                        *self.fields_list
+                    ).filter(is_superuser=0)
                     return self.view_register(request)
-            except:
+            except BaseException:
                 self.client_details = PurchaseOrder.objects.values(
                     *self.fields_list
                 ).filter(is_active=1)
                 return self.apply_filters(request)
-        except:
+        except BaseException:
             error_type = "Nothing to display"
             error = "Oops... Something went wrong."
             temp = {"type": error_type, "message": error}
@@ -280,13 +271,16 @@ class GenerateRegister(View):
             self.save_option = "0"
         if not self.title:
             self.title = "General Register"
-        start_date_temp = datetime.strptime(request.GET["start_date"], "%Y-%m-%d")
+        start_date_temp = datetime.strptime(
+            request.GET["start_date"], "%Y-%m-%d"
+        )
         self.start_date = datetime(
             start_date_temp.year, start_date_temp.month, start_date_temp.day
         ) + timedelta(hours=0)
         end_date_temp = datetime.strptime(request.GET["end_date"], "%Y-%m-%d")
 
-        # adding 24 hours in date will convert '2014-8-10' to '2014-8-10 00:00:00'
+        # adding 24 hours in date will convert '2014-8-10' to '2014-8-10
+        # 00:00:00'
 
         self.end_date = datetime(
             end_date_temp.year, end_date_temp.month, end_date_temp.day
@@ -300,31 +294,34 @@ class GenerateRegister(View):
             self.selected_fields_order = request.GET.getlist("order")
             self.selected_fields_client = ["Order Id"]
             self.selected_fields_client = (
-                self.selected_fields_client + request.GET.getlist("client_fields")
+                self.selected_fields_client
+                + request.GET.getlist("client_fields")
             )
         else:
             self.selected_fields_order = request.GET.getlist("order")
             self.selected_fields_client = request.GET.getlist("client_fields")
         self.result_fields.append(self.selected_fields_client)
         self.result_fields.append(self.selected_fields_order)
-        self.selected_fields_constraints = request.GET.getlist("additional_constraints")
+        self.selected_fields_constraints = request.GET.getlist(
+            "additional_constraints"
+        )
         try:
             self.mode_of_payment = request.GET["mode_of_payment"]
-        except:
+        except BaseException:
             pass
         try:
             self.month = request.GET["month"]
-        except:
+        except BaseException:
             pass
         try:
             self.year = request.GET["year"]
-        except:
+        except BaseException:
             self.year = datetime.datetime.now().strftime("%Y")
         try:
             self.surcharge = Surcharge.objects.values_list(
                 "tax_name", flat=True
             ).filter(id__in=request.GET.getlist("surcharges"))
             self.total_taxes = [0] * (len(request.GET.getlist("surcharges")))
-        except:
+        except BaseException:
             pass
         return self.convert_values(request)

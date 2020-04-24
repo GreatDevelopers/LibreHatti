@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 %% admin.py %%
 This file display usage information that admin requires to edit or add
@@ -6,13 +7,15 @@ easy as one need to do it through MySQL server.
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from useraccounts.models import *
+from useraccounts.models import (
+    Address,
+    AdminOrganisations,
+    Customer,
+    OrganisationType,
+    User,
+)
 
-"""
-these fields are required in admin interface to add the details of
-particular organisation with which the user deals and also customer
-details whether its individual or owner of a company
-"""
+
 admin.site.register(AdminOrganisations)
 admin.site.register(Address)
 admin.site.register(OrganisationType)
@@ -20,35 +23,32 @@ admin.site.register(Customer)
 admin.site.unregister(User)
 
 
-"""
-This class is used to add, edit or delete the address of the organisation
-or user
-"""
-
-
 class AddressInline(admin.StackedInline):
+    """
+    This class is used to add, edit or delete the address of the organisation
+    or user
+    """
+
     model = Address
 
 
-"""
-This class is used to add, edit or delete the details of customer
-mentioning the address along with ithe information whether customer is
-org_type or not
-"""
-
-
 class CustomerInline(admin.StackedInline):
+    """
+    This class is used to add, edit or delete the details of customer
+    mentioning the address along with ithe information whether customer is
+    org_type or not
+    """
+
     model = Customer
 
 
-"""
-This class is used to add new customer, edit or delete existing
-customers specifying the username , email, first and last name and
-confirming the passwords
-"""
-
-
 class CustomUserAdd(UserAdmin):
+    """
+    This class is used to add new customer, edit or delete existing
+    customers specifying the username , email, first and last name and
+    confirming the passwords
+    """
+
     list_display = ["user", "email", "address", "date_joined"]
     add_fieldsets = (
         (

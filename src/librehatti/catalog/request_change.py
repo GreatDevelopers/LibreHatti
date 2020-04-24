@@ -1,34 +1,23 @@
-from django.http import HttpResponse, HttpResponseRedirect
+# -*- coding: utf-8 -*-
+from datetime import datetime
 
-from django.views.generic import View
-
-from django.shortcuts import render
-
-from librehatti.voucher.models import VoucherId
-from librehatti.voucher.models import FinancialSession
-from librehatti.catalog.models import Bill
-from librehatti.catalog.models import ChangeRequest
-from librehatti.catalog.models import RequestSurchargeChange
-from librehatti.catalog.models import RequestStatus
-from librehatti.catalog.models import TaxesApplied
-from librehatti.catalog.forms import ChangeRequestForm
-
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-
-from django.utils.decorators import method_decorator
-
+from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-
-from django.template.loader import get_template
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.template import Context
-
-from librehatti.config import _SENDER_EMAIL
-from librehatti.config import _RECEIVER_EMAIL
-
-from datetime import date, datetime
-
-from librehatti.config import _ADMIN_GROUP
+from django.template.loader import get_template
+from librehatti.catalog.forms import ChangeRequestForm
+from librehatti.catalog.models import (
+    Bill,
+    ChangeRequest,
+    RequestStatus,
+    RequestSurchargeChange,
+    TaxesApplied,
+)
+from librehatti.config import _ADMIN_GROUP, _RECEIVER_EMAIL, _SENDER_EMAIL
+from librehatti.voucher.models import FinancialSession, VoucherId
 
 
 @login_required
@@ -44,7 +33,8 @@ def request_save(request):
         purchase_order_of_session = request.GET["order_id"]
         session_id = request.GET["session"]
         voucherid = VoucherId.objects.values("purchase_order_id").filter(
-            purchase_order_of_session=purchase_order_of_session, session_id=session_id
+            purchase_order_of_session=purchase_order_of_session,
+            session_id=session_id,
         )
         for value in voucherid:
             purchase_order = value["purchase_order_id"]
@@ -53,8 +43,12 @@ def request_save(request):
         new_value_list = request.POST.getlist("new_value")
         description = request.POST.get("description")
         session = FinancialSession.objects.get(pk=session_id)
-        bill = Bill.objects.values("grand_total").get(purchase_order_id=purchase_order)
-        taxesapplied = TaxesApplied.objects.filter(purchase_order=purchase_order)
+        bill = Bill.objects.values("grand_total").get(
+            purchase_order_id=purchase_order
+        )
+        taxesapplied = TaxesApplied.objects.filter(
+            purchase_order=purchase_order
+        )
         previous_total = bill["grand_total"]
         new_total = previous_total
         temp = 0
@@ -70,10 +64,12 @@ def request_save(request):
             temp = temp + 1
         try:
             ChangeRequest.objects.get(
-                purchase_order_of_session=purchase_order_of_session, session=session_id
+                purchase_order_of_session=purchase_order_of_session,
+                session=session_id,
             )
             ChangeRequest.objects.filter(
-                purchase_order_of_session=purchase_order_of_session, session=session_id
+                purchase_order_of_session=purchase_order_of_session,
+                session=session_id,
             ).update(
                 purchase_order_of_session=purchase_order_of_session,
                 session=session,
@@ -82,7 +78,7 @@ def request_save(request):
                 description=description,
                 initiator=full_name,
             )
-        except:
+        except BaseException:
             obj = ChangeRequest(
                 purchase_order_of_session=purchase_order_of_session,
                 session=session,
@@ -93,16 +89,20 @@ def request_save(request):
             )
             obj.save()
         change_request = ChangeRequest.objects.get(
-            purchase_order_of_session=purchase_order_of_session, session=session_id
+            purchase_order_of_session=purchase_order_of_session,
+            session=session_id,
         )
         temp = 0
         for value in taxesapplied:
             surcharge = TaxesApplied.objects.get(
-                purchase_order=purchase_order, surcharge__tax_name=surcharge_list[temp]
+                purchase_order=purchase_order,
+                surcharge__tax_name=surcharge_list[temp],
             )
             if new_value_list[temp]:
 
-                if RequestSurchargeChange.objects.filter(change_request=change_request):
+                if RequestSurchargeChange.objects.filter(
+                    change_request=change_request
+                ):
 
                     try:
                         RequestSurchargeChange.objects.get(
@@ -116,7 +116,7 @@ def request_save(request):
                             previous_value=previous_value_list[temp],
                             new_value=new_value_list[temp],
                         )
-                    except:
+                    except BaseException:
                         obj = RequestSurchargeChange(
                             change_request=change_request,
                             surcharge=surcharge,
@@ -140,7 +140,7 @@ def request_save(request):
                     RequestSurchargeChange.objects.filter(
                         change_request=change_request, surcharge=surcharge
                     ).delete()
-                except:
+                except BaseException:
                     pass
             temp = temp + 1
         try:
@@ -151,7 +151,7 @@ def request_save(request):
                 cancelled=0,
                 request_response=None,
             )
-        except:
+        except BaseException:
             obj = RequestStatus(change_request=change_request)
             obj.save()
         request_status = request_notify()
@@ -170,9 +170,12 @@ def request_save(request):
 
 def request_notify():
     """
-    This function notifies the admin that a request is pending for being processed
+    This function notifies the admin that a request is pending
+    for being processed
     """
-    notify = RequestStatus.objects.filter(confirmed=False).filter(cancelled=False)
+    notify = RequestStatus.objects.filter(confirmed=False).filter(
+        cancelled=False
+    )
     if notify:
         number_request = 1
     else:
@@ -209,7 +212,9 @@ def list_request(request):
             request_status = "Cancelled"
         value["request_status"] = request_status
         final_request_list.append(value)
-    return render(request, "catalog/list_request.html", {"list": final_request_list})
+    return render(
+        request, "catalog/list_request.html", {"list": final_request_list}
+    )
 
 
 @login_required
@@ -225,9 +230,15 @@ def view_request(request):
     previous_total = ChangeRequest.objects.values("previous_total").filter(
         id=request_id
     )[0]
-    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[0]
-    description = ChangeRequest.objects.values("description").filter(id=request_id)[0]
-    initiator = ChangeRequest.objects.values("initiator").filter(id=request_id)[0]
+    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[
+        0
+    ]
+    description = ChangeRequest.objects.values("description").filter(
+        id=request_id
+    )[0]
+    initiator = ChangeRequest.objects.values("initiator").filter(id=request_id)[
+        0
+    ]
     initiation_date = ChangeRequest.objects.values("initiation_date").filter(
         id=request_id
     )[0]
@@ -240,15 +251,19 @@ def view_request(request):
         .filter(cancelled=False)
     ):
         request_status = "Waiting"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(confirmed=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        confirmed=True
+    ):
         request_status = "Confirmed"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(cancelled=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        cancelled=True
+    ):
         request_status = "Cancelled"
     try:
-        request_response = RequestStatus.objects.values("request_response").filter(
-            change_request=request_id
-        )[0]
-    except:
+        request_response = RequestStatus.objects.values(
+            "request_response"
+        ).filter(change_request=request_id)[0]
+    except BaseException:
         pass
     return render(
         request,
@@ -278,15 +293,21 @@ def accept_request(request):
     """
     request_id = request.GET["id"]
     today = datetime.now().date()
-    user = User.objects.values("first_name", "last_name").filter(id=request.user.id)[0]
+    user = User.objects.values("first_name", "last_name").filter(
+        id=request.user.id
+    )[0]
     RequestStatus.objects.filter(change_request=request_id).update(
         confirmed=True, cancelled=False, request_response=today
     )
     previous_total = ChangeRequest.objects.values("previous_total").filter(
         id=request_id
     )[0]
-    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[0]
-    description = ChangeRequest.objects.values("description").filter(id=request_id)[0]
+    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[
+        0
+    ]
+    description = ChangeRequest.objects.values("description").filter(
+        id=request_id
+    )[0]
     surcharge_diff = RequestSurchargeChange.objects.values(
         "surcharge__surcharge__tax_name", "previous_value", "new_value"
     ).filter(change_request=request_id)
@@ -296,15 +317,21 @@ def accept_request(request):
         .filter(cancelled=False)
     ):
         request_status = "Waiting"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(confirmed=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        confirmed=True
+    ):
         request_status = "Confirmed"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(cancelled=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        cancelled=True
+    ):
         request_status = "Cancelled"
     change_request_obj = ChangeRequest.objects.values(
         "new_total", "purchase_order_of_session", "session_id"
     ).get(id=request_id)
     voucherid = VoucherId.objects.values("purchase_order").filter(
-        purchase_order_of_session=change_request_obj["purchase_order_of_session"],
+        purchase_order_of_session=change_request_obj[
+            "purchase_order_of_session"
+        ],
         session_id=change_request_obj["session_id"],
     )[0]
     Bill.objects.filter(purchase_order=voucherid["purchase_order"]).update(
@@ -350,15 +377,21 @@ def reject_request(request):
     """
     request_id = request.GET["id"]
     today = datetime.now().date()
-    user = User.objects.values("first_name", "last_name").filter(id=request.user.id)[0]
+    user = User.objects.values("first_name", "last_name").filter(
+        id=request.user.id
+    )[0]
     RequestStatus.objects.filter(change_request=request_id).update(
         cancelled=True, confirmed=False, request_response=today
     )
     previous_total = ChangeRequest.objects.values("previous_total").filter(
         id=request_id
     )[0]
-    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[0]
-    description = ChangeRequest.objects.values("description").filter(id=request_id)[0]
+    new_total = ChangeRequest.objects.values("new_total").filter(id=request_id)[
+        0
+    ]
+    description = ChangeRequest.objects.values("description").filter(
+        id=request_id
+    )[0]
     surcharge_diff = RequestSurchargeChange.objects.values(
         "surcharge__surcharge__tax_name", "previous_value", "new_value"
     ).filter(change_request=request_id)
@@ -368,15 +401,21 @@ def reject_request(request):
         .filter(cancelled=False)
     ):
         request_status = "Waiting"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(confirmed=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        confirmed=True
+    ):
         request_status = "Confirmed"
-    elif RequestStatus.objects.filter(change_request=request_id).filter(cancelled=True):
+    elif RequestStatus.objects.filter(change_request=request_id).filter(
+        cancelled=True
+    ):
         request_status = "Cancelled"
     change_request_obj = ChangeRequest.objects.values(
         "previous_total", "purchase_order_of_session", "session_id"
     ).get(id=request_id)
     voucherid = VoucherId.objects.values("purchase_order").filter(
-        purchase_order_of_session=change_request_obj["purchase_order_of_session"],
+        purchase_order_of_session=change_request_obj[
+            "purchase_order_of_session"
+        ],
         session_id=change_request_obj["session_id"],
     )[0]
     Bill.objects.filter(purchase_order=voucherid["purchase_order"]).update(

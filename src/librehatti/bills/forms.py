@@ -1,18 +1,10 @@
-from django import forms
-
-from librehatti.bills.models import *
-
-from librehatti.catalog.models import ModeOfPayment, Category, Product
-from librehatti.catalog.models import PurchaseOrder
-
-import itertools
+# -*- coding: utf-8 -*-
 
 from ajax_select import make_ajax_field
-
-from librehatti.config import _PARENT_CATEGORY
-from librehatti.config import _SUB_CATEGORY
-from librehatti.config import _ITEM
-from librehatti.config import _TYPE
+from django import forms
+from librehatti.bills.models import NoteLine, QuotedOrder
+from librehatti.catalog.models import Category, Product
+from librehatti.config import _ITEM, _PARENT_CATEGORY, _SUB_CATEGORY, _TYPE
 
 
 class BuyerForm(forms.ModelForm):
@@ -32,7 +24,8 @@ class BuyerForm(forms.ModelForm):
 
 class ItemSelectForm(forms.ModelForm):
     """
-    This form lets user to select item after categories are filtered in dropdown.
+    This form lets user to select item after categories are
+    filtered in dropdown.
     """
 
     class Media:
@@ -40,15 +33,15 @@ class ItemSelectForm(forms.ModelForm):
 
     try:
         parent_category = forms.ModelChoiceField(
-            queryset=Category.objects.filter(parent__parent__isnull=True).filter(
-                parent__isnull=False
-            ),
+            queryset=Category.objects.filter(
+                parent__parent__isnull=True
+            ).filter(parent__isnull=False),
             label=_PARENT_CATEGORY,
         )
         sub_category = forms.ModelChoiceField(
             queryset=Category.objects.all(), label=_SUB_CATEGORY
         )
-    except:
+    except BaseException:
         pass
 
     item = forms.ModelChoiceField(queryset=Product.objects.all(), label=_ITEM)
@@ -64,10 +57,14 @@ class ItemSelectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ItemSelectForm, self).__init__(*args, **kwargs)
         self.fields["type"].widget.attrs = {"class": "type"}
-        self.fields["parent_category"].widget.attrs = {"class": "parent_category"}
+        self.fields["parent_category"].widget.attrs = {
+            "class": "parent_category"
+        }
         self.fields["sub_category"].widget.attrs = {"class": "sub_category"}
         self.fields["item"].widget.attrs = {"class": "item"}
-        self.fields["price_per_unit"].widget.attrs = {"class": "quoted_price_per_unit"}
+        self.fields["price_per_unit"].widget.attrs = {
+            "class": "quoted_price_per_unit"
+        }
 
 
 class SelectNoteForm(forms.Form):

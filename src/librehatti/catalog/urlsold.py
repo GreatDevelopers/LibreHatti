@@ -1,16 +1,13 @@
+# -*- coding: utf-8 -*-
 """
 urls of catalog are..
 """
 # from django.urls import url, patterns
 from django.urls import re_path
-from . import views as catalog_views
-from django.views.generic import TemplateView
-from . import request_change
 
-"""
-urls showing the list of item purchased and redirects to page of adding
-new categories of product
-"""
+from . import request_change, views as catalog_views
+
+
 urlpatterns = [
     re_path(r"^$", catalog_views.index),
     re_path(r"^select_sub_category/", catalog_views.select_sub_category),
@@ -23,13 +20,17 @@ urlpatterns = [
     re_path(r"^change_request/", catalog_views.change_request),
     re_path(r"^price_per_unit/", catalog_views.price_per_unit),
     re_path(r"^select_type/", catalog_views.select_type),
-    re_path(r"^nonpaymentorderofsession/", catalog_views.nonpaymentorderofsession),
+    re_path(
+        r"^nonpaymentorderofsession/", catalog_views.nonpaymentorderofsession
+    ),
     re_path(r"^nonpaymentordersuccess/", catalog_views.nonpaymentordersuccess),
 ]
 
 
 urlpatterns += [
-    re_path(r"^request_save/", request_change.request_save, name="request_save"),
+    re_path(
+        r"^request_save/", request_change.request_save, name="request_save"
+    ),
     re_path(r"^list_requests/", request_change.list_request),
     re_path(r"^view_request/", request_change.view_request),
     re_path(r"^accept_request/", request_change.accept_request),

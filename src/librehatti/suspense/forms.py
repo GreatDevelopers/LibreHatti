@@ -1,23 +1,22 @@
-from django.forms import ModelForm, TextInput
-from . import models
-
-# from librehatti.suspense.models import SuspenseClearance
-from .models import SuspenseClearance
-from .models import TaDa
-from .models import Staff
-from .models import SuspenseOrder
-from .models import QuotedSuspenseOrder
-from .models import CarTaxiAdvance
-
-from librehatti.catalog.models import Category
+# -*- coding: utf-8 -*-
+import datetime
 
 from django import forms
+from django.forms import ModelForm
+from librehatti.catalog.models import Category
+from librehatti.suspense.models import FinancialSession, Vehicle
 
-from librehatti.suspense.models import FinancialSession
-from librehatti.suspense.models import VoucherId
-from librehatti.suspense.models import Vehicle
+from .models import (
+    CarTaxiAdvance,
+    QuotedSuspenseOrder,
+    Staff,
+    SuspenseClearance,
+    SuspenseOrder,
+    TaDa,
+)
 
-import datetime
+
+# from librehatti.suspense.models import SuspenseClearance
 
 
 class Clearance_form(ModelForm):
@@ -31,17 +30,28 @@ class Clearance_form(ModelForm):
     class Meta:
         model = SuspenseClearance
         exclude = ("work_charge",)
-        widgets = {"session": forms.HiddenInput(), "voucher_no": forms.HiddenInput()}
+        widgets = {
+            "session": forms.HiddenInput(),
+            "voucher_no": forms.HiddenInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(Clearance_form, self).__init__(*args, **kwargs)
         self.fields["voucher_no"].widget.attrs = {"class": "form-control"}
         self.fields["car_taxi_charge"].widget.attrs = {"class": "form-control"}
         self.fields["labour_charge"].widget.attrs = {"class": "form-control"}
-        self.fields["boring_charge_external"].widget.attrs = {"class": "form-control"}
-        self.fields["boring_charge_internal"].widget.attrs = {"class": "form-control"}
-        self.fields["lab_testing_staff"].widget.attrs = {"class": "form-control"}
-        self.fields["field_testing_staff"].widget.attrs = {"class": "form-control"}
+        self.fields["boring_charge_external"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["boring_charge_internal"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["lab_testing_staff"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["field_testing_staff"].widget.attrs = {
+            "class": "form-control"
+        }
         self.fields["test_date"].widget.attrs = {"class": "form-control"}
         self.fields["clear_date"].widget.attrs = {"class": "form-control"}
         self.fields["session"].widget.attrs = {"class": "form-control"}
@@ -80,17 +90,32 @@ class TaDaForm(ModelForm):
 
     class Meta:
         model = TaDa
-        exclude = ("date_of_generation", "tada_amount", "tada_amount_without_tax")
-        widgets = {"session": forms.HiddenInput(), "voucher_no": forms.HiddenInput()}
+        exclude = (
+            "date_of_generation",
+            "tada_amount",
+            "tada_amount_without_tax",
+        )
+        widgets = {
+            "session": forms.HiddenInput(),
+            "voucher_no": forms.HiddenInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(TaDaForm, self).__init__(*args, **kwargs)
         self.fields["voucher_no"].widget.attrs = {"class": "form-control"}
         self.fields["session"].widget.attrs = {"class": "form-control"}
-        self.fields["departure_time_from_tcc"].widget.attrs = {"class": "form-control"}
-        self.fields["arrival_time_at_site"].widget.attrs = {"class": "form-control"}
-        self.fields["departure_time_from_site"].widget.attrs = {"class": "form-control"}
-        self.fields["arrival_time_at_tcc"].widget.attrs = {"class": "form-control"}
+        self.fields["departure_time_from_tcc"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["arrival_time_at_site"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["departure_time_from_site"].widget.attrs = {
+            "class": "form-control"
+        }
+        self.fields["arrival_time_at_tcc"].widget.attrs = {
+            "class": "form-control"
+        }
         self.fields["start_test_date"].widget.attrs = {"class": "form-control"}
         self.fields["end_test_date"].widget.attrs = {"class": "form-control"}
         self.fields["source_site"].widget.attrs = {"class": "form-control"}
@@ -111,7 +136,7 @@ class StaffForm(forms.ModelForm):
         lab = forms.ModelChoiceField(
             queryset=Category.objects.filter(parent__isnull=True)
         )
-    except:
+    except BaseException:
         pass
 
 
@@ -148,7 +173,9 @@ class TransportForm1(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(TransportForm1, self).__init__(*args, **kwargs)
-        self.fields["Date_of_generation"].widget.attrs = {"class": "form-control"}
+        self.fields["Date_of_generation"].widget.attrs = {
+            "class": "form-control"
+        }
         self.fields["kilometer"].widget.attrs = {"class": "form-control"}
         self.fields["date"].widget.attrs = {"class": "form-control"}
         self.fields["Vehicle"].widget.attrs = {
@@ -167,7 +194,10 @@ class CarTaxiAdvance_form(ModelForm):
     class Meta:
         model = CarTaxiAdvance
         exclude = ("balance",)
-        widgets = {"session": forms.HiddenInput(), "voucher_no": forms.HiddenInput()}
+        widgets = {
+            "session": forms.HiddenInput(),
+            "voucher_no": forms.HiddenInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(CarTaxiAdvance_form, self).__init__(*args, **kwargs)

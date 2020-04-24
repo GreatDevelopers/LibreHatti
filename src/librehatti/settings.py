@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 # from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
-from librehatti.config import _SENDER_EMAIL
-from librehatti.config import _PASSWORD
+import os
+
+from librehatti.config import _PASSWORD, _SENDER_EMAIL
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -67,7 +69,16 @@ STATICFILES_FINDERS = (
 #    'django.core.context_processors.request',
 # )
 
-# TEMPLATE_CONTEXT_PROCESSORS = ('django.contrib.auth.context_processors.auth', 'django.core.context_processors.debug', 'django.core.context_processors.i18n', 'django.core.context_processors.media', 'django.core.context_processors.static', 'django.core.context_processors.tz', 'django.contrib.messages.context_processors.messages', 'django.core.context_processors.request')
+# TEMPLATE_CONTEXT_PROCESSORS = (
+# 'django.contrib.auth.context_processors.auth',
+# 'django.core.context_processors.debug',
+# 'django.core.context_processors.i18n',
+# 'django.core.context_processors.media',
+# 'django.core.context_processors.static',
+# 'django.core.context_processors.tz',
+# 'django.contrib.messages.context_processors.messages',
+# 'django.core.context_processors.request'
+# )
 
 SECRET_KEY = "v5j3-ny)7zlk3wmqyg298#re3#8-v_v6+@9635h0-x9zak+8t*"
 
@@ -76,7 +87,6 @@ SECRET_KEY = "v5j3-ny)7zlk3wmqyg298#re3#8-v_v6+@9635h0-x9zak+8t*"
 #    'django.template.loaders.app_directories.Loader',
 # )
 
-"""The MIDDLEWARE_CLASSES changed to MIDDLEWARE in django2.0"""
 # MIDDLEWARE_CLASSES = (
 MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
@@ -151,7 +161,9 @@ LOGIN_URL = "admin:login"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "filters": {
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}
+    },
     "handlers": {
         "mail_admins": {
             "level": "ERROR",

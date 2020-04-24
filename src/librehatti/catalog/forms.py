@@ -1,25 +1,18 @@
+# -*- coding: utf-8 -*-
 """
 Forms of catalog are ..
 """
-from django import forms
-
-from librehatti.catalog.models import Category
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import PurchaseOrder, ModeOfPayment
-from librehatti.catalog.models import TaxesApplied
-from librehatti.catalog.models import SpecialCategories
-
-from librehatti.voucher.models import FinancialSession
-
-import itertools
 
 from ajax_select import make_ajax_field
-
-from librehatti.config import _PARENT_CATEGORY
-from librehatti.config import _SUB_CATEGORY
-from librehatti.config import _ITEM
-from librehatti.config import _TYPE
+from django import forms
+from librehatti.catalog.models import (
+    Category,
+    Product,
+    PurchaseOrder,
+    SpecialCategories,
+)
+from librehatti.config import _ITEM, _PARENT_CATEGORY, _SUB_CATEGORY, _TYPE
+from librehatti.voucher.models import FinancialSession
 
 
 class AddCategory(forms.Form):
@@ -42,15 +35,15 @@ class ItemSelectForm(forms.ModelForm):
 
     try:
         parent_category = forms.ModelChoiceField(
-            queryset=Category.objects.filter(parent__parent__isnull=True).filter(
-                parent__isnull=False
-            ),
+            queryset=Category.objects.filter(
+                parent__parent__isnull=True
+            ).filter(parent__isnull=False),
             label=_PARENT_CATEGORY,
         )
         sub_category = forms.ModelChoiceField(
             queryset=Category.objects.all(), label=_SUB_CATEGORY
         )
-    except:
+    except BaseException:
         pass
 
     item = forms.ModelChoiceField(queryset=Product.objects.all(), label=_ITEM)
@@ -66,7 +59,9 @@ class ItemSelectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ItemSelectForm, self).__init__(*args, **kwargs)
         self.fields["type"].widget.attrs = {"class": "type"}
-        self.fields["parent_category"].widget.attrs = {"class": "parent_category"}
+        self.fields["parent_category"].widget.attrs = {
+            "class": "parent_category"
+        }
         self.fields["sub_category"].widget.attrs = {"class": "sub_category"}
         self.fields["item"].widget.attrs = {"class": "item"}
         self.fields["price_per_unit"].widget.attrs = {"class": "price_per_unit"}
@@ -90,7 +85,8 @@ class BuyerForm(forms.ModelForm):
 
 class ChangeRequestForm(forms.Form):
     """
-    This form enables the user to select a purchase order to request a change in the Bill Amount
+    This form enables the user to select a purchase order to request
+    a change in the Bill Amount
     """
 
     session = forms.ModelChoiceField(queryset=FinancialSession.objects.all())

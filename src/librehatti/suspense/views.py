@@ -1,58 +1,54 @@
-from django.shortcuts import render
-
-from django.db.models import Sum, Max
-
-from .models import SuspenseClearance
-from .models import TaDa, TaDa_Tax_Detail
-
-from django.http import HttpResponseRedirect, HttpResponse
-
-from django.urls import reverse
-
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import PurchaseOrder
-from librehatti.catalog.models import PurchasedItem
-from librehatti.catalog.models import Surcharge
-from librehatti.catalog.models import HeaderFooter
-from librehatti.catalog.models import SpecialCategories
-from librehatti.catalog.request_change import request_notify
-
-from librehatti.suspense.models import SuspenseClearance
-from librehatti.suspense.models import SuspenseOrder
-from librehatti.suspense.models import Transport
-from librehatti.suspense.models import QuotedSuspenseOrder
-from librehatti.suspense.models import Vehicle
-from librehatti.suspense.models import Staff, CarTaxiAdvance
-from librehatti.suspense.models import TransportBillOfSession
-from librehatti.suspense.models import SuspenseClearedRegister
-from librehatti.suspense.forms import Clearance_form
-from librehatti.suspense.forms import SuspenseForm
-from librehatti.suspense.forms import QuotedSuspenseForm
-from librehatti.suspense.forms import TaDaForm
-from librehatti.suspense.forms import TaDaSearch
-from librehatti.suspense.forms import SessionSelectForm
-from librehatti.suspense.forms import TransportForm1
-from librehatti.suspense.forms import CarTaxiAdvance_form
-
-from librehatti.prints.helper import num2eng
-
-from librehatti.bills.models import QuotedOrder
-from librehatti.bills.models import QuotedItem
-
-from librehatti.voucher.models import VoucherId, Distribution
-from librehatti.voucher.models import FinancialSession, CalculateDistribution
-from librehatti.voucher.models import VoucherTotal
-
-from librehatti.reports.forms import DateRangeSelectionForm
-
-from django.contrib.auth.decorators import login_required
+# -*- coding: utf-8 -*-
+import json
+from datetime import datetime
 
 import simplejson
-import json
-from datetime import date, datetime
-
-from django.template.loader import get_template
+from django.contrib.auth.decorators import login_required
+from django.db.models import Max, Sum
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.template import Context
+from django.template.loader import get_template
+from django.urls import reverse
+from librehatti.bills.models import QuotedItem, QuotedOrder
+from librehatti.catalog.models import (
+    HeaderFooter,
+    PurchaseOrder,
+    PurchasedItem,
+    SpecialCategories,
+    Surcharge,
+)
+from librehatti.catalog.request_change import request_notify
+from librehatti.prints.helper import num2eng
+from librehatti.reports.forms import DateRangeSelectionForm
+from librehatti.suspense.forms import (
+    CarTaxiAdvance_form,
+    Clearance_form,
+    SessionSelectForm,
+    SuspenseForm,
+    TaDaForm,
+    TransportForm1,
+)
+from librehatti.suspense.models import (
+    CarTaxiAdvance,
+    QuotedSuspenseOrder,
+    Staff,
+    SuspenseClearance,
+    SuspenseClearedRegister,
+    SuspenseOrder,
+    Transport,
+    TransportBillOfSession,
+    Vehicle,
+)
+from librehatti.voucher.models import (
+    CalculateDistribution,
+    Distribution,
+    FinancialSession,
+    VoucherId,
+    VoucherTotal,
+)
+
+from .models import TaDa, TaDa_Tax_Detail
 
 
 @login_required
@@ -82,17 +78,19 @@ def add_distance(request):
         specialcategories = SpecialCategories.objects.values("voucher").filter(
             category=first_item["item__category__id"]
         )[0]
-        if specialcategories["voucher"] == False:
+        if not specialcategories["voucher"]:
             generate_voucher = 0
     for id in range(0, 10):
         try:
             items.append(old_post["purchaseditem_set-" + str(id) + "-item"])
-        except:
+        except BaseException:
             pass
     for item in items:
         if item:
             parents.append(
-                PurchasedItem.objects.values("item__category__parent__name", "id")
+                PurchasedItem.objects.values(
+                    "item__category__parent__name", "id"
+                )
                 .filter(item=item)
                 .filter(purchase_order=purchase_order_id)
             )
@@ -109,7 +107,7 @@ def add_distance(request):
                     or temp_val[1].upper() == " FIELD WORK"
                 ):
                     field_work.append(key)
-            except:
+            except BaseException:
                 pass
     if field_work and generate_voucher == 1:
         if request.method == "POST":
@@ -250,7 +248,11 @@ def clearance_search(request):
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session"
                 request_status = request_notify()
-                temp = {"form": form, "message": errors, "request": request_status}
+                temp = {
+                    "form": form,
+                    "message": errors,
+                    "request": request_status,
+                }
                 return render(request, "suspense/suspense_first.html", temp)
         else:
             form = SessionSelectForm(request.POST)
@@ -298,7 +300,7 @@ def clearance_result(request):
             financialsession = FinancialSession.objects.values("id").get(
                 session_start_date=start_date, session_end_date=end_date
             )
-            suspense_object = SuspenseOrder.objects.filter(
+            SuspenseOrder.objects.filter(
                 voucher=voucher_no, session_id=session
             ).update(is_cleared=0)
             try:
@@ -320,7 +322,7 @@ def clearance_result(request):
                     test_date=test_date,
                     clear_date=clear_date,
                 )
-            except:
+            except BaseException:
                 obj = SuspenseClearance(
                     session=session,
                     voucher_no=voucher_no,
@@ -396,7 +398,7 @@ def with_transport(request):
             voucher_no=number, session=financialsession["id"]
         )
         transport_total = transport["total"]
-    except:
+    except BaseException:
         transport_total = 0
 
     tada = TaDa.objects.values_list("tada_amount", flat=True).filter(
@@ -429,9 +431,9 @@ def with_transport(request):
     if lab_staff_list[0]:
         for lab_staff_value in lab_staff_list:
             lab_temp = []
-            lab_staff_obj = Staff.objects.values("name", "position__position").filter(
-                code=lab_staff_value
-            )[0]
+            lab_staff_obj = Staff.objects.values(
+                "name", "position__position"
+            ).filter(code=lab_staff_value)[0]
             lab_temp.append(lab_staff_obj["name"])
             lab_temp.append(lab_staff_obj["position__position"])
             lab_staff_name_list.append(lab_temp)
@@ -440,9 +442,9 @@ def with_transport(request):
     if field_staff_list[0]:
         for field_staff_value in field_staff_list:
             field_temp = []
-            field_staff_obj = Staff.objects.values("name", "position__position").filter(
-                code=field_staff_value
-            )[0]
+            field_staff_obj = Staff.objects.values(
+                "name", "position__position"
+            ).filter(code=field_staff_value)[0]
             field_temp.append(field_staff_obj["name"])
             field_temp.append(field_staff_obj["position__position"])
             field_staff_name_list.append(field_temp)
@@ -466,7 +468,9 @@ def with_transport(request):
         "purchase_order__buyer__customer__title",
         "purchased_item__item__category__name",
     ).filter(voucher_no=number, session=financialsession["id"])[0]
-    distribution = Distribution.objects.values("name").get(ratio=voucherid["ratio"])
+    distribution = Distribution.objects.values("name").get(
+        ratio=voucherid["ratio"]
+    )
     calculate_distribution = CalculateDistribution.objects.values(
         "college_income_calculated",
         "admin_charges_calculated",
@@ -535,14 +539,14 @@ def other_charges(request):
     session = request.GET["session"]
     financialsession = FinancialSession.objects.values("id").get(id=session)
     try:
-        transport = Transport.objects.values("id", "date_of_generation", "total").get(
-            voucher_no=number, session=financialsession["id"]
-        )
+        transport = Transport.objects.values(
+            "id", "date_of_generation", "total"
+        ).get(voucher_no=number, session=financialsession["id"])
         transport_total = transport["total"]
         transportbillno = TransportBillOfSession.objects.values(
             "transportbillofsession"
         ).get(transport__voucher_no=number, transport__session=session)
-    except:
+    except BaseException:
         transport_total = 0
         transport = 0
         transportbillno = 0
@@ -592,10 +596,14 @@ def other_charges(request):
         car_taxi_advance = CarTaxiAdvance.objects.values(
             "spent", "advance", "balance", "receipt_no", "receipt_session"
         ).get(voucher_no=number, session=session)
-        receipt_dated = VoucherId.objects.values("purchase_order__date_time").filter(
+        receipt_dated = VoucherId.objects.values(
+            "purchase_order__date_time"
+        ).filter(
             receipt_no_of_session=car_taxi_advance["receipt_no"],
             session_id=car_taxi_advance["receipt_session"],
-        )[0]
+        )[
+            0
+        ]
         return render(
             request,
             "suspense/othercharge.html",
@@ -681,7 +689,6 @@ def quoted_add_distance(request):
     items = []
     parents = []
     field_work = []
-    suspense = 0
     generate_voucher = 1
     first_item = QuotedItem.objects.values("item__category__id").filter(
         quoted_order=quoted_order_id
@@ -693,12 +700,12 @@ def quoted_add_distance(request):
         specialcategories = SpecialCategories.objects.values("voucher").filter(
             category=first_item["item__category__id"]
         )[0]
-        if specialcategories["voucher"] == False:
+        if not specialcategories["voucher"]:
             generate_voucher = 0
     for id in range(0, 10):
         try:
             items.append(old_post["quoteditem_set-" + str(id) + "-item"])
-        except:
+        except BaseException:
             pass
     for item in items:
         if item:
@@ -749,7 +756,7 @@ def quoted_save_distance(request):
         suspense = QuotedSuspenseOrder.objects.get(quoted_order=quoted_order_id)
         suspense.distance_estimated = distance
         suspense.save()
-    except:
+    except BaseException:
         suspense = QuotedSuspenseOrder(
             quoted_order=quoted_order, distance_estimated=distance
         )
@@ -783,7 +790,7 @@ def save_distance(request):
         )
         suspense.distance_estimated = distance
         suspense.save()
-    except:
+    except BaseException:
         suspense = SuspenseOrder(
             voucher=voucher_no,
             purchase_order=purchase_order,
@@ -855,7 +862,11 @@ def sessionselect(request):
                 form = SessionSelectForm()
                 request_status = request_notify()
                 errors = "No such voucher number in selected session"
-                temp = {"SelectForm": form, "errors": errors, "request": request_status}
+                temp = {
+                    "SelectForm": form,
+                    "errors": errors,
+                    "request": request_status,
+                }
                 return render(request, "voucher/sessionselect.html", temp)
         else:
             form = SessionSelectForm(request.POST)
@@ -879,7 +890,7 @@ def transportbill(request):
     if request.method == "POST":
         form = TransportForm1(request.POST)
         if form.is_valid():
-            if not "session" in request.POST:
+            if "session" not in request.POST:
                 HttpResponseRedirect(reverse("suspense:sessionselect"))
             session = FinancialSession.objects.get(id=request.POST["session"])
             session_id = FinancialSession.objects.values("id").get(
@@ -888,19 +899,21 @@ def transportbill(request):
             voucher = request.POST["voucher"]
             date_of_generation = request.POST["Date_of_generation"]
             vehicle = Vehicle.objects.get(id=request.POST["Vehicle"])
-            kilometers_list = simplejson.dumps(request.POST.getlist("kilometer"))
+            kilometers_list = simplejson.dumps(
+                request.POST.getlist("kilometer")
+            )
             kilometers = json.loads(kilometers_list)
             dated = simplejson.dumps(request.POST.getlist("date"))
             date = json.loads(dated)
-            rate_object = Surcharge.objects.filter(tax_name="transportation").values(
-                "value"
-            )[0]
+            rate_object = Surcharge.objects.filter(
+                tax_name="transportation"
+            ).values("value")[0]
             rate = int(rate_object["value"])
             distance = 0
             for temp_var in kilometers:
                 distance = distance + int(temp_var)
             total = rate * distance
-            suspense_object = SuspenseOrder.objects.filter(
+            SuspenseOrder.objects.filter(
                 voucher=voucher, session_id=session
             ).update(is_cleared=0)
             try:
@@ -934,8 +947,10 @@ def transportbill(request):
                     transport_obj = Transport.objects.filter(
                         voucher_no=voucher, session=session
                     )[0]
-                    max_id = TransportBillOfSession.objects.all().aggregate(Max("id"))
-                    if max_id["id__max"] == None:
+                    max_id = TransportBillOfSession.objects.all().aggregate(
+                        Max("id")
+                    )
+                    if max_id["id__max"] is None:
                         temp_obj = TransportBillOfSession(
                             transport=transport_obj,
                             session=session,
@@ -943,16 +958,19 @@ def transportbill(request):
                         )
                         temp_obj.save()
                     else:
-                        transportbillofsession_obj = TransportBillOfSession.objects.values(
+                        transportbillofsession_obj = TransportBillOfSession.objects.values(  # noqa
                             "transportbillofsession", "session"
                         ).get(
                             id=max_id["id__max"]
                         )
-                        if transportbillofsession_obj["session"] == session_id["id"]:
+                        if (
+                            transportbillofsession_obj["session"]
+                            == session_id["id"]
+                        ):  # noqa
                             temp_obj = TransportBillOfSession(
                                 transport=transport_obj,
                                 session=session,
-                                transportbillofsession=transportbillofsession_obj[
+                                transportbillofsession=transportbillofsession_obj[  # noqa
                                     "transportbillofsession"
                                 ]
                                 + 1,
@@ -965,10 +983,12 @@ def transportbill(request):
                                 transportbillofsession=1,
                             )
                             temp_obj.save()
-            except:
+            except BaseException:
                 pass
             temp = list(
-                Transport.objects.filter(voucher_no=voucher, session=session).values()
+                Transport.objects.filter(
+                    voucher_no=voucher, session=session
+                ).values()
             )
             total_amount = (
                 Transport.objects.filter(voucher_no=voucher, session=session)
@@ -982,7 +1002,6 @@ def transportbill(request):
                 transport_total.append(cal_total)
             zip_data = list(zip(date, kilometers, transport_total))
             header = HeaderFooter.objects.values("header").get(is_active=True)
-            footer = HeaderFooter.objects.values("footer").get(is_active=True)
             request_status = request_notify()
             session_id = session.id
             return render(
@@ -1071,8 +1090,6 @@ def tada_result(request):
                 for tada_val in testing_staff_details:
                     tada_val["daily_ta_da"] = tada_val["daily_ta_da"] * days
                 list_staff.append(testing_staff_details)
-            header = HeaderFooter.objects.values("header").get(is_active=True)
-            footer = HeaderFooter.objects.values("footer").get(is_active=True)
             voucher_obj = (
                 VoucherId.objects.filter(session=session)
                 .filter(voucher_no=voucher)
@@ -1104,17 +1121,21 @@ def tada_result(request):
                 tax_amount = int(round(tax_amount))
                 tada_taxes.append((tax_name, tax_amount))
                 tada_total_with_tax += tax_amount
-            suspense_object = SuspenseOrder.objects.filter(
+            SuspenseOrder.objects.filter(
                 voucher=voucher, session_id=session
             ).update(is_cleared=0)
             object = list(
                 TaDa.objects.filter(
-                    session=session, voucher_no=voucher, start_test_date=start_test_date
+                    session=session,
+                    voucher_no=voucher,
+                    start_test_date=start_test_date,
                 ).values()
             )
             if object:
                 TaDa.objects.filter(
-                    session=session, voucher_no=voucher, start_test_date=start_test_date
+                    session=session,
+                    voucher_no=voucher,
+                    start_test_date=start_test_date,
                 ).update(
                     voucher_no=voucher,
                     session=session,
@@ -1131,7 +1152,9 @@ def tada_result(request):
                     testing_staff=testing_staff,
                 )
                 tada_id = TaDa.objects.get(
-                    session=session, voucher_no=voucher, start_test_date=start_test_date
+                    session=session,
+                    voucher_no=voucher,
+                    start_test_date=start_test_date,
                 ).id
                 tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
                 for tax_obj, tax in zip(tada_tax_detail, tada_taxes):
@@ -1180,13 +1203,13 @@ def tada_result(request):
             # tada_amount_in_words = tada_total
             tada_tax_detail_list = []
             tada_id = TaDa.objects.get(
-                session=session, voucher_no=voucher, start_test_date=start_test_date
+                session=session,
+                voucher_no=voucher,
+                start_test_date=start_test_date,
             ).id
             tada_tax_detail = TaDa_Tax_Detail.objects.filter(tada=tada_id)
             for i in tada_tax_detail:
                 tada_tax_detail_list.append((i.name, i.amount))
-            header = HeaderFooter.objects.values("header").get(is_active=True)
-            footer = HeaderFooter.objects.values("footer").get(is_active=True)
             request_status = request_notify()
             return render(
                 request,
@@ -1209,7 +1232,8 @@ def tada_result(request):
             session = request.POST["session"]
             voucher = request.POST["voucher_no"]
             form = TaDaForm(
-                request.POST, initial={"voucher_no": voucher, "session": session}
+                request.POST,
+                initial={"voucher_no": voucher, "session": session},
             )
             message = "Fields are mandatory"
             tada = "enable"
@@ -1230,7 +1254,9 @@ def tada_result(request):
                 .values()
             )
             if object:
-                form = TaDaForm(initial={"voucher_no": voucher, "session": session})
+                form = TaDaForm(
+                    initial={"voucher_no": voucher, "session": session}
+                )
                 tada = "enable"
                 session_data = FinancialSession.objects.values(
                     "session_start_date", "session_end_date"
@@ -1278,7 +1304,9 @@ def tada_order_session(request):
                 .values()
             )
             if object:
-                form = TaDaForm(initial={"voucher_no": voucher, "session": session})
+                form = TaDaForm(
+                    initial={"voucher_no": voucher, "session": session}
+                )
                 tada = "enable"
                 session_data = FinancialSession.objects.values(
                     "session_start_date", "session_end_date"
@@ -1308,19 +1336,27 @@ def tada_order_session(request):
                 form = SessionSelectForm()
                 request_status = request_notify()
                 errors = "No such voucher number in selected session"
-                temp = {"form": form, "errors": errors, "request": request_status}
+                temp = {
+                    "form": form,
+                    "errors": errors,
+                    "request": request_status,
+                }
                 return render(request, "suspense/form.html", temp)
         else:
             form = SessionSelectForm(request.POST)
             request_status = request_notify()
             return render(
-                request, "suspense/form.html", {"form": form, "request": request_status}
+                request,
+                "suspense/form.html",
+                {"form": form, "request": request_status},
             )
     else:
         form = SessionSelectForm()
         request_status = request_notify()
         return render(
-            request, "suspense/form.html", {"form": form, "request": request_status}
+            request,
+            "suspense/form.html",
+            {"form": form, "request": request_status},
         )
 
 
@@ -1329,7 +1365,8 @@ def mark_clear(request):
     """
     This view is used to fetch and display the data required to mark the
     suspense order as cleared.
-    returns: render page with list of suspense voucher with their status and options.
+    returns: render page with list of suspense voucher with their status and
+    options.
     """
     if request.method == "POST":
         date_form = DateRangeSelectionForm(request.POST)
@@ -1347,7 +1384,9 @@ def mark_clear(request):
             list_details = []
             for suspense_var in suspense_obj:
                 SuspenseClearance_object = (
-                    SuspenseClearance.objects.filter(session=suspense_var["session_id"])
+                    SuspenseClearance.objects.filter(
+                        session=suspense_var["session_id"]
+                    )
                     .filter(voucher_no=suspense_var["voucher"])
                     .values(
                         "session",
@@ -1363,14 +1402,16 @@ def mark_clear(request):
             for temp_var in list_clearance:
                 for voucher_var in temp_var:
                     voucher_object = (
-                        VoucherId.objects.filter(voucher_no=voucher_var["voucher_no"])
+                        VoucherId.objects.filter(
+                            voucher_no=voucher_var["voucher_no"]
+                        )
                         .filter(session_id=voucher_var["session"])
                         .values(
                             "purchase_order__buyer__first_name",
                             "purchase_order__buyer__last_name",
-                            "purchase_order__buyer__customer__address__street_address",
-                            "purchase_order__buyer__customer__address__district",
-                            "purchase_order__buyer__customer__address__province",
+                            "purchase_order__buyer__customer__address__street_address",  # noqa
+                            "purchase_order__buyer__customer__address__district",  # noqa
+                            "purchase_order__buyer__customer__address__province",  # noqa
                         )
                     )
                     if voucher_object:
@@ -1413,14 +1454,14 @@ def mark_status(request):
         est_transport_total = (
             est_transport["distance_estimated"] * delivery_rate["value"]
         )
-    except:
+    except BaseException:
         est_transport_total = 0
     try:
         transport = Transport.objects.values("total").get(
             voucher_no=voucher, session_id=session
         )
         transport_total = transport["total"]
-    except:
+    except BaseException:
         transport_total = 0
     suspenseclearance = SuspenseClearance.objects.values(
         "labour_charge",
@@ -1442,7 +1483,7 @@ def mark_status(request):
         tada_amount = 0
         for value in tada:
             tada_amount = tada_amount + value
-    except:
+    except BaseException:
         tada_amount = 0
     calculate_distribution = VoucherTotal.objects.values("total").get(
         voucher_no=voucher, session_id=session
@@ -1457,38 +1498,49 @@ def mark_status(request):
         "admin_charges",
         "purchased_item__item__category__parent__name",
     ).filter(voucher_no=voucher, session_id=session)[0]
-    temp_val = voucherid["purchased_item__item__category__parent__name"].split(":")
+    temp_val = voucherid["purchased_item__item__category__parent__name"].split(
+        ":"
+    )
     try:
-        if temp_val[1].upper() == "FIELD WORK" or temp_val[1].upper() == " FIELD WORK":
+        if (
+            temp_val[1].upper() == "FIELD WORK"
+            or temp_val[1].upper() == " FIELD WORK"
+        ):
             work_charge = round((2 * distribution_total) / 100)
         else:
             work_charge = 0
-    except:
+    except BaseException:
         work_charge = 0
-    college_income = round((voucherid["college_income"] * distribution_total) / 100)
-    admin_charges = round((voucherid["admin_charges"] * distribution_total) / 100)
-    remain_cost = distribution_total - work_charge - college_income - admin_charges
+    college_income = round(
+        (voucherid["college_income"] * distribution_total) / 100
+    )
+    admin_charges = round(
+        (voucherid["admin_charges"] * distribution_total) / 100
+    )
+    remain_cost = (
+        distribution_total - work_charge - college_income - admin_charges
+    )
     split = voucherid["ratio"].split(":")
     consultancy_asset = round((remain_cost * int(split[0])) / 100)
     development_fund = round((remain_cost * int(split[1])) / 100)
     calculate_distribution_total = (
         college_income + admin_charges + consultancy_asset + development_fund
     )
-    CalculateDistribution.objects.filter(voucher_no=voucher, session_id=session).update(
+    CalculateDistribution.objects.filter(
+        voucher_no=voucher, session_id=session
+    ).update(
         college_income_calculated=college_income,
         admin_charges_calculated=admin_charges,
         consultancy_asset=consultancy_asset,
         development_fund=development_fund,
         total=calculate_distribution_total,
     )
-    SuspenseClearance.objects.filter(voucher_no=voucher, session_id=session).update(
-        work_charge=work_charge
-    )
-    suspense_order_obj = (
-        SuspenseOrder.objects.filter(voucher=voucher)
-        .filter(session_id=session)
-        .update(is_cleared="1")
-    )
+    SuspenseClearance.objects.filter(
+        voucher_no=voucher, session_id=session
+    ).update(work_charge=work_charge)
+    SuspenseOrder.objects.filter(voucher=voucher).filter(
+        session_id=session
+    ).update(is_cleared="1")
     if SuspenseClearedRegister.objects.filter(
         voucher_no=voucher, session=session
     ).exists():
@@ -1497,9 +1549,11 @@ def mark_status(request):
         financialsession = FinancialSession.objects.get(id=session)
         session_id = FinancialSession.objects.values("id").get(id=session)
         max_id = SuspenseClearedRegister.objects.all().aggregate(Max("id"))
-        if max_id["id__max"] == None:
+        if max_id["id__max"] is None:
             temp_obj = SuspenseClearedRegister(
-                suspenseclearednumber=1, session=financialsession, voucher_no=voucher
+                suspenseclearednumber=1,
+                session=financialsession,
+                voucher_no=voucher,
             )
             temp_obj.save()
         else:
@@ -1520,7 +1574,7 @@ def mark_status(request):
                 clearednumber = SuspenseClearedRegister.objects.filter(
                     session_id=session
                 ).aggregate(Max("suspenseclearednumber"))
-                if clearednumber["suspenseclearednumber__max"] == None:
+                if clearednumber["suspenseclearednumber__max"] is None:
                     temp_obj = SuspenseClearedRegister(
                         suspenseclearednumber=1,
                         session=financialsession,
@@ -1559,7 +1613,7 @@ def clearance_options(request):
     with_transport = 0
     try:
         Transport.objects.get(voucher_no=voucher_no, session_id=session_id)
-    except:
+    except BaseException:
         with_transport = 1
     details = PurchaseOrder.objects.values(
         "buyer__first_name",
@@ -1601,7 +1655,7 @@ def summary_page(request):
         tada_amount = 0
         for value in tada:
             tada_amount = tada_amount + value
-    except:
+    except BaseException:
         tada_amount = 0
     transport = (
         Transport.objects.values("rate", "total")
@@ -1636,9 +1690,9 @@ def transport_bill(request):
     if request.method == "POST":
         session = request.POST["session"]
         voucher = request.POST["voucher"]
-        bill_no = TransportBillOfSession.objects.values("transportbillofsession").get(
-            transport__voucher_no=voucher, transport__session=session
-        )
+        bill_no = TransportBillOfSession.objects.values(
+            "transportbillofsession"
+        ).get(transport__voucher_no=voucher, transport__session=session)
         transport_object = Transport.objects.filter(
             session_id=session, voucher_no=voucher
         ).values(
@@ -1668,7 +1722,6 @@ def transport_bill(request):
                 temp_value = temp_var.replace("u'", "")
                 temp_value = temp_value.replace("'", "")
                 list_of_date.append(temp_value)
-            distance = 0
             for temp_var in list_of_kilometer:
                 total = rate * int(temp_var)
                 total_list.append(int(total))
@@ -1711,7 +1764,9 @@ def tada_bill_list(request):
     session = request.POST["session"]
     voucher = request.POST["voucher"]
     tada = (
-        TaDa.objects.values("id", "tada_amount", "start_test_date", "end_test_date")
+        TaDa.objects.values(
+            "id", "tada_amount", "start_test_date", "end_test_date"
+        )
         .filter(voucher_no=voucher)
         .filter(session=session)
     )
@@ -1753,9 +1808,9 @@ def tada_bill(request):
         no_of_days = (end_test_date - start_test_date).days
         days = no_of_days + 1
     for testing_staff_var in testing_staff_list:
-        testing_staff_details = Staff.objects.filter(code=testing_staff_var).values(
-            "name", "daily_ta_da"
-        )
+        testing_staff_details = Staff.objects.filter(
+            code=testing_staff_var
+        ).values("name", "daily_ta_da")
         for tada_val in testing_staff_details:
             tada_val["daily_ta_da"] = tada_val["daily_ta_da"] * days
         list_staff.append(testing_staff_details)
@@ -1836,8 +1891,14 @@ def car_taxi_advance_form(request):
                 form = SessionSelectForm()
                 errors = "No such voucher number in selected session"
                 request_status = request_notify()
-                temp = {"form": form, "message": errors, "request": request_status}
-                return render(request, "suspense/car_taxi_advance_form.html", temp)
+                temp = {
+                    "form": form,
+                    "message": errors,
+                    "request": request_status,
+                }
+                return render(
+                    request, "suspense/car_taxi_advance_form.html", temp
+                )
         else:
             form = SessionSelectForm(request.POST)
             request_status = request_notify()

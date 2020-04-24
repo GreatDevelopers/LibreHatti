@@ -1,15 +1,13 @@
-from django.db.models import Q
-
-from django.utils.html import escape
-
-from django.contrib.auth.models import User
-
+# -*- coding: utf-8 -*-
 from ajax_select import LookupChannel
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 class BuyerLookup(LookupChannel):
     """
-    This class suggests user names (AJAX Effect) while filling client name for a purchase order
+    This class suggests user names (AJAX Effect) while filling client
+    name for a purchase order
     """
 
     model = User
@@ -49,8 +47,7 @@ class BuyerLookup(LookupChannel):
             "customer__telephone",
         ).filter(id=obj.id)[0]
         return (
-            "<b>Name or Title:</b> %s <br> <b>Company:</b> %s <br> <b>Address:</b> %s <br> %s <br> <b>GST No:</b> %s <br> <b>Phone:</b> %s \
-        <hr>"
+            "<b>Name or Title:</b> %s <br> <b>Company:</b> %s <br> <b>Address:</b> %s <br> %s <br> <b>GST No:</b> %s <br> <b>Phone:</b> %s <hr>"  # noqa
             % (
                 (
                     result["first_name"]

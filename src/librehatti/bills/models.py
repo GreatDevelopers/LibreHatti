@@ -1,25 +1,19 @@
-from django.db import models
-
-import useraccounts
-
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import ModeOfPayment
-from librehatti.catalog.models import Surcharge
-
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
-
-from librehatti.config import _BUYER
-from librehatti.config import _DELIVERY_ADDRESS
-from librehatti.config import _IS_DEBIT
-from librehatti.config import _PURCHASED_ITEMS
-from librehatti.config import _QTY
-from librehatti.config import _REFERENCE
-from librehatti.config import _REFERENCE_DATE
-
+from django.db import models
+from librehatti.catalog.models import Product, Surcharge
+from librehatti.config import (
+    _BUYER,
+    _DELIVERY_ADDRESS,
+    _IS_DEBIT,
+    _QTY,
+    _REFERENCE,
+    _REFERENCE_DATE,
+)
 from librehatti.voucher.models import FinancialSession
 
+
 # from django.core.urlresolvers import reverse
-from django.urls import reverse
 
 
 class NoteLine(models.Model):
@@ -42,7 +36,9 @@ class QuotedOrder(models.Model):
     Handles ORM of quoted order.
     """
 
-    buyer = models.ForeignKey(User, verbose_name=_BUYER, on_delete=models.CASCADE)
+    buyer = models.ForeignKey(
+        User, verbose_name=_BUYER, on_delete=models.CASCADE
+    )
     is_debit = models.BooleanField(default=False, verbose_name=_IS_DEBIT)
     reference = models.CharField(max_length=200, verbose_name=_REFERENCE)
     reference_date = models.DateField(verbose_name=_REFERENCE_DATE)

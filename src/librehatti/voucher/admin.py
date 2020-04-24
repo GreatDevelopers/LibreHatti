@@ -1,10 +1,13 @@
-from django.contrib import admin
-
-from librehatti.voucher.models import *
-
-from django.contrib.auth.admin import *
-
+# -*- coding: utf-8 -*-
+from django.contrib.auth.admin import admin
+from librehatti.catalog.models import FinancialSession
 from librehatti.voucher.forms import AssignDistributionForm
+from librehatti.voucher.models import (
+    CategoryDistributionType,
+    Distribution,
+    VoucherId,
+)
+
 
 admin.autodiscover()
 

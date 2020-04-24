@@ -1,14 +1,10 @@
+# -*- coding: utf-8 -*-
 """
 views for the useraccounts is described here
 """
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
-"""
-this function displays the register and login button for user
-"""
 
 
 def register(request):
@@ -18,7 +14,7 @@ def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            form.save()
             return HttpResponseRedirect("/catalog/")
     else:
         form = UserCreationForm()

@@ -1,29 +1,28 @@
+# -*- coding: utf-8 -*-
 """
 Models for the useraccounts are..
 """
-from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
 from librehatti.config import _COUNTRY
-
-"""
-describes the type of organisation where the user deals
-"""
 
 
 class OrganisationType(models.Model):
+    """
+    describes the type of organisation where the user deals
+    """
+
     type_desc = models.CharField(max_length=200)
 
     def __str__(self):
         return self.type_desc
 
 
-"""
-describes the address details of the admin organisation
-"""
-
-
 class Address(models.Model):
+    """
+    describes the address details of the admin organisation
+    """
+
     street_address = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
     pin = models.CharField(max_length=10, blank=True, null=True)
@@ -37,12 +36,11 @@ class Address(models.Model):
         return self.street_address + "," + self.district
 
 
-"""
-describes the details of the user's organisation
-"""
-
-
 class HattiUser(models.Model):
+    """
+    describes the details of the user's organisation
+    """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=500)
@@ -60,15 +58,16 @@ class HattiUser(models.Model):
         abstract = True
 
 
-"""
-This class inherits the details of HattiUser specifying the title of
-organisation and its type
-"""
-
-
 class AdminOrganisations(HattiUser):
+    """
+    This class inherits the details of HattiUser specifying the title of
+    organisation and its type
+    """
+
     title = models.CharField(max_length=200)
-    organisation_type = models.ForeignKey(OrganisationType, on_delete=models.CASCADE)
+    organisation_type = models.ForeignKey(
+        OrganisationType, on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name_plural = "Admin Organisations"
@@ -77,15 +76,14 @@ class AdminOrganisations(HattiUser):
         return self.title
 
 
-"""
-This class inherits the details of HattiUser whether customer is
-organisation type or individual thus customer will confirm the Is org
-checkbox and then specifying the type of oganisation and its company
-name
-"""
-
-
 class Customer(HattiUser):
+    """
+    This class inherits the details of HattiUser whether customer is
+    organisation type or individual thus customer will confirm the Is org
+    checkbox and then specifying the type of oganisation and its company
+    name
+    """
+
     title = models.CharField(max_length=200, blank=True, null=True)
     is_org = models.BooleanField(default=False)
     org_type = models.ForeignKey(OrganisationType, on_delete=models.CASCADE)

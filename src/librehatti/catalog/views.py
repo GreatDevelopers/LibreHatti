@@ -1,36 +1,30 @@
-from django.http import HttpResponse, HttpResponseRedirect
-
-from django.shortcuts import render
-
-from django.db.models import Sum, Max
-
-from librehatti.catalog.models import Category
-from librehatti.catalog.models import Product
-from librehatti.catalog.models import *
-from librehatti.catalog.forms import AddCategory
-from librehatti.catalog.forms import ItemSelectForm
-from librehatti.catalog.forms import ChangeRequestForm
-from librehatti.catalog.forms import ProductListForm
-from librehatti.catalog.models import HeaderFooter
-from librehatti.catalog.request_change import request_notify
-
-from librehatti.prints.helper import num2eng
-
-from librehatti.suspense.models import SuspenseOrder
-
-from librehatti.voucher.models import VoucherId
-from librehatti.voucher.models import CalculateDistribution
-from librehatti.voucher.models import CategoryDistributionType
-from librehatti.voucher.models import FinancialSession
-
-from django.urls import reverse_lazy
-
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-
+# -*- coding: utf-8 -*-
 import simplejson
-
-from django import forms
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Max, Sum
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from librehatti.catalog.forms import ChangeRequestForm, ProductListForm
+from librehatti.catalog.models import (
+    Category,
+    NonPaymentOrder,
+    NonPaymentOrderOfSession,
+    Product,
+    PurchaseOrder,
+    PurchasedItem,
+    SpecialCategories,
+    Surcharge,
+    TaxesApplied,
+)
+from librehatti.catalog.request_change import request_notify
+from librehatti.suspense.models import SuspenseOrder
+from librehatti.voucher.models import (
+    Bill,
+    CalculateDistribution,
+    FinancialSession,
+    VoucherId,
+)
 
 
 @login_required
@@ -96,13 +90,12 @@ def select_item(request):
     """
     cat_id = request.GET["cat_id"]
     try:
-        distrubtion = CategoryDistributionType.objects.get(category_id=cat_id)
         products = Product.objects.filter(category=cat_id)
         product_dict = {}
         for product in products:
             product_dict[product.id] = product.name
         return HttpResponse(simplejson.dumps(product_dict))
-    except:
+    except BaseException:
         return HttpResponse("0")
 
 
@@ -147,23 +140,27 @@ def bill_cal(request):
         specialcategories = SpecialCategories.objects.values("tax").filter(
             category=first_item["item__category__id"]
         )[0]
-        if specialcategories["tax"] == False:
+        if not specialcategories["tax"]:
             generate_tax = 0
     purchase_order = PurchaseOrder.objects.get(id=purchase_order_id)
-    purchase_order_obj = PurchaseOrder.objects.values("total_discount", "tds").get(
-        id=purchase_order_id
-    )
+    purchase_order_obj = PurchaseOrder.objects.values(
+        "total_discount", "tds"
+    ).get(id=purchase_order_id)
     purchase_item = PurchasedItem.objects.filter(
         purchase_order=purchase_order_id
     ).aggregate(Sum("price"))
     total = purchase_item["price__sum"]
     price_total = total - purchase_order_obj["total_discount"]
     totalplusdelivery = price_total
-    surcharge = Surcharge.objects.values("id", "value", "taxes_included", "tax_name")
-    delivery_rate = Surcharge.objects.values("value").filter(tax_name="Transportation")
-    distance = SuspenseOrder.objects.filter(purchase_order=purchase_order_id).aggregate(
-        Sum("distance_estimated")
+    surcharge = Surcharge.objects.values(
+        "id", "value", "taxes_included", "tax_name"
     )
+    delivery_rate = Surcharge.objects.values("value").filter(
+        tax_name="Transportation"
+    )
+    distance = SuspenseOrder.objects.filter(
+        purchase_order=purchase_order_id
+    ).aggregate(Sum("distance_estimated"))
     if distance["distance_estimated__sum"]:
         delivery_charges = (
             int(distance["distance_estimated__sum"]) * delivery_rate[0]["value"]
@@ -198,7 +195,9 @@ def bill_cal(request):
                     surcharge_value=value["value"],
                 )
                 taxes_applied.save()
-    taxes_applied_temp = TaxesApplied.objects.filter(purchase_order=purchase_order_id)
+    taxes_applied_temp = TaxesApplied.objects.filter(
+        purchase_order=purchase_order_id
+    )
     if taxes_applied_temp:
         taxes_applied_obj = TaxesApplied.objects.filter(
             purchase_order=purchase_order_id
@@ -239,16 +238,16 @@ def list_products(request):
         if form.is_valid():
             select_lab = request.POST["select_lab"]
             root_name = Category.objects.get(id=select_lab)
-            all_products = Product.objects.filter(category__parent__parent=select_lab)
             work_type = Category.objects.filter(parent=select_lab)
-            category = Category.objects.filter(parent__parent=select_lab)
             result = []
             for work in work_type:
                 temp = []
                 temp.append(work.name)
                 work_type_category = Category.objects.filter(parent=work.id)
                 temp.append(work_type_category)
-                products = Product.objects.filter(category__parent__parent=select_lab)
+                products = Product.objects.filter(
+                    category__parent__parent=select_lab
+                )
                 temp.append(products)
                 result.append(temp)
             return render(
@@ -257,20 +256,24 @@ def list_products(request):
                 {"result": result, "root_name": root_name},
             )
 
-            # all_products = Product.objects.filter(category__parent__parent=select_lab)
+            # all_products = Product.objects.filter(
+            # category__parent__parent=select_lab)
             # all_categories=Category.objects.filter().order_by('name')
             # products_dict = { }
             # for one_category in all_categories:
             #     if one_category.is_leaf_node():
             #         one_category_dict = {}
-            #         products_list = Product.objects.filter(category=one_category)
+            #         products_list = Product.objects.filter(
+            #         category=one_category)
             #         attributes_dict = { }
             #         for one_product in products_list:
-            #             attributes_list = Catalog.objects.filter(product = one_product)
+            #             attributes_list = Catalog.objects.filter(
+            #             product = one_product)
             #             attributes_dict[one_product] = attributes_list
             #         one_category_dict[one_category.name] = attributes_dict
             #         products_dict[one_category.id] = one_category_dict
-            # return render(request,'catalog/list_products.html',{'nodes':all_categories, \
+            # return render(request,'catalog/list_products.html',{'nodes
+            # ':all_categories, \
             #     'products_dict':products_dict})
     else:
         form = ProductListForm()
@@ -287,7 +290,6 @@ def previous_value(request):
     """
 
     """
-    old_post = request.session.get("old_post")
     purchase_order_id = request.session.get("purchase_order_id")
     Bill.objects.filter(purchase_order=purchase_order_id).delete()
     if SuspenseOrder.objects.filter(purchase_order=purchase_order_id):
@@ -345,7 +347,8 @@ def order_added_success(request):
 @login_required
 def change_request(request):
     """
-    This view enables the user to add a change request or view a change request put by him
+    This view enables the user to add a change request or view a change
+    request put by him
     Argument: Http Request
     Return: Render change_form.html
     """
@@ -360,11 +363,14 @@ def change_request(request):
         )
         if object:
             voucherid = VoucherId.objects.filter(
-                purchase_order_of_session=purchase_order_of_session, session_id=session
+                purchase_order_of_session=purchase_order_of_session,
+                session_id=session,
             ).values("purchase_order_id")
             for value in voucherid:
                 purchase_order = value["purchase_order_id"]
-            bill = Bill.objects.values("grand_total").get(purchase_order=purchase_order)
+            bill = Bill.objects.values("grand_total").get(
+                purchase_order=purchase_order
+            )
             surcharge = TaxesApplied.objects.values(
                 "surcharge__tax_name", "id", "tax"
             ).filter(purchase_order_id=purchase_order)
@@ -451,7 +457,7 @@ def nonpaymentorderofsession(request):
             "non_payment_order_of_session"
         ).get(non_payment_order=nonpaymentorder_id)
         non_pay_order_id = nonpayobject["non_payment_order_of_session"]
-    except:
+    except BaseException:
         non_pay_order = NonPaymentOrder.objects.values("date", "id").get(
             id=nonpaymentorder_id
         )
@@ -467,7 +473,7 @@ def nonpaymentorderofsession(request):
         session = FinancialSession.objects.get(id=session_id)
         max_id = NonPaymentOrderOfSession.objects.all().aggregate(Max("id"))
         non_pay_order_id = 0
-        if max_id["id__max"] == None:
+        if max_id["id__max"] is None:
             non_pay_order_id = 1
             obj = NonPaymentOrderOfSession(
                 non_payment_order=nonpaymentorderobj,
