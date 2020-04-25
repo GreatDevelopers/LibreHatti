@@ -5,6 +5,7 @@ from django import forms
 from librehatti.bills.models import NoteLine, QuotedOrder
 from librehatti.catalog.models import Category, Product
 from librehatti.config import ITEM, PARENT_CATEGORY, SUB_CATEGORY, TYPE
+from librehatti.constants import ITEM_SELECT_CHOICES
 
 
 class BuyerForm(forms.ModelForm):
@@ -42,16 +43,10 @@ class ItemSelectForm(forms.ModelForm):
             queryset=Category.objects.all(), label=SUB_CATEGORY
         )
     except BaseException:
-        pass
+        raise
 
     item = forms.ModelChoiceField(queryset=Product.objects.all(), label=ITEM)
-    CHOICES = (
-        ("", "---------"),
-        ("1", "Lab Work"),
-        ("2", "Field Work"),
-        ("3", "Other Services"),
-    )
-    type = forms.ChoiceField(choices=CHOICES, label=TYPE)
+    type = forms.ChoiceField(choices=ITEM_SELECT_CHOICES, label=TYPE)
     price_per_unit = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):

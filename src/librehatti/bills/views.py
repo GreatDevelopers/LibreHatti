@@ -26,7 +26,7 @@ def quoted_bill_cal(request):
     This view calculate taxes on quoted order, bill data
     and save those values in database.
     argument: Http request
-    returns: Redirects to select option page after calculatations.
+    returns: Redirects to select option page after calculations.
     """
     old_post = request.session.get("old_post")
     quoted_order_id = request.session.get("quoted_order_id")
@@ -116,7 +116,7 @@ def quoted_bill_cal(request):
 @login_required
 def quoted_order_added_success(request):
     """
-    View to hadle success of addition of quoted order.
+    View to handle success of addition of quoted order.
     argument: Http request
     returns: Render success page after adding quoted order.
     """

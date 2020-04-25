@@ -25,7 +25,7 @@ class NoteLine(models.Model):
     is_permanent = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s" % (self.note)
+        return "%s" % self.note
 
     class Meta:
         verbose_name_plural = "Quoted Order Note"
@@ -53,7 +53,7 @@ class QuotedOrder(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return "%s" % (self.id)
+        return "%s" % self.id
 
 
 class QuotedItem(models.Model):
@@ -74,7 +74,7 @@ class QuotedItem(models.Model):
             super(QuotedItem, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%s" % (self.item) + " - " "%s" % (self.quoted_order)
+        return "%s" % self.item + " - " "%s" % self.quoted_order
 
 
 class QuotedOrderofSession(models.Model):
@@ -99,7 +99,7 @@ class QuotedTaxesApplied(models.Model):
     tax = models.IntegerField()
 
     def __str__(self):
-        return "%s" % (self.surcharge)
+        return "%s" % self.surcharge
 
 
 class QuotedBill(models.Model):
