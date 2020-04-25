@@ -1,4 +1,5 @@
 django==2.2
+django-ajax-selects==1.9.1
 django-cors-headers
 djangorestframework
 git+https://github.com/jasvir99/django-suit.git@v2
