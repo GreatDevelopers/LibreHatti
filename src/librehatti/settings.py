@@ -20,11 +20,11 @@ MANAGERS = ADMINS
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "librehatti3",
+        "NAME": "librehatti",
         "USER": "root",
-        "PASSWORD": "J@1diamond",
-        "HOST": "localhost",
-        "PORT": "",
+        "PASSWORD": "libre@hatti",
+        "HOST": "db",
+        "PORT": "3306",
     }
 }
 
@@ -129,7 +129,7 @@ TEMPLATES = [
     }
 ]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -140,7 +140,9 @@ INSTALLED_APPS = (
     "mptt",
     "ajax_select",
     "django.contrib.admin",
+    #"librehatti.voucher",
     "librehatti.catalog",
+    #"librehatti.voucher",
     "useraccounts",
     "tinymce",
     #    'templates.admin',
@@ -151,7 +153,7 @@ INSTALLED_APPS = (
     "librehatti.voucher",
     "librehatti.programmeletter",
     "django.contrib.admindocs",
-)
+]
 
 
 ACCOUNT_ACTIVATION_DAYS = 7

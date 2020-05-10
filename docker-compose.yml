@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./data/:/var/lib/mysql/data
+    environment:
+       MYSQL_DATABASE: 'librehatti'
+       MYSQL_USER: 'root'
+       MYSQL_PASSWORD: 'libre@hatti'
+       MYSQL_ROOT_PASSWORD: 'libre@hatti'
+    command: echo "CREATE DATABASE IF NOT EXISTS librehatti; use librehatti; source /var/lib/mysql/data/librehatti.sql" | mysql -uroot -p
+ 
+  web:
+    restart: always
+    build: .
+    command: python src/manage.py runserver 0.0.0.0:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    links:
+      - db:db
+
+
