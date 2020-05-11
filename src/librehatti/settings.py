@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+import datetime
 import os
 
 from librehatti.config import PASSWORD, SENDER_EMAIL
@@ -89,6 +90,7 @@ SECRET_KEY = "v5j3-ny)7zlk3wmqyg298#re3#8-v_v6+@9635h0-x9zak+8t*"
 
 # MIDDLEWARE_CLASSES = (
 MIDDLEWARE = (
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -130,6 +132,8 @@ TEMPLATES = [
 ]
 
 INSTALLED_APPS = (
+    "djoser",
+    "rest_framework.authtoken",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -139,6 +143,8 @@ INSTALLED_APPS = (
     "suit",
     "mptt",
     "ajax_select",
+    "corsheaders",
+    "rest_framework",
     "django.contrib.admin",
     "librehatti.catalog",
     "useraccounts",
@@ -184,4 +190,22 @@ LOGGING = {
 AJAX_LOOKUP_CHANNELS = {
     "buyer": ("librehatti.catalog.lookups", "BuyerLookup"),
     "staff": ("librehatti.programmeletter.stafflookups", "StaffLookup"),
+}
+
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://localhost:8000"]
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ),
+}
+
+JWT_AUTH = {
+    "JWT_RESPONSE_PAYLOAD_HANDLER": "librehatti.utils.my_jwt_response_handler",
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=3600),
 }

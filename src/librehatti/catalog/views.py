@@ -25,6 +25,21 @@ from librehatti.voucher.models import (
     FinancialSession,
     VoucherId,
 )
+from rest_framework import viewsets
+from rest_framework.authentication import (
+    BasicAuthentication,
+    SessionAuthentication,
+)
+from rest_framework.permissions import IsAuthenticated
+
+from .serializers import FinancialSessionSerializer
+
+
+class FinancialSessionView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = FinancialSessionSerializer
+    queryset = FinancialSession.objects.all()
 
 
 @login_required

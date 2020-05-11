@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import re_path
+from django.urls import path, re_path
 
 from .catalog import views as catalog_views
 from .prints import views as prints_views
@@ -17,6 +17,7 @@ from .reports.search import SearchResult
 
 admin.autodiscover()
 urlpatterns = [
+    path("api/auth/", include("djoser.urls.authtoken")),
     re_path(r"^$", catalog_views.index, name="home"),
     re_path(
         r"^catalog/",
