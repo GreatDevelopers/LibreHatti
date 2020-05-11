@@ -21,14 +21,14 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "librehatti",
-        "USER": "root",
+        "USER": "librehatti",
         "PASSWORD": "libre@hatti",
         "HOST": "db",
         "PORT": "3306",
     }
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -140,9 +140,7 @@ INSTALLED_APPS = [
     "mptt",
     "ajax_select",
     "django.contrib.admin",
-    #"librehatti.voucher",
     "librehatti.catalog",
-    #"librehatti.voucher",
     "useraccounts",
     "tinymce",
     #    'templates.admin',
