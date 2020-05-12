@@ -1,9 +1,6 @@
 name: pre-commit
 
-on:
-  pull_request:
-  push:
-    branches: [d2.0p3.6]
+on: [push, pull_request]
 
 jobs:
   pre-commit:
