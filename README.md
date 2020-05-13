@@ -11,7 +11,7 @@ Raising Pull Request
 
 ```
 cd LibreHatti
-pip install pre-commit
+pip3 install pre-commit
 pre-commit install
 ```
 - Make sure PR have proper title and description
