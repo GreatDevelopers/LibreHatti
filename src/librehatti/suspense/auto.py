@@ -18,8 +18,7 @@ django.setup()
 
 # copyfile("urls.py", "urlsold.py")
 
-# import ipdb
-# ipdb.set_trace()
+
 li = []
 new_li = []
 with open("urls.py") as fin:
@@ -29,8 +28,7 @@ for i in urls.urlpatterns:
     li.append(i.lookup_str.split("views.")[1])
 
 i = 0
-# import ipdb
-# ipdb.set_trace()
+
 for j in range(0, len(fin_content)):
     if i < len(li) and li[i] in fin_content[j]:
         print((i, j))
