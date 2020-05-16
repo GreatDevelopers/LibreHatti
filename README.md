@@ -19,6 +19,12 @@ pre-commit install
 - Add proper labels
 - Link tickets to PR
 
+Setting up Environment
+------------------------
+Since we use docker environment, it is quite easy setup your local environment
+1. [Install](https://docs.docker.com/engine/install/) docker
+2. `cd Librehatti`
+3. `docker-compose up`
 
 REQUIREMENTS
 ------------
