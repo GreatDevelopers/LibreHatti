@@ -2,6 +2,8 @@ django==2.2.10
 django-ajax-selects==1.9.1
 django-cors-headers
 django-mptt==0.11.0
+django-mptt==0.11.0
+django-tinymce==3.0.2
 django-tinymce==3.0.2
 djangorestframework
 djangorestframework-jwt
@@ -12,4 +14,5 @@ phonetics
 pre-commit
 PyJWT==1.7.1
 python3-openid==3.1.0
-social-auth-app-django
+simplejson==3.17.0
+social-auth-app-django==3.1.0
