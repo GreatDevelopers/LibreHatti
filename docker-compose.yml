@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 networks:
   lh:
@@ -30,3 +30,17 @@ services:
     hostname: "LH_APP"
     networks:
       - lh
+
+  frontend:
+    build:
+      context: .
+      dockerfile: FrontEndDockerfile
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    command: ["npm", "run", "start"]
+    depends_on:
+      - web

@@ -1,0 +1,14 @@
+version: '3.7'
+
+networks:
+  lh:
+    driver: bridge
+
+services:
+  frontend:
+    build: .
+    volumes:
+      - '.:/usr/app'
+      - '/usr/app/node_modules'
+    ports:
+      - 3000:3000
