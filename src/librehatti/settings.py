@@ -191,7 +191,7 @@ AJAX_LOOKUP_CHANNELS = {
     "staff": ("librehatti.programmeletter.stafflookups", "StaffLookup"),
 }
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://localhost:8000"]
+CORS_ORIGIN_WHITELIST = ["http://192.168.48.2:3000", "http://localhost:8000"]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
