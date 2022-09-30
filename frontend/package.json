@@ -17,7 +17,7 @@
     "react-global-configuration": "^1.4.0",
     "react-scripts": "^3.4.1",
     "reactstrap": "^8.4.1",
-    "recharts": "^1.8.5"
+    "recharts": "^2.1.14"
   },
   "scripts": {
     "start": "react-scripts start",
