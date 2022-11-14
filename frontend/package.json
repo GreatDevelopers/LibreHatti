@@ -15,7 +15,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-global-configuration": "^1.4.0",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^5.0.1",
     "reactstrap": "^8.4.1",
     "recharts": "^1.8.5"
   },
